@@ -42,7 +42,7 @@ public class TextUtils {
      * @return 是否相等。
      */
     public static boolean isEqualTo(String lhss, String rhss){
-        return TextUtils.isEqualTo(lhss, rhss);
+        return android.text.TextUtils.equals(lhss, rhss);
     }
 
     /**
