@@ -7,7 +7,6 @@ import android.os.StatFs;
 import android.text.format.Formatter;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.channels.FileChannel;
@@ -623,8 +621,7 @@ public class IoUtils {
     }
 
     /**
-     * 将字符编码转换成GBK码
-     *
+     * 将字符编码转换成GBK码。
      */
     public String toGBK(String str) throws UnsupportedEncodingException{
         return transcode(str, GBK);
@@ -635,7 +632,7 @@ public class IoUtils {
      *
      * @param str  待转换编码的字符串。
      * @param newCharset 目标编码。
-     * @return 新编码的字符串
+     * @return 新编码的字符串。
      * @throws UnsupportedEncodingException 不支持的编码异常。
      */
     public String transcode(String str, String newCharset)
