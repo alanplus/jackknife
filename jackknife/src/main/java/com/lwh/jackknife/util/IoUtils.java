@@ -645,4 +645,31 @@ public class IoUtils {
         }
         return null;
     }
+
+    /**
+     * 创建目录。
+     *
+     * @param dirs 要初始化的所有的应用文件夹。
+     */
+    public static void createFolder(String[] dirs){
+        if (dirs != null){
+            for (String dir:dirs){
+                createFolder(dir);
+            }
+        }
+    }
+
+    /**
+     * 创建目录。
+     *
+     * @param dir 一个目录。
+     */
+    public static void createFolder(String dir){
+        if (TextUtils.isNotEmpty(dir)){
+            File folder = new File(dir);
+            if (!folder.exists()){
+                folder.mkdirs();
+            }
+        }
+    }
 }

@@ -26,6 +26,6 @@ repositories{
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
-//    compile project(':jackknife')
-    compile(name: 'jackknife-1.0.0', ext: 'aar')
+    compile project(':jackknife')
+//    compile(name: 'jackknife-1.0.0', ext: 'aar')
 }

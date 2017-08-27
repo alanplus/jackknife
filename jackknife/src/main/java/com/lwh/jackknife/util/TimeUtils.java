@@ -265,7 +265,7 @@ public class TimeUtils {
     }
 
     /**
-     * string转为long。
+     * string转换为long。
      *
      * @param strTime 字符串时间。
      * @param formatType 格式化类型。
