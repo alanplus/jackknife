@@ -1,10 +1,19 @@
 package com.lwh.jackknife.util;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.format.Formatter;
+import android.util.DisplayMetrics;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,6 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.Map;
@@ -61,6 +73,8 @@ public class IoUtils {
      */
     public static final String GBK = "GBK";
 
+    public static final int UNKNOWN_VERSION = -1;
+
     private IoUtils(){
     }
 
@@ -83,7 +97,7 @@ public class IoUtils {
         StringBuffer buff = new StringBuffer();
         if (src != null && src.length > 0){
             for (int i=0;i<src.length;i++){
-                int value = src[i] & 255;
+                int value = src[i] & 0xFF;
                 String H = NumberUtils.D2H(value);
                 if (H.length() < 2){
                     buff.append(0);
@@ -671,5 +685,118 @@ public class IoUtils {
                 folder.mkdirs();
             }
         }
+    }
+
+    public static void launchApp(Context context, String packageName, String className){
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.LAUNCHER");
+        intent.setComponent(new ComponentName(packageName, className));
+        context.startActivity(intent);
+    }
+
+    public static void install(Context context, String apkPath) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setDataAndType(Uri.fromFile(new File(apkPath)),
+                "application/vnd.android.package-archive");
+        context.startActivity(intent);
+    }
+
+    public static Signature[] getUninstallApkSignatures(String apkPath) {
+        String PATH_PackageParser = "android.content.pm.PackageParser";
+        try {
+            Class pkgParserCls = Class.forName(PATH_PackageParser);
+            Class[] typeArgs = new Class[1];
+            typeArgs[0] = String.class;
+            Constructor pkgParserCt = pkgParserCls.getConstructor(typeArgs);
+            Object[] valueArgs = new Object[1];
+            valueArgs[0] = apkPath;
+            Object pkgParser = pkgParserCt.newInstance(valueArgs);
+            DisplayMetrics metrics = new DisplayMetrics();
+            metrics.setToDefaults();
+            typeArgs = new Class[4];
+            typeArgs[0] = File.class;
+            typeArgs[1] = String.class;
+            typeArgs[2] = DisplayMetrics.class;
+            typeArgs[3] = Integer.TYPE;
+            Method pkgParser_parsePackageMtd = pkgParserCls.getDeclaredMethod("parsePackage",
+                    typeArgs);
+            valueArgs = new Object[4];
+            valueArgs[0] = new File(apkPath);
+            valueArgs[1] = apkPath;
+            valueArgs[2] = metrics;
+            valueArgs[3] = PackageManager.GET_SIGNATURES;
+            Object pkgParserPkg = pkgParser_parsePackageMtd.invoke(pkgParser, valueArgs);
+            typeArgs = new Class[2];
+            typeArgs[0] = pkgParserPkg.getClass();
+            typeArgs[1] = Integer.TYPE;
+            Method pkgParser_collectCertificatesMtd = pkgParserCls.getDeclaredMethod("collectCertificates",
+                    typeArgs);
+            valueArgs = new Object[2];
+            valueArgs[0] = pkgParserPkg;
+            valueArgs[1] = PackageManager.GET_SIGNATURES;
+            pkgParser_collectCertificatesMtd.invoke(pkgParser, valueArgs);
+            Field packageInfoFld = pkgParserPkg.getClass().getDeclaredField("mSignatures");
+            Signature[] info = (Signature[]) packageInfoFld.get(pkgParserPkg);
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Signature[] getSignatures(Context context){
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.signatures;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getVersionName(Context context){
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "unknown";
+    }
+
+    public static int getVersionCode(Context context){
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return UNKNOWN_VERSION;
+    }
+
+    public static String extractApk(Context context){
+        ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
+        String apkPath = applicationInfo.sourceDir;
+        return apkPath;
+    }
+
+    public static String getAndroidVersion(int sdk){
+        switch (sdk){
+            case Build.VERSION_CODES.ICE_CREAM_SANDWICH:
+                return "Android 4.0";
+        }
+        throw new RuntimeException("不可知的Android系统版本。");
+    }
+
+    public native static int bsdiff(String oldPath, String newPath, String patchPath);
+
+    public native static int bspatch(String oldPath, String newPath, String patchPath);
+
+    static{
+        System.loadLibrary("ioutils");
     }
 }
