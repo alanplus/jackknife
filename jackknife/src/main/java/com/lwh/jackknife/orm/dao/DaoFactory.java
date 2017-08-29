@@ -11,15 +11,22 @@ public class DaoFactory {
 
     private SQLiteDatabase mDatabase;
     
-    private static DaoFactory sInstance =
-            new DaoFactory(new File(Environment.getExternalStorageDirectory(), "szchinaway.db"));
+    private static DaoFactory sInstance;
 
     private DaoFactory(File file) {
         this.path = file.getAbsolutePath();
         openDatabase();
     }
 
-    public static DaoFactory getInstance() {
+    public static DaoFactory getInstance(String dbName) {
+        if (sInstance == null) {
+            synchronized (DaoFactory.class) {
+                if (sInstance == null) {
+                    sInstance = new DaoFactory(new File(Environment.getExternalStorageDirectory(),
+                            dbName + ".db"));
+                }
+            }
+        }
         return sInstance;
     }
 

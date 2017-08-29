@@ -786,8 +786,56 @@ public class IoUtils {
 
     public static String getAndroidVersion(int sdk){
         switch (sdk){
+            case Build.VERSION_CODES.BASE:
+                return "Android 1.0";
+            case Build.VERSION_CODES.BASE_1_1:
+                return "Android 1.1";
+            case Build.VERSION_CODES.CUPCAKE:
+                return "Android 1.5";
+            case Build.VERSION_CODES.DONUT:
+                return "Android 1.6";
+            case Build.VERSION_CODES.ECLAIR:
+                return "Android 2.0";
+            case Build.VERSION_CODES.ECLAIR_0_1:
+                return "Android 2.0.1";
+            case Build.VERSION_CODES.ECLAIR_MR1:
+                return "Android 2.1";
+            case Build.VERSION_CODES.FROYO:
+                return "Android 2.2";
+            case Build.VERSION_CODES.GINGERBREAD:
+                return "Android 2.3";
+            case Build.VERSION_CODES.GINGERBREAD_MR1:
+                return "Android 2.3.3";
+            case Build.VERSION_CODES.HONEYCOMB:
+                return "Android 3.0";
+            case Build.VERSION_CODES.HONEYCOMB_MR1:
+                return "Android 3.1";
+            case Build.VERSION_CODES.HONEYCOMB_MR2:
+                return "Android 3.2";
             case Build.VERSION_CODES.ICE_CREAM_SANDWICH:
                 return "Android 4.0";
+            case Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1:
+                return "Android 4.0.3";
+            case Build.VERSION_CODES.JELLY_BEAN:
+                return "Android 4.1";
+            case Build.VERSION_CODES.JELLY_BEAN_MR1:
+                return "Android 4.2";
+            case Build.VERSION_CODES.JELLY_BEAN_MR2:
+                return "Android 4.3";
+            case Build.VERSION_CODES.KITKAT:
+                return "Android 4.4";
+            case Build.VERSION_CODES.KITKAT_WATCH:
+                return "Android 4.4W";
+            case Build.VERSION_CODES.LOLLIPOP:
+                return "Android 5.0";
+            case Build.VERSION_CODES.LOLLIPOP_MR1:
+                return "Android 5.1";
+            case Build.VERSION_CODES.M:
+                return "Android 6.0";
+            case Build.VERSION_CODES.N:
+                return "Android 7.0";
+            case Build.VERSION_CODES.N_MR1:
+                return "Android 7.1";
         }
         throw new RuntimeException("不可知的Android系统版本。");
     }

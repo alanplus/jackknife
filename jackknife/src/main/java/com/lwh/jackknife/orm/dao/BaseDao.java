@@ -3,10 +3,10 @@ package com.lwh.jackknife.orm.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 
 import com.lwh.jackknife.orm.Column;
 import com.lwh.jackknife.orm.Table;
+import com.lwh.jackknife.util.TextUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,6 +16,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 万能DAO。
+ *
+ * @param <T> 数据实体类。
+ */
 public abstract class BaseDao<T> implements Dao<T> {
 
     private SQLiteDatabase mDatabase;
@@ -36,8 +41,8 @@ public abstract class BaseDao<T> implements Dao<T> {
             if (!mDatabase.isOpen()) {
                 return false;
             }
-            if (!TextUtils.isEmpty(createTable())) {
-                mDatabase.execSQL(createTable());
+            if (TextUtils.isNotEmpty(createTable())) {
+                mDatabase.execSQL(createTable());//创表
             }
             mRelationMap = new HashMap<>();
             initRelationMap();
@@ -50,7 +55,7 @@ public abstract class BaseDao<T> implements Dao<T> {
      * 初始化关系映射。
      */
     private void initRelationMap() {
-        String sql = "SELECT * FROM "+this.mTableName+" LIMIT 1, 0";//查询出这个表的所有列。
+        String sql = "SELECT * FROM " + mTableName + " LIMIT 1";
         Cursor cursor = null;
         try {
             cursor = this.mDatabase.rawQuery(sql,null);
@@ -85,35 +90,6 @@ public abstract class BaseDao<T> implements Dao<T> {
         }
     }
 
-    /**
-     * 创建表。
-     *
-     * @return 创表语句。
-     */
-    public abstract String createTable();
-
-    @Override
-    public Long insert(T data) {
-        Map<String, String> map = getValues(data);
-        ContentValues contentValues = getContentValues(map);
-        Long result = mDatabase.insert(mTableName, null, contentValues);
-        return result;
-    }
-
-    private ContentValues getContentValues(Map<String, String> map) {
-        ContentValues contentValues = new ContentValues();
-        Set<String> keys = map.keySet();
-        Iterator<String> iterator = keys.iterator();
-        while (iterator.hasNext()) {
-            String key = iterator.next();
-            String value = map.get(key);
-            if (value != null) {
-                contentValues.put(key,value);
-            }
-        }
-        return contentValues;
-    }
-
     private Map<String, String> getValues(T data) {
         Map<String, String> result = new HashMap<>();
         Iterator<Field> iterator = mRelationMap.values().iterator();
@@ -140,43 +116,102 @@ public abstract class BaseDao<T> implements Dao<T> {
         return result;
     }
 
+    /**
+     * 创建表。
+     *
+     * @return 创表语句。
+     */
+    protected abstract String createTable();
+
+    private ContentValues getContentValues(Map<String, String> map) {
+        ContentValues values = new ContentValues();
+        Set<String> keys = map.keySet();
+        Iterator<String> iterator = keys.iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            String value = map.get(key);
+            if(value != null){
+                values.put(key,value);
+            }
+        }
+        return values;
+    }
+
     @Override
-    public int update(T data, T where) {
-        int result;
-        Map<String, String> values = getValues(data);
-        Condition condition = new Condition(getValues(where));
-        result = mDatabase.update(mTableName,getContentValues(values),condition.mWhereClause,condition.mWhereArgs);
-        return result;
+    public boolean insert(T data) {
+        Map<String, String> map = getValues(data);
+        ContentValues values = getContentValues(map);
+        long rowID = mDatabase.insert(mTableName, null, values);
+        if (rowID != -1){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean insert(List<T> datas) {
+        if (datas == null){
+            return false;
+        }
+        int count = 0;
+        for (T data:datas){
+            if(insert(data)){
+                count++;
+            }
+        }
+        if (count == datas.size()){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(T where) {
+        Map<String, String> map = getValues(where);
+        Condition condition = new Condition(map);
+        int rowsOfAffected = mDatabase.delete(mTableName, condition.getWhereClause(), condition.getWhereArgs());
+        if (rowsOfAffected > 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAll(){
+        int rowsOfAffected = mDatabase.delete(mTableName, null, null);
+        if (rowsOfAffected > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean update(T newData, T where) {
+        Map<String, String> map = getValues(where);
+        Condition condition = new Condition(map);
+        int rowsOfAffected = mDatabase.update(mTableName, getContentValues(map), condition.getWhereClause(),
+                condition.getWhereArgs());
+        if (rowsOfAffected > 0) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public List<T> query(T where) {
-        return query(where, null, null, null);
+        Map<String, String> map = getValues(where);
+        Condition condition = new Condition(map);
+        Cursor cursor = mDatabase.query(mTableName, null, condition.getWhereClause(),
+                condition.getWhereArgs(), null, null, null);
+        return getResult(cursor, where);
     }
 
     @Override
-    public List<T> query(T where, String orderBy, Integer startIndex, Integer limit) {
-        Map<String, String> values = getValues(where);
-        String limitStr = null;
-        if(startIndex != null && limit != null) {
-            limitStr = startIndex+" , "+limit;
+    public T queryOnly(T where) {
+        if (query(where) != null) {
+            return query(where).get(0);
         }
-        Condition condition = new Condition(values);
-        Cursor cursor;
-        cursor = mDatabase.query(mTableName, null, condition.getWhereClause(),
-                condition.getWhereArgs(), null, null, orderBy, limitStr);
-        List<T> result = getReslut(cursor, where);
-        cursor.close();
-        return result;
-    }
-
-    @Override
-    public int queryCount(T where){
-        List<T> datas = query(where);
-        if (datas != null){
-            return datas.size();
-        }
-        return 0;
+        return null;
     }
 
     /**
@@ -186,89 +221,66 @@ public abstract class BaseDao<T> implements Dao<T> {
      * @param where 条件对象。
      * @return 查询结果。
      */
-    private List<T> getReslut(Cursor cursor, T where) {
-        List list = new ArrayList();
-        Object item;
+    private List<T> getResult(Cursor cursor, T where) {
+        List<T> datas = new ArrayList<>();
+        T data;
         while (cursor.moveToNext()) {
             Class<?> whereClass = where.getClass();
             try {
-                item = whereClass.newInstance();
+                data = (T) whereClass.newInstance();
                 Iterator<Map.Entry<String, Field>> iterator = mRelationMap.entrySet().iterator();
                 while (iterator.hasNext()) {
                     Map.Entry<String, Field> entry = iterator.next();
                     String columnName = entry.getKey();
                     Field field = entry.getValue();
-                    Integer colmunIndex = cursor.getColumnIndex(columnName);
+                    Integer columnIndex = cursor.getColumnIndex(columnName);
                     Class type = field.getType();
-                    if (colmunIndex != -1) {
+                    if (columnIndex != -1) {
                         if (type == String.class) {
-                            field.set(item,cursor.getString(colmunIndex));
+                            field.set(data,cursor.getString(columnIndex));
                         }else if(type == Integer.class) {
-                            field.set(item,cursor.getInt(colmunIndex));
+                            field.set(data,cursor.getInt(columnIndex));
                         }else  if(type == Long.class) {
-                            field.set(item,cursor.getLong(colmunIndex));
+                            field.set(data,cursor.getLong(columnIndex));
                         }else if(type == Double.class) {
-                            field.set(item,cursor.getDouble(colmunIndex));
+                            field.set(data,cursor.getDouble(columnIndex));
                         }else if(type == byte[].class) {
-                            field.set(item,cursor.getBlob(colmunIndex));
+                            field.set(data,cursor.getBlob(columnIndex));
                         } else {
                             continue;
                         }
                     }
                 }
-                list.add(item);
+                datas.add(data);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        return list;
+        return datas;
     }
 
-    @Override
-    public int delete(T where) {
-        Map<String, String> values = getValues(where);
-        Condition condition = new Condition(values);
-        int result = mDatabase.delete(mTableName, condition.getWhereClause(), condition.getWhereArgs());
-        return result;
-    }
-
-    @Override
-    public boolean deleteAll(){
-        return true;
-    }
-
-    /**
-     * 查询条件。
-     */
     private class Condition {
 
-        /**
-         * where子句。
-         */
         private String mWhereClause;
-
-        /**
-         * where参数。
-         */
         private String[] mWhereArgs;
+        private String AND = " AND ";
 
-        public Condition(Map<String, String> map) {
-            List<String> list = new ArrayList();
+        public Condition(Map<String, String> map){
+            List<String> list = new ArrayList<>();
             StringBuilder builder = new StringBuilder();
-            builder.append(" 1=1 ");
             Set<String> keys = map.keySet();
             Iterator<String> iterator = keys.iterator();
             while (iterator.hasNext()) {
                 String key = iterator.next();
                 String value = map.get(key);
                 if (value != null) {
-                    builder.append(" and "+key+" =? ");
+                    builder.append(AND+key+" =? ");
                     list.add(value);
                 }
             }
-            this.mWhereClause = builder.toString();
+            this.mWhereClause = builder.substring(AND.length());
             this.mWhereArgs = list.toArray(new String[list.size()]);
         }
 
