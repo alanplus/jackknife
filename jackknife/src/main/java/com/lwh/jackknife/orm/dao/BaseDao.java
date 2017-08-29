@@ -65,7 +65,7 @@ public abstract class BaseDao<T> implements Dao<T> {
                 field.setAccessible(true);
             }
             for (String columnName:columnNames) {
-                Field colmunToFiled = null;
+                Field columnField = null;
                 //开始找对应关系
                 for (Field field:columnFields) {
                     String fieldName;
@@ -75,12 +75,12 @@ public abstract class BaseDao<T> implements Dao<T> {
                         fieldName = field.getName();
                     }
                     if (columnName.equals(fieldName)) {
-                        colmunToFiled=field;
+                        columnField = field;
                         break;
                     }
                 }
-                if (colmunToFiled != null) {
-                    mRelationMap.put(columnName, colmunToFiled);
+                if (columnField != null) {
+                    mRelationMap.put(columnName, columnField);
                 }
             }
         } catch (Exception e) {
@@ -198,12 +198,18 @@ public abstract class BaseDao<T> implements Dao<T> {
     }
 
     @Override
+    public List<T> queryAll() {
+        Cursor cursor = mDatabase.query(mTableName, null, null, null, null, null, null, null);
+        return getResult(cursor);
+    }
+
+    @Override
     public List<T> query(T where) {
         Map<String, String> map = getValues(where);
         Condition condition = new Condition(map);
         Cursor cursor = mDatabase.query(mTableName, null, condition.getWhereClause(),
                 condition.getWhereArgs(), null, null, null);
-        return getResult(cursor, where);
+        return getResult(cursor);
     }
 
     @Override
@@ -218,16 +224,14 @@ public abstract class BaseDao<T> implements Dao<T> {
      * 获取查询结果。
      *
      * @param cursor 游标。
-     * @param where 条件对象。
      * @return 查询结果。
      */
-    private List<T> getResult(Cursor cursor, T where) {
+    private List<T> getResult(Cursor cursor) {
         List<T> datas = new ArrayList<>();
         T data;
         while (cursor.moveToNext()) {
-            Class<?> whereClass = where.getClass();
             try {
-                data = (T) whereClass.newInstance();
+                data = mDataClass.newInstance();
                 Iterator<Map.Entry<String, Field>> iterator = mRelationMap.entrySet().iterator();
                 while (iterator.hasNext()) {
                     Map.Entry<String, Field> entry = iterator.next();
