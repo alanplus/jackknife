@@ -1,12 +1,11 @@
-# jackknife
 
 allprojects {
   repositories {
     jcenter()
-    <b>maven { url "https://jitpack.io" }</b>
+    <font color="green">maven { url "https://jitpack.io" }</font>
   }
 }
 
 dependencies {
-  <b>compile 'com.github.JackWHLiu:jackknife:1.0.0'</b>
+  <font color="green">compile 'com.github.JackWHLiu:jackknife:1.0.0'</font>
 }
