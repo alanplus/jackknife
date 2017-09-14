@@ -15,8 +15,8 @@ import com.lwh.jackknife.app.Fragment;
  * View层的代理，Fragment被销毁的时候，绑定了此Fragment的Presenter也会被自动销毁。所以凡是生命周期可能比
  * Fragment长的操作都应该放在Presenter中实现，比如在子线程中执行的操作。
  *
- * @param <V> 视图，Activity、Fragment等
- * @param <P> 主导器
+ * @param <V> 视图，Activity、Fragment等。
+ * @param <P> 主导器。
  */
 public abstract class BaseFragment<V extends IBaseView, P extends BasePresenter<V>> extends Fragment {
 

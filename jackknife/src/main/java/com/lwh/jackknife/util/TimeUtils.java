@@ -373,4 +373,20 @@ public class TimeUtils {
             return false;
         }
     }
+
+    /**
+     * 转化毫秒数为mm:ss的格式。
+     *
+     * @param milliSecs 毫秒时长。
+     * @return 格式化后的时间。
+     */
+    public static String formatTime(long milliSecs) {
+        StringBuffer sb = new StringBuffer();
+        long m = milliSecs / (60 * 1000);
+        sb.append(m < 10 ? "0" + m : m);
+        sb.append(":");
+        long s = (milliSecs % (60 * 1000)) / 1000;
+        sb.append(s < 10 ? "0" + s : s);
+        return sb.toString();
+    }
 }

@@ -7,6 +7,11 @@ import com.lwh.jackknife.ioc.ViewInjector;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * 自动注入的Activity。
+ *
+ * @auther lwh
+ */
 public abstract class Activity extends FragmentActivity {
 
 	@Override

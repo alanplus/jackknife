@@ -15,10 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * 适配器基类，继承此类可以适配任何类型的Bean
+ * 适配器基类，继承此类可以适配任何类型的Bean。
  *
  * @author lwh
- * @param <T> 数据模型
+ * @param <T> 数据模型。
  */
 public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 

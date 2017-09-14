@@ -687,6 +687,13 @@ public class IoUtils {
         }
     }
 
+    /**
+     * 启动一个已安装的app。
+     *
+     * @param context 上下文。
+     * @param packageName 包名。
+     * @param className 全类名。
+     */
     public static void launchApp(Context context, String packageName, String className){
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.LAUNCHER");
@@ -694,6 +701,12 @@ public class IoUtils {
         context.startActivity(intent);
     }
 
+    /**
+     * 安装一个apk。
+     *
+     * @param context 上下文。
+     * @param apkPath apk文件的路径。
+     */
     public static void install(Context context, String apkPath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -702,6 +715,12 @@ public class IoUtils {
         context.startActivity(intent);
     }
 
+    /**
+     * 得到一个apk文件的签名。
+     *
+     * @param apkPath apk文件的路径。
+     * @return 签名。
+     */
     public static Signature[] getUninstallApkSignatures(String apkPath) {
         String PATH_PackageParser = "android.content.pm.PackageParser";
         try {
@@ -745,6 +764,12 @@ public class IoUtils {
         return null;
     }
 
+    /**
+     * 得到本应用的应用签名。
+     *
+     * @param context 上下文。
+     * @return 签名。
+     */
     public static Signature[] getSignatures(Context context){
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -756,6 +781,12 @@ public class IoUtils {
         return null;
     }
 
+    /**
+     * 得到版本名。
+     *
+     * @param context 上下文。
+     * @return 版本名。
+     */
     public static String getVersionName(Context context){
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -767,6 +798,12 @@ public class IoUtils {
         return "unknown";
     }
 
+    /**
+     * 得到版本号。
+     *
+     * @param context 上下文。
+     * @return 版本号。
+     */
     public static int getVersionCode(Context context){
         PackageManager packageManager = context.getPackageManager();
         try {
@@ -778,12 +815,24 @@ public class IoUtils {
         return UNKNOWN_VERSION;
     }
 
+    /**
+     * 提取本应用的apk文件的路径，应用安装后，系统会自动在这个目录备份。
+     *
+     * @param context 上下文。
+     * @return apk文件的路径。
+     */
     public static String extractApk(Context context){
         ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
         String apkPath = applicationInfo.sourceDir;
         return apkPath;
     }
 
+    /**
+     * 通过SDK的r级别获取其版本名称。
+     *
+     * @param sdk r级别。
+     * @return 版本名称。
+     */
     public static String getAndroidVersion(int sdk){
         switch (sdk){
             case Build.VERSION_CODES.BASE:
@@ -840,11 +889,39 @@ public class IoUtils {
         throw new RuntimeException("不可知的Android系统版本。");
     }
 
+    /**
+     * 合并新版本的安装包。
+     *
+     * @param oldPath 旧版本apk文件的路径。
+     * @param newPath 新版本apk文件的路径。
+     * @param patchPath 差分包的路径。
+     * @return 是否成功，0表示成功，非0表示失败。
+     */
     public native static int bsdiff(String oldPath, String newPath, String patchPath);
 
+    /**
+     * 生成apk差分包。
+     *
+     * @param oldPath 旧版本apk文件的路径。
+     * @param newPath 新版本apk文件的路径。
+     * @param patchPath 差分包的路径。
+     * @return 是否成功，0表示成功，非0表示失败。
+     */
     public native static int bspatch(String oldPath, String newPath, String patchPath);
 
     static{
         System.loadLibrary("ioutils");
+    }
+
+    /**
+     * 获取SD卡根目录。
+     *
+     * @return SD卡根目录。
+     */
+    public static String getSdRoot(){
+        if (checkMediaMounted()) {
+            return Environment.getExternalStorageDirectory().getAbsolutePath();
+        }
+        return "";
     }
 }

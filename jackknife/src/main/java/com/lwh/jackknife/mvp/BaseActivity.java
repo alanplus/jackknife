@@ -10,22 +10,22 @@ import com.lwh.jackknife.app.Activity;
  * View层的代理，Activity被销毁的时候，绑定了此Activity的Presenter也会被自动销毁。所以凡是生命周期可能比
  * Activity长的操作都应该放在Presenter中实现，比如在子线程中执行的操作。
  *
- * @param <V> 视图，Activity、Fragment等
- * @param <P> 主导器
+ * @param <V> 视图，Activity、Fragment等。
+ * @param <P> 主导器。
  */
 public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<V>> extends Activity {
 
     /**
-     * 业务逻辑主导器
+     * 业务逻辑主导器。
      */
     protected P mPresenter;
 
     protected final String TAG = getClass().getSimpleName();
 
     /**
-     * 创建出相关业务逻辑的主导器
+     * 创建出相关业务逻辑的主导器。
      *
-     * @return 具体业务逻辑主导器
+     * @return 具体业务逻辑主导器。
      */
     protected abstract P createPresenter();
 
