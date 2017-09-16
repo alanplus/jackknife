@@ -3,12 +3,12 @@ package com.lwh.jackknife.mvp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lwh.jackknife.app.Fragment;
+import com.lwh.jackknife.util.Logger;
 
 /**
  * Fragment的通用基类，本项目所有Fragment必须继承此类，通过把自己的子类绑定在Presenter上，来实现Presenter层对
@@ -31,38 +31,38 @@ public abstract class BaseFragment<V extends IBaseView, P extends BasePresenter<
         mPresenter = createPresenter();
         mPresenter.attachView((V)this);
         super.onActivityCreated(savedInstanceState);
-        Log.w(TAG, "onActivityCreated()");
+        Logger.info(TAG, "onActivityCreated()");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.w(TAG, "onAttach()");
+        Logger.info(TAG, "onAttach()");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.w(TAG, "onDetach()");
+        Logger.info(TAG, "onDetach()");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.w(TAG, "onStart()");
+        Logger.info(TAG, "onStart()");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Log.w(TAG, "onCreateView()");
+        Logger.info(TAG, "onCreateView()");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     public void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
-        Log.w(TAG, "onDestroy()");
+        Logger.info(TAG, "onDestroy()");
     }
 
     /**

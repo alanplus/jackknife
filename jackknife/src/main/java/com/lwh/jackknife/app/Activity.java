@@ -14,12 +14,42 @@ import java.lang.reflect.InvocationTargetException;
  */
 public abstract class Activity extends FragmentActivity {
 
+	/**
+	 * 加入任务。
+	 */
+	private void joinTask(){
+		if (getApplication() instanceof Application) {
+			Application.getInstance().pushTask(this);
+		}
+	}
+
+	/**
+	 * 相当于finish，使用此方法会移除任务栈的缓存对象。
+	 */
+	public void back(){
+		if (getApplication() instanceof Application) {
+			Application.getInstance().popTask();
+		}
+	}
+
+	/**
+	 * 退出所有界面。
+	 */
+	public void exit(){
+		if (getApplication() instanceof Application) {
+			Application.getInstance().removeAll();
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		try {
 			ViewInjector injector = new ViewInjector();
 			injector.inject(this);
+			if (getApplication() instanceof Application){
+				joinTask();
+			}
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {

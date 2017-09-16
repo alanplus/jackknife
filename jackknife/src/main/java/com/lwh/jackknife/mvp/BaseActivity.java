@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.lwh.jackknife.app.Activity;
+import com.lwh.jackknife.util.Logger;
 
 /**
  * Activity的通用基类，本项目所有Activity必须继承此类，通过把自己的子类绑定在Presenter上，来实现Presenter层对
@@ -32,7 +33,7 @@ public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.w(TAG, "onCreate()");
+        Logger.info(TAG, "onCreate()");
         mPresenter = createPresenter();
         mPresenter.attachView((V)this);
     }
@@ -40,31 +41,31 @@ public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<
     @Override
     protected void onResume() {
         super.onResume();
-        Log.w(TAG, "onResume()");
+        Logger.info(TAG, "onResume()");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.w(TAG, "onPause()");
+        Logger.info(TAG, "onPause()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.w(TAG, "onStop()");
+        Logger.info(TAG, "onStop()");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.w(TAG, "onStart()");
+        Logger.info(TAG, "onStart()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.w(TAG, "onDestroy()");
+        Logger.info(TAG, "onDestroy()");
         mPresenter.detachView();
     }
 }

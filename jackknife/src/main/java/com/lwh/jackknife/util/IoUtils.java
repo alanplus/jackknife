@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
@@ -923,5 +924,18 @@ public class IoUtils {
             return Environment.getExternalStorageDirectory().getAbsolutePath();
         }
         return "";
+    }
+
+    public static byte[] bytes(Object obj){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos;
+        try {
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] bytes = baos.toByteArray();
+        return bytes;
     }
 }

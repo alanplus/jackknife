@@ -57,7 +57,7 @@ public abstract class BaseModel<T>{
 
     protected abstract List<T> initBeans();
 
-    public List<T> getResult(WhereBuilder<T> builder) throws IllegalAccessException {
+    public List<T> getResult(QueryBuilder<T> builder) throws IllegalAccessException {
         List<T> result = new ArrayList<>();
         Map<String, Object> conditions = builder.getQueryConditions();
         if (mBeans.size() == 0){
@@ -76,32 +76,32 @@ public abstract class BaseModel<T>{
                 Field[] fields = beanClass.getFields();
                 for (Field field:fields){
                     String[] keyPart = key.split(" ");
-                    if (keyPart[1].equals(WhereBuilder.KEY_EQUAL_TO)){
+                    if (keyPart[1].equals(QueryBuilder.KEY_EQUAL_TO)){
                         if (keyPart[0].equals(field.getName()) &&
                                 field.get(bean).equals(obj)){
                             result.add(bean);
                         }
-                    } else if (keyPart[1].equals(WhereBuilder.KEY_NOT_EQUAL_TO)){
+                    } else if (keyPart[1].equals(QueryBuilder.KEY_NOT_EQUAL_TO)){
                         if (keyPart[0].equals(field.getName()) &&
                                 !field.get(bean).equals(obj)){
                             result.add(bean);
                         }
-                    } else if (keyPart[1].equals(WhereBuilder.KEY_GREATOR_THAN)){
+                    } else if (keyPart[1].equals(QueryBuilder.KEY_GREATOR_THAN)){
                         if (keyPart[0].equals(field.getName()) &&
                                 Float.parseFloat((String) field.get(bean)) > Float.parseFloat((String) obj)){
                             result.add(bean);
                         }
-                    } else if (keyPart[1].equals(WhereBuilder.KEY_LESS_THAN)){
+                    } else if (keyPart[1].equals(QueryBuilder.KEY_LESS_THAN)){
                         if (keyPart[0].equals(field.getName()) &&
                                 Float.parseFloat((String) field.get(bean)) < Float.parseFloat((String) obj)){
                             result.add(bean);
                         }
-                    } else if (keyPart[1].equals(WhereBuilder.KEY_GREATOR_THAN_OR_EQUAL_TO)){
+                    } else if (keyPart[1].equals(QueryBuilder.KEY_GREATOR_THAN_OR_EQUAL_TO)){
                         if (keyPart[0].equals(field.getName()) &&
                                 Float.parseFloat((String) field.get(bean)) >= Float.parseFloat((String) obj)){
                             result.add(bean);
                         }
-                    } else if (keyPart[1].equals(WhereBuilder.KEY_LESS_THAN_OR_EQUAL_TO)){
+                    } else if (keyPart[1].equals(QueryBuilder.KEY_LESS_THAN_OR_EQUAL_TO)){
                         if (keyPart[0].equals(field.getName()) &&
                                 Float.parseFloat((String) field.get(bean)) <= Float.parseFloat((String) obj)){
                             result.add(bean);
@@ -113,7 +113,29 @@ public abstract class BaseModel<T>{
         return result;
     }
 
-    public class WhereBuilder<T> {
+    public static class WhereBuilder {
+
+        private String where;
+        private Object[] whereArgs;
+
+        private WhereBuilder(Class beanClass){
+
+        }
+
+        public static WhereBuilder create(Class beanClass){
+            return new WhereBuilder(beanClass);
+        }
+
+        public WhereBuilder and(String where, Object[] whereArgs){
+            return this;
+        }
+
+        public WhereBuilder append(String connect, String where, Object... value){
+            return this;
+        }
+    }
+
+    public class QueryBuilder<T> {
 
         private static final String KEY_EQUAL_TO = " =?";
         private static final String KEY_NOT_EQUAL_TO = " !=?";
@@ -121,9 +143,31 @@ public abstract class BaseModel<T>{
         private static final String KEY_LESS_THAN = " <?";
         private static final String KEY_GREATOR_THAN_OR_EQUAL_TO = " >=?";
         private static final String KEY_LESS_THAN_OR_EQUAL_TO = " <=?";
+
+        private static final String ASC = "ASC";
+        private static final String DESC = "DESC";
+        private static final String AND = "AND ";
+        private static final String OR = "OR ";
+        private static final String GROUP_BY = "GROUP BY ";
+        private static final String HAVING = "HAVING ";
+        private static final String ORDER_BY = "ORDER BY ";
+        private static final String LIMIT = "LIMIT ";
+        private static final String SELECT_COUNT = "SELECT COUNT(*) FROM ";
+        private static final String DISTINCT = "DISTINCT";
+        private static final String ASTERISK = "*";
+        private static final String FROM = " FROM ";
+        private static final String EQUAL_HOLDER = "=?";
+        private static final String COMMA_HOLDER = ",?";
+        private boolean distinct;
+        private String group;
+        private String having;
+        private String order;
+        private int limit;
+
+
         private Map<String, Object> mQueryConditions;
 
-        public WhereBuilder(){
+        public QueryBuilder(){
             mQueryConditions = new ConcurrentHashMap<>();
         }
 
@@ -131,32 +175,32 @@ public abstract class BaseModel<T>{
             return mQueryConditions;
         }
 
-        public WhereBuilder<T> addWhereEqualTo(String key, Object value){
+        public QueryBuilder<T> addWhereEqualTo(String key, Object value){
             mQueryConditions.put(key+KEY_EQUAL_TO, value);
             return this;
         }
 
-        public WhereBuilder<T> addWhereNotEqualTo(String key, Object value){
+        public QueryBuilder<T> addWhereNotEqualTo(String key, Object value){
             mQueryConditions.put(key+KEY_NOT_EQUAL_TO, value);
             return this;
         }
 
-        public WhereBuilder<T> addWhereGreaterThan(String key, Object value){
+        public QueryBuilder<T> addWhereGreaterThan(String key, Object value){
             mQueryConditions.put(key+KEY_GREATOR_THAN, value);
             return this;
         }
 
-        public WhereBuilder<T> addWhereLessThan(String key, Object value){
+        public QueryBuilder<T> addWhereLessThan(String key, Object value){
             mQueryConditions.put(key+KEY_LESS_THAN, value);
             return this;
         }
 
-        public WhereBuilder<T> addWhereGreaterThanOrEqualTo(String key, Object value){
+        public QueryBuilder<T> addWhereGreaterThanOrEqualTo(String key, Object value){
             mQueryConditions.put(key+KEY_GREATOR_THAN_OR_EQUAL_TO, value);
             return this;
         }
 
-        public WhereBuilder<T> addWhereLessThanOrEqualTo(String key, Object value){
+        public QueryBuilder<T> addWhereLessThanOrEqualTo(String key, Object value){
             mQueryConditions.put(key+KEY_LESS_THAN_OR_EQUAL_TO, value);
             return this;
         }
