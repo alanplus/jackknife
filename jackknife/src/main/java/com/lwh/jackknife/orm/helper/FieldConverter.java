@@ -1,4 +1,4 @@
-package com.lwh.jackknife.orm;
+package com.lwh.jackknife.orm.helper;
 
 /**
  * Created by liuwenhao on 2017/9/16.

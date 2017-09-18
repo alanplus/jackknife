@@ -1,7 +1,7 @@
 package com.lwh.jackknife.orm.type;
 
-import com.lwh.jackknife.orm.BaseFieldConverter;
-import com.lwh.jackknife.orm.DataPersister;
+import com.lwh.jackknife.orm.helper.BaseFieldConverter;
+import com.lwh.jackknife.orm.helper.DataPersister;
 
 public abstract class BaseDataType extends BaseFieldConverter implements DataPersister {
 

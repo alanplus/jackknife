@@ -1,5 +1,7 @@
 package com.lwh.jackknife.orm;
 
+import com.lwh.jackknife.orm.table.OrmTable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class OrmConfig {
         return mTableClasses;
     }
 
-    public class Builder{
+    public static class Builder{
 
         private String mDbName;
         private int mVersionCode = 1;

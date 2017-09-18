@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.lwh.jackknife.app.Application;
+import com.lwh.jackknife.orm.helper.OrmSQLiteOpenHelper;
 import com.lwh.jackknife.orm.annotation.Column;
-import com.lwh.jackknife.orm.QueryBuilder;
-import com.lwh.jackknife.orm.TableManager;
-import com.lwh.jackknife.orm.WhereBuilder;
+import com.lwh.jackknife.orm.builder.QueryBuilder;
+import com.lwh.jackknife.orm.table.TableManager;
+import com.lwh.jackknife.orm.builder.WhereBuilder;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -22,11 +24,13 @@ import java.util.Locale;
 public class OrmDao<T> implements Dao<T> {
 
     private Class<T> mBeanClass;
+    private OrmSQLiteOpenHelper mHelper;
     private SQLiteDatabase mDb;
 
-    public OrmDao(Class<T> beanClass, SQLiteDatabase db){
+    public OrmDao(Class<T> beanClass){
         this.mBeanClass = beanClass;
-        this.mDb = db;
+        this.mHelper = Application.getInstance().getSQLiteOpenHelper();
+        this.mDb = mHelper.getWritableDatabase();
     }
 
     public ContentValues getContentValues(T bean) throws IllegalAccessException {

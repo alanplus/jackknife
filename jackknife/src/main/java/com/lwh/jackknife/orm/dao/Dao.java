@@ -1,7 +1,7 @@
 package com.lwh.jackknife.orm.dao;
 
-import com.lwh.jackknife.orm.QueryBuilder;
-import com.lwh.jackknife.orm.WhereBuilder;
+import com.lwh.jackknife.orm.builder.QueryBuilder;
+import com.lwh.jackknife.orm.builder.WhereBuilder;
 
 import java.util.List;
 

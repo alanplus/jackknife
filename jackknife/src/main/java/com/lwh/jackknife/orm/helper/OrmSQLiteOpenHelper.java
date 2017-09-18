@@ -1,8 +1,12 @@
-package com.lwh.jackknife.orm;
+package com.lwh.jackknife.orm.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.lwh.jackknife.orm.table.OrmTable;
+import com.lwh.jackknife.orm.table.TableManager;
+import com.lwh.jackknife.orm.Transaction;
 
 import java.util.List;
 

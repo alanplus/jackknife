@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 25
-        versionCode 14
-        versionName "1.2.2"
+        versionCode 15
+        versionName "1.2.3"
     }
     buildTypes {
         release {
@@ -32,4 +32,5 @@ repositories{
 
 dependencies {
     provided 'com.android.support:appcompat-v7:25.2.0'
+    provided 'com.android.support:recyclerview-v7:25.2.0'
 }

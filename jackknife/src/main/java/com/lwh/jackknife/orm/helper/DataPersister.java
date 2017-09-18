@@ -1,4 +1,4 @@
-package com.lwh.jackknife.orm;
+package com.lwh.jackknife.orm.helper;
 
 public interface DataPersister extends FieldConverter{
 

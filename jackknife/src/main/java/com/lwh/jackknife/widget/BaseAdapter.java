@@ -39,13 +39,13 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 
 	@Target(ElementType.TYPE)
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface ItemId {
+	public @interface ItemViewId {
 		int[]value();
 	}
 
 	@Target(ElementType.TYPE)
 	@Retention(RetentionPolicy.RUNTIME)
-	public @interface ItemLayout {
+	public @interface ItemLayoutId {
 		int value();
 	}
 
@@ -183,11 +183,11 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 	 */
 	private View inflateView()
 			throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Class<?> adapterClazz = getClass();
-		ItemLayout adapterLayout = adapterClazz.getAnnotation(ItemLayout.class);
-		int layoutId = adapterLayout.value();
-		Class<?> inflaterClazz = LayoutInflater.class;
-		Method inflateMethod = inflaterClazz.getMethod(METHOD_INFLATE, int.class, ViewGroup.class);
+		Class<?> adapterClass = getClass();
+		ItemLayoutId itemLayoutId = adapterClass.getAnnotation(ItemLayoutId.class);
+		int layoutId = itemLayoutId.value();
+		Class<?> inflaterClass = LayoutInflater.class;
+		Method inflateMethod = inflaterClass.getMethod(METHOD_INFLATE, int.class, ViewGroup.class);
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
@@ -195,11 +195,11 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 	 * 获取布局文件中条目的id
 	 * @hide
 	 */
-	private int[] getItemIds() {
-		Class<?> adapterClazz = getClass();
-		ItemId itemId = adapterClazz.getAnnotation(ItemId.class);
-		if (itemId != null) {
-			return itemId.value();
+	private int[] getItemViewIds() {
+		Class<?> adapterClass = getClass();
+		ItemViewId itemViewId = adapterClass.getAnnotation(ItemViewId.class);
+		if (itemViewId != null) {
+			return itemViewId.value();
 		} else {
 			return null;
 		}
@@ -235,9 +235,9 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
-			int[] itemIds = getItemIds();
-			for (int itemId : itemIds) {
-				mViewHolder.get(itemId);
+			int[] itemViewIds = getItemViewIds();
+			for (int id : itemViewIds) {
+				mViewHolder.get(id);
 			}
 			mConvertView.setTag(mViewHolder);
 		} else {
@@ -255,11 +255,11 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 			mViews = new SparseArray<>();
 		}
 
-		private T get(int viewId) {
-			View view = mViews.get(viewId);
+		private T get(int id) {
+			View view = mViews.get(id);
 			if (view == null) {
-				view = mConvertView.findViewById(viewId);
-				mViews.put(viewId, (T) view);
+				view = mConvertView.findViewById(id);
+				mViews.put(id, (T) view);
 			}
 			return (T) view;
 		}

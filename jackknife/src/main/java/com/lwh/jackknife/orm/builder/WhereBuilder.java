@@ -1,4 +1,4 @@
-package com.lwh.jackknife.orm;
+package com.lwh.jackknife.orm.builder;
 
 import com.lwh.jackknife.util.TextUtils;
 

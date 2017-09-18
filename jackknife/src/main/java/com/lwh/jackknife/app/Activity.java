@@ -32,15 +32,6 @@ public abstract class Activity extends FragmentActivity {
 		}
 	}
 
-	/**
-	 * 退出所有界面。
-	 */
-	public void exit(){
-		if (getApplication() instanceof Application) {
-			Application.getInstance().removeAll();
-		}
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
