@@ -21,7 +21,7 @@ public class Orm {
     public synchronized static void init(Context context, OrmConfig config) {
         String name = config.getDatabaseName();
         int versionCode = config.getVersionCode();
-        List<Class<OrmTable>> tableClasses = config.getTableClasses();
+        List<Class<? extends OrmTable>> tableClasses = config.getTableClasses();
         OrmSQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode, tableClasses);
         Application.getInstance().attach(helper);
     }

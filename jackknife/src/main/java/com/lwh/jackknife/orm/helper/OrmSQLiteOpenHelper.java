@@ -12,10 +12,10 @@ import java.util.List;
 
 public class OrmSQLiteOpenHelper extends SQLiteOpenHelper{
 
-    private List<Class<OrmTable>> mTableClasses;
+    private List<Class<? extends OrmTable>> mTableClasses;
     private TableManager mTableManager;
 
-    public OrmSQLiteOpenHelper(Context context, String name, int version, List<Class<OrmTable>> tableClasses) {
+    public OrmSQLiteOpenHelper(Context context, String name, int version, List<Class<? extends OrmTable>> tableClasses) {
         super(context, name, null, version);
         this.mTableClasses = tableClasses;
     }
@@ -32,7 +32,7 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper{
         Transaction.execute(db, new Transaction.Worker() {
             @Override
             public boolean doTransition(SQLiteDatabase db) {
-                for (Class<OrmTable> tableClass:mTableClasses){//遍历所有要创建的表的对象类型
+                for (Class<? extends OrmTable> tableClass:mTableClasses){//遍历所有要创建的表的对象类型
                     mTableManager.createTable(tableClass);
                 }
                 return true;

@@ -9,7 +9,7 @@ public class OrmConfig {
 
     private String mDbName;
     private int mVersionCode;
-    private List<Class<OrmTable>> mTableClasses;
+    private List<Class<? extends OrmTable>> mTableClasses;
 
     private OrmConfig(Builder builder){
         mDbName = builder.mDbName;
@@ -25,7 +25,7 @@ public class OrmConfig {
         return mVersionCode;
     }
 
-    public List<Class<OrmTable>> getTableClasses() {
+    public List<Class<? extends OrmTable>> getTableClasses() {
         return mTableClasses;
     }
 
@@ -33,11 +33,11 @@ public class OrmConfig {
 
         private String mDbName;
         private int mVersionCode = 1;
-        private List<Class<OrmTable>> mTableClasses;
+        private List<Class<? extends OrmTable>> mTableClasses;
 
-        public Builder tables(Class<OrmTable>... tableClasses){
+        public Builder tables(Class<? extends OrmTable>... tableClasses){
             mTableClasses = new ArrayList<>();
-            for (Class<OrmTable> tableClass : tableClasses){
+            for (Class<? extends OrmTable> tableClass : tableClasses){
                 mTableClasses.add(tableClass);
             }
             return this;

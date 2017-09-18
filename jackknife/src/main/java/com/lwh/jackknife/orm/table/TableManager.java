@@ -51,7 +51,7 @@ public class TableManager {
         return "";
     }
 
-    public void createTable(Class<OrmTable> tableClass){
+    public void createTable(Class<? extends OrmTable> tableClass){
         Table table = tableClass.getAnnotation(Table.class);
         String tableName;
         if (table != null) {
