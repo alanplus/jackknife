@@ -10,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 放在真实要回调的回调方法上面，它是onItemClick的被代理的方法
+ * 放在真实要回调的回调方法上面，它是onItemClick的被代理的方法。
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
