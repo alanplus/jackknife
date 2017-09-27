@@ -1,11 +1,10 @@
 package com.lwh.jackknife.orm.helper;
 
 /**
- * Created by liuwenhao on 2017/9/16.
+ * 属性转换器。
  */
-
 public interface FieldConverter {
 
-    Object java2sql(Object jobject);
-    Object sql2java(Object sqlData);
+    Object toSqlData(Object java);
+    Object toJavaData(Object sql);
 }

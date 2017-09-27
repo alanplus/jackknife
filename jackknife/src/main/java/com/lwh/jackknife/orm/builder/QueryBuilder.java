@@ -1,6 +1,6 @@
 package com.lwh.jackknife.orm.builder;
 
-public class QueryBuilder<T> {
+public class QueryBuilder {
 
     public static final String ASC = " ASC";
     public static final String DESC = " DESC";
@@ -17,10 +17,10 @@ public class QueryBuilder<T> {
 
     protected String[] mColumns;
     protected boolean mDistinct;
-    protected String mGroup;
-    protected String mHaving;
-    protected String mOrder;
-    protected String mLimit;
+    protected String mGroup = "";
+    protected String mHaving = "";
+    protected String mOrder = "";
+    protected String mLimit = "";
     protected WhereBuilder mWhereBuilder;
 
     public QueryBuilder(){
@@ -38,7 +38,7 @@ public class QueryBuilder<T> {
     }
 
     public static QueryBuilder create(){
-        return new QueryBuilder<>();
+        return new QueryBuilder();
     }
 
 

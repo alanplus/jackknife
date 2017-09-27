@@ -18,6 +18,6 @@ public class StringType extends BaseDataType {
 
     @Override
     public int getDefaultWidth() {
-        return 255;
+        return 0;
     }
 }

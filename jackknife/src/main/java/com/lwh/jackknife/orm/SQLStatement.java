@@ -51,6 +51,5 @@ public class SQLStatement {
     }
 
     public void print(){
-//        Logger.info(TAG, );
     }
 }

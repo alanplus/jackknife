@@ -1,9 +1,12 @@
 package com.lwh.jackknife.orm.table;
 
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.Table;
+import com.lwh.jackknife.orm.helper.OrmSQLiteOpenHelper;
 import com.lwh.jackknife.orm.type.BaseDataType;
 import com.lwh.jackknife.orm.type.BooleanType;
 import com.lwh.jackknife.orm.type.ByteArrayType;
@@ -22,36 +25,41 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 表管理器。
+ */
 public class TableManager {
 
     private static TableManager sInstance;
     private static SQLiteDatabase sDatabase;
-    private Map<Class<OrmTable>,String> mTableNameMap;
+    private static Map<Class<? extends OrmTable>,String> sTableNameMap;
 
     public TableManager(SQLiteDatabase db){
         this.sDatabase = db;
-        mTableNameMap = new ConcurrentHashMap<>();
+        sTableNameMap = new ConcurrentHashMap<>();
     }
 
-    public static TableManager getInstance(SQLiteDatabase db){
+    public static TableManager getInstance(){
         if (sInstance == null){
             synchronized (TableManager.class){
                 if (sInstance == null) {
-                    sInstance = new TableManager(db);
+                    if (Application.getInstance() instanceof Application) {
+                        OrmSQLiteOpenHelper helper = Application.getInstance().getSQLiteOpenHelper();
+                        SQLiteDatabase db = helper.getWritableDatabase();
+                        sInstance = new TableManager(db);
+                    }
                 }
             }
         }
         return sInstance;
     }
 
-    public <T> String getTableName(Class<T> tableClass){
-        if (mTableNameMap.containsKey(tableClass)){
-            return mTableNameMap.get(tableClass);
-        }
-        return "";
+    public <T extends OrmTable> String getTableName(Class<T> tableClass){
+        Table table = tableClass.getAnnotation(Table.class);
+        return table.value();
     }
 
-    public void createTable(Class<? extends OrmTable> tableClass){
+    public <T extends OrmTable> void createTable(Class<T> tableClass){
         Table table = tableClass.getAnnotation(Table.class);
         String tableName;
         if (table != null) {
@@ -60,10 +68,11 @@ public class TableManager {
             String className = tableClass.getSimpleName();
             tableName = generateTableName(className);//按对象的类名和表名的映射规则生成默认的
         }
-        Field[] fields = tableClass.getFields();
+        Field[] fields = tableClass.getDeclaredFields();
         StringBuilder sb = new StringBuilder();
         sb.append("CREATE TABLE "+tableName + "(");
         for (Field field:fields){
+            field.setAccessible(true);
             String columnName;
             String colunmType;
             Column column = field.getAnnotation(Column.class);
@@ -75,21 +84,21 @@ public class TableManager {
             }
             Class<?> fieldType = field.getType();
             BaseDataType dataType;
-            if (Boolean.class.isAssignableFrom(fieldType)){
+            if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
                 dataType = new BooleanType();
-            }else if (Byte.class.isAssignableFrom(fieldType)) {
+            }else if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)) {
                 dataType = new ByteType();
-            }else if (Short.class.isAssignableFrom(fieldType)){
+            }else if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)){
                 dataType = new ShortType();
-            }else if (Integer.class.isAssignableFrom(fieldType)){
+            }else if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
                 dataType = new IntType();
-            }else if (Long.class.isAssignableFrom(fieldType)){
+            }else if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
                 dataType = new LongType();
-            }else if (Float.class.isAssignableFrom(fieldType)) {
+            }else if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)) {
                 dataType = new FloatType();
-            }else if (Double.class.isAssignableFrom(fieldType)){
+            }else if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
                 dataType = new DoubleType();
-            }else if (Character.class.isAssignableFrom(fieldType)){
+            }else if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)){
                 dataType = new CharType();
             }else if (String.class.isAssignableFrom(fieldType)){
                 dataType = new StringType();
@@ -100,8 +109,13 @@ public class TableManager {
             colunmType = sqlType.name();
             sb.append(columnName + " " + colunmType).append(",");//添加一个表的列的sql语句
         }
-        String sql = sb.substring(0, sb.length()-2)+");";//删除最后一个逗号并加上又括号
-        sDatabase.execSQL(sql);
+        String sql = sb.substring(0, sb.length()-1)+");";//删除最后一个逗号并加上右括号
+        try {
+            sDatabase.execSQL(sql);
+            sTableNameMap.put(tableClass, tableName);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     private String generateTableName(String className){
@@ -125,5 +139,4 @@ public class TableManager {
         }
         return sb.toString().toLowerCase();
     }
-
 }

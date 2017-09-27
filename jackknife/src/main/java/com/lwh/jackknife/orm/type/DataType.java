@@ -17,7 +17,7 @@ public enum DataType {
 
     private final DataPersister mPersister;
 
-    DataType(DataPersister persister){
+    /* package */ DataType(DataPersister persister){
         mPersister = persister;
     }
 

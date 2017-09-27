@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteException;
 import com.lwh.jackknife.util.Logger;
 
 /**
- * 事务。中间发生失败，就不会提交成功。
+ * 事务提交。提交过程中发生错误，就不会提交成功。
  */
 public class Transaction {
 
@@ -25,6 +25,7 @@ public class Transaction {
             e.printStackTrace();
         } finally {
             db.endTransaction();
+            Logger.info(TAG, "end transaction");
         }
         return false;
     }

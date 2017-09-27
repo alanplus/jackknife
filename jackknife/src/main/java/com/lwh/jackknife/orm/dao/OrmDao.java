@@ -5,92 +5,93 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.lwh.jackknife.app.Application;
-import com.lwh.jackknife.orm.helper.OrmSQLiteOpenHelper;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
-import com.lwh.jackknife.orm.table.TableManager;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
+import com.lwh.jackknife.orm.helper.OrmSQLiteOpenHelper;
+import com.lwh.jackknife.orm.table.OrmTable;
+import com.lwh.jackknife.orm.table.TableManager;
+import com.lwh.jackknife.util.Logger;
+import com.lwh.jackknife.util.TextUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * 万能DAO。
  *
  * @param <T> 数据实体类。
  */
-public class OrmDao<T> implements Dao<T> {
+public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     private Class<T> mBeanClass;
     private OrmSQLiteOpenHelper mHelper;
     private SQLiteDatabase mDb;
+    private final String TAG = getClass().getSimpleName();
 
-    public OrmDao(Class<T> beanClass){
+    /* package */ OrmDao(Class<T> beanClass){
         this.mBeanClass = beanClass;
         this.mHelper = Application.getInstance().getSQLiteOpenHelper();
         this.mDb = mHelper.getWritableDatabase();
     }
 
-    public ContentValues getContentValues(T bean) throws IllegalAccessException {
+    public ContentValues getContentValues(T bean) {
         ContentValues values = new ContentValues();
-        Field[] fields = mBeanClass.getFields();
+        Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields){
             field.setAccessible(true);
             Column column = field.getAnnotation(Column.class);
-            String columnName;
-            if (column != null){
-                columnName = column.value();
-            } else {
-                columnName = generateColumnName(field.getName());
-            }
-            Class<?> fieldType = field.getType();
-            if (String.class.isAssignableFrom(fieldType)){
-                values.put(columnName, String.valueOf(field.get("")));
-            }else if (Boolean.class.isAssignableFrom(fieldType)){
-                values.put(columnName, field.getBoolean(bean));
-            }else if(Byte.class.isAssignableFrom(fieldType)){
-                values.put(columnName, field.getByte(bean));
-            }else if (Short.class.isAssignableFrom(fieldType)){
-                values.put(columnName, field.getShort(bean));
-            }else if (Integer.class.isAssignableFrom(fieldType)){
-                values.put(columnName, field.getInt(bean));
-            }else if (Long.class.isAssignableFrom(fieldType)){
-                values.put(columnName, field.getLong(bean));
-            }else if (Float.class.isAssignableFrom(fieldType)){
-                values.put(columnName, field.getFloat(bean));
-            }else if (Double.class.isAssignableFrom(fieldType)){
-                values.put(columnName, field.getDouble(bean));
-            }else {
-                values.put(columnName, (byte[]) field.get(""));
+            if (column != null) {
+                String columnName = column.value();
+                Class<?> fieldType = field.getType();
+                try {
+                    if (String.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, String.valueOf(field.get(bean)));
+                    } else if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, field.getBoolean(bean));
+                    } else if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, field.getByte(bean));
+                    } else if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, field.getShort(bean));
+                    } else if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, field.getInt(bean));
+                    } else if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, field.getLong(bean));
+                    } else if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, field.getFloat(bean));
+                    } else if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, field.getDouble(bean));
+                    } else {
+                        values.put(columnName, (byte[]) field.get(bean));
+                    }
+                }catch (IllegalAccessException e){
+                    e.printStackTrace();
+                }
             }
         }
         return values;
     }
 
-    private String generateColumnName(String fieldName){
+    private String getColumns(){
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < fieldName.length(); i++) {
-            if (fieldName.charAt(i) >= 65 && fieldName.charAt(i) <= 90 || i == 0) {
-                sb.append("_");
-            }
-            sb.append(String.valueOf(fieldName.charAt(i)).toLowerCase(Locale.ENGLISH));
+        Field[] fields = mBeanClass.getDeclaredFields();
+        for (Field field:fields){
+            field.setAccessible(true);
+            String name = field.getName();
+            sb.append(name).append(",");
         }
-        return sb.toString().toLowerCase();
+        return sb.substring(0, sb.length()-1);
     }
 
     @Override
     public boolean insert(T bean) {
-        try {
-            TableManager manager = TableManager.getInstance(mDb);
-            String tableName = manager.getTableName(mBeanClass);
-            ContentValues contentValues = getContentValues(bean);
-            if(mDb.insert(tableName, null, contentValues) > 0){
-                return true;
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        ContentValues contentValues = getContentValues(bean);
+        if(mDb.insert(tableName, getColumns(), contentValues) > 0){
+            Logger.error(TAG, "insert success");
+            return true;
         }
         return false;
     }
@@ -112,9 +113,9 @@ public class OrmDao<T> implements Dao<T> {
 
     @Override
     public boolean delete(WhereBuilder builder) {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
-        if (mDb.delete(tableName, builder.getWhere(), (String[]) builder.getWhereArgs()) > 0) {
+        if (mDb.delete(tableName, builder.getWhere(), convertWhereArgs(builder.getWhereArgs())) > 0) {
             return true;
         }
         return false;
@@ -122,7 +123,7 @@ public class OrmDao<T> implements Dao<T> {
 
     @Override
     public boolean delete() {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         if (mDb.delete(tableName, null, null) > 0) {
             return true;
@@ -132,37 +133,41 @@ public class OrmDao<T> implements Dao<T> {
 
     @Override
     public boolean update(WhereBuilder builder, T newBean) {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
-        try {
-            ContentValues contentValues = getContentValues(newBean);
-            if (mDb.update(tableName, contentValues, builder.getWhere(), (String[]) builder.getWhereArgs()) > 0){
-                return true;
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        ContentValues contentValues = getContentValues(newBean);
+        if (mDb.update(tableName, contentValues, builder.getWhere(), convertWhereArgs(builder.getWhereArgs())) > 0){
+            return true;
         }
         return false;
     }
 
+    public String[] convertWhereArgs(Object[] objects){
+        List<String> result = new ArrayList<>();
+        for (Object obj:objects){
+            if (obj instanceof Number){
+                result.add(String.valueOf(obj));
+            }else if (obj instanceof String){
+                result.add(obj.toString());
+            }
+        }
+        return result.toArray(new String[]{});
+    }
+
     @Override
     public boolean update(T newBean) {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
-        try {
-            ContentValues contentValues = getContentValues(newBean);
-            if (mDb.update(tableName, contentValues, null, null) > 0){
-                return true;
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        ContentValues contentValues = getContentValues(newBean);
+        if (mDb.update(tableName, contentValues, null, null) > 0){
+            return true;
         }
         return false;
     }
 
     @Override
     public List<T> select() {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         Cursor cursor = mDb.query(tableName, null, null, null, null, null, null);
         return getResult(cursor);
@@ -170,7 +175,7 @@ public class OrmDao<T> implements Dao<T> {
 
     @Override
     public List<T> select(QueryBuilder builder) {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         String[] columns = builder.getColumns();
         String group = builder.getGroup();
@@ -179,15 +184,18 @@ public class OrmDao<T> implements Dao<T> {
         String limit = builder.getLimit();
         WhereBuilder whereBuilder = builder.getWhereBuilder();
         String where = whereBuilder.getWhere();
-        String[] whereArgs = (String[]) whereBuilder.getWhereArgs();
+        String[] whereArgs = convertWhereArgs(whereBuilder.getWhereArgs());
         Cursor cursor = mDb.query(tableName, columns, where, whereArgs, group, having, order);
         List<T> result = getResult(cursor);
-        if (limit.contains(",")){
-            String[] limitPart = limit.split(",");
-            return getSpecifiedBeans(result, Integer.valueOf(limitPart[0]), Integer.valueOf(limitPart[1]));
-        }else{
-            return getSpecifiedBeans(result, Integer.valueOf(limit));
+        if (TextUtils.isNotEmpty(limit)) {
+            if (limit.contains(",")) {
+                String[] limitPart = limit.split(",");
+                return getSpecifiedBeans(result, Integer.valueOf(limitPart[0]), Integer.valueOf(limitPart[1]));
+            } else {
+                return getSpecifiedBeans(result, Integer.valueOf(limit));
+            }
         }
+        return result;
     }
 
     public List<T> getSpecifiedBeans(List<T> beans, int start, int length){
@@ -204,7 +212,7 @@ public class OrmDao<T> implements Dao<T> {
 
     @Override
     public int selectCount() {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         Cursor cursor = mDb.rawQuery("SELECT COUNT(*) FROM TABLE " + tableName, null);
         return cursor.getCount();
@@ -212,7 +220,7 @@ public class OrmDao<T> implements Dao<T> {
 
     @Override
     public int selectCount(QueryBuilder builder) {
-        TableManager manager = TableManager.getInstance(mDb);
+        TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         WhereBuilder whereBuilder = builder.getWhereBuilder();
         String sql = "SELECT COUNT(*) FROM TABLE " + tableName;
@@ -238,12 +246,43 @@ public class OrmDao<T> implements Dao<T> {
         while (cursor.moveToNext()) {
             try {
                 T bean = mBeanClass.newInstance();
-                Field[] fields = mBeanClass.getFields();
+                Field[] fields = mBeanClass.getDeclaredFields();
                 for (Field field:fields){
                     field.setAccessible(true);
-                    //这个肯定不是第一次，TableManager早在SQLiteHelper就会创建。
-                    TableManager manager = TableManager.getInstance(null);
-                    field.set(bean, cursor.getColumnIndex(manager.getTableName(mBeanClass)));
+                    Column column = field.getAnnotation(Column.class);
+                    if (column != null){
+                        String columnName = column.value();
+                        int columnIndex = cursor.getColumnIndex(columnName);
+                        Class<?> fieldType = field.getType();
+                        if (String.class.isAssignableFrom(fieldType)){
+                            field.set(bean, cursor.getString(columnIndex));
+                        }else if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
+                            int value = cursor.getInt(columnIndex);
+                            switch (value){
+                                case 0:
+                                    field.set(bean, false);
+                                    break;
+                                case 1:
+                                    field.set(bean, true);
+                                    break;
+                            }
+                        } else if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
+                            field.set(bean, cursor.getLong(columnIndex));
+                        } else if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
+                            field.set(bean, cursor.getInt(columnIndex));
+                        } else if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)
+                                || byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)){
+                            field.set(bean, cursor.getShort(columnIndex));
+                        } else if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
+                            field.set(bean, cursor.getDouble(columnIndex));
+                        } else if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)) {
+                            field.set(bean, cursor.getFloat(columnIndex));
+                        } else if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)) {
+                            field.set(bean, cursor.getString(columnIndex));
+                        } else {
+                            field.set(bean, cursor.getBlob(columnIndex));
+                        }
+                    }
                 }
                 result.add(bean);
             } catch (InstantiationException e) {

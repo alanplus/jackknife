@@ -16,19 +16,8 @@ public class BooleanType extends BaseDataType {
         return mInstance;
     }
 
-
     @Override
     public int getDefaultWidth() {
         return 1;
-    }
-
-    @Override
-    public Object java2sql(Object jobject) {
-        return null;
-    }
-
-    @Override
-    public Object sql2java(Object sqlData) {
-        return null;
     }
 }

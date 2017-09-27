@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lwh.jackknife.orm.Transaction;
 import com.lwh.jackknife.orm.table.OrmTable;
 import com.lwh.jackknife.orm.table.TableManager;
-import com.lwh.jackknife.orm.Transaction;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper{
     }
 
     private void autoCreateTable(SQLiteDatabase db){
-        mTableManager  = TableManager.getInstance(db);
+        mTableManager  = TableManager.getInstance();
         Transaction.execute(db, new Transaction.Worker() {
             @Override
             public boolean doTransition(SQLiteDatabase db) {
@@ -42,8 +42,5 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (newVersion > oldVersion) {
-            // FIXME: 2017/9/16 
-        }
     }
 }

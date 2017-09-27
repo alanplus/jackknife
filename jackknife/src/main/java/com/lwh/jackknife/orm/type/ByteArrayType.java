@@ -1,12 +1,8 @@
 package com.lwh.jackknife.orm.type;
 
-/**
- * Created by liuwenhao on 2017/9/16.
- */
-
 public class ByteArrayType extends BaseDataType {
 
-    private static final ByteType mInstance = new ByteType();
+    private static final ByteArrayType mInstance = new ByteArrayType();
 
     public ByteArrayType(){
         super(SqlType.BLOB);
@@ -16,10 +12,9 @@ public class ByteArrayType extends BaseDataType {
         super(sqlType);
     }
 
-    public static ByteType getInstance(){
+    public static ByteArrayType getInstance(){
         return mInstance;
     }
-
 
     @Override
     public int getDefaultWidth() {

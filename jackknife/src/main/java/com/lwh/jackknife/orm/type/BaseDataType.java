@@ -16,12 +16,12 @@ public abstract class BaseDataType extends BaseFieldConverter implements DataPer
     }
 
     @Override
-    public Object java2sql(Object jobject) {
-        return null;
+    public Object toJavaData(Object sql) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Object sql2java(Object sqlData) {
-        return null;
+    public Object toSqlData(Object java) {
+        throw new UnsupportedOperationException();
     }
 }

@@ -9,12 +9,16 @@ import com.lwh.jackknife.orm.table.OrmTable;
 import java.util.List;
 
 /**
- * 如果使用了此类，需要继承{@link Application}。
+ * 如果你使用了此类，你将需要继承{@link Application}。
  */
 public class Orm {
 
     public synchronized static void init(Context context, String databaseName){
-        OrmSQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1, null);
+        init(context, databaseName, 1);
+    }
+
+    public synchronized static void init(Context context, String databaseName, int version){
+        OrmSQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, version, null);
         Application.getInstance().attach(helper);
     }
 

@@ -1,24 +1,25 @@
 package com.lwh.jackknife.orm;
 
 import com.lwh.jackknife.orm.table.OrmTable;
+import com.lwh.jackknife.util.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrmConfig {
 
-    private String mDbName;
+    private String mDatabaseName;
     private int mVersionCode;
     private List<Class<? extends OrmTable>> mTableClasses;
 
     private OrmConfig(Builder builder){
-        mDbName = builder.mDbName;
+        mDatabaseName = builder.mDatabaseName;
         mVersionCode = builder.mVersionCode;
         mTableClasses = builder.mTableClasses;
     }
 
     public String getDatabaseName() {
-        return mDbName;
+        return mDatabaseName;
     }
 
     public int getVersionCode() {
@@ -31,7 +32,7 @@ public class OrmConfig {
 
     public static class Builder{
 
-        private String mDbName;
+        private String mDatabaseName;
         private int mVersionCode = 1;
         private List<Class<? extends OrmTable>> mTableClasses;
 
@@ -44,17 +45,17 @@ public class OrmConfig {
         }
 
         public Builder database(String name){
-            mDbName = name;
+            mDatabaseName = name;
             return this;
         }
 
-        public Builder version(int versionCode){
-            mVersionCode = versionCode;
+        public Builder version(int code){
+            mVersionCode = code;
             return this;
         }
 
         public OrmConfig build(){
-            if (mDbName != null) {
+            if (TextUtils.isNotEmpty(mDatabaseName)) {
                 return new OrmConfig(this);
             }
             return null;

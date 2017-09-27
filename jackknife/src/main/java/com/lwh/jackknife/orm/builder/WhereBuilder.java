@@ -2,7 +2,7 @@ package com.lwh.jackknife.orm.builder;
 
 import com.lwh.jackknife.util.TextUtils;
 
-public class WhereBuilder<T> {
+public class WhereBuilder {
 
     public static final String WHERE = " WHERE ";
     public static final String EQUAL_HOLDER = "=?";
@@ -21,7 +21,6 @@ public class WhereBuilder<T> {
     public static final String PARENTHESES_RIGHT = ")";
     protected String mWhere;
     protected Object[] mWhereArgs;
-    protected Class<T> mTableClass;
 
     public WhereBuilder(){
     }
@@ -37,10 +36,6 @@ public class WhereBuilder<T> {
 
     public static WhereBuilder create(String where, Object[] whereArgs){
         return new WhereBuilder(where, whereArgs);
-    }
-
-    public Class<T> getTableClass() {
-        return mTableClass;
     }
 
     public WhereBuilder and(){
@@ -140,7 +135,7 @@ public class WhereBuilder<T> {
     }
 
     public String getWhere() {
-        return WHERE;
+        return mWhere;
     }
 
     public Object[] getWhereArgs() {
@@ -160,7 +155,22 @@ public class WhereBuilder<T> {
     }
 
     public String getSQL(){
-        // FIXME: 2017/9/16
-        return "WHERE "+ "";
+        int position = 0;
+        for (int i = 0; i < mWhere.length(); i++) {
+            char c = mWhere.charAt(i);
+            if (c == '?'){
+                String arg;
+                if (mWhereArgs[position] instanceof Number) {
+                    arg = String.valueOf(mWhereArgs[position]);
+                }else if (mWhereArgs[position] instanceof String){
+                    arg = mWhereArgs[position].toString();
+                }else {
+                    throw new RuntimeException("mWhereArgs类型不为Number和String");
+                }
+                mWhere.replaceFirst("^?$", arg);
+                position++;
+            }
+        }
+        return WHERE + mWhere;
     }
 }
