@@ -2,11 +2,14 @@ package com.lwh.jackknife.orm.table;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.annotation.Column;
+import com.lwh.jackknife.orm.annotation.Ignore;
 import com.lwh.jackknife.orm.annotation.Table;
-import com.lwh.jackknife.orm.helper.OrmSQLiteOpenHelper;
+import com.lwh.jackknife.orm.dao.DaoFactory;
+import com.lwh.jackknife.orm.dao.OrmDao;
 import com.lwh.jackknife.orm.type.BaseDataType;
 import com.lwh.jackknife.orm.type.BooleanType;
 import com.lwh.jackknife.orm.type.ByteArrayType;
@@ -21,6 +24,7 @@ import com.lwh.jackknife.orm.type.SqlType;
 import com.lwh.jackknife.orm.type.StringType;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,11 +36,30 @@ public class TableManager {
 
     private static TableManager sInstance;
     private static SQLiteDatabase sDatabase;
-    private static Map<Class<? extends OrmTable>,String> sTableNameMap;
+    private Map<Class<? extends OrmTable>, String> mTableNameMap;
+    private final char A = 'A';
+    private final char Z = 'Z';
+    private final String CREATE_TABLE = "CREATE TABLE";
+    private final String SPACE = " ";
+    private final String LEFT_PARENTHESIS = "(";
+    private final String RIGHT_PARENTHESIS = ")";
+    private final String COMMA = ",";
+    private final String SEMICOLON = ";";
+    private final String UNDERLINE = "_";
+    private final String TABLE_NAME_HEADER = "t" + UNDERLINE;
+    private OrmDao<TableName> mDao;
 
-    public TableManager(SQLiteDatabase db){
+    private TableManager(SQLiteDatabase db){
         this.sDatabase = db;
-        sTableNameMap = new ConcurrentHashMap<>();
+        createTable(TableName.class);
+        mTableNameMap = new ConcurrentHashMap<>();
+        mDao = DaoFactory.getDao(TableName.class);
+        List<TableName> tables = mDao.select();
+        for (TableName table:tables) {
+            String tableName = table.getTableName();
+            Class<? extends OrmTable> tableClass = table.getTableClass();
+            mTableNameMap.put(tableClass, tableName);
+        }
     }
 
     public static TableManager getInstance(){
@@ -44,9 +67,9 @@ public class TableManager {
             synchronized (TableManager.class){
                 if (sInstance == null) {
                     if (Application.getInstance() instanceof Application) {
-                        OrmSQLiteOpenHelper helper = Application.getInstance().getSQLiteOpenHelper();
-                        SQLiteDatabase db = helper.getWritableDatabase();
-                        sInstance = new TableManager(db);
+                        SQLiteOpenHelper helper = Application.getInstance().getSQLiteOpenHelper();
+                        sDatabase = helper.getWritableDatabase();
+                        sInstance = new TableManager(sDatabase);
                     }
                 }
             }
@@ -70,9 +93,13 @@ public class TableManager {
         }
         Field[] fields = tableClass.getDeclaredFields();
         StringBuilder sb = new StringBuilder();
-        sb.append("CREATE TABLE "+tableName + "(");
+        sb.append(CREATE_TABLE + SPACE + tableName + LEFT_PARENTHESIS);
         for (Field field:fields){
             field.setAccessible(true);
+            Ignore ignore = field.getAnnotation(Ignore.class);
+            if (ignore != null){
+                continue;
+            }
             String columnName;
             String colunmType;
             Column column = field.getAnnotation(Column.class);
@@ -107,12 +134,14 @@ public class TableManager {
             }
             SqlType sqlType = dataType.getSqlType();
             colunmType = sqlType.name();
-            sb.append(columnName + " " + colunmType).append(",");//添加一个表的列的sql语句
+            sb.append(columnName + SPACE + colunmType).append(COMMA);//添加一个表的列的sql语句
         }
-        String sql = sb.substring(0, sb.length()-1)+");";//删除最后一个逗号并加上右括号
+        String sql = sb.substring(0, sb.length()-1) + RIGHT_PARENTHESIS + SEMICOLON;//删除最后一个逗号并加上右括号
         try {
             sDatabase.execSQL(sql);
-            sTableNameMap.put(tableClass, tableName);
+            mTableNameMap.put(tableClass, tableName);
+            TableName nameTable = new TableName(tableClass, tableName);
+            mDao.insert(nameTable);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -121,19 +150,19 @@ public class TableManager {
     private String generateTableName(String className){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < className.length(); i++) {
-            if (className.charAt(i) >= 65 && className.charAt(i) <= 90 || i == 0) {
-                sb.append("_");
+            if (className.charAt(i) >= A && className.charAt(i) <= Z || i == 0) {
+                sb.append(UNDERLINE);
             }
             sb.append(String.valueOf(className.charAt(i)).toLowerCase(Locale.ENGLISH));
         }
-        return "t_" + sb.toString().toLowerCase();
+        return TABLE_NAME_HEADER + sb.toString().toLowerCase();
     }
 
     private String generateColumnName(String fieldName){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < fieldName.length(); i++) {
-            if (fieldName.charAt(i) >= 65 && fieldName.charAt(i) <= 90 || i == 0) {
-                sb.append("_");
+            if (fieldName.charAt(i) >= A && fieldName.charAt(i) <= Z || i == 0) {
+                sb.append(UNDERLINE);
             }
             sb.append(String.valueOf(fieldName.charAt(i)).toLowerCase(Locale.ENGLISH));
         }

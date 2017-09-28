@@ -3,12 +3,12 @@ package com.lwh.jackknife.orm.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
-import com.lwh.jackknife.orm.helper.OrmSQLiteOpenHelper;
 import com.lwh.jackknife.orm.table.OrmTable;
 import com.lwh.jackknife.orm.table.TableManager;
 import com.lwh.jackknife.util.Logger;
@@ -26,7 +26,7 @@ import java.util.List;
 public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     private Class<T> mBeanClass;
-    private OrmSQLiteOpenHelper mHelper;
+    private SQLiteOpenHelper mHelper;
     private SQLiteDatabase mDb;
     private final String TAG = getClass().getSimpleName();
 

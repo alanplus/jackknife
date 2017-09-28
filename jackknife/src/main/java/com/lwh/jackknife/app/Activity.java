@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class Activity extends FragmentActivity {
 
 	/**
-	 * 加入任务。
+	 * 加入任务栈。
 	 */
 	private void joinTask(){
 		if (getApplication() instanceof Application) {
@@ -26,7 +26,7 @@ public abstract class Activity extends FragmentActivity {
 	/**
 	 * 相当于finish，使用此方法会移除任务栈的缓存对象。
 	 */
-	public void back(){
+	public void finishTask(){
 		if (getApplication() instanceof Application) {
 			Application.getInstance().popTask();
 		}
