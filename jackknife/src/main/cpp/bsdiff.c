@@ -1,4 +1,4 @@
-/*-
+/*
  * Copyright 2003-2005 Colin Percival
  * All rights reserved
  *
@@ -34,8 +34,6 @@ __FBSDID("$FreeBSD: src/usr.bin/bsdiff/bsdiff/bsdiff.c,v 1.1 2005/08/06 01:59:05
 #include <err.h>
 #include <fcntl.h>
 #include <jni.h>
-#include <android/log.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -408,7 +406,6 @@ int diffMethod(int argc,char *argv[])
 JNIEXPORT jint JNICALL Java_com_lwh_jackknife_util_IoUtils_bsdiff
         (JNIEnv *env, jclass cls,
          jstring oldPath, jstring newPath, jstring patchPath){
-    __android_log_print(ANDROID_LOG_INFO, "bsdiff", "正在差分");
     int argc = 4;
     char * argv[argc];
     argv[0] = "bsdiff";

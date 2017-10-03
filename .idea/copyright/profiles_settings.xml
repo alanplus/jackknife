@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="" />
+  <settings default="jackknife">
+    <module2copyright>
+      <element module="All" copyright="jackknife" />
+    </module2copyright>
+  </settings>
 </component>

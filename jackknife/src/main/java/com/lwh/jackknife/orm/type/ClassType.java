@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.orm.annotation;
+package com.lwh.jackknife.orm.type;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class ClassType extends BaseDataType{
 
-/**
- * 唯一约束，配置了该注解的属性，其哈希码不能重复。
- */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Unique {
+    public ClassType(){
+        super(SqlType.TEXT);
+    }
+
+    public ClassType(SqlType sqlType) {
+        super(sqlType);
+    }
+    @Override
+    public int getDefaultWidth() {
+        return 0;
+    }
 }
