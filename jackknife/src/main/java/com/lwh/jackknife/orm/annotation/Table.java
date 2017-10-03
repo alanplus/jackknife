@@ -1,7 +1,5 @@
 package com.lwh.jackknife.orm.annotation;
 
-import com.lwh.jackknife.orm.table.OrmTable;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -6,8 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.annotation.Column;
+import com.lwh.jackknife.orm.annotation.ForeignKey;
 import com.lwh.jackknife.orm.annotation.Ignore;
+import com.lwh.jackknife.orm.annotation.NotNull;
+import com.lwh.jackknife.orm.annotation.PrimaryKey;
 import com.lwh.jackknife.orm.annotation.Table;
+import com.lwh.jackknife.orm.annotation.Unique;
 import com.lwh.jackknife.orm.dao.DaoFactory;
 import com.lwh.jackknife.orm.dao.OrmDao;
 import com.lwh.jackknife.orm.type.BaseDataType;
@@ -41,6 +45,10 @@ public class TableManager {
     private final char Z = 'Z';
     private final String CREATE_TABLE = "CREATE TABLE";
     private final String SPACE = " ";
+    private final String UNIQUE = "UNIQUE";
+    private final String NOT_NULL = "NOT NULL";
+    private final String PRIMARY_KEY = "PRIMARY KEY";
+    private final String FOREIGN_KEY = "FOREIGN KEY";
     private final String LEFT_PARENTHESIS = "(";
     private final String RIGHT_PARENTHESIS = ")";
     private final String COMMA = ",";
@@ -97,18 +105,13 @@ public class TableManager {
         for (Field field:fields){
             field.setAccessible(true);
             Ignore ignore = field.getAnnotation(Ignore.class);
-            if (ignore != null){
+            PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+            ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
+            if (ignore != null || (primaryKey == null && foreignKey == null)){
                 continue;
             }
             String columnName;
             String colunmType;
-            Column column = field.getAnnotation(Column.class);
-            if (column != null){
-                columnName = column.value();
-            }else {
-                String fieldName = field.getName();
-                columnName = generateColumnName(fieldName);//按对象的属性名和列表的映射规则生成默认的
-            }
             Class<?> fieldType = field.getType();
             BaseDataType dataType;
             if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
@@ -134,8 +137,42 @@ public class TableManager {
             }
             SqlType sqlType = dataType.getSqlType();
             colunmType = sqlType.name();
-            sb.append(columnName + SPACE + colunmType).append(COMMA);//添加一个表的列的sql语句
+            Column column = field.getAnnotation(Column.class);
+            if (column != null){
+                columnName = column.value();
+            }else {
+                String fieldName = field.getName();
+                columnName = generateColumnName(fieldName);//按对象的属性名和列表的映射规则生成默认的
+            }
+            sb.append(columnName + SPACE + colunmType);
+            Unique unique = field.getAnnotation(Unique.class);
+            if (unique != null) {
+                sb.append(SPACE).append(UNIQUE);
+            }
+            NotNull notNull = field.getAnnotation(NotNull.class);
+            if (notNull != null) {
+                sb.append(SPACE).append(NOT_NULL);
+            }
+            sb.append(SPACE).append(PRIMARY_KEY);
+            if (foreignKey != null){
+                Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
+                if (!foreignKeyTableClass.equals(tableClass)){//建立外键的条件，不能建立在自己的主键基础上
+                    String foreignKeyTableName = foreignKeyTableClass.getName();//外键表的表名
+                    sb.append(SPACE).append(FOREIGN_KEY).append(foreignKeyTableName).append(LEFT_PARENTHESIS);
+                    Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();//拿到外键所指向表的所有列
+                    for (Field foreignKeyTableField : foreignKeyTableFields){
+                        PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField.getAnnotation(PrimaryKey.class);
+                        if (foreignKeyTablePrimaryKey != null){
+                            String name = field.getName();
+                            sb.append(name).append(COMMA);
+                        }
+                    }
+                    sb.deleteCharAt(sb.length()-1);
+                }
+            }
+            sb.append(COMMA);
         }
+        sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS);//删掉最后一个逗号
         String sql = sb.substring(0, sb.length()-1) + RIGHT_PARENTHESIS + SEMICOLON;//删除最后一个逗号并加上右括号
         try {
             sDatabase.execSQL(sql);

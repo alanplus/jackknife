@@ -2,21 +2,13 @@ package com.lwh.jackknife.orm.builder;
 
 public class QueryBuilder {
 
-    public static final String ASC = " ASC";
-    public static final String DESC = " DESC";
     public static final String GROUP_BY = " GROUP BY ";
     public static final String HAVING = " HAVING ";
     public static final String ORDER_BY = " ORDER BY ";
     public static final String LIMIT = " LIMIT ";
-    public static final String SELECT_COUNT = "SELECT COUNT(*) FROM ";
-    public static final String SELECT = "SELECT ";
-    public static final String DISTINCT = " DISTINCT ";
-    public static final String ASTERISK = "*";
-    public static final String FROM = " FROM ";
     public static final String COMMA = ",";
 
     protected String[] mColumns;
-    protected boolean mDistinct;
     protected String mGroup = "";
     protected String mHaving = "";
     protected String mOrder = "";
@@ -39,12 +31,6 @@ public class QueryBuilder {
 
     public static QueryBuilder create(){
         return new QueryBuilder();
-    }
-
-
-    public QueryBuilder distinct(boolean distinct){
-        mDistinct = distinct;
-        return this;
     }
 
     public QueryBuilder columns(String[] columns){
