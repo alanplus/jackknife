@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2017. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.lwh.jackknife.orm.dao;
 
 import com.lwh.jackknife.orm.builder.QueryBuilder;
@@ -42,7 +50,7 @@ public interface Dao<T extends OrmTable> {
      *
      * @return 是否删除成功。
      */
-    boolean delete();
+    boolean deleteAll();
 
     /**
      * 按条件更新数据。
@@ -59,14 +67,14 @@ public interface Dao<T extends OrmTable> {
      * @param newBean 要修改成什么样的数据？
      * @return 是否修改成功。
      */
-    boolean update(T newBean);
+    boolean updateAll(T newBean);
 
     /**
      * 查询所有数据。
      *
      * @return 查询出的数据集合。
      */
-    List<T> select();
+    List<T> selectAll();
 
     /**
      * 按查询条件查询数据。
@@ -81,7 +89,7 @@ public interface Dao<T extends OrmTable> {
      *
      * @return 所有数据的条数。
      */
-    int selectCount();
+    int selectAllCount();
 
     /**
      * 按查询条件获取数据的条数。

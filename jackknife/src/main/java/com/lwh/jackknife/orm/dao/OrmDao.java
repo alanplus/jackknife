@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2017. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.lwh.jackknife.orm.dao;
 
 import android.content.ContentValues;
@@ -6,6 +14,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
+import com.lwh.jackknife.orm.Transaction;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
@@ -29,11 +38,82 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     private SQLiteOpenHelper mHelper;
     private SQLiteDatabase mDb;
     private final String TAG = getClass().getSimpleName();
+    private final String SELECT_COUNT = "SELECT COUNT(*) FROM ";
 
     /* package */ OrmDao(Class<T> beanClass){
         this.mBeanClass = beanClass;
         this.mHelper = Application.getInstance().getSQLiteOpenHelper();
         this.mDb = mHelper.getWritableDatabase();
+    }
+
+    private boolean isAssignableFromBoolean(Class<?> fieldType){
+        if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromByte(Class<?> fieldType){
+        if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromShort(Class<?> fieldType){
+        if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromInteger(Class<?> fieldType){
+        if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromLong(Class<?> fieldType){
+        if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromFloat(Class<?> fieldType){
+        if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromDouble(Class<?> fieldType){
+        if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromCharacter(Class<?> fieldType){
+        if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromCharSequence(Class<?> fieldType){
+        if (CharSequence.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromClass(Class<?> fieldType){
+        if (Class.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
     }
 
     public ContentValues getContentValues(T bean) {
@@ -46,22 +126,24 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 String columnName = column.value();
                 Class<?> fieldType = field.getType();
                 try {
-                    if (String.class.isAssignableFrom(fieldType)) {
+                    if (isAssignableFromCharSequence(fieldType)) {
                         values.put(columnName, String.valueOf(field.get(bean)));
-                    } else if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)) {
+                    } else if (isAssignableFromBoolean(fieldType)) {
                         values.put(columnName, field.getBoolean(bean));
-                    } else if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)) {
+                    } else if (isAssignableFromByte(fieldType)) {
                         values.put(columnName, field.getByte(bean));
-                    } else if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)) {
+                    } else if (isAssignableFromShort(fieldType)) {
                         values.put(columnName, field.getShort(bean));
-                    } else if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)) {
+                    } else if (isAssignableFromInteger(fieldType)) {
                         values.put(columnName, field.getInt(bean));
-                    } else if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)) {
+                    } else if (isAssignableFromLong(fieldType)) {
                         values.put(columnName, field.getLong(bean));
-                    } else if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)) {
+                    } else if (isAssignableFromFloat(fieldType)) {
                         values.put(columnName, field.getFloat(bean));
-                    } else if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)) {
+                    } else if (isAssignableFromDouble(fieldType)) {
                         values.put(columnName, field.getDouble(bean));
+                    } else if (Class.class.isAssignableFrom(fieldType)) {
+                        values.put(columnName, ((Class)field.get(bean)).getName());
                     } else {
                         values.put(columnName, (byte[]) field.get(bean));
                     }
@@ -112,34 +194,27 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     }
 
     @Override
-    public boolean delete(WhereBuilder builder) {
-        TableManager manager = TableManager.getInstance();
-        String tableName = manager.getTableName(mBeanClass);
-        if (mDb.delete(tableName, builder.getWhere(), convertWhereArgs(builder.getWhereArgs())) > 0) {
-            return true;
-        }
-        return false;
+    public boolean delete(final WhereBuilder builder) {
+        return Transaction.execute(mDb, new Transaction.Worker() {
+            @Override
+            public boolean doTransition(SQLiteDatabase db) {
+                TableManager manager = TableManager.getInstance();
+                String tableName = manager.getTableName(mBeanClass);
+                return mDb.delete(tableName, builder.getWhere(), convertWhereArgs(builder.getWhereArgs())) > 0;
+            }
+        });
     }
 
     @Override
-    public boolean delete() {
-        TableManager manager = TableManager.getInstance();
-        String tableName = manager.getTableName(mBeanClass);
-        if (mDb.delete(tableName, null, null) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean update(WhereBuilder builder, T newBean) {
-        TableManager manager = TableManager.getInstance();
-        String tableName = manager.getTableName(mBeanClass);
-        ContentValues contentValues = getContentValues(newBean);
-        if (mDb.update(tableName, contentValues, builder.getWhere(), convertWhereArgs(builder.getWhereArgs())) > 0){
-            return true;
-        }
-        return false;
+    public boolean deleteAll() {
+        return Transaction.execute(mDb, new Transaction.Worker() {
+            @Override
+            public boolean doTransition(SQLiteDatabase db) {
+                TableManager manager = TableManager.getInstance();
+                String tableName = manager.getTableName(mBeanClass);
+                return mDb.delete(tableName, null, null) > 0;
+            }
+        });
     }
 
     public String[] convertWhereArgs(Object[] objects){
@@ -155,18 +230,34 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     }
 
     @Override
-    public boolean update(T newBean) {
-        TableManager manager = TableManager.getInstance();
-        String tableName = manager.getTableName(mBeanClass);
-        ContentValues contentValues = getContentValues(newBean);
-        if (mDb.update(tableName, contentValues, null, null) > 0){
-            return true;
-        }
-        return false;
+    public boolean update(final WhereBuilder builder, final T newBean) {
+        return Transaction.execute(mDb, new Transaction.Worker() {
+            @Override
+            public boolean doTransition(SQLiteDatabase db) {
+                TableManager manager = TableManager.getInstance();
+                String tableName = manager.getTableName(mBeanClass);
+                ContentValues contentValues = getContentValues(newBean);
+                return mDb.update(tableName, contentValues, builder.getWhere(), convertWhereArgs
+                        (builder.getWhereArgs())) > 0;
+            }
+        });
     }
 
     @Override
-    public List<T> select() {
+    public boolean updateAll(final T newBean) {
+        return Transaction.execute(mDb, new Transaction.Worker() {
+            @Override
+            public boolean doTransition(SQLiteDatabase db) {
+                TableManager manager = TableManager.getInstance();
+                String tableName = manager.getTableName(mBeanClass);
+                ContentValues contentValues = getContentValues(newBean);
+                return mDb.update(tableName, contentValues, null, null) > 0;
+            }
+        });
+    }
+
+    @Override
+    public List<T> selectAll() {
         TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         Cursor cursor = mDb.query(tableName, null, null, null, null, null, null);
@@ -211,10 +302,10 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     }
 
     @Override
-    public int selectCount() {
+    public int selectAllCount() {
         TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
-        Cursor cursor = mDb.rawQuery("SELECT COUNT(*) FROM TABLE " + tableName, null);
+        Cursor cursor = mDb.rawQuery(SELECT_COUNT + tableName, null);
         return cursor.getCount();
     }
 
@@ -223,24 +314,30 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         WhereBuilder whereBuilder = builder.getWhereBuilder();
-        String sql = "SELECT COUNT(*) FROM TABLE " + tableName;
+        String sql = SELECT_COUNT + tableName;
         sql += whereBuilder.getSQL();
-        if (builder.getGroup() != null){
+        if (TextUtils.isNotEmpty(builder.getGroup())){
             sql += QueryBuilder.GROUP_BY + builder.getGroup();
         }
-        if (builder.getHaving() != null){
+        if (TextUtils.isNotEmpty(builder.getHaving())){
             sql += QueryBuilder.HAVING + builder.getHaving();
         }
-        if (builder.getOrder() != null){
+        if (TextUtils.isNotEmpty(builder.getOrder())){
             sql += QueryBuilder.ORDER_BY + builder.getOrder();
         }
-        if (builder.getLimit() != null){
+        if (TextUtils.isNotEmpty(builder.getLimit())){
             sql += QueryBuilder.LIMIT + builder.getLimit();
         }
         Cursor cursor = mDb.rawQuery(sql, null);
         return cursor.getCount();
     }
 
+    /**
+     * 获取查询结果，<b>OrmTable的实现类必须提供空的构造方法</b>。
+     *
+     * @param cursor 游标。
+     * @return 查询出来的数据。
+     */
     public List<T> getResult(Cursor cursor){
         List<T> result = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -254,9 +351,9 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                         String columnName = column.value();
                         int columnIndex = cursor.getColumnIndex(columnName);
                         Class<?> fieldType = field.getType();
-                        if (String.class.isAssignableFrom(fieldType)){
+                        if (isAssignableFromCharSequence(fieldType)){
                             field.set(bean, cursor.getString(columnIndex));
-                        }else if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
+                        }else if (isAssignableFromBoolean(fieldType)){
                             int value = cursor.getInt(columnIndex);
                             switch (value){
                                 case 0:
@@ -266,19 +363,25 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                                     field.set(bean, true);
                                     break;
                             }
-                        } else if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
+                        } else if (isAssignableFromLong(fieldType)){
                             field.set(bean, cursor.getLong(columnIndex));
-                        } else if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
+                        } else if (isAssignableFromInteger(fieldType)){
                             field.set(bean, cursor.getInt(columnIndex));
-                        } else if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)
-                                || byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)){
+                        } else if (isAssignableFromShort(fieldType)
+                                || isAssignableFromByte(fieldType)){
                             field.set(bean, cursor.getShort(columnIndex));
-                        } else if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
+                        } else if (isAssignableFromDouble(fieldType)){
                             field.set(bean, cursor.getDouble(columnIndex));
-                        } else if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)) {
+                        } else if (isAssignableFromFloat(fieldType)) {
                             field.set(bean, cursor.getFloat(columnIndex));
-                        } else if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)) {
+                        } else if (isAssignableFromCharacter(fieldType)) {
                             field.set(bean, cursor.getString(columnIndex));
+                        } else if (isAssignableFromClass(fieldType)) {
+                            try {
+                                field.set(bean, Class.forName(cursor.getString(columnIndex)));
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             field.set(bean, cursor.getBlob(columnIndex));
                         }

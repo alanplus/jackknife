@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2017. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package com.lwh.jackknife.orm.table;
 
 import android.database.SQLException;
@@ -7,18 +15,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.ForeignKey;
-import com.lwh.jackknife.orm.annotation.Ignore;
+import com.lwh.jackknife.orm.annotation.NonColumn;
 import com.lwh.jackknife.orm.annotation.NotNull;
 import com.lwh.jackknife.orm.annotation.PrimaryKey;
 import com.lwh.jackknife.orm.annotation.Table;
 import com.lwh.jackknife.orm.annotation.Unique;
+import com.lwh.jackknife.orm.builder.QueryBuilder;
+import com.lwh.jackknife.orm.builder.WhereBuilder;
 import com.lwh.jackknife.orm.dao.DaoFactory;
 import com.lwh.jackknife.orm.dao.OrmDao;
+import com.lwh.jackknife.orm.exception.ConstraintException;
 import com.lwh.jackknife.orm.type.BaseDataType;
 import com.lwh.jackknife.orm.type.BooleanType;
 import com.lwh.jackknife.orm.type.ByteArrayType;
 import com.lwh.jackknife.orm.type.ByteType;
 import com.lwh.jackknife.orm.type.CharType;
+import com.lwh.jackknife.orm.type.ClassType;
 import com.lwh.jackknife.orm.type.DoubleType;
 import com.lwh.jackknife.orm.type.FloatType;
 import com.lwh.jackknife.orm.type.IntType;
@@ -27,28 +39,42 @@ import com.lwh.jackknife.orm.type.ShortType;
 import com.lwh.jackknife.orm.type.SqlType;
 import com.lwh.jackknife.orm.type.StringType;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 表管理器。
+ * OrmTable表的管理器。
  */
 public class TableManager {
 
+    /**
+     * 表管理器的单例。
+     */
     private static TableManager sInstance;
+
+    /**
+     * 数据库操作类。
+     */
     private static SQLiteDatabase sDatabase;
-    private Map<Class<? extends OrmTable>, String> mTableNameMap;
+
+    /**
+     * 创建一个存放映射关系的Map。
+     */
+    private Map<Class<? extends OrmTable>, String> mTableNameMap = new ConcurrentHashMap<>();
     private final char A = 'A';
     private final char Z = 'Z';
     private final String CREATE_TABLE = "CREATE TABLE";
+    private final String TABLE_NAME = "table_name";
     private final String SPACE = " ";
     private final String UNIQUE = "UNIQUE";
     private final String NOT_NULL = "NOT NULL";
     private final String PRIMARY_KEY = "PRIMARY KEY";
-    private final String FOREIGN_KEY = "FOREIGN KEY";
+    private final String REFERENCES = "REFERENCES";
     private final String LEFT_PARENTHESIS = "(";
     private final String RIGHT_PARENTHESIS = ")";
     private final String COMMA = ",";
@@ -59,10 +85,12 @@ public class TableManager {
 
     private TableManager(SQLiteDatabase db){
         this.sDatabase = db;
-        createTable(TableName.class);
-        mTableNameMap = new ConcurrentHashMap<>();
         mDao = DaoFactory.getDao(TableName.class);
-        List<TableName> tables = mDao.select();
+    }
+
+    public void installTables(){
+        createTable(TableName.class);
+        List<TableName> tables = mDao.selectAll();
         for (TableName table:tables) {
             String tableName = table.getTableName();
             Class<? extends OrmTable> tableClass = table.getTableClass();
@@ -78,6 +106,7 @@ public class TableManager {
                         SQLiteOpenHelper helper = Application.getInstance().getSQLiteOpenHelper();
                         sDatabase = helper.getWritableDatabase();
                         sInstance = new TableManager(sDatabase);
+                        sInstance.installTables();
                     }
                 }
             }
@@ -85,103 +114,35 @@ public class TableManager {
         return sInstance;
     }
 
+    /**
+     * 获取表名。
+     *
+     * @param tableClass 实现OrmTable接口的类的类型。
+     * @param <T> 实现OrmTable接口的类。
+     * @return 一个实现OrmTable接口的表名。
+     */
     public <T extends OrmTable> String getTableName(Class<T> tableClass){
-        Table table = tableClass.getAnnotation(Table.class);
-        return table.value();
-    }
-
-    public <T extends OrmTable> void createTable(Class<T> tableClass){
-        Table table = tableClass.getAnnotation(Table.class);
+        Table table = tableClass.getAnnotation(Table.class);//获取到表的Table注解
         String tableName;
-        if (table != null) {
+        if (table != null) {//不存在Table注解的情况
             tableName = table.value();//按注解指定的表名来
-        } else {
+        } else {//存在Table注解的情况
             String className = tableClass.getSimpleName();
             tableName = generateTableName(className);//按对象的类名和表名的映射规则生成默认的
         }
-        Field[] fields = tableClass.getDeclaredFields();
-        StringBuilder sb = new StringBuilder();
-        sb.append(CREATE_TABLE + SPACE + tableName + LEFT_PARENTHESIS);
-        for (Field field:fields){
-            field.setAccessible(true);
-            Ignore ignore = field.getAnnotation(Ignore.class);
-            PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-            ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
-            if (ignore != null || (primaryKey == null && foreignKey == null)){
-                continue;
-            }
-            String columnName;
-            String colunmType;
-            Class<?> fieldType = field.getType();
-            BaseDataType dataType;
-            if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
-                dataType = new BooleanType();
-            }else if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)) {
-                dataType = new ByteType();
-            }else if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)){
-                dataType = new ShortType();
-            }else if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
-                dataType = new IntType();
-            }else if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
-                dataType = new LongType();
-            }else if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)) {
-                dataType = new FloatType();
-            }else if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
-                dataType = new DoubleType();
-            }else if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)){
-                dataType = new CharType();
-            }else if (String.class.isAssignableFrom(fieldType)){
-                dataType = new StringType();
-            }else{//数组或Object
-                dataType = new ByteArrayType();
-            }
-            SqlType sqlType = dataType.getSqlType();
-            colunmType = sqlType.name();
-            Column column = field.getAnnotation(Column.class);
-            if (column != null){
-                columnName = column.value();
-            }else {
-                String fieldName = field.getName();
-                columnName = generateColumnName(fieldName);//按对象的属性名和列表的映射规则生成默认的
-            }
-            sb.append(columnName + SPACE + colunmType);
-            Unique unique = field.getAnnotation(Unique.class);
-            if (unique != null) {
-                sb.append(SPACE).append(UNIQUE);
-            }
-            NotNull notNull = field.getAnnotation(NotNull.class);
-            if (notNull != null) {
-                sb.append(SPACE).append(NOT_NULL);
-            }
-            sb.append(SPACE).append(PRIMARY_KEY);
-            if (foreignKey != null){
-                Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
-                if (!foreignKeyTableClass.equals(tableClass)){//建立外键的条件，不能建立在自己的主键基础上
-                    String foreignKeyTableName = foreignKeyTableClass.getName();//外键表的表名
-                    sb.append(SPACE).append(FOREIGN_KEY).append(foreignKeyTableName).append(LEFT_PARENTHESIS);
-                    Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();//拿到外键所指向表的所有列
-                    for (Field foreignKeyTableField : foreignKeyTableFields){
-                        PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField.getAnnotation(PrimaryKey.class);
-                        if (foreignKeyTablePrimaryKey != null){
-                            String name = field.getName();
-                            sb.append(name).append(COMMA);
-                        }
-                    }
-                    sb.deleteCharAt(sb.length()-1);
-                }
-            }
-            sb.append(COMMA);
+        return tableName;
+    }
+
+    public <T extends OrmTable> String getColumnName(Field field){
+        String columnName;
+        Column column = field.getAnnotation(Column.class);
+        if (column != null){
+            columnName = column.value();
+        }else {
+            String fieldName = field.getName();
+            columnName = generateColumnName(fieldName);//按对象的属性名和列表的映射规则生成默认的
         }
-        sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS);//删掉最后一个逗号
-        String sql = sb.substring(0, sb.length()-1) + RIGHT_PARENTHESIS + SEMICOLON;//删除最后一个逗号并加上右括号
-        try {
-            sDatabase.execSQL(sql);
-            mTableNameMap.put(tableClass, tableName);
-            TableName nameTable = new TableName(tableClass, tableName);
-            mDao.insert(nameTable);
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+        return columnName;
     }
 
     private String generateTableName(String className){
@@ -204,5 +165,180 @@ public class TableManager {
             sb.append(String.valueOf(fieldName.charAt(i)).toLowerCase(Locale.ENGLISH));
         }
         return sb.toString().toLowerCase();
+    }
+
+    private boolean isAssignableFromBoolean(Class<?> fieldType){
+        if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromByte(Class<?> fieldType){
+        if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromShort(Class<?> fieldType){
+        if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromInteger(Class<?> fieldType){
+        if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromLong(Class<?> fieldType){
+        if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromFloat(Class<?> fieldType){
+        if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromDouble(Class<?> fieldType){
+        if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromCharacter(Class<?> fieldType){
+        if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromCharSequence(Class<?> fieldType){
+        if (CharSequence.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromClass(Class<?> fieldType){
+        if (Class.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private BaseDataType parseDataType(Class<?> fieldType){
+        BaseDataType dataType;
+        if (isAssignableFromBoolean(fieldType)){
+            dataType = new BooleanType();
+        }else if (isAssignableFromByte(fieldType)) {
+            dataType = new ByteType();
+        }else if (isAssignableFromShort(fieldType)){
+            dataType = new ShortType();
+        }else if (isAssignableFromInteger(fieldType)){
+            dataType = new IntType();
+        }else if (isAssignableFromLong(fieldType)){
+            dataType = new LongType();
+        }else if (isAssignableFromFloat(fieldType)) {
+            dataType = new FloatType();
+        }else if (isAssignableFromDouble(fieldType)){
+            dataType = new DoubleType();
+        }else if (isAssignableFromCharacter(fieldType)){
+            dataType = new CharType();
+        }else if (isAssignableFromCharSequence(fieldType)){
+            dataType = new StringType();
+        }else if (isAssignableFromClass(fieldType)){
+            dataType = new ClassType();
+        }else{//数组或Object
+            dataType = new ByteArrayType();
+        }
+        return dataType;
+    }
+
+    public <T extends OrmTable> void createTable(Class<T> tableClass){
+        String tableName = getTableName(tableClass);//获取到表名
+        Field[] fields = tableClass.getDeclaredFields();//拿到这个表的所有字段
+        StringBuilder sb = new StringBuilder();
+        sb.append(CREATE_TABLE + SPACE + tableName + LEFT_PARENTHESIS);//sql:CREATE TABLE ${tableName} (
+        List<Annotation> keys = new ArrayList<>();//记录该表有没有主键或外键
+        for (Field field:fields){//遍历表的字段
+            field.setAccessible(true);
+            NonColumn nonColumn = field.getAnnotation(NonColumn.class);//不需要映射的列
+            PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);//主键
+            ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);//外键
+            if (nonColumn != null){//跳过不需要映射的字段
+                continue;
+            }
+            if(primaryKey != null) {
+                keys.add(primaryKey);//将主键加入集合
+            }
+            if (foreignKey != null) {
+                keys.add(foreignKey);//将外键加入集合
+            }
+            Class<?> fieldType = field.getType();
+            BaseDataType dataType = parseDataType(fieldType);//解析并映射数据类型
+            SqlType sqlType = dataType.getSqlType();
+            String columnType = sqlType.name();//列类型
+            String columnName = getColumnName(field);//列名
+            sb.append(columnName + SPACE + columnType);//sql:${columnName} ${columnType}
+            Unique unique = field.getAnnotation(Unique.class);
+            if (unique != null) {
+                sb.append(SPACE).append(UNIQUE);//sql: UNIQUE
+            }
+            NotNull notNull = field.getAnnotation(NotNull.class);
+            if (notNull != null) {
+                sb.append(SPACE).append(NOT_NULL);//sql: NOT NULL
+            }
+            if (primaryKey != null) {
+                sb.append(SPACE).append(PRIMARY_KEY);//sql: PRIMARY KEY
+            }
+            if (foreignKey != null){
+                Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
+                if (!foreignKeyTableClass.equals(tableClass)){//建立外键的条件，不能建立在自己的主键基础上
+                    String foreignKeyTableName = foreignKeyTableClass.getName();//外键表的表名
+                    sb.append(SPACE).append(REFERENCES).append(SPACE).append(foreignKeyTableName)
+                            .append(LEFT_PARENTHESIS);//sql: REFERENCES ${foreignKeyTableName} (
+                    Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();//拿到外键所指向表的所有列
+                    for (Field foreignKeyTableField:foreignKeyTableFields){//遍历复合主键，如果有
+                        PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField.getAnnotation(PrimaryKey.class);
+                        if (foreignKeyTablePrimaryKey != null){
+                            String foreignKeyTablePrimaryKeyName = field.getName();//外键表的某个主键的名字
+                            sb.append(foreignKeyTablePrimaryKeyName).append(COMMA);//sql:${foreignKeyTablePrimaryKeyName},
+                        }
+                    }
+                    sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS);//删掉最后一个逗号
+                }
+            }
+            sb.append(COMMA);
+        }
+        if (keys.size() == 0){
+            throw new ConstraintException("请至少指定一个有效的主键或外键");
+        }
+        try {
+            String sql = sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS).append(SEMICOLON)
+                    .toString();//删除最后一个逗号并加上右括号
+            sDatabase.execSQL(sql);
+            mTableNameMap.put(tableClass, tableName);//将新创建出来的表加入缓存
+            WhereBuilder whereBuilder = new WhereBuilder()
+                    .addWhereEqualTo(TABLE_NAME, tableName);
+            QueryBuilder queryBuilder = new QueryBuilder().where(whereBuilder);
+            int count = mDao.selectCount(queryBuilder);
+            if (count == 0) {//没有从表名表中查询到此表
+                TableName nameTable = new TableName(tableClass, tableName);//存放Orm框架创建的表的系统表
+                mDao.insert(nameTable);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }

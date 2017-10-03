@@ -42,17 +42,17 @@ public abstract class BaseModel<T>{
     /**
      * 要检索的结果的限制条数，-1表示不限制。
      */
-    protected int mCount = -1;
+    private int mLimit = -1;
 
     /**
      * 跳过前面多少条？
      */
-    protected int mSkip;
+    private int mSkip;
 
     /**
      * 按该bean的哪个属性排序，比如按name升序，则为"name"，按name降序，则为"-name";
      */
-    protected String mSortBy = "";
+    private String mSortBy = "";
 
     private final String TAG = getClass().getName();
 
@@ -87,18 +87,6 @@ public abstract class BaseModel<T>{
         mBeans.clear();
     }
 
-    public void setCount(int count) {
-        this.mCount = count;
-    }
-
-    public void setSkip(int skip) {
-        this.mSkip = skip;
-    }
-
-    public void setSortBy(String sortBy){
-        this.mSortBy = sortBy;
-    }
-
     /**
      * 加载数据的回调接口。
      *
@@ -115,6 +103,24 @@ public abstract class BaseModel<T>{
      */
     public interface OnExtractListener<E>{
         void onExtract(String elementName, List<E> elements);
+    }
+
+    public void limit(int limit) {
+        this.mLimit = limit;
+    }
+
+    public void sortBy(String sortBy) {
+        this.mSortBy = sortBy;
+    }
+
+    public void skip(int skip){
+        this.mSkip = skip;
+    }
+
+    private void restore(){
+        this.mLimit = -1;
+        this.mSkip = 0;
+        this.mSortBy = "";
     }
 
     /**
@@ -150,10 +156,10 @@ public abstract class BaseModel<T>{
      * 得到满足条件的bean对象的数量。
      *
      * @param selector 选择器。
-     * @param countIgnore 要不要忽略设置的限制条数。
+     * @param ignoreLimit true表示拿到实际的数据数量，false表示拿到limit后的数据数量，当实际数据数量小于limit时，不影响结果。
      * @return bean的数量。
      */
-    protected int getCount(Selector selector, boolean countIgnore){
+    protected int getCount(Selector selector, boolean ignoreLimit){
         List<T> objects = null;
         try {
             objects = findObjects(selector);
@@ -163,10 +169,10 @@ public abstract class BaseModel<T>{
             e.printStackTrace();
         }
         if(objects != null){
-            if (countIgnore) {
+            if (ignoreLimit) {
                 return objects.size();
             }else{
-                return objects.size() > mCount ? mCount : objects.size();
+                return objects.size() > mLimit ? mLimit : objects.size();
             }
         }
         return 0;
@@ -176,7 +182,6 @@ public abstract class BaseModel<T>{
      * 提取bean对象的某个属性组成新的集合。
      *
      * @param selector 选择器。
-     * @param elementClass bean数据某个属性的类型。
      * @param elementName bean数据某个属性的名称。
      * @param <E> bean数据某个属性。
      * @return bean数据某个属性的集合。
@@ -218,7 +223,6 @@ public abstract class BaseModel<T>{
         Map<String, Object> map = selector.getConditionMap();
         Set<String> keys = map.keySet();
         for (int i=0;i<mBeans.size();i++) {
-            Logger.info(TAG, "traversal element index="+i);
             int matchesCount = 0;
             T bean = mBeans.get(i);//存储在内存中的真实的数据
             Iterator<String> iterator = keys.iterator();//拿到所有的条件key
@@ -226,7 +230,6 @@ public abstract class BaseModel<T>{
                 String key = iterator.next();
                 String[] keyPart = key.split(Selector.SPACE);
                 String elementName = keyPart[0];
-                Logger.info(TAG, "condition key ---> "+elementName);
                 Field targetField = mBeanClass.getDeclaredField(elementName);//要检测的属性
                 targetField.setAccessible(true);
                 Object leftValue = map.get(key);
@@ -244,17 +247,81 @@ public abstract class BaseModel<T>{
             if (TextUtils.isNotEmpty(mSortBy)) {//需要排序就排序
                 Collections.sort(temp, new ModelComparator(mSortBy));
             }
-            if (mCount < -1){
+            if (mLimit < -1){
                 throw new RuntimeException("限制数量不合法");
-            }else if (mCount != -1) {
-                for (int j = mSkip; j < mSkip + mCount; j++) {
+            }else if (mLimit != -1) {
+                for (int j = mSkip; j < mSkip + mLimit; j++) {
                     result.add(temp.get(j));
                 }
             }else{
                 result.addAll(temp);
             }
         }
+        restore();
         return result;
+    }
+
+    private boolean isAssignableFromBoolean(Class<?> fieldType){
+        if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromByte(Class<?> fieldType){
+        if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromShort(Class<?> fieldType){
+        if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromInteger(Class<?> fieldType){
+        if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromLong(Class<?> fieldType){
+        if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromFloat(Class<?> fieldType){
+        if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssignableFromDouble(Class<?> fieldType){
+        if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssinableFromCharacter(Class<?> fieldType){
+        if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isAssinableFromCharSequence(Class<?> fieldType){
+        if (CharSequence.class.isAssignableFrom(fieldType)){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -280,13 +347,13 @@ public abstract class BaseModel<T>{
                 if (n1.equals(n2)){
                     return true;
                 }
-            }else if (CharSequence.class.isAssignableFrom(fieldType)){
+            }else if (isAssinableFromCharSequence(fieldType)){
                 CharSequence s1 = (CharSequence) leftValue;
                 CharSequence s2 = (CharSequence) rightValue;
                 if (s1.equals(s2)){
                     return true;
                 }
-            }else if (Boolean.class.isAssignableFrom(fieldType)){
+            }else if (isAssignableFromBoolean(fieldType)){
                 boolean b1 = (boolean) leftValue;
                 boolean b2 = (boolean) rightValue;
                 if (b1 == b2){
@@ -369,7 +436,7 @@ public abstract class BaseModel<T>{
             }
             return false;
         }else if (condition.equals(Selector.CONTAINS_HOLDER)
-                && String.class.isAssignableFrom(fieldType)) {
+                && isAssinableFromCharSequence(fieldType)) {
             String lhs = (String) leftValue;
             String rhs = (String) rightValue;
             if (rhs.contains(lhs)){
@@ -377,7 +444,7 @@ public abstract class BaseModel<T>{
             }
             return false;
         }else if (condition.equals(Selector.STARTS_WITH_HOLDER)
-                && String.class.isAssignableFrom(fieldType)) {
+                && isAssinableFromCharSequence(fieldType)) {
             String lhs = (String) leftValue;
             String rhs = (String) rightValue;
             if (rhs.startsWith(lhs)){
@@ -385,7 +452,7 @@ public abstract class BaseModel<T>{
             }
             return false;
         }else if (condition.equals(Selector.ENDS_WITH_HOLDER)
-                && String.class.isAssignableFrom(fieldType)) {
+                && isAssinableFromCharSequence(fieldType)) {
             String lhs = (String) leftValue;
             String rhs = (String) rightValue;
             if (rhs.endsWith(lhs)){
@@ -393,7 +460,7 @@ public abstract class BaseModel<T>{
             }
             return false;
         }else if (condition.equals(Selector.MATCHES_HOLDER)
-                && String.class.isAssignableFrom(fieldType)) {
+                && isAssinableFromCharSequence(fieldType)) {
             String regex = (String) leftValue;
             String value = (String) rightValue;
             Pattern p = Pattern.compile(regex);

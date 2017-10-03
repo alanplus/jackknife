@@ -12,6 +12,9 @@ public class Transaction {
 
     private static final String TAG = Transaction.class.getName();
 
+    private Transaction(){
+    }
+
     public static boolean execute(SQLiteDatabase db, Worker worker){
         db.beginTransaction();
         Logger.info(TAG, "begin transaction");
