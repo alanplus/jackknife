@@ -48,10 +48,7 @@ dependencies {
 
 ### (二)数据库ORM模块（jackknife-orm）
 #### 1、初始化配置
-> 可使用
-  <blockquote>
-  伪代码：Orm.init(OrmConfig);//调用Orm的init方法
-  </blockquote>
+> 可使用Orm.init(OrmConfig);//调用Orm的init方法
 #### 2、完成实体类的编写
 > 如果你想使用jackknife-orm自动创表，你只需要实现OrmTable接口再配置一些基本信息即可。
 需要注意的是，在一个OrmTable的实现类中，至少要有一个配置主键或外键的属性。
@@ -68,9 +65,7 @@ dependencies {
 ##### （6）@NotNull
 > 配置非空约束
 #### 3.创表
-> <blockquote>
- 伪代码：TableManager.getInstance().createTable(OrmTable.class);//创建OrmTable的实现类的表
-</blockquote>
+> TableManager.getInstance().createTable(OrmTable.class);//创建OrmTable的实现类的表
 #### 4.数据的增删改查
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&dt; dao = DaoFactory.getDao(User.class);
