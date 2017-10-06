@@ -4,7 +4,7 @@ JackKnife的IOC模块
 一、关于如何配置环境
 --------------------------------
 如果要依赖jackknife的库，需要对号入座的加上以下两个配置。
-//指定仓库的地址，在project的build.gradle加入加粗的代码。
+> //指定仓库的地址，在project的build.gradle加入加粗的代码。
 allprojects {
   repositories {
     jcenter()
@@ -12,7 +12,7 @@ allprojects {
   }
 }
 
-//依赖本库，在app模块的build.gradle加入加粗的代码。
+> //依赖本库，在app模块的build.gradle加入加粗的代码。
 dependencies {
   <b>compile 'com.github.JackWHLiu:jackknife:1.0.0'</b>
 }
