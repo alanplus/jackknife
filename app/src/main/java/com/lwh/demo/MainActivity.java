@@ -4,10 +4,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lwh.jackknife.app.AppCompatActivity;
 import com.lwh.jackknife.ioc.ViewId;
 import com.lwh.jackknife.ioc.ViewIgnore;
 
-public class MainActivity extends com.lwh.jackknife.app.Activity {
+public class MainActivity extends AppCompatActivity {
 
     @ViewId(R.id.textview_main_lineone)
     private TextView textview_main_lineone;

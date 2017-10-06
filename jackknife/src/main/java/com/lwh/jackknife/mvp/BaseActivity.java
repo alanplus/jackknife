@@ -17,9 +17,8 @@
 package com.lwh.jackknife.mvp;
 
 import android.os.Bundle;
-import android.util.Log;
 
-import com.lwh.jackknife.app.Activity;
+import com.lwh.jackknife.app.AppCompatActivity;
 import com.lwh.jackknife.util.Logger;
 
 /**
@@ -30,7 +29,7 @@ import com.lwh.jackknife.util.Logger;
  * @param <V> 视图，Activity、Fragment等。
  * @param <P> 主导器。
  */
-public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<V>> extends Activity {
+public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<V>> extends AppCompatActivity {
 
     /**
      * 业务逻辑主导器。

@@ -124,6 +124,26 @@ public class TextUtils {
         return !isEmpty(str);
     }
 
+    public static boolean checkEmpty(String... text){
+        for (String element:text){
+            boolean isSucceed = isEmpty(element);
+            if (!isSucceed){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkNotEmpty(String... text){
+        for (String element:text){
+            boolean isSucceed = isNotEmpty(element);
+            if (!isSucceed){
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * 判断两个字符串是否相等。
      *

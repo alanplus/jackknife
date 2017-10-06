@@ -29,7 +29,7 @@ public class Application extends android.app.Application {
     /**
      * 存放Activity弱引用的栈。
      */
-    private Stack<WeakReference<Activity>> mActivityStack;
+    private Stack<WeakReference<android.app.Activity>> mActivityStack;
 
     /**
      * Application的单例。
@@ -82,7 +82,7 @@ public class Application extends android.app.Application {
      *
      * @param activity
      */
-    /* package */ void pushTask(Activity activity){
+    /* package */ void pushTask(android.app.Activity activity){
         mActivityStack.add(new WeakReference<>(activity));
     }
 
@@ -90,8 +90,8 @@ public class Application extends android.app.Application {
      * 把顶部的Activity弹出栈。
      */
     /* package */ void popTask(){
-        WeakReference<Activity> ref = mActivityStack.pop();
-        Activity activity = ref.get();
+        WeakReference<android.app.Activity> ref = mActivityStack.pop();
+        android.app.Activity activity = ref.get();
         activity.finish();
         mActivityStack.remove(activity);
     }
@@ -100,8 +100,8 @@ public class Application extends android.app.Application {
      * 移除所有任务栈的Activity弱引用。
      */
     protected void removeAll(){
-        for (WeakReference<Activity> ref:mActivityStack){
-            Activity activity = ref.get();
+        for (WeakReference<android.app.Activity> ref:mActivityStack){
+            android.app.Activity activity = ref.get();
             activity.finish();
         }
         mActivityStack.removeAllElements();

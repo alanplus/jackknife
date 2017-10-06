@@ -64,7 +64,7 @@ public class ViewInjector {
         if (type == VIEW_TYPE_FRAGMENT) {
             viewInjected = ((Fragment) viewInjected).getActivity();
         }else if (type == VIEW_TYPE_UNDECLARED){
-            throw new IllegalArgumentException("viewInjected must be an Activity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
         }
         return (Activity) viewInjected;
     }
@@ -78,7 +78,7 @@ public class ViewInjector {
         StringBuffer sb;
         String layoutName = viewInjected.getClass().getSimpleName();
         if (!layoutName.endsWith(suffix)) {
-            throw new IllegalArgumentException("viewInjected must be an Activity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
         } else {
             String name = layoutName.substring(0, layoutName.length() - suffix.length());
             sb = new StringBuffer(suffix.toLowerCase(Locale.ENGLISH));
@@ -131,7 +131,7 @@ public class ViewInjector {
                     ViewGroup.class);
             return (View) inflateMethod.invoke(inflater, layoutId, null);
         }else{
-            throw new IllegalArgumentException("viewInjected must be an Activity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
         }
     }
 
@@ -175,7 +175,7 @@ public class ViewInjector {
                 }
             }
         }else{
-            throw new IllegalArgumentException("viewInjected must be an Activity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
         }
     }
 
@@ -217,7 +217,7 @@ public class ViewInjector {
                 }
             }
         }else{
-            throw new IllegalArgumentException("viewInjected must be an Activity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
         }
     }
 

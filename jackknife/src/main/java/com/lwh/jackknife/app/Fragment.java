@@ -26,9 +26,7 @@ import com.lwh.jackknife.ioc.ViewInjector;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * 自动注入的Fragment。
- *
- * @auther lwh
+ * Automatically inject a layout, bind views, and registry events for fragments.
  */
 public abstract class Fragment extends android.support.v4.app.Fragment{
 
