@@ -48,7 +48,7 @@ dependencies {
 
 ### (二)数据库ORM模块（jackknife-orm）
 #### 1、初始化配置
-> 可使用Orm.init(OrmConfig);//调用Orm的init方法
+> 继承com.lwh.jackknife.app.Application，并在Application中完成初始化。可使用Orm.init(OrmConfig);//调用Orm的init方法
 #### 2、完成实体类的编写
 > 如果你想使用jackknife-orm自动创表，你只需要实现OrmTable接口再配置一些基本信息即可。
 需要注意的是，在一个OrmTable的实现类中，至少要有一个配置主键或外键的属性。
