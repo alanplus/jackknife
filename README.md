@@ -5,17 +5,17 @@ JackKnife的IOC模块
 --------------------------------
 如果要依赖jackknife的库，需要对号入座的加上以下两个配置。
 > //指定仓库的地址，在project的build.gradle加入加粗的代码。
-allprojects {
-  repositories {
-    jcenter()
-    <b>maven { url "https://jitpack.io" }</b>
-  }
-}
+> allprojects {
+>   repositories {
+>     jcenter()
+>     <b>maven { url "https://jitpack.io" }</b>
+>   }
+> }
 
 > //依赖本库，在app模块的build.gradle加入加粗的代码。
-dependencies {
-  <b>compile 'com.github.JackWHLiu:jackknife:1.0.0'</b>
-}
+> dependencies {
+>   <b>compile 'com.github.JackWHLiu:jackknife:1.0.0'</b>
+> }
 
 二、关于如何使用
 --------------------------------
