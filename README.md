@@ -68,11 +68,11 @@ dependencies {
 > TableManager.getInstance().createTable(OrmTable.class);//创建OrmTable的实现类的表
 #### 4.数据的增删改查
 > 首先要获取到操作该表的DAO对象，以User为例
-OrmDao&lt;User&dt; dao = DaoFactory.getDao(User.class);
+OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 ##### （1）单条插入
 > dao.insert(User);
 ##### （2）多条插入
-> dao.insert(List&lt;User&dt;);
+> dao.insert(List&lt;User&gt;);
 ##### （3）删除所有
 > dao.deleteAll();
 ##### （4）按条件删除
