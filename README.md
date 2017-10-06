@@ -68,7 +68,29 @@ dependencies {
 ##### （6）@NotNull
 > 配置非空约束
 #### 3.创表
-<blockquote>
+> <blockquote>
  伪代码：TableManager.getInstance().createTable(OrmTable.class);//创建OrmTable的实现类的表
 </blockquote>
 #### 4.数据的增删改查
+> 首先要获取到操作该表的DAO对象，以User为例
+OrmDao&lt;User&dt; dao = DaoFactory.getDao(User.class);
+##### （1）INSERT
+> dao.insert(User);
+##### （2）MULTIPLE INSERT
+> dao.insert(List&lt;User&dt;);
+##### （3）DELETE ALL
+> dao.deleteAll();
+##### （4）DELETE BY CONDITION
+> dao.delete(WhereBuilder);
+##### （5）UPDATE ALL
+> dao.updateAll();
+##### （6）UPDATE BY CONDITION
+> dao.update(WhereBuilder);
+##### （7）SELECT ALL
+> dao.selectAll();
+##### （8）SELECT BY CONDITION
+> dao.select(QueryBuilder);
+##### （9）SELECT ALL COUNT
+> dao.selectAllCount();
+##### （10）SELECT BY CONDITION
+> dao.selectCount(QueryBuilder);
