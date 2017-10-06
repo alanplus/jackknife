@@ -45,3 +45,30 @@ dependencies {
 > 优先级最高，加上该注解，jackknife会直接跳过该控件的自动注入。一般使用在使用Java代码new出来的控件提取到全局的情况。
 #### 3、自动注册事件
 >  创建一个自定义的事件注解，在这个注解上配置@EventBase，并使用在你要实际回调的方法上，<b>注意保持参数列表跟原接口的某个回调方法的参数列表保持一致</b>。
+
+### (二)数据库ORM模块（jackknife-orm）
+#### 1、初始化配置
+> 可使用
+  <blockquote>
+  伪代码：Orm.init(OrmConfig);//调用Orm的init方法
+  </blockquote>
+#### 2、完成实体类的编写
+> 如果你想使用jackknife-orm自动创表，你只需要实现OrmTable接口再配置一些基本信息即可。
+需要注意的是，在一个OrmTable的实现类中，至少要有一个配置主键或外键的属性。
+##### （1）@Table
+> 配置你要映射的表名
+##### （2）@Column
+> 配置你要映射的列名
+##### （3）@PrimaryKey
+> 配置主键
+##### （4）@ForeignKey
+> 配置外键
+##### （5）@Unique
+> 配置唯一约束
+##### （6）@NotNull
+> 配置非空约束
+#### 3.创表
+<blockquote>
+ 伪代码：TableManager.getInstance().createTable(OrmTable.class);//创建OrmTable的实现类的表
+</blockquote>
+#### 4.数据的增删改查
