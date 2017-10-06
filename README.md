@@ -74,23 +74,23 @@ dependencies {
 #### 4.数据的增删改查
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&dt; dao = DaoFactory.getDao(User.class);
-##### （1）INSERT
+##### （1）单条插入
 > dao.insert(User);
-##### （2）MULTIPLE INSERT
+##### （2）多条插入
 > dao.insert(List&lt;User&dt;);
-##### （3）DELETE ALL
+##### （3）删除所有
 > dao.deleteAll();
-##### （4）DELETE BY CONDITION
+##### （4）按条件删除
 > dao.delete(WhereBuilder);
-##### （5）UPDATE ALL
+##### （5）修改所有
 > dao.updateAll();
-##### （6）UPDATE BY CONDITION
+##### （6）按条件修改
 > dao.update(WhereBuilder);
-##### （7）SELECT ALL
+##### （7）查询所有
 > dao.selectAll();
-##### （8）SELECT BY CONDITION
+##### （8）按条件查询
 > dao.select(QueryBuilder);
-##### （9）SELECT ALL COUNT
+##### （9）查询所有记录的条数
 > dao.selectAllCount();
-##### （10）SELECT BY CONDITION
+##### （10）查询满足条件记录的条数
 > dao.selectCount(QueryBuilder);
