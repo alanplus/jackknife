@@ -16,11 +16,6 @@
 
 package com.lwh.jackknife.util;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -175,35 +170,6 @@ public class TextUtils {
         String uuid = UUID.randomUUID().toString();
         uuid = uuid.replaceAll("-", "");
         return uuid;
-    }
-
-    /**
-     * 读取文本文件的内容，比如txt文件。
-     *
-     * @param file 必须为文本文件。
-     * @return 字符串。
-     * @throws IOException 输入输出异常。
-     */
-    public static String getText(File file, String charsetName) throws IOException {
-        FileInputStream fis = new FileInputStream(file);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(fis, charsetName));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 以UTF-8编码读取文本文件的内容，比如txt文件。
-     *
-     * @param file 必须为文本文件。
-     * @return 字符串。
-     * @throws IOException 输入输出异常。
-     */
-    public static String getText(File file) throws IOException{
-        return getText(file, "UTF-8");
     }
 
     /**

@@ -1186,7 +1186,7 @@ public class NumberUtils {
      * @return 十进制数。
      */
     public static int H2D(String hexadecimal){
-        return Integer.parseInt(hexadecimal, 16);
+        return Integer.parseInt(hexadecimal, SIXTEEN);
     }
 
     /**
@@ -1196,7 +1196,7 @@ public class NumberUtils {
      * @return 十进制数。
      */
     public static int O2D(String octal){
-        return Integer.parseInt(octal, 8);
+        return Integer.parseInt(octal, EIGHT);
     }
 
     /**
@@ -1206,7 +1206,7 @@ public class NumberUtils {
      * @return 十进制数。
      */
     public static int B2D(String binary){
-        return Integer.parseInt(binary, 2);
+        return Integer.parseInt(binary, TWO);
     }
 
     /**
