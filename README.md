@@ -63,7 +63,7 @@ dependencies {
 ##### （6）@NotNull
 > 配置非空约束
 #### 3.创表
-> TableManager.getInstance().createTable(OrmTable.class);//创建OrmTable的实现类的表
+> 以User为例，TableManager.getInstance().createTable(User.class);//创建OrmTable的实现类的表
 #### 4.数据的增删改查
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
