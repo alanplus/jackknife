@@ -101,6 +101,7 @@ public class TableManager {
     public void installTables(){
         createTable(TableName.class);
         List<TableName> tables = mDao.selectAll();
+
         for (TableName table:tables) {
             String tableName = table.getTableName();
             Class<? extends OrmTable> tableClass = table.getTableClass();
@@ -217,7 +218,6 @@ public class TableManager {
             field.setAccessible(true);
             NonColumn nonColumn = field.getAnnotation(NonColumn.class);//不需要映射的列
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);//主键
-            AssignType assignType = primaryKey.value();//分配类型
             ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);//外键
             if (nonColumn != null){//跳过不需要映射的字段
                 continue;
@@ -243,6 +243,7 @@ public class TableManager {
             }
             if (primaryKey != null) {
                 sb.append(SPACE).append(PRIMARY_KEY);//sql: PRIMARY KEY
+                AssignType assignType = primaryKey.value();//分配类型
                 if (assignType.equals(AssignType.BY_MYSELF)) {
                 } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
                     sb.append(SPACE).append(AUTO_INCREMENT);

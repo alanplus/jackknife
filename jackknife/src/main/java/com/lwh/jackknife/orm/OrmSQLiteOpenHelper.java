@@ -20,11 +20,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.lwh.jackknife.orm.table.OrmTable;
-import com.lwh.jackknife.orm.table.TableManager;
-
-import java.util.List;
-
 public class OrmSQLiteOpenHelper extends SQLiteOpenHelper{
 
     public OrmSQLiteOpenHelper(Context context, String name, int version) {

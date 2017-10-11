@@ -261,4 +261,23 @@ public class TextUtils {
         }
         return builder.toString();
     }
+
+    /**
+     * 分断文本，常用于16进制字符串加分隔符。
+     *
+     * @param text 要分断的文本。
+     * @param divider 分隔符。
+     * @param sectionLength 每一部分的长度。
+     * @return 分断后的文本。
+     */
+    private String subsection(String text, String divider, int sectionLength) {
+        if (text.length() < sectionLength) {
+            return text;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (int i=0;i<text.length();i++) {
+            sb.append(text.substring(i,i+sectionLength)).append(divider);
+        }
+        return sb.toString();
+    }
 }

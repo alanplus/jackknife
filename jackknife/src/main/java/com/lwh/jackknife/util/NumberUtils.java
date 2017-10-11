@@ -1298,4 +1298,23 @@ public class NumberUtils {
     public static String B2H(String binary){
         return D2H(B2D(binary));
     }
+
+    /**
+     * 向高位补0。
+     *
+     * @param num 2、8、16进制数均可。
+     * @param requireLength 要求的长度。
+     * @return 补0后的数字。
+     */
+    public String zeronize(String num, int requireLength){
+        StringBuffer sb = new StringBuffer();
+        if(requireLength > num.length()){
+            int length = requireLength - num.length();
+            for (int i=0;i<length;i++){
+                sb.append(0);
+            }
+            sb.append(num);
+        }
+        return sb.toString();
+    }
 }
