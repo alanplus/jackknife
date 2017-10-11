@@ -130,7 +130,7 @@ public class WhereBuilder {
         return append(null, column + GREATER_THAN_HOLDER, new Object[]{value});
     }
 
-    public WhereBuilder addWhereGreaterThanOrEqual(String column, Object value){
+    public WhereBuilder addWhereGreaterThanOrEqualTo(String column, Object value){
         return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, new Object[]{value});
     }
 

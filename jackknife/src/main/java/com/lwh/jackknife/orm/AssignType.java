@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.orm.helper;
+package com.lwh.jackknife.orm;
 
-public interface DataPersister extends FieldConverter{
+public enum AssignType {
 
-    /**
-     * 返回和这个类型相关的默认的宽度，如果不写，就是0。
-     *
-     * @return 默认的宽度。
-     */
-    int getDefaultWidth();
+    BY_MYSELF,//自己指定主键的值。
+    AUTO_INCREMENT//自增长。
 }

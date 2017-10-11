@@ -16,10 +16,11 @@
 
 package com.lwh.jackknife.orm.type;
 
-import com.lwh.jackknife.orm.helper.BaseFieldConverter;
-import com.lwh.jackknife.orm.helper.DataPersister;
+import com.lwh.jackknife.orm.DataMatcher;
 
-public abstract class BaseDataType extends BaseFieldConverter implements DataPersister {
+import java.lang.reflect.Field;
+
+public abstract class BaseDataType implements DataMatcher {
 
     private final SqlType mSqlType;
 
@@ -31,13 +32,13 @@ public abstract class BaseDataType extends BaseFieldConverter implements DataPer
         return mSqlType;
     }
 
-    @Override
-    public Object toJavaData(Object sql) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Object toSqlData(Object java) {
-        throw new UnsupportedOperationException();
+    public boolean matches(Field field){
+        Class<?>[] types = getTypes();
+        for (Class<?> type:types) {
+            if (type.isAssignableFrom(field.getType())){
+                return true;
+            }
+        }
+        return false;
     }
 }

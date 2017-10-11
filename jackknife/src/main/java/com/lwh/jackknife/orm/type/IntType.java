@@ -24,16 +24,12 @@ public class IntType extends BaseDataType {
         super(SqlType.INTEGER);
     }
 
-    public IntType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static IntType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 4;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] {int.class, Integer.class};
     }
 }

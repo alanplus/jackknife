@@ -24,16 +24,12 @@ public class ByteType extends BaseDataType {
         super(SqlType.INTEGER);
     }
 
-    public ByteType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static ByteType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 1;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] {byte.class, Byte.class} ;
     }
 }

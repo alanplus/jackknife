@@ -19,7 +19,10 @@ package com.lwh.jackknife.app;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.lang.ref.WeakReference;
+import java.util.Map;
 import java.util.Stack;
+
+import dalvik.system.DexClassLoader;
 
 /**
  * 如果使用了ORM模块，你需要继承此类。
@@ -41,6 +44,8 @@ public class Application extends android.app.Application {
      */
     private SQLiteOpenHelper mSQLiteOpenHelper;
 
+    private Map<String, DexClassLoader> mInstalledPlugins;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -55,6 +60,13 @@ public class Application extends android.app.Application {
      */
     public void attach(SQLiteOpenHelper helper){
         this.mSQLiteOpenHelper = helper;
+    }
+
+    public void installPlugin(String pluginName, DexClassLoader classLoader){
+        if (mInstalledPlugins.containsKey(pluginName)) {
+            mInstalledPlugins.remove(pluginName);
+        }
+        mInstalledPlugins.put(pluginName, classLoader);
     }
 
     /**

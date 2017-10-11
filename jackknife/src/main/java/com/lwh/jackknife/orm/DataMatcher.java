@@ -14,10 +14,27 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.orm.helper;
+package com.lwh.jackknife.orm;
+
+import java.lang.reflect.Field;
 
 /**
- * 属性转换器。
+ * 数据匹配器。
  */
-public abstract class BaseFieldConverter implements FieldConverter {
+public interface DataMatcher {
+
+    /**
+     * 获取java的类型。
+     *
+     * @return java类型。
+     */
+    Class<?>[] getTypes();
+
+    /**
+     * 某个属性是否匹配该数据类型。
+     *
+     * @param field 要测试的属性。
+     * @return 是否匹配。
+     */
+    boolean matches(Field field);
 }

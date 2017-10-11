@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.orm.helper;
+package com.lwh.jackknife.orm;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,26 +27,12 @@ import java.util.List;
 
 public class OrmSQLiteOpenHelper extends SQLiteOpenHelper{
 
-    private List<Class<? extends OrmTable>> mTableClasses;
-    private TableManager mTableManager;
-
-    public OrmSQLiteOpenHelper(Context context, String name, int version, List<Class<? extends OrmTable>> tableClasses) {
+    public OrmSQLiteOpenHelper(Context context, String name, int version) {
         super(context, name, null, version);
-        this.mTableClasses = tableClasses;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if (mTableClasses != null) {//有表创建
-            autoCreateTable(db);//自动创表
-        }
-    }
-
-    private void autoCreateTable(SQLiteDatabase db){
-        mTableManager  = TableManager.getInstance();
-        for (Class<? extends OrmTable> tableClass:mTableClasses){//遍历所有要创建的表的对象类型
-            mTableManager.createTable(tableClass);
-        }
     }
 
     @Override

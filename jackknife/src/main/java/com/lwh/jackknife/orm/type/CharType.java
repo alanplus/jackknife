@@ -24,30 +24,12 @@ public class CharType extends BaseDataType {
         super(SqlType.TEXT);
     }
 
-    public CharType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static CharType getInstance(){
         return mInstance;
     }
 
     @Override
-    public Object toSqlData(Object java) {
-        Character character = (Character) java;
-        if (character == null || character == 0){
-            return null;
-        }
-        return character;
-    }
-
-    @Override
-    public Object toJavaData(Object sql) {
-        return super.toJavaData(sql);
-    }
-
-    @Override
-    public int getDefaultWidth() {
-        return 0;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] { char.class } ;
     }
 }

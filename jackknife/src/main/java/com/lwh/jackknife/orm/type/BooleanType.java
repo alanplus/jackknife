@@ -24,16 +24,12 @@ public class BooleanType extends BaseDataType {
         super(SqlType.INTEGER);
     }
 
-    public BooleanType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static BooleanType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 1;
+    public Class<?>[] getTypes() {
+        return new Class<?>[]{boolean.class, Boolean.class};
     }
 }

@@ -16,17 +16,20 @@
 
 package com.lwh.jackknife.orm.type;
 
-public class ClassType extends BaseDataType{
+public class ClassType extends BaseDataType {
+
+    private static final ClassType mInstance = new ClassType();
 
     public ClassType(){
         super(SqlType.TEXT);
     }
 
-    public ClassType(SqlType sqlType) {
-        super(sqlType);
+    public static ClassType getInstance(){
+        return mInstance;
     }
+
     @Override
-    public int getDefaultWidth() {
-        return 0;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] { Class.class };
     }
 }

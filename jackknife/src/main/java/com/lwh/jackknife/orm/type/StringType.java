@@ -24,16 +24,12 @@ public class StringType extends BaseDataType {
         super(SqlType.TEXT);
     }
 
-    public StringType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static StringType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 0;
+    public Class<?>[] getTypes() {
+        return new Class<?>[]{ String.class };
     }
 }

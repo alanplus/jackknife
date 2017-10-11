@@ -24,16 +24,12 @@ public class FloatType extends BaseDataType {
         super(SqlType.REAL);
     }
 
-    public FloatType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static FloatType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 4;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] {float.class, Float.class} ;
     }
 }

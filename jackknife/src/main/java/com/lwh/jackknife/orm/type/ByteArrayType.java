@@ -24,16 +24,12 @@ public class ByteArrayType extends BaseDataType {
         super(SqlType.BLOB);
     }
 
-    public ByteArrayType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static ByteArrayType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 0;
+    public Class<?>[] getTypes() {
+        return new Class<?>[]{ byte[].class };
     }
 }

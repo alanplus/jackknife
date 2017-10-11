@@ -24,16 +24,12 @@ public class LongType extends BaseDataType {
         super(SqlType.INTEGER);
     }
 
-    public LongType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static LongType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 8;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] {long.class, Long.class} ;
     }
 }

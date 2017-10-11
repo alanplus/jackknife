@@ -16,6 +16,7 @@
 
 package com.lwh.jackknife.orm.table;
 
+import com.lwh.jackknife.orm.AssignType;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.NotNull;
 import com.lwh.jackknife.orm.annotation.PrimaryKey;
@@ -35,7 +36,7 @@ class TableName implements OrmTable {
     @Column("table_class")
     private Class<? extends OrmTable> tableClass;
 
-    @PrimaryKey
+    @PrimaryKey(AssignType.BY_MYSELF)
     @Column("table_name")
     private String tableName;
 

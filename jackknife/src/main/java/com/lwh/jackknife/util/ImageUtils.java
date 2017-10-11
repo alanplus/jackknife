@@ -46,7 +46,6 @@ import com.lwh.jackknife.app.Application;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

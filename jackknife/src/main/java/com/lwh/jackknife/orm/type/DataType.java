@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.orm.type;
 
-import com.lwh.jackknife.orm.helper.DataPersister;
+import com.lwh.jackknife.orm.DataMatcher;
 
 public enum DataType {
 
@@ -31,13 +31,13 @@ public enum DataType {
     DOUBLE(DoubleType.getInstance()),
     OTHER(ByteArrayType.getInstance());
 
-    private final DataPersister mPersister;
+    private final DataMatcher mMatcher;
 
-    /* package */ DataType(DataPersister persister){
-        mPersister = persister;
+    /* package */ DataType(DataMatcher matcher){
+        mMatcher = matcher;
     }
 
-    public DataPersister getPersister() {
-        return mPersister;
+    public DataMatcher getMatcher() {
+        return mMatcher;
     }
 }

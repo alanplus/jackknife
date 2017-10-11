@@ -24,16 +24,12 @@ public class ShortType extends BaseDataType {
         super(SqlType.INTEGER);
     }
 
-    public ShortType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static ShortType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 2;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] {short.class, Short.class} ;
     }
 }

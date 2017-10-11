@@ -20,10 +20,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
-import com.lwh.jackknife.orm.helper.OrmSQLiteOpenHelper;
-import com.lwh.jackknife.orm.table.OrmTable;
-
-import java.util.List;
 
 /**
  * 如果你使用了此类，你将需要继承{@link Application}。
@@ -31,19 +27,14 @@ import java.util.List;
 public class Orm {
 
     public synchronized static void init(Context context, String databaseName){
-        init(context, databaseName, 1);
-    }
-
-    public synchronized static void init(Context context, String databaseName, int version){
-        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, version, null);
+        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1);
         Application.getInstance().attach(helper);
     }
 
     public synchronized static void init(Context context, OrmConfig config) {
         String name = config.getDatabaseName();
         int versionCode = config.getVersionCode();
-        List<Class<? extends OrmTable>> tableClasses = config.getTableClasses();
-        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode, tableClasses);
+        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode);
         Application.getInstance().attach(helper);
     }
 }

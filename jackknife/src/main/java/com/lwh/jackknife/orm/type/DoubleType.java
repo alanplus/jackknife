@@ -24,16 +24,12 @@ public class DoubleType extends BaseDataType {
         super(SqlType.REAL);
     }
 
-    public DoubleType(SqlType sqlType) {
-        super(sqlType);
-    }
-
     public static DoubleType getInstance(){
         return mInstance;
     }
 
     @Override
-    public int getDefaultWidth() {
-        return 8;
+    public Class<?>[] getTypes() {
+        return new Class<?>[] { double.class, Double.class };
     }
 }

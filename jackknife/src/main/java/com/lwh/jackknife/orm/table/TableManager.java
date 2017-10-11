@@ -21,6 +21,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
+import com.lwh.jackknife.orm.AssignType;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.ForeignKey;
 import com.lwh.jackknife.orm.annotation.NonColumn;
@@ -77,6 +78,7 @@ public class TableManager {
     private final char A = 'A';
     private final char Z = 'Z';
     private final String CREATE_TABLE = "CREATE TABLE";
+    private final String AUTO_INCREMENT = "AUTO INCREMENT";
     private final String TABLE_NAME = "table_name";
     private final String SPACE = " ";
     private final String UNIQUE = "UNIQUE";
@@ -175,102 +177,34 @@ public class TableManager {
         return sb.toString().toLowerCase();
     }
 
-    private boolean isAssignableFromBoolean(Class<?> fieldType){
-        if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+    /**
+     * 获取声明的可映射的数据类型。
+     *
+     * @return 你要映射的所有数据类型。
+     */
+    protected List<BaseDataType> getDeclaredDataTypes(){
+        List<BaseDataType> dataTypes = new ArrayList<>();
+        dataTypes.add(BooleanType.getInstance());
+        dataTypes.add(ByteType.getInstance());
+        dataTypes.add(ShortType.getInstance());
+        dataTypes.add(IntType.getInstance());
+        dataTypes.add(LongType.getInstance());
+        dataTypes.add(FloatType.getInstance());
+        dataTypes.add(DoubleType.getInstance());
+        dataTypes.add(CharType.getInstance());
+        dataTypes.add(StringType.getInstance());
+        dataTypes.add(ClassType.getInstance());
+        return dataTypes;
     }
 
-    private boolean isAssignableFromByte(Class<?> fieldType){
-        if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)){
-            return true;
+    private BaseDataType matchDataType(Field field){
+        List<BaseDataType> dataTypes = getDeclaredDataTypes();
+        for (BaseDataType dataType:dataTypes) {
+            if (dataType.matches(field)){ //匹配到合适的数据类型。
+                return dataType;
+            }
         }
-        return false;
-    }
-
-    private boolean isAssignableFromShort(Class<?> fieldType){
-        if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromInteger(Class<?> fieldType){
-        if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromLong(Class<?> fieldType){
-        if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromFloat(Class<?> fieldType){
-        if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromDouble(Class<?> fieldType){
-        if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromCharacter(Class<?> fieldType){
-        if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromCharSequence(Class<?> fieldType){
-        if (CharSequence.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromClass(Class<?> fieldType){
-        if (Class.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
-    private BaseDataType parseDataType(Class<?> fieldType){
-        BaseDataType dataType;
-        if (isAssignableFromBoolean(fieldType)){
-            dataType = new BooleanType();
-        }else if (isAssignableFromByte(fieldType)) {
-            dataType = new ByteType();
-        }else if (isAssignableFromShort(fieldType)){
-            dataType = new ShortType();
-        }else if (isAssignableFromInteger(fieldType)){
-            dataType = new IntType();
-        }else if (isAssignableFromLong(fieldType)){
-            dataType = new LongType();
-        }else if (isAssignableFromFloat(fieldType)) {
-            dataType = new FloatType();
-        }else if (isAssignableFromDouble(fieldType)){
-            dataType = new DoubleType();
-        }else if (isAssignableFromCharacter(fieldType)){
-            dataType = new CharType();
-        }else if (isAssignableFromCharSequence(fieldType)){
-            dataType = new StringType();
-        }else if (isAssignableFromClass(fieldType)){
-            dataType = new ClassType();
-        }else{//数组或Object
-            dataType = new ByteArrayType();
-        }
-        return dataType;
+        return ByteArrayType.getInstance();
     }
 
     public <T extends OrmTable> void createTable(Class<T> tableClass){
@@ -283,6 +217,7 @@ public class TableManager {
             field.setAccessible(true);
             NonColumn nonColumn = field.getAnnotation(NonColumn.class);//不需要映射的列
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);//主键
+            AssignType assignType = primaryKey.value();//分配类型
             ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);//外键
             if (nonColumn != null){//跳过不需要映射的字段
                 continue;
@@ -293,8 +228,7 @@ public class TableManager {
             if (foreignKey != null) {
                 keys.add(foreignKey);//将外键加入集合
             }
-            Class<?> fieldType = field.getType();
-            BaseDataType dataType = parseDataType(fieldType);//解析并映射数据类型
+            BaseDataType dataType = matchDataType(field);//解析并映射数据类型
             SqlType sqlType = dataType.getSqlType();
             String columnType = sqlType.name();//列类型
             String columnName = getColumnName(field);//列名
@@ -309,6 +243,10 @@ public class TableManager {
             }
             if (primaryKey != null) {
                 sb.append(SPACE).append(PRIMARY_KEY);//sql: PRIMARY KEY
+                if (assignType.equals(AssignType.BY_MYSELF)) {
+                } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
+                    sb.append(SPACE).append(AUTO_INCREMENT);
+                }
             }
             if (foreignKey != null){
                 Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
