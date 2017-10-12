@@ -270,7 +270,7 @@ public class TextUtils {
      * @param sectionLength 每一部分的长度。
      * @return 分断后的文本。
      */
-    private String subsection(String text, String divider, int sectionLength) {
+    private static String subsection(String text, String divider, int sectionLength) {
         if (text.length() < sectionLength) {
             return text;
         }
