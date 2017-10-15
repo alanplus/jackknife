@@ -17,7 +17,7 @@
 package com.lwh.jackknife.orm.type;
 
 /**
- * SQLite数据库的sql的类型枚举。
+ * SQLite数据库的sql的类型枚举，所有其他数据库的SQL语句的数据类型最终会转为以下五种。
  */
 public enum SqlType {
     NULL,//值是空值。

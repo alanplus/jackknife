@@ -26,9 +26,9 @@ import com.lwh.jackknife.ioc.ViewInjector;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Automatically inject a layout, bind views, and registry events for fragments.
+ * Automatically inject a layout, bind views, and register events for fragments.
  */
-public abstract class Fragment extends android.support.v4.app.Fragment{
+public abstract class Fragment extends android.app.Fragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

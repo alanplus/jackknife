@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +43,8 @@ public class ViewInjector {
     private final int VIEW_TYPE_UNDECLARED = -1;
     private final int VIEW_TYPE_ACTIVITY = 0;
     private final int VIEW_TYPE_FRAGMENT = 1;
+    private final int A = 'A';
+    private final int Z = 'Z';
 
     public void inject(Activity activity) throws InvocationTargetException,
             NoSuchMethodException, ClassNotFoundException, NoSuchFieldException,
@@ -64,7 +66,7 @@ public class ViewInjector {
         if (type == VIEW_TYPE_FRAGMENT) {
             viewInjected = ((Fragment) viewInjected).getActivity();
         }else if (type == VIEW_TYPE_UNDECLARED){
-            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
         }
         return (Activity) viewInjected;
     }
@@ -78,12 +80,12 @@ public class ViewInjector {
         StringBuffer sb;
         String layoutName = viewInjected.getClass().getSimpleName();
         if (!layoutName.endsWith(suffix)) {
-            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
         } else {
             String name = layoutName.substring(0, layoutName.length() - suffix.length());
             sb = new StringBuffer(suffix.toLowerCase(Locale.ENGLISH));
             for (int i = 0; i < name.length(); i++) {
-                if (name.charAt(i) >= 65 && name.charAt(i) <= 90 || i == 0) {
+                if (name.charAt(i) >= A && name.charAt(i) <= Z || i == 0) {
                     sb.append("_");
                 }
                 sb.append(String.valueOf(name.charAt(i)).toLowerCase(Locale.ENGLISH));
@@ -175,7 +177,7 @@ public class ViewInjector {
                 }
             }
         }else{
-            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
         }
     }
 
@@ -217,7 +219,7 @@ public class ViewInjector {
                 }
             }
         }else{
-            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
+            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
         }
     }
 

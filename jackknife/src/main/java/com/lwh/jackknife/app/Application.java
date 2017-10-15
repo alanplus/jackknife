@@ -32,7 +32,7 @@ public class Application extends android.app.Application {
     /**
      * 存放Activity弱引用的栈。
      */
-    private Stack<WeakReference<android.app.Activity>> mActivityStack;
+    private Stack<WeakReference<android.app.Activity>> mActivityStacks;
 
     /**
      * Application的单例。
@@ -50,7 +50,7 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         sApp = this;
-        mActivityStack = new Stack<>();
+        mActivityStacks = new Stack<>();
     }
 
     /**
@@ -60,13 +60,6 @@ public class Application extends android.app.Application {
      */
     public void attach(SQLiteOpenHelper helper){
         this.mSQLiteOpenHelper = helper;
-    }
-
-    public void installPlugin(String pluginName, DexClassLoader classLoader){
-        if (mInstalledPlugins.containsKey(pluginName)) {
-            mInstalledPlugins.remove(pluginName);
-        }
-        mInstalledPlugins.put(pluginName, classLoader);
     }
 
     /**
@@ -95,27 +88,27 @@ public class Application extends android.app.Application {
      * @param activity
      */
     /* package */ void pushTask(android.app.Activity activity){
-        mActivityStack.add(new WeakReference<>(activity));
+        mActivityStacks.add(new WeakReference<>(activity));
     }
 
     /**
      * 把顶部的Activity弹出栈。
      */
     /* package */ void popTask(){
-        WeakReference<android.app.Activity> ref = mActivityStack.pop();
+        WeakReference<android.app.Activity> ref = mActivityStacks.pop();
         android.app.Activity activity = ref.get();
         activity.finish();
-        mActivityStack.remove(activity);
+        mActivityStacks.remove(activity);
     }
 
     /**
      * 移除所有任务栈的Activity弱引用。
      */
     protected void removeAll(){
-        for (WeakReference<android.app.Activity> ref:mActivityStack){
+        for (WeakReference<android.app.Activity> ref:mActivityStacks){
             android.app.Activity activity = ref.get();
             activity.finish();
         }
-        mActivityStack.removeAllElements();
+        mActivityStacks.removeAllElements();
     }
 }
