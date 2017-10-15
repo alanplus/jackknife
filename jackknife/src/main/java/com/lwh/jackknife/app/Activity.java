@@ -28,18 +28,20 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class Activity extends android.app.Activity {
 
 	/**
-	 * 加入任务栈。
+	 * If you are using {@link Application}, it is gonna automatically be added to the Application's
+	 * task stack when creating the Activity.
 	 */
-	private void joinTask(){
+	protected void push(){
 		if (getApplication() instanceof Application) {
 			Application.getInstance().pushTask(this);
 		}
 	}
 
 	/**
-	 * 相当于finish，使用此方法会移除任务栈的缓存对象。
+	 * Equivalent to {@link android.app.Activity#finish()}, the difference is that it is gonna be
+	 * removed from the Application's task stack when the activity is destroyed.
 	 */
-	public void finishTask(){
+	public void pop(){
 		if (getApplication() instanceof Application) {
 			Application.getInstance().popTask();
 		}
@@ -52,7 +54,7 @@ public abstract class Activity extends android.app.Activity {
 			ViewInjector injector = new ViewInjector();
 			injector.inject(this);
 			if (getApplication() instanceof Application){
-				joinTask();
+				push();
 			}
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();

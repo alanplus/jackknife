@@ -273,10 +273,6 @@ public class ApkUtils {
                 return "Android 5.1";
             case Build.VERSION_CODES.M:
                 return "Android 6.0";
-            case Build.VERSION_CODES.N:
-                return "Android 7.0";
-            case Build.VERSION_CODES.N_MR1:
-                return "Android 7.1";
         }
         throw new RuntimeException("不可知的Android系统版本。");
     }

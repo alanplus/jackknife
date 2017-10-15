@@ -16,35 +16,32 @@
 
 package com.lwh.jackknife.app;
 
+import android.app.ActivityGroup;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.lang.ref.WeakReference;
-import java.util.Map;
 import java.util.Stack;
 
-import dalvik.system.DexClassLoader;
-
 /**
- * 如果使用了ORM模块，你需要继承此类。
+ * In a particular case, you might want to inherit this class and specify it in the application's
+ * tag of the manifest file.
  */
 public class Application extends android.app.Application {
 
     /**
-     * 存放Activity弱引用的栈。
+     * Only a mirror used to record the activity created.
      */
     private Stack<WeakReference<android.app.Activity>> mActivityStacks;
 
     /**
-     * Application的单例。
+     * There is only one instance of the program.
      */
     private static Application sApp;
 
     /**
-     * SQLite数据库打开助手。
+     * It is attached to the application context and is easy to access anywhere in the program.
      */
     private SQLiteOpenHelper mSQLiteOpenHelper;
-
-    private Map<String, DexClassLoader> mInstalledPlugins;
 
     @Override
     public void onCreate() {
@@ -54,24 +51,12 @@ public class Application extends android.app.Application {
     }
 
     /**
-     * 依附SQLite打开助手。
+     * After attachment, you can get it in {@link #getSQLiteOpenHelper()}.
      *
-     * @param helper SQLite打开助手。
+     * @param helper A helper class to manage database creation and version management.
      */
     public void attach(SQLiteOpenHelper helper){
         this.mSQLiteOpenHelper = helper;
-    }
-
-    /**
-     * 检测SQLite打开助手是否依附上。
-     *
-     * @return 是否依附成功。
-     */
-    public boolean isSQLiteOpenHelperAttached(){
-        if (mSQLiteOpenHelper != null){
-            return true;
-        }
-        return false;
     }
 
     public SQLiteOpenHelper getSQLiteOpenHelper(){
@@ -83,16 +68,22 @@ public class Application extends android.app.Application {
     }
 
     /**
-     * 把Activity压入栈。
+     * Add the activity to the task stack.
      *
-     * @param activity
+     * @param activity An activity is a single, focused thing that the user can do.  Almost all
+     * activities interact with the user, so the Activity class takes care of
+     * creating a window for you in which you can place your UI with
+     * {@link android.app.Activity#setContentView}.  While activities are often presented to the user
+     * as full-screen windows, they can also be used in other ways: as floating
+     * windows (via a theme with {@link android.R.attr#windowIsFloating} set)
+     * or embedded inside of another activity (using {@link ActivityGroup}).
      */
     /* package */ void pushTask(android.app.Activity activity){
         mActivityStacks.add(new WeakReference<>(activity));
     }
 
     /**
-     * 把顶部的Activity弹出栈。
+     * Destroy and remove activity from the top of the task stack.
      */
     /* package */ void popTask(){
         WeakReference<android.app.Activity> ref = mActivityStacks.pop();
@@ -102,9 +93,9 @@ public class Application extends android.app.Application {
     }
 
     /**
-     * 移除所有任务栈的Activity弱引用。
+     * Destroy and remove all activities in the task stack.
      */
-    protected void removeAll(){
+    protected void removeTasks(){
         for (WeakReference<android.app.Activity> ref:mActivityStacks){
             android.app.Activity activity = ref.get();
             activity.finish();
