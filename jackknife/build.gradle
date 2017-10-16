@@ -5,7 +5,40 @@ import org.aspectj.tools.ajc.Main
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
+version = "1.4.1"
+def siteUrl = 'https://github.com/JackWHLiu'
+def gitUrl = 'https://github.com/JackWHLiu/jackknife.git'
 group='com.github.JackWHLiu'
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'jackknife'
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'JackWHLiu'
+                        name '刘文豪'
+                        email '924666990@qq.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
 
 android {
     compileSdkVersion 23
@@ -13,8 +46,8 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 19
-        versionCode 32
-        versionName "1.4.0"
+        versionCode 33
+        versionName "1.4.1"
     }
     lintOptions {
         abortOnError false
@@ -78,4 +111,24 @@ dependencies {
     provided 'com.android.support:appcompat-v7:23.0.0'
     provided 'com.android.support:recyclerview-v7:23.0.0'
     provided 'org.aspectj:aspectjrt:1.8.1'
+}
+
+task sourcesJar(type:Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
 }
