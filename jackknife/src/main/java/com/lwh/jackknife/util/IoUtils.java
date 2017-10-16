@@ -702,8 +702,6 @@ public class IoUtils {
         }
     }
 
-
-
     /**
      * 获取SD卡根目录。
      *
