@@ -298,6 +298,6 @@ public class ApkUtils {
     public native static int bspatch(String oldPath, String newPath, String patchPath);
 
     static{
-        System.loadLibrary("ioutils");
+        System.loadLibrary("apkutils");
     }
 }
