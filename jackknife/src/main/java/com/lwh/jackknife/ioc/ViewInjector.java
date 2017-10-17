@@ -1,17 +1,19 @@
 /*
- * Copyright (C) 2017 The JackKnife Open Source Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  * Copyright (C) 2017 The JackKnife Open Source Project
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *      http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
 package com.lwh.jackknife.ioc;
@@ -24,6 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -32,61 +35,71 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ViewInjector {
+import com.lwh.jackknife.ioc.exception.ViewTypeException;
+
+public class ViewInjector<VIEW> {
 
     private final String METHOD_SET_CONTENT_VIEW = "setContentView";
     private final String METHOD_FIND_VIEW_BY_ID = "findViewById";
     private final String METHOD_INFLATE = "inflate";
     private final String METHOD_VALUE = "value";
-    private final String TYPE_NAME_ACTIVITY = Activity.class.getSimpleName();
-    private final String TYPE_NAME_FRAGMENT = Fragment.class.getSimpleName();
-    private final int VIEW_TYPE_UNDECLARED = -1;
-    private final int VIEW_TYPE_ACTIVITY = 0;
-    private final int VIEW_TYPE_FRAGMENT = 1;
+    private final String UNDERLINE = "_";
+    private final String ID = ".R$id";
+    private final String LAYOUT = ".R$layout";
+    private final String VIEW_TYPE_ERROR = "viewInjected must be an activity or a fragment.";
     private final int A = 'A';
     private final int Z = 'Z';
 
-    public void inject(Activity activity) throws InvocationTargetException,
+    enum ViewType {
+        Activity, Fragment, UNDECLARED
+    }
+
+    private ViewInjector() {
+    }
+
+    public static ViewInjector create() {
+        return new ViewInjector();
+    }
+
+    public void inject(VIEW viewInjected) throws InvocationTargetException,
             NoSuchMethodException, ClassNotFoundException, NoSuchFieldException,
             IllegalAccessException {
-        injectLayout(activity);
-        injectViews(activity);
-        injectEvents(activity);
-    }
-
-    public void inject(Fragment fragment) throws InvocationTargetException,
-            NoSuchMethodException, ClassNotFoundException, IllegalAccessException,
-            NoSuchFieldException {
-        injectViews(fragment);
-        injectEvents(fragment);
-    }
-
-    protected Activity getActivity(Object viewInjected) {
-        int type = getViewType(viewInjected.getClass());
-        if (type == VIEW_TYPE_FRAGMENT) {
-            viewInjected = ((Fragment) viewInjected).getActivity();
-        }else if (type == VIEW_TYPE_UNDECLARED){
-            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
+        if (viewInjected instanceof Activity) {
+            injectLayout(viewInjected);
+            injectViews(viewInjected);
+            injectEvents(viewInjected);
+        } else if (viewInjected instanceof Fragment) {
+            injectViews(viewInjected);
+            injectEvents(viewInjected);
         }
-        return (Activity) viewInjected;
     }
 
-    protected String generateLayoutName(Object viewInjected) {
-        int type = getViewType(viewInjected.getClass());
-        String suffix = TYPE_NAME_ACTIVITY;
-        if (type == VIEW_TYPE_FRAGMENT) {
-            suffix = TYPE_NAME_FRAGMENT;
+    protected VIEW getActivity(VIEW viewInjected) {
+        ViewType viewType = getViewType(viewInjected);
+        if (viewType == ViewType.Fragment) {
+            viewInjected = (VIEW) ((Fragment) viewInjected).getActivity();
+        }else if (viewType == ViewType.UNDECLARED){
+            throw new ViewTypeException();
+        }
+        return viewInjected;
+    }
+
+    protected String generateLayoutName(VIEW viewInjected) {
+        ViewType viewType = getViewType(viewInjected);
+        String suffix = ViewType.Activity.name();
+        if (viewType == ViewType.Fragment) {
+            suffix = viewType.name();
         }
         StringBuffer sb;
         String layoutName = viewInjected.getClass().getSimpleName();
         if (!layoutName.endsWith(suffix)) {
-            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
+            throw new ViewTypeException(VIEW_TYPE_ERROR);
         } else {
             String name = layoutName.substring(0, layoutName.length() - suffix.length());
             sb = new StringBuffer(suffix.toLowerCase(Locale.ENGLISH));
             for (int i = 0; i < name.length(); i++) {
                 if (name.charAt(i) >= A && name.charAt(i) <= Z || i == 0) {
-                    sb.append("_");
+                    sb.append(UNDERLINE);
                 }
                 sb.append(String.valueOf(name.charAt(i)).toLowerCase(Locale.ENGLISH));
             }
@@ -94,36 +107,37 @@ public class ViewInjector {
         return sb.toString();
     }
 
-    protected int getViewType(Class<?> viewClass) {
+    protected ViewType getViewType(VIEW viewInjected) {
+        Class<VIEW> viewClass = (Class<VIEW>) viewInjected.getClass();
         if (Activity.class.isAssignableFrom(viewClass)) {
-            return VIEW_TYPE_ACTIVITY;
+            return ViewType.Activity;
         } else if (Fragment.class.isAssignableFrom(viewClass)) {
-            return VIEW_TYPE_FRAGMENT;
+            return ViewType.Fragment;
         } else {
-            return VIEW_TYPE_UNDECLARED;
+            return ViewType.UNDECLARED;
         }
     }
 
-    protected boolean isViewTypeAllowed(int type){
-        if (type != VIEW_TYPE_UNDECLARED){
+    protected boolean isViewTypeAllowed(ViewType viewType){
+        if (viewType != ViewType.UNDECLARED){
             return true;
         }
         return false;
     }
 
-    public final View injectLayout(Object viewInjected) throws NoSuchMethodException,
+    public final View injectLayout(VIEW viewInjected) throws NoSuchMethodException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             ClassNotFoundException, NoSuchFieldException {
-        int type = getViewType(viewInjected.getClass());
-        if (isViewTypeAllowed(type)) {
+        ViewType viewType = getViewType(viewInjected);
+        if (isViewTypeAllowed(viewType)) {
             String layoutName = generateLayoutName(viewInjected);
             viewInjected = getActivity(viewInjected);
             Class<?> viewClass = viewInjected.getClass();
             String packageName = ((Activity) viewInjected).getPackageName();
-            Class<?> layoutClass = Class.forName(packageName + ".R$layout");
+            Class<?> layoutClass = Class.forName(packageName + LAYOUT);
             Field field = layoutClass.getDeclaredField(layoutName);
             int layoutId = field.getInt(viewInjected);
-            if (type == VIEW_TYPE_ACTIVITY) {
+            if (viewType == ViewType.Activity) {
                 Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
                 method.invoke(viewInjected, layoutId);
             }
@@ -133,23 +147,23 @@ public class ViewInjector {
                     ViewGroup.class);
             return (View) inflateMethod.invoke(inflater, layoutId, null);
         }else{
-            throw new IllegalArgumentException("viewInjected must be an AppCompatActivity or a fragment.");
+            throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
     }
 
-    public final void injectViews(Object viewInjected) throws NoSuchMethodException,
+    public final void injectViews(VIEW viewInjected) throws NoSuchMethodException,
             ClassNotFoundException, InvocationTargetException, IllegalAccessException,
             NoSuchFieldException {
-        int type = getViewType(viewInjected.getClass());
-        if (isViewTypeAllowed(type)) {
+        ViewType viewType = getViewType(viewInjected);
+        if (isViewTypeAllowed(viewType)) {
             Class<?> viewClass = viewInjected.getClass();
             Field[] viewFields = viewClass.getDeclaredFields();
-            Activity activity = getActivity(viewInjected);
+            Activity activity = (Activity) getActivity(viewInjected);
             Class<? extends Activity> activityClass = activity.getClass();
             for (Field field : viewFields) {
                 field.setAccessible(true);
-                Class<?> viewType = field.getType();
-                if (View.class.isAssignableFrom(viewType)) {
+                Class<?> fieldType = field.getType();
+                if (View.class.isAssignableFrom(fieldType)) {
                     ViewIgnore viewIgnore = field.getAnnotation(ViewIgnore.class);
                     if (viewIgnore != null) {
                         continue;
@@ -160,7 +174,7 @@ public class ViewInjector {
                         id = viewId.value();
                     } else {
                         String packageName = activity.getPackageName();
-                        Class<?> idClass = Class.forName(packageName + ".R$id");
+                        Class<?> idClass = Class.forName(packageName + ID);
                         Field idField = idClass.getDeclaredField(field.getName());
                         try {
                             id = idField.getInt(idField);
@@ -177,18 +191,18 @@ public class ViewInjector {
                 }
             }
         }else{
-            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
+            throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
     }
 
-    public final void injectEvents(Object viewInjected)
+    public final void injectEvents(VIEW viewInjected)
             throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
-        int type = getViewType(viewInjected.getClass());
-        if (isViewTypeAllowed(type)) {
+        ViewType viewType = getViewType(viewInjected);
+        if (isViewTypeAllowed(viewType)) {
             Class<?> viewClass = viewInjected.getClass();
             Method[] methods = viewClass.getDeclaredMethods();
-            Activity activity = getActivity(viewInjected);
+            Activity activity = (Activity) getActivity(viewInjected);
             for (Method method : methods) {
                 Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {
@@ -219,16 +233,16 @@ public class ViewInjector {
                 }
             }
         }else{
-            throw new IllegalArgumentException("viewInjected must be an activity or a fragment.");
+            throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
     }
 
     private class EventInvocationHandler implements InvocationHandler {
 
-        private HashMap<String, Method> mCallbackMethodMap;
-        private Object mViewInjected;
+        private Map<String, Method> mCallbackMethodMap;
+        private VIEW mViewInjected;
 
-        public EventInvocationHandler(HashMap<String, Method> callbackMethodMap, Object view) {
+        public EventInvocationHandler(HashMap<String, Method> callbackMethodMap, VIEW view) {
             this.mCallbackMethodMap = callbackMethodMap;
             this.mViewInjected = view;
         }

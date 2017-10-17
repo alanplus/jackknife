@@ -16,9 +16,6 @@
 
 package com.lwh.jackknife.mvp;
 
-import android.support.annotation.NonNull;
-
-import com.lwh.jackknife.util.Logger;
 import com.lwh.jackknife.util.TextUtils;
 
 import java.lang.reflect.Field;
@@ -204,7 +201,7 @@ public abstract class BaseModel<T>{
      * @throws IllegalAccessException 非法访问异常。
      * @throws NoSuchFieldException 没有这样一个属性的异常。
      */
-    protected <E> List<E> extractElement(Selector selector, @NonNull String elementName) throws IllegalAccessException,
+    protected <E> List<E> extractElement(Selector selector, String elementName) throws IllegalAccessException,
             NoSuchFieldException {
         List<E> elements = new ArrayList<>();
         List<T> beans = findObjects(selector);

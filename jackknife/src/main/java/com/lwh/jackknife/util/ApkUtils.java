@@ -1,17 +1,19 @@
 /*
- * Copyright (C) 2017 The JackKnife Open Source Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  * Copyright (C) 2017 The JackKnife Open Source Project
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *      http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
 package com.lwh.jackknife.util;
@@ -275,29 +277,5 @@ public class ApkUtils {
                 return "Android 6.0";
         }
         throw new RuntimeException("不可知的Android系统版本。");
-    }
-
-    /**
-     * 合并新版本的安装包。
-     *
-     * @param oldPath 旧版本apk文件的路径。
-     * @param newPath 新版本apk文件的路径。
-     * @param patchPath 差分包的路径。
-     * @return 是否成功，0表示成功，非0表示失败。
-     */
-    public native static int bsdiff(String oldPath, String newPath, String patchPath);
-
-    /**
-     * 生成apk差分包。
-     *
-     * @param oldPath 旧版本apk文件的路径。
-     * @param newPath 新版本apk文件的路径。
-     * @param patchPath 差分包的路径。
-     * @return 是否成功，0表示成功，非0表示失败。
-     */
-    public native static int bspatch(String oldPath, String newPath, String patchPath);
-
-    static{
-        System.loadLibrary("apkutils");
     }
 }

@@ -90,6 +90,8 @@ public class IoUtils {
      */
     public static final String GBK = "GBK";
 
+    public static final int UNKNOWN_VERSION = -1;
+
     private IoUtils(){
     }
 
@@ -700,6 +702,30 @@ public class IoUtils {
                 folder.mkdirs();
             }
         }
+    }
+
+    /**
+     * 合并新版本的安装包。
+     *
+     * @param oldPath 旧版本apk文件的路径。
+     * @param newPath 新版本apk文件的路径。
+     * @param patchPath 差分包的路径。
+     * @return 是否成功，0表示成功，非0表示失败。
+     */
+    public native static int bsdiff(String oldPath, String newPath, String patchPath);
+
+    /**
+     * 生成apk差分包。
+     *
+     * @param oldPath 旧版本apk文件的路径。
+     * @param newPath 新版本apk文件的路径。
+     * @param patchPath 差分包的路径。
+     * @return 是否成功，0表示成功，非0表示失败。
+     */
+    public native static int bspatch(String oldPath, String newPath, String patchPath);
+
+    static{
+        System.loadLibrary("ioutils");
     }
 
     /**

@@ -1306,7 +1306,7 @@ public class NumberUtils {
      * @param requireLength 要求的长度。
      * @return 补0后的数字。
      */
-    public static String zeronize(String num, int requireLength){
+    public String zeronize(String num, int requireLength){
         StringBuffer sb = new StringBuffer();
         if(requireLength > num.length()){
             int length = requireLength - num.length();

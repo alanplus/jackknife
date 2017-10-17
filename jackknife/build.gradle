@@ -1,56 +1,15 @@
-import com.android.build.gradle.LibraryPlugin
-import org.aspectj.bridge.IMessage
-import org.aspectj.bridge.MessageHandler
-import org.aspectj.tools.ajc.Main
-
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-version = "1.4.2"
-def siteUrl = 'https://github.com/JackWHLiu'
-def gitUrl = 'https://github.com/JackWHLiu/jackknife.git'
 group='com.github.JackWHLiu'
-
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                packaging 'aar'
-                name 'jackknife'
-                url siteUrl
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'JackWHLiu'
-                        name '刘文豪'
-                        email '924666990@qq.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-}
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 19
-        versionCode 34
-        versionName "1.4.2"
-    }
-    lintOptions {
-        abortOnError false
+        targetSdkVersion 23
+        versionCode 35
+        versionName "1.4.3"
     }
     buildTypes {
         release {
@@ -63,72 +22,4 @@ android {
             path 'CMakeLists.txt'
         }
     }
-    libraryVariants.all { variant ->
-        LibraryPlugin plugin = project.plugins.getPlugin(LibraryPlugin)
-        JavaCompile javaCompile = variant.javaCompile
-        javaCompile.doLast {
-            String[] args = ["-showWeaveInfo",
-                             "-1.5",
-                             "-inpath", javaCompile.destinationDir.toString(),
-                             "-aspectpath", javaCompile.classpath.asPath,
-                             "-d", javaCompile.destinationDir.toString(),
-                             "-classpath", javaCompile.classpath.asPath,
-//                             "-bootclasspath", plugin.project.android.bootClasspath.join(
-//                    File.pathSeparator)
-            ]
-
-            MessageHandler handler = new MessageHandler(true);
-            new Main().run(args, handler)
-            def log = project.logger
-            for (IMessage message : handler.getMessages(null, true)) {
-                switch (message.getKind()) {
-                    case IMessage.ABORT:
-                    case IMessage.ERROR:
-                    case IMessage.FAIL:
-                        log.error message.message, message.thrown
-                        break;
-                    case IMessage.WARNING:
-                    case IMessage.INFO:
-                        log.info message.message, message.thrown
-                        break;
-                    case IMessage.DEBUG:
-                        log.debug message.message, message.thrown
-                        break;
-                }
-            }
-        }
-    }
-}
-
-repositories{
-    flatDir{
-        dirs 'libs'
-    }
-    jcenter()
-}
-
-dependencies {
-    provided 'com.android.support:appcompat-v7:23.0.0'
-    provided 'com.android.support:recyclerview-v7:23.0.0'
-    provided 'org.aspectj:aspectjrt:1.8.1'
-}
-
-task sourcesJar(type:Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
 }

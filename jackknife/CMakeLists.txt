@@ -6,7 +6,7 @@ find_library(
 )
 
 add_library(
-    apkutils
+    ioutils
     SHARED
     src/main/cpp/bspatch.c
     src/main/cpp/bsdiff.c
@@ -30,6 +30,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 include_directories(src/main/cpp/bzip2)
 
 target_link_libraries(
-    apkutils
+    ioutils
     ${log-lib}
 )
