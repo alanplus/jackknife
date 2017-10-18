@@ -30,12 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * 适配器基类，继承此类可以适配任何类型的Bean。
- *
- * @author lwh
- * @param <T> 数据模型。
- */
 public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 
 	private List<T> mBeans = null;
@@ -50,7 +44,7 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 
 	public BaseAdapter(Context context, List<T> beans) {
 		this(context);
-		bindDataSet(beans);
+		addItems(beans);
 	}
 
 	@Target(ElementType.TYPE)
@@ -63,19 +57,6 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface ItemLayoutId {
 		int value();
-	}
-
-	/**
-	 * Binds data set for this adapter.You can't invoke the method when the
-	 * adapter has data set.It is called in the Constructor commonly.
-	 * 为本是适配器绑定数据集。当适配器有数据的时候，你不能调用这个方法。它通常在构造方法中被调用。
-	 */
-	public void bindDataSet(List<T> beans) {
-		if (mBeans == null) {
-			mBeans = beans;
-			notifyDataSetChanged();
-		} else
-			throw new IllegalStateException("Data set is already binded.");
 	}
 
 	@Override
@@ -101,49 +82,31 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 		return position;
 	}
 
-	/**
-	 * 添加一个条目
-	 */
 	public void addItem(T data) {
 		mBeans.add(data);
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 在指定位置添加一个条目
-	 */
 	public void addItem(int position, T bean) {
 		mBeans.add(position, bean);
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 在适配器末尾添加一堆条目
-	 */
 	public void addItems(List<T> beans) {
 		mBeans.addAll(beans);
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 从适配器的指定位置开始，添加一堆条目
-	 */
 	public void addItems(int start, List<T> beans) {
 		mBeans.addAll(start, beans);
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 替换指定位置的条目
-	 */
 	public void replaceItem(int position, T bean) {
 		mBeans.set(position, bean);
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 从指定位置开始替换一堆条目
-	 */
 	public void replaceItems(int start, List<T> beans) {
 		for (T bean : beans) {
 			mBeans.set(start, bean);
@@ -151,10 +114,6 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 		}
 	}
 
-	/**
-	 * Replaces all data in BaseAdapter whether the data is empty or not.
-	 * 替换适配器中所有条目，无论数据是否为空
-	 */
 	public void replace(List<T> beans) {
 		mBeans = beans;
 		notifyDataSetInvalidated();
@@ -165,19 +124,11 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 从指定位置移除一个条目
-	 */
 	public void removeItem(int position) {
 		mBeans.remove(position);
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 移除连续下标的一堆条目
-	 * @param start 开始的下标
-	 * @param end 结束的下标
-	 */
 	public void removeItems(int start, int end) {
 		for (int i = start; i <= end; i++) {
 			mBeans.remove(i);
@@ -185,18 +136,11 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 清空所有条目
-	 */
 	public void clear() {
 		mBeans.clear();
 		notifyDataSetChanged();
 	}
 
-	/**
-	 * 加载布局
-	 * @hide
-	 */
 	private View inflateView()
 			throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		Class<?> adapterClass = getClass();
@@ -207,10 +151,6 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
-	/**
-	 * 获取布局文件中条目的id
-	 * @hide
-	 */
 	private int[] getItemViewIds() {
 		Class<?> adapterClass = getClass();
 		ItemViewId itemViewId = adapterClass.getAnnotation(ItemViewId.class);
@@ -221,16 +161,8 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter {
 		}
 	}
 
-	/**
-	 * 给条目的子控件绑定数据
-	 * @param position 位置
-	 * @param views 存放了条目中的控件，通过get(int id)拿
-	 */
 	protected abstract <T extends View> void onBindView(int position, SparseArray<T> views);
 
-	/**
-	 * 获取所有的Bean
-	 */
 	public List<T> getBeans() {
 		return mBeans;
 	}

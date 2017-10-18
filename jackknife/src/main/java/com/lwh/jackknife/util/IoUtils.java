@@ -16,20 +16,11 @@
 
 package com.lwh.jackknife.util;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.format.Formatter;
-import android.util.DisplayMetrics;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -42,9 +33,6 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.Map;
@@ -702,30 +690,6 @@ public class IoUtils {
                 folder.mkdirs();
             }
         }
-    }
-
-    /**
-     * 合并新版本的安装包。
-     *
-     * @param oldPath 旧版本apk文件的路径。
-     * @param newPath 新版本apk文件的路径。
-     * @param patchPath 差分包的路径。
-     * @return 是否成功，0表示成功，非0表示失败。
-     */
-    public native static int bsdiff(String oldPath, String newPath, String patchPath);
-
-    /**
-     * 生成apk差分包。
-     *
-     * @param oldPath 旧版本apk文件的路径。
-     * @param newPath 新版本apk文件的路径。
-     * @param patchPath 差分包的路径。
-     * @return 是否成功，0表示成功，非0表示失败。
-     */
-    public native static int bspatch(String oldPath, String newPath, String patchPath);
-
-    static{
-        System.loadLibrary("ioutils");
     }
 
     /**

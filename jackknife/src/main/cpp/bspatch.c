@@ -173,7 +173,7 @@ int patchMethod(int argc,char * argv[])
     return 0;
 }
 
-JNIEXPORT jint JNICALL Java_com_lwh_jackknife_util_IoUtils_bspatch
+JNIEXPORT jint JNICALL Java_com_lwh_jackknife_util_ApkUtils_patchApkNative
         (JNIEnv *env, jclass cls,
          jstring oldPath, jstring newPath, jstring patchPath){
     int argc = 4;

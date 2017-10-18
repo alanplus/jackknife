@@ -1,19 +1,17 @@
 /*
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
- *  * Copyright (C) 2017 The JackKnife Open Source Project
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *      http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.lwh.jackknife.ioc;
@@ -37,7 +35,7 @@ import android.view.ViewGroup;
 
 import com.lwh.jackknife.ioc.exception.ViewTypeException;
 
-public class ViewInjector<VIEW> {
+public class ViewInjector<V> {
 
     private final String METHOD_SET_CONTENT_VIEW = "setContentView";
     private final String METHOD_FIND_VIEW_BY_ID = "findViewById";
@@ -61,7 +59,7 @@ public class ViewInjector<VIEW> {
         return new ViewInjector();
     }
 
-    public void inject(VIEW viewInjected) throws InvocationTargetException,
+    public void inject(V viewInjected) throws InvocationTargetException,
             NoSuchMethodException, ClassNotFoundException, NoSuchFieldException,
             IllegalAccessException {
         if (viewInjected instanceof Activity) {
@@ -74,17 +72,17 @@ public class ViewInjector<VIEW> {
         }
     }
 
-    protected VIEW getActivity(VIEW viewInjected) {
+    protected V getActivity(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
         if (viewType == ViewType.Fragment) {
-            viewInjected = (VIEW) ((Fragment) viewInjected).getActivity();
+            viewInjected = (V) ((Fragment) viewInjected).getActivity();
         }else if (viewType == ViewType.UNDECLARED){
             throw new ViewTypeException();
         }
         return viewInjected;
     }
 
-    protected String generateLayoutName(VIEW viewInjected) {
+    protected String generateLayoutName(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
         String suffix = ViewType.Activity.name();
         if (viewType == ViewType.Fragment) {
@@ -107,8 +105,8 @@ public class ViewInjector<VIEW> {
         return sb.toString();
     }
 
-    protected ViewType getViewType(VIEW viewInjected) {
-        Class<VIEW> viewClass = (Class<VIEW>) viewInjected.getClass();
+    protected ViewType getViewType(V viewInjected) {
+        Class<V> viewClass = (Class<V>) viewInjected.getClass();
         if (Activity.class.isAssignableFrom(viewClass)) {
             return ViewType.Activity;
         } else if (Fragment.class.isAssignableFrom(viewClass)) {
@@ -125,7 +123,7 @@ public class ViewInjector<VIEW> {
         return false;
     }
 
-    public final View injectLayout(VIEW viewInjected) throws NoSuchMethodException,
+    public final View injectLayout(V viewInjected) throws NoSuchMethodException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException,
             ClassNotFoundException, NoSuchFieldException {
         ViewType viewType = getViewType(viewInjected);
@@ -151,7 +149,7 @@ public class ViewInjector<VIEW> {
         }
     }
 
-    public final void injectViews(VIEW viewInjected) throws NoSuchMethodException,
+    public final void injectViews(V viewInjected) throws NoSuchMethodException,
             ClassNotFoundException, InvocationTargetException, IllegalAccessException,
             NoSuchFieldException {
         ViewType viewType = getViewType(viewInjected);
@@ -195,7 +193,7 @@ public class ViewInjector<VIEW> {
         }
     }
 
-    public final void injectEvents(VIEW viewInjected)
+    public final void injectEvents(V viewInjected)
             throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
         ViewType viewType = getViewType(viewInjected);
@@ -240,9 +238,9 @@ public class ViewInjector<VIEW> {
     private class EventInvocationHandler implements InvocationHandler {
 
         private Map<String, Method> mCallbackMethodMap;
-        private VIEW mViewInjected;
+        private V mViewInjected;
 
-        public EventInvocationHandler(HashMap<String, Method> callbackMethodMap, VIEW view) {
+        public EventInvocationHandler(HashMap<String, Method> callbackMethodMap, V view) {
             this.mCallbackMethodMap = callbackMethodMap;
             this.mViewInjected = view;
         }

@@ -92,6 +92,10 @@ public interface Dao<T extends OrmTable> {
      */
     List<T> select(QueryBuilder builder);
 
+    T selectOne();
+
+    T selectOne(QueryBuilder builder);
+
     /**
      * 获取所有数据的条数。
      *

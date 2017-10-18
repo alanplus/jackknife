@@ -47,6 +47,7 @@ import com.lwh.jackknife.orm.type.LongType;
 import com.lwh.jackknife.orm.type.ShortType;
 import com.lwh.jackknife.orm.type.SqlType;
 import com.lwh.jackknife.orm.type.StringType;
+import com.lwh.jackknife.util.Logger;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -70,6 +71,8 @@ public class TableManager {
      * 数据库操作类。
      */
     private static SQLiteDatabase sDatabase;
+
+    private final String TAG = getClass().getSimpleName();
 
     /**
      * 创建一个存放映射关系的Map。
@@ -274,6 +277,7 @@ public class TableManager {
         try {
             String sql = sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS).append(SEMICOLON)
                     .toString();//删除最后一个逗号并加上右括号
+            Logger.info(TAG, "execute sql:"+sql);
             sDatabase.execSQL(sql);
             mTableNameMap.put(tableClass, tableName);//将新创建出来的表加入缓存
             WhereBuilder whereBuilder = new WhereBuilder()

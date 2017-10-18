@@ -297,6 +297,24 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return result;
     }
 
+    @Override
+    public T selectOne() {
+        List<T> beans = selectAll();
+        if (beans != null) {
+            return beans.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public T selectOne(QueryBuilder builder) {
+        List<T> beans = select(builder);
+        if (beans != null) {
+            return beans.get(0);
+        }
+        return null;
+    }
+
     public List<T> getSpecifiedBeans(List<T> beans, int start, int length){
         List<T> newBeans = new ArrayList<>();
         for (int i=start;i<length;i++) {

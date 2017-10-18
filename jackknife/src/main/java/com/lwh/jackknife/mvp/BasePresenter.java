@@ -37,8 +37,8 @@ public abstract class BasePresenter<V extends IBaseView> {
         return mViewRef.get();
     }
 
-    protected  <T> T getView(Class<T> viewClass) {
-        return (T) getView();
+    protected V getView(Class<V> viewClass) {
+        return getView();
     }
 
     protected boolean isViewAttached(){

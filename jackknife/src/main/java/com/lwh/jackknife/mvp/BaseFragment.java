@@ -31,6 +31,8 @@ public abstract class BaseFragment<V extends IBaseView, P extends BasePresenter<
 
     protected final String TAG = getClass().getSimpleName();
 
+    protected abstract P createPresenter();
+
     public void onActivityCreated(Bundle savedInstanceState) {
         mPresenter = createPresenter();
         mPresenter.attachView((V)this);
@@ -66,6 +68,4 @@ public abstract class BaseFragment<V extends IBaseView, P extends BasePresenter<
         super.onDestroy();
         mPresenter.detachView();
     }
-
-    protected abstract P createPresenter();
 }

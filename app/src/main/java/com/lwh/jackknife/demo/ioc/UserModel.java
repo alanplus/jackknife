@@ -21,10 +21,6 @@ import com.lwh.jackknife.mvp.BaseModel;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by liuwenhao on 2017/10/17.
- */
-
 public class UserModel extends BaseModel<User>{
 
     public UserModel(Class<User> beanClass) {
@@ -41,7 +37,7 @@ public class UserModel extends BaseModel<User>{
     }
 
     public List<User> findNameEqualToCelica() {
-        Selector selector = new Selector();
+        Selector selector = Selector.create();
         selector.addWhereEqualTo("name", "Celica");
         try {
             return findObjects(selector);
