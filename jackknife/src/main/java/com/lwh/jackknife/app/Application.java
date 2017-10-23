@@ -19,6 +19,8 @@ package com.lwh.jackknife.app;
 import android.app.ActivityGroup;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lwh.jackknife.ioc.SupportActivity;
+
 import java.lang.ref.WeakReference;
 import java.util.Stack;
 
@@ -31,7 +33,7 @@ public class Application extends android.app.Application {
     /**
      * Only a mirror used to record the activity created.
      */
-    private Stack<WeakReference<android.app.Activity>> mActivityStacks;
+    private Stack<WeakReference<SupportActivity>> mActivityStacks;
 
     /**
      * There is only one instance of the program.
@@ -78,7 +80,7 @@ public class Application extends android.app.Application {
      * windows (via a theme with {@link android.R.attr#windowIsFloating} set)
      * or embedded inside of another activity (using {@link ActivityGroup}).
      */
-    /* package */ void pushTask(android.app.Activity activity){
+    /* package */ void pushTask(SupportActivity activity){
         mActivityStacks.add(new WeakReference<>(activity));
     }
 
@@ -86,8 +88,8 @@ public class Application extends android.app.Application {
      * Destroy and remove activity from the top of the task stack.
      */
     /* package */ void popTask(){
-        WeakReference<android.app.Activity> ref = mActivityStacks.pop();
-        android.app.Activity activity = ref.get();
+        WeakReference<SupportActivity> ref = mActivityStacks.pop();
+        SupportActivity activity = ref.get();
         activity.finish();
         mActivityStacks.remove(activity);
     }
@@ -96,8 +98,8 @@ public class Application extends android.app.Application {
      * Destroy and remove all activities in the task stack.
      */
     protected void removeTasks(){
-        for (WeakReference<android.app.Activity> ref:mActivityStacks){
-            android.app.Activity activity = ref.get();
+        for (WeakReference<SupportActivity> ref:mActivityStacks){
+            SupportActivity activity = ref.get();
             activity.finish();
         }
         mActivityStacks.removeAllElements();

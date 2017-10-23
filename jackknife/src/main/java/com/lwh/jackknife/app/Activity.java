@@ -18,6 +18,7 @@ package com.lwh.jackknife.app;
 
 import android.os.Bundle;
 
+import com.lwh.jackknife.ioc.SupportActivity;
 import com.lwh.jackknife.ioc.ViewInjector;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Automatically inject a layout, bind views, and register events for activities.
  */
-public abstract class Activity extends android.app.Activity {
+public  class Activity extends android.app.Activity implements SupportActivity {
 
 	/**
 	 * If you are using {@link Application}, it is automatically gonna be added to the Application's

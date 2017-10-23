@@ -26,8 +26,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +33,7 @@ import android.view.ViewGroup;
 
 import com.lwh.jackknife.ioc.exception.ViewTypeException;
 
-public class ViewInjector<V> {
+public class ViewInjector<V extends SupportV> {
 
     private final String METHOD_SET_CONTENT_VIEW = "setContentView";
     private final String METHOD_FIND_VIEW_BY_ID = "findViewById";
@@ -49,7 +47,9 @@ public class ViewInjector<V> {
     private final int Z = 'Z';
 
     enum ViewType {
-        Activity, Fragment, UNDECLARED
+        Activity,
+        Fragment,
+        UNDECLARED
     }
 
     private ViewInjector() {
@@ -62,11 +62,11 @@ public class ViewInjector<V> {
     public void inject(V viewInjected) throws InvocationTargetException,
             NoSuchMethodException, ClassNotFoundException, NoSuchFieldException,
             IllegalAccessException {
-        if (viewInjected instanceof Activity) {
+        if (viewInjected instanceof SupportActivity) {
             injectLayout(viewInjected);
             injectViews(viewInjected);
             injectEvents(viewInjected);
-        } else if (viewInjected instanceof Fragment) {
+        } else if (viewInjected instanceof SupportFragment) {
             injectViews(viewInjected);
             injectEvents(viewInjected);
         }
@@ -75,7 +75,7 @@ public class ViewInjector<V> {
     protected V getActivity(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
         if (viewType == ViewType.Fragment) {
-            viewInjected = (V) ((Fragment) viewInjected).getActivity();
+            viewInjected = (V) ((SupportFragment) viewInjected).getFragmentActivity();
         }else if (viewType == ViewType.UNDECLARED){
             throw new ViewTypeException();
         }
@@ -107,9 +107,9 @@ public class ViewInjector<V> {
 
     protected ViewType getViewType(V viewInjected) {
         Class<V> viewClass = (Class<V>) viewInjected.getClass();
-        if (Activity.class.isAssignableFrom(viewClass)) {
+        if (SupportActivity.class.isAssignableFrom(viewClass)) {
             return ViewType.Activity;
-        } else if (Fragment.class.isAssignableFrom(viewClass)) {
+        } else if (SupportFragment.class.isAssignableFrom(viewClass)) {
             return ViewType.Fragment;
         } else {
             return ViewType.UNDECLARED;
@@ -131,7 +131,7 @@ public class ViewInjector<V> {
             String layoutName = generateLayoutName(viewInjected);
             viewInjected = getActivity(viewInjected);
             Class<?> viewClass = viewInjected.getClass();
-            String packageName = ((Activity) viewInjected).getPackageName();
+            String packageName = ((SupportActivity) viewInjected).getPackageName();
             Class<?> layoutClass = Class.forName(packageName + LAYOUT);
             Field field = layoutClass.getDeclaredField(layoutName);
             int layoutId = field.getInt(viewInjected);
@@ -156,8 +156,8 @@ public class ViewInjector<V> {
         if (isViewTypeAllowed(viewType)) {
             Class<?> viewClass = viewInjected.getClass();
             Field[] viewFields = viewClass.getDeclaredFields();
-            Activity activity = (Activity) getActivity(viewInjected);
-            Class<? extends Activity> activityClass = activity.getClass();
+            SupportActivity activity = (SupportActivity) getActivity(viewInjected);
+            Class<? extends SupportActivity> activityClass = activity.getClass();
             for (Field field : viewFields) {
                 field.setAccessible(true);
                 Class<?> fieldType = field.getType();
@@ -200,7 +200,7 @@ public class ViewInjector<V> {
         if (isViewTypeAllowed(viewType)) {
             Class<?> viewClass = viewInjected.getClass();
             Method[] methods = viewClass.getDeclaredMethods();
-            Activity activity = (Activity) getActivity(viewInjected);
+            SupportActivity activity = (SupportActivity) getActivity(viewInjected);
             for (Method method : methods) {
                 Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {

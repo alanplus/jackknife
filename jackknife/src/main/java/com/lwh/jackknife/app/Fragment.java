@@ -21,14 +21,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lwh.jackknife.ioc.SupportActivity;
+import com.lwh.jackknife.ioc.SupportFragment;
 import com.lwh.jackknife.ioc.ViewInjector;
+import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * Automatically inject a layout, bind views, and register events for fragments.
  */
-public abstract class Fragment extends android.app.Fragment{
+public abstract class Fragment extends android.app.Fragment implements SupportFragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,5 +69,13 @@ public abstract class Fragment extends android.app.Fragment{
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public SupportActivity getFragmentActivity() {
+		if (getActivity() instanceof SupportActivity) {
+			return (SupportActivity) getActivity();
+		}
+		throw  new LackInterfaceException("activity缺少SupportActivity接口");
 	}
 }

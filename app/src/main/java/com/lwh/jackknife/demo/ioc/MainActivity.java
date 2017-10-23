@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
     @OnClick(R.id.button_main_getstarted)
     public void getStarted(View view) {
         Toast.makeText(this, "Button named \'Get started!\' has been clicked.", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, SecondActivity.class);
+        Intent intent = new Intent(this, ThirdActivity.class);
         startActivity(intent);
     }
 }
