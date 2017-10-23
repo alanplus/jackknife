@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lwh.jackknife.ioc.exception.IllegalViewClassNameException;
 import com.lwh.jackknife.ioc.exception.ViewTypeException;
 
 public class ViewInjector<V extends SupportV> {
@@ -43,6 +44,7 @@ public class ViewInjector<V extends SupportV> {
     private final String ID = ".R$id";
     private final String LAYOUT = ".R$layout";
     private final String VIEW_TYPE_ERROR = "viewInjected must be an activity or a fragment.";
+    private final String VIEW_CLASS_NAME_ERROR = "class name is not ends with \'Activity\' or \'Fragment\'.";
     private final int A = 'A';
     private final int Z = 'Z';
 
@@ -77,7 +79,7 @@ public class ViewInjector<V extends SupportV> {
         if (viewType == ViewType.Fragment) {
             viewInjected = (V) ((SupportFragment) viewInjected).getFragmentActivity();
         }else if (viewType == ViewType.UNDECLARED){
-            throw new ViewTypeException();
+            throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
         return viewInjected;
     }
@@ -91,7 +93,7 @@ public class ViewInjector<V extends SupportV> {
         StringBuffer sb;
         String layoutName = viewInjected.getClass().getSimpleName();
         if (!layoutName.endsWith(suffix)) {
-            throw new ViewTypeException(VIEW_TYPE_ERROR);
+            throw new IllegalViewClassNameException(VIEW_CLASS_NAME_ERROR);
         } else {
             String name = layoutName.substring(0, layoutName.length() - suffix.length());
             sb = new StringBuffer(suffix.toLowerCase(Locale.ENGLISH));
@@ -129,12 +131,16 @@ public class ViewInjector<V extends SupportV> {
         ViewType viewType = getViewType(viewInjected);
         if (isViewTypeAllowed(viewType)) {
             String layoutName = generateLayoutName(viewInjected);
+            ContentView contentView = viewInjected.getClass().getAnnotation(ContentView.class);
             viewInjected = getActivity(viewInjected);
             Class<?> viewClass = viewInjected.getClass();
             String packageName = ((SupportActivity) viewInjected).getPackageName();
             Class<?> layoutClass = Class.forName(packageName + LAYOUT);
             Field field = layoutClass.getDeclaredField(layoutName);
-            int layoutId = field.getInt(viewInjected);
+            int layoutId = field.getInt(viewInjected);//根据布局名称生成的
+            if (contentView != null) {//有注解，按注解来
+                layoutId = contentView.value();
+            }
             if (viewType == ViewType.Activity) {
                 Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
                 method.invoke(viewInjected, layoutId);

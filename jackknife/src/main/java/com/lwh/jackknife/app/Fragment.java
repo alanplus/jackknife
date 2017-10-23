@@ -76,6 +76,6 @@ public abstract class Fragment extends android.app.Fragment implements SupportFr
 		if (getActivity() instanceof SupportActivity) {
 			return (SupportActivity) getActivity();
 		}
-		throw  new LackInterfaceException("activity缺少SupportActivity接口");
+		throw new LackInterfaceException("activity缺少SupportActivity接口");
 	}
 }

@@ -1,4 +1,4 @@
-JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)QQ Group286417906
+JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)官方唯一QQ群286417906
 ================================
 
 一、关于如何配置环境
@@ -87,3 +87,7 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 > dao.selectAllCount();
 ##### （10）查询满足条件记录的条数
 > dao.selectCount(QueryBuilder);
+##### （11）查询第一条记录
+> dao.selectOne();
+##### （12）查询最满足条件的一条记录
+> dao.selectOne(QueryBuilder);

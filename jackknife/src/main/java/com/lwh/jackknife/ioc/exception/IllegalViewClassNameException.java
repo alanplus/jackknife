@@ -16,12 +16,12 @@
 
 package com.lwh.jackknife.ioc.exception;
 
-public class LackInterfaceException extends RuntimeException {
+public class IllegalViewClassNameException extends RuntimeException {
 
-    public LackInterfaceException() {
+    public IllegalViewClassNameException() {
     }
 
-    public LackInterfaceException(String detailMessage) {
+    public IllegalViewClassNameException(String detailMessage) {
         super(detailMessage);
     }
 }
