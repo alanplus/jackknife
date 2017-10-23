@@ -125,7 +125,7 @@ public class IoUtils {
     public static byte[] H2bs(String H, String separator){
         if (separator != null){
             String[] HS = H.split(separator);
-            byte[] bs = new byte[H.length()];
+            byte[] bs = new byte[HS.length];
             int i = 0;
             for (String b : HS){
                 bs[i++] = Integer.valueOf(b, 16).byteValue();

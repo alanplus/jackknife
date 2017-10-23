@@ -276,36 +276,4 @@ public class ApkUtils {
         }
         throw new RuntimeException("不可知的Android系统版本。");
     }
-
-    /**
-     * 生成apk差分包。
-     *
-     * @param oldPath 旧版本apk文件的路径。
-     * @param newPath 新版本apk文件的路径。
-     * @param patchPath 差分包的路径。
-     * @return 是否成功，0表示成功，非0表示失败。
-     */
-    public static int diffApk(String oldPath, String newPath, String patchPath) {
-        return diffApkNative(oldPath, newPath, patchPath);
-    }
-
-    /**
-     * 合并新版本的安装包。
-     *
-     * @param oldPath 旧版本apk文件的路径。
-     * @param newPath 新版本apk文件的路径。
-     * @param patchPath 差分包的路径。
-     * @return 是否成功，0表示成功，非0表示失败。
-     */
-    public static int patchApk(String oldPath, String newPath, String patchPath) {
-        return patchApkNative(oldPath, newPath, patchPath);
-    }
-
-    public native static int diffApkNative(String oldPath, String newPath, String patchPath);
-
-    public native static int patchApkNative(String oldPath, String newPath, String patchPath);
-
-    static{
-        System.loadLibrary("apkutils");
-    }
 }
