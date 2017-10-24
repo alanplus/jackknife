@@ -51,6 +51,7 @@ public class ViewInjector<V extends SupportV> {
     enum ViewType {
         Activity,
         Fragment,
+        Dialog,
         UNDECLARED
     }
 
@@ -71,6 +72,10 @@ public class ViewInjector<V extends SupportV> {
         } else if (viewInjected instanceof SupportFragment) {
             injectViews(viewInjected);
             injectEvents(viewInjected);
+        } else if (viewInjected instanceof SupportDialog) {
+            injectLayout(viewInjected);
+            injectViews(viewInjected);
+            injectEvents(viewInjected);
         }
     }
 
@@ -78,7 +83,9 @@ public class ViewInjector<V extends SupportV> {
         ViewType viewType = getViewType(viewInjected);
         if (viewType == ViewType.Fragment) {
             viewInjected = (V) ((SupportFragment) viewInjected).getFragmentActivity();
-        }else if (viewType == ViewType.UNDECLARED){
+        } else if (viewType == ViewType.Dialog) {
+            viewInjected = (V)((SupportDialog) viewInjected).getDialogActivity();
+        } else if (viewType == ViewType.UNDECLARED) {
             throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
         return viewInjected;
@@ -86,25 +93,26 @@ public class ViewInjector<V extends SupportV> {
 
     protected String generateLayoutName(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
-        String suffix = ViewType.Activity.name();
-        if (viewType == ViewType.Fragment) {
-            suffix = viewType.name();
-        }
-        StringBuffer sb;
-        String layoutName = viewInjected.getClass().getSimpleName();
-        if (!layoutName.endsWith(suffix)) {
-            throw new IllegalViewClassNameException(VIEW_CLASS_NAME_ERROR);
-        } else {
-            String name = layoutName.substring(0, layoutName.length() - suffix.length());
-            sb = new StringBuffer(suffix.toLowerCase(Locale.ENGLISH));
-            for (int i = 0; i < name.length(); i++) {
-                if (name.charAt(i) >= A && name.charAt(i) <= Z || i == 0) {
-                    sb.append(UNDERLINE);
+        if (isViewTypeAllowed(viewType)) {
+            String suffix = viewType.name();
+            StringBuffer sb;
+            String layoutName = viewInjected.getClass().getSimpleName();
+            if (!layoutName.endsWith(suffix)) {
+                throw new IllegalViewClassNameException(VIEW_CLASS_NAME_ERROR);
+            } else {
+                String name = layoutName.substring(0, layoutName.length() - suffix.length());
+                sb = new StringBuffer(suffix.toLowerCase(Locale.ENGLISH));
+                for (int i = 0; i < name.length(); i++) {
+                    if (name.charAt(i) >= A && name.charAt(i) <= Z || i == 0) {
+                        sb.append(UNDERLINE);
+                    }
+                    sb.append(String.valueOf(name.charAt(i)).toLowerCase(Locale.ENGLISH));
                 }
-                sb.append(String.valueOf(name.charAt(i)).toLowerCase(Locale.ENGLISH));
             }
+            return sb.toString();
+        } else {
+            throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
-        return sb.toString();
     }
 
     protected ViewType getViewType(V viewInjected) {
@@ -137,11 +145,11 @@ public class ViewInjector<V extends SupportV> {
             String packageName = ((SupportActivity) viewInjected).getPackageName();
             Class<?> layoutClass = Class.forName(packageName + LAYOUT);
             Field field = layoutClass.getDeclaredField(layoutName);
-            int layoutId = field.getInt(viewInjected);//根据布局名称生成的
-            if (contentView != null) {//有注解，按注解来
+            int layoutId = field.getInt(viewInjected);
+            if (contentView != null) {
                 layoutId = contentView.value();
             }
-            if (viewType == ViewType.Activity) {
+            if (viewType == ViewType.Activity || viewType == ViewType.Dialog) {
                 Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
                 method.invoke(viewInjected, layoutId);
             }
