@@ -81,7 +81,7 @@ public class TableManager {
     private final char A = 'A';
     private final char Z = 'Z';
     private final String CREATE_TABLE = "CREATE TABLE";
-    private final String AUTO_INCREMENT = "AUTO INCREMENT";
+    private final String AUTO_INCREMENT = "AUTOINCREMENT";
     private final String TABLE_NAME = "table_name";
     private final String SPACE = " ";
     private final String UNIQUE = "UNIQUE";
