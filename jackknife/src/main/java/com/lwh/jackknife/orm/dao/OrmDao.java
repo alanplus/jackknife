@@ -24,6 +24,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.Transaction;
 import com.lwh.jackknife.orm.annotation.Column;
+import com.lwh.jackknife.orm.annotation.NonColumn;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
 import com.lwh.jackknife.orm.table.OrmTable;
@@ -168,10 +169,13 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields){
             field.setAccessible(true);
-            String name = field.getName();
-            sb.append(name).append(",");
+            NonColumn nonColumn = field.getAnnotation(NonColumn.class);
+            if (nonColumn == null) {
+                String name = field.getName();
+                sb.append(name).append(",");
+            }
         }
-        return sb.substring(0, sb.length()-1);
+        return sb.substring(0, sb.length()-2);
     }
 
     @Override
