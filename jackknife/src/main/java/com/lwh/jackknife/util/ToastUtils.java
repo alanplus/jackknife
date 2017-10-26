@@ -17,11 +17,17 @@
 package com.lwh.jackknife.util;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 public class ToastUtils {
 
-	public static Toast sToast = null;
+	private static Toast sToast;
+	private static Handler sHandler = new Handler(Looper.getMainLooper());
+
+	private ToastUtils() {
+	}
 
 	public static void showShort(Context context, String text) {
 		if (sToast == null) {
@@ -30,7 +36,7 @@ public class ToastUtils {
 			sToast.setDuration(Toast.LENGTH_SHORT);
 			sToast.setText(text);
 		}
-		sToast.show();
+		showToastInternal();
 	}
 
 	public static void showLong(Context context, String text) {
@@ -40,7 +46,7 @@ public class ToastUtils {
 			sToast.setDuration(Toast.LENGTH_LONG);
 			sToast.setText(text);
 		}
-		sToast.show();
+		showToastInternal();
 	}
 
 	public static void showShort(Context context, int resId) {
@@ -50,7 +56,7 @@ public class ToastUtils {
 			sToast.setDuration(Toast.LENGTH_SHORT);
 			sToast.setText(resId);
 		}
-		sToast.show();
+		showToastInternal();
 	}
 
 	public static void showLong(Context context, int resId) {
@@ -60,6 +66,15 @@ public class ToastUtils {
 			sToast.setDuration(Toast.LENGTH_LONG);
 			sToast.setText(resId);
 		}
-		sToast.show();
+		showToastInternal();
+	}
+
+	private static void showToastInternal() {
+		sHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				sToast.show();
+			}
+		});
 	}
 }
