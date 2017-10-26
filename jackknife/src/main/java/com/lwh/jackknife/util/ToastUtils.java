@@ -30,55 +30,64 @@ public class ToastUtils {
 	}
 
 	public static void showShort(Context context, String text) {
+		showToast(context, text, Toast.LENGTH_SHORT);
+	}
+
+	public static void showLong(Context context, String text) {
+		showToast(context, text, Toast.LENGTH_LONG);
+	}
+
+	public static void showShort(Context context, int resId) {
+		showToast(context, resId, Toast.LENGTH_SHORT);
+	}
+
+	public static void showLong(Context context, int resId) {
+		showToast(context, resId, Toast.LENGTH_LONG);
+	}
+
+	private static void showToast(final Context context, final int resId, final int duration) {
+		if (Looper.myLooper() != Looper.getMainLooper()) {
+			sHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					showToastInternal(context, resId, duration);
+				}
+			});
+		} else {
+			showToastInternal(context, resId, duration);
+		}
+	}
+
+	private static void showToast(final Context context, final String text, final int duration) {
+		if (Looper.myLooper() != Looper.getMainLooper()) {
+			sHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					showToastInternal(context, text, duration);
+				}
+			});
+		} else {
+			showToastInternal(context, text, duration);
+		}
+	}
+
+	private static void showToastInternal(final Context context, final String text, final int duration) {
 		if (sToast == null) {
 			sToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		} else {
 			sToast.setDuration(Toast.LENGTH_SHORT);
 			sToast.setText(text);
 		}
-		showToastInternal();
+		sToast.show();
 	}
 
-	public static void showLong(Context context, String text) {
-		if (sToast == null) {
-			sToast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-		} else {
-			sToast.setDuration(Toast.LENGTH_LONG);
-			sToast.setText(text);
-		}
-		showToastInternal();
-	}
-
-	public static void showShort(Context context, int resId) {
+	private static void showToastInternal(final Context context, final int resId, final int duration) {
 		if (sToast == null) {
 			sToast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
 		} else {
 			sToast.setDuration(Toast.LENGTH_SHORT);
 			sToast.setText(resId);
 		}
-		showToastInternal();
-	}
-
-	public static void showLong(Context context, int resId) {
-		if (sToast == null) {
-			sToast = Toast.makeText(context, resId, Toast.LENGTH_LONG);
-		} else {
-			sToast.setDuration(Toast.LENGTH_LONG);
-			sToast.setText(resId);
-		}
-		showToastInternal();
-	}
-
-	private static void showToastInternal() {
-		if (Looper.myLooper() != Looper.getMainLooper()) {
-			sHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					sToast.show();
-				}
-			});
-		} else {
-			sToast.show();
-		}
+		sToast.show();
 	}
 }

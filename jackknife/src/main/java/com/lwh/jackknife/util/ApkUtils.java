@@ -276,4 +276,15 @@ public class ApkUtils {
         }
         throw new RuntimeException("不可知的Android系统版本。");
     }
+
+    public boolean checkInstalledPackage(Context context, String packageName) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

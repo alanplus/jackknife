@@ -16,6 +16,9 @@
 
 package com.lwh.jackknife.util;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -279,5 +282,19 @@ public class TextUtils {
             sb.append(text.substring(i,i+sectionLength)).append(divider);
         }
         return sb.toString();
+    }
+
+    public static String parseJson(String str, String name){
+        if (str.isEmpty()||name.isEmpty()) {
+            return null;
+        }
+        String result = null;
+        try {
+            JSONObject jo = new JSONObject(str);
+            result = jo.has(name)?jo.getString(name):null;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
