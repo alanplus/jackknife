@@ -70,11 +70,15 @@ public class ToastUtils {
 	}
 
 	private static void showToastInternal() {
-		sHandler.post(new Runnable() {
-			@Override
-			public void run() {
-				sToast.show();
-			}
-		});
+		if (Looper.myLooper() != Looper.getMainLooper()) {
+			sHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					sToast.show();
+				}
+			});
+		} else {
+			sToast.show();
+		}
 	}
 }
