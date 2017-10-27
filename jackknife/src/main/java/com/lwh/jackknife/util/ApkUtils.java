@@ -31,260 +31,131 @@ import android.util.DisplayMetrics;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ApkUtils {
 
-    public static final int UNKNOWN_VERSION = -1;
-
     private ApkUtils() {
     }
 
-    public static PackageInfo getPackageInfo(Context context, String apkFilePath) {
-        PackageManager pm = context.getPackageManager();
-        PackageInfo pkgInfo = null;
-        try {
-            pkgInfo = pm.getPackageArchiveInfo(apkFilePath, PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return pkgInfo;
+    public static Signature[] getUninstalledApkSignatures(String apkPath) throws
+            ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+            InvocationTargetException, InstantiationException, NoSuchFieldException {
+        Class<?> packageParserClass = Class.forName("android.content.pm.PackageParser");
+        Class[] typeArgs = new Class[1];
+        typeArgs[0] = String.class;
+        Constructor packageParserConstructor = packageParserClass.getConstructor(typeArgs);
+        Object[] valueArgs = new Object[1];
+        valueArgs[0] = apkPath;
+        Object packageParser = packageParserConstructor.newInstance(valueArgs);
+        DisplayMetrics metrics = new DisplayMetrics();
+        metrics.setToDefaults();
+        typeArgs = new Class[4];
+        typeArgs[0] = File.class;
+        typeArgs[1] = String.class;
+        typeArgs[2] = DisplayMetrics.class;
+        typeArgs[3] = Integer.TYPE;
+        Method parsePackageMethod = packageParserClass.getDeclaredMethod("parsePackage",
+                typeArgs);
+        valueArgs = new Object[4];
+        valueArgs[0] = new File(apkPath);
+        valueArgs[1] = apkPath;
+        valueArgs[2] = metrics;
+        valueArgs[3] = PackageManager.GET_SIGNATURES;
+        Object packageParserPackage = parsePackageMethod.invoke(packageParser, valueArgs);
+        typeArgs = new Class[2];
+        typeArgs[0] = packageParserPackage.getClass();
+        typeArgs[1] = Integer.TYPE;
+        Method collectCertificatesMethod = packageParserClass.getDeclaredMethod("collectCertificates",
+                typeArgs);
+        valueArgs = new Object[2];
+        valueArgs[0] = packageParserPackage;
+        valueArgs[1] = PackageManager.GET_SIGNATURES;
+        collectCertificatesMethod.invoke(packageParser, valueArgs);
+        Field packageInfoField = packageParserPackage.getClass().getDeclaredField("mSignatures");
+        Signature[] signatures = (Signature[]) packageInfoField.get(packageParserPackage);
+        return signatures;
     }
 
-    public static Drawable getAppIcon(Context context, String apkFilePath) {
-        PackageManager pm = context.getPackageManager();
-        PackageInfo pkgInfo = getPackageInfo(context, apkFilePath);
-        if (pkgInfo == null) {
+    public static Signature[] getSignatures(Context context) throws PackageManager.NameNotFoundException {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(),
+                PackageManager.GET_SIGNATURES);
+        return packageInfo.signatures;
+    }
+
+    public static PackageInfo getUninstalledApkPackageInfo(Context context, String apkPath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = packageManager.getPackageArchiveInfo(
+                apkPath, 0);
+        return packageInfo;
+    }
+
+    public static PackageInfo getPackageInfo(Context context, String packageName) throws PackageManager.NameNotFoundException {
+        PackageManager packageManager = context.getPackageManager();
+        return packageManager.getPackageInfo(packageName, 0);
+    }
+
+    public static Drawable getUninstalledApkIcon(Context context, String apkPath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = getUninstalledApkPackageInfo(context, apkPath);
+        if (packageInfo == null) {
             return null;
         }
-        ApplicationInfo appInfo = pkgInfo.applicationInfo;
+        ApplicationInfo applicationInfo = packageInfo.applicationInfo;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            appInfo.sourceDir = apkFilePath;
-            appInfo.publicSourceDir = apkFilePath;
+            applicationInfo.sourceDir = apkPath;
+            applicationInfo.publicSourceDir = apkPath;
         }
-        return pm.getApplicationIcon(appInfo);
+        return packageManager.getApplicationIcon(applicationInfo);
     }
 
-    public static CharSequence getAppLabel(Context context, String apkFilePath) {
-        PackageManager pm = context.getPackageManager();
-        PackageInfo pkgInfo = getPackageInfo(context, apkFilePath);
-        if (pkgInfo == null) {
+    public static CharSequence getUninstalledApkLabel(Context context, String apkPath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = getUninstalledApkPackageInfo(context, apkPath);
+        if (packageInfo == null) {
             return null;
         }
-        ApplicationInfo appInfo = pkgInfo.applicationInfo;
+        ApplicationInfo applicationInfo = packageInfo.applicationInfo;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
-            appInfo.sourceDir = apkFilePath;
-            appInfo.publicSourceDir = apkFilePath;
+            applicationInfo.sourceDir = apkPath;
+            applicationInfo.publicSourceDir = apkPath;
         }
-        return pm.getApplicationLabel(appInfo);
+        return packageManager.getApplicationLabel(applicationInfo);
     }
 
-    /**
-     * 启动一个已安装的app。
-     *
-     * @param context 上下文。
-     * @param packageName 包名。
-     * @param className 全类名。
-     */
-    public static void launchApp(Context context, String packageName, String className){
+    public static String getVersionName(Context context) throws PackageManager.NameNotFoundException {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+        return packageInfo.versionName;
+    }
+
+    public static int getVersionCode(Context context) throws PackageManager.NameNotFoundException {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+        return packageInfo.versionCode;
+    }
+
+    public static File extractApk(Context context){
+        ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
+        String apkPath = applicationInfo.sourceDir;
+        File apkFile = new File(apkPath);
+        return apkFile;
+    }
+
+    public static void launch(Context context, String packageName, String className){
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.LAUNCHER");
         intent.setComponent(new ComponentName(packageName, className));
         context.startActivity(intent);
     }
 
-    /**
-     * 安装一个apk。
-     *
-     * @param context 上下文。
-     * @param apkPath apk文件的路径。
-     */
     public static void install(Context context, String apkPath) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setDataAndType(Uri.fromFile(new File(apkPath)),
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
-    }
-
-    /**
-     * 得到一个apk文件的签名。
-     *
-     * @param apkPath apk文件的路径。
-     * @return 签名。
-     */
-    public static Signature[] getUninstallApkSignatures(String apkPath) {
-        String PATH_PackageParser = "android.content.pm.PackageParser";
-        try {
-            Class pkgParserCls = Class.forName(PATH_PackageParser);
-            Class[] typeArgs = new Class[1];
-            typeArgs[0] = String.class;
-            Constructor pkgParserCt = pkgParserCls.getConstructor(typeArgs);
-            Object[] valueArgs = new Object[1];
-            valueArgs[0] = apkPath;
-            Object pkgParser = pkgParserCt.newInstance(valueArgs);
-            DisplayMetrics metrics = new DisplayMetrics();
-            metrics.setToDefaults();
-            typeArgs = new Class[4];
-            typeArgs[0] = File.class;
-            typeArgs[1] = String.class;
-            typeArgs[2] = DisplayMetrics.class;
-            typeArgs[3] = Integer.TYPE;
-            Method pkgParser_parsePackageMtd = pkgParserCls.getDeclaredMethod("parsePackage",
-                    typeArgs);
-            valueArgs = new Object[4];
-            valueArgs[0] = new File(apkPath);
-            valueArgs[1] = apkPath;
-            valueArgs[2] = metrics;
-            valueArgs[3] = PackageManager.GET_SIGNATURES;
-            Object pkgParserPkg = pkgParser_parsePackageMtd.invoke(pkgParser, valueArgs);
-            typeArgs = new Class[2];
-            typeArgs[0] = pkgParserPkg.getClass();
-            typeArgs[1] = Integer.TYPE;
-            Method pkgParser_collectCertificatesMtd = pkgParserCls.getDeclaredMethod("collectCertificates",
-                    typeArgs);
-            valueArgs = new Object[2];
-            valueArgs[0] = pkgParserPkg;
-            valueArgs[1] = PackageManager.GET_SIGNATURES;
-            pkgParser_collectCertificatesMtd.invoke(pkgParser, valueArgs);
-            Field packageInfoFld = pkgParserPkg.getClass().getDeclaredField("mSignatures");
-            Signature[] info = (Signature[]) packageInfoFld.get(pkgParserPkg);
-            return info;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 得到本应用的应用签名。
-     *
-     * @param context 上下文。
-     * @return 签名。
-     */
-    public static Signature[] getSignatures(Context context){
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.signatures;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 得到版本名。
-     *
-     * @param context 上下文。
-     * @return 版本名。
-     */
-    public static String getVersionName(Context context){
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return "unknown";
-    }
-
-    /**
-     * 得到版本号。
-     *
-     * @param context 上下文。
-     * @return 版本号。
-     */
-    public static int getVersionCode(Context context){
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return UNKNOWN_VERSION;
-    }
-
-    /**
-     * 提取本应用的apk文件的路径，应用安装后，系统会自动在这个目录备份。
-     *
-     * @param context 上下文。
-     * @return apk文件的路径。
-     */
-    public static String extractApk(Context context){
-        ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
-        String apkPath = applicationInfo.sourceDir;
-        return apkPath;
-    }
-
-    /**
-     * 通过SDK的r级别获取其版本名称。
-     *
-     * @param sdk r级别。
-     * @return 版本名称。
-     */
-    public static String getAndroidVersion(int sdk){
-        switch (sdk){
-            case Build.VERSION_CODES.BASE:
-                return "Android 1.0";
-            case Build.VERSION_CODES.BASE_1_1:
-                return "Android 1.1";
-            case Build.VERSION_CODES.CUPCAKE:
-                return "Android 1.5";
-            case Build.VERSION_CODES.DONUT:
-                return "Android 1.6";
-            case Build.VERSION_CODES.ECLAIR:
-                return "Android 2.0";
-            case Build.VERSION_CODES.ECLAIR_0_1:
-                return "Android 2.0.1";
-            case Build.VERSION_CODES.ECLAIR_MR1:
-                return "Android 2.1";
-            case Build.VERSION_CODES.FROYO:
-                return "Android 2.2";
-            case Build.VERSION_CODES.GINGERBREAD:
-                return "Android 2.3";
-            case Build.VERSION_CODES.GINGERBREAD_MR1:
-                return "Android 2.3.3";
-            case Build.VERSION_CODES.HONEYCOMB:
-                return "Android 3.0";
-            case Build.VERSION_CODES.HONEYCOMB_MR1:
-                return "Android 3.1";
-            case Build.VERSION_CODES.HONEYCOMB_MR2:
-                return "Android 3.2";
-            case Build.VERSION_CODES.ICE_CREAM_SANDWICH:
-                return "Android 4.0";
-            case Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1:
-                return "Android 4.0.3";
-            case Build.VERSION_CODES.JELLY_BEAN:
-                return "Android 4.1";
-            case Build.VERSION_CODES.JELLY_BEAN_MR1:
-                return "Android 4.2";
-            case Build.VERSION_CODES.JELLY_BEAN_MR2:
-                return "Android 4.3";
-            case Build.VERSION_CODES.KITKAT:
-                return "Android 4.4";
-            case Build.VERSION_CODES.KITKAT_WATCH:
-                return "Android 4.4W";
-            case Build.VERSION_CODES.LOLLIPOP:
-                return "Android 5.0";
-            case Build.VERSION_CODES.LOLLIPOP_MR1:
-                return "Android 5.1";
-            case Build.VERSION_CODES.M:
-                return "Android 6.0";
-        }
-        throw new RuntimeException("不可知的Android系统版本。");
-    }
-
-    public boolean checkInstalledPackage(Context context, String packageName) {
-        try {
-            PackageManager pm = context.getPackageManager();
-            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 }

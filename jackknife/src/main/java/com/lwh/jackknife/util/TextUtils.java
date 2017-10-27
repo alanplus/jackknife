@@ -102,22 +102,10 @@ public class TextUtils {
     private TextUtils(){
     }
 
-    /**
-     * 检查字符串是否为空或为空字符串。
-     *
-     * @param str 需要检测的字符串。
-     * @return 是否为空或为空字符串。
-     */
     public static boolean isEmpty(CharSequence str) {
         return android.text.TextUtils.isEmpty(str);
     }
 
-    /**
-     * 检查字符串是否不为空并且不为空字符串。
-     *
-     * @param str 需要检测的字符串。
-     * @return 是否不为空并且不为空字符串。
-     */
     public static boolean isNotEmpty(CharSequence str){
         return !isEmpty(str);
     }
@@ -142,46 +130,19 @@ public class TextUtils {
         return true;
     }
 
-    /**
-     * 判断两个字符串是否相等。
-     *
-     * @param lhss 左手边的字符串。
-     * @param rhss 右手边的字符串。
-     * @return 是否相等。
-     */
     public static boolean isEqualTo(String lhss, String rhss){
         return android.text.TextUtils.equals(lhss, rhss);
     }
 
-    /**
-     * 判断两个字符串是否不相等。
-     *
-     * @param lhss 左手边的字符串。
-     * @param rhss 右手边的字符串。
-     * @return 是否不相等。
-     */
     public static boolean isNotEqualTo(String lhss, String rhss){
         return !isEqualTo(lhss, rhss);
     }
 
-    /**
-     * 获取32位的随机字符串。
-     *
-     * @return 32位的随机字符串。
-     */
     public static String getUUID(){
         String uuid = UUID.randomUUID().toString();
-        uuid = uuid.replaceAll("-", "");
-        return uuid;
+        return uuid.replaceAll("-", "");
     }
 
-    /**
-     * 检测某个字符串是否匹配某个正则表达式。
-     *
-     * @param text 要检测的字符串。
-     * @param regex 用什么正则表达式来检测。
-     * @return 是否匹配。
-     */
     public static boolean match(String text, String regex){
         Pattern p = Pattern.compile(regex);
         Matcher matcher = p.matcher(text);
@@ -191,13 +152,7 @@ public class TextUtils {
         return false;
     }
 
-    /**
-     * 汉字转成ASCII码。
-     *
-     * @param ch 汉字。
-     * @return 汉字的ASCII码。
-     */
-    private static int getAscii(String ch) {
+    private static int getASCII(String ch) {
         int asc = 0;
         byte[] bytes = new byte[0];
         try {
@@ -227,7 +182,7 @@ public class TextUtils {
      */
     public static String getPinyin(String ch) {
         String result = null;
-        int ascii = getAscii(ch);
+        int ascii = getASCII(ch);
         if (ascii > 0 && ascii < 160) {
             result = String.valueOf((char) ascii);
         } else {

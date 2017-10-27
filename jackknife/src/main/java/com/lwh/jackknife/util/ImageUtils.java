@@ -55,57 +55,6 @@ import java.io.IOException;
 public class ImageUtils {
 
     /**
-     * 将dp转化为px。
-     *
-     * @param value
-     * @param context
-     * @return
-     */
-    public static int dp2px(float value, Context context) {
-        final float scale = context.getResources().getDisplayMetrics().densityDpi;
-        return (int) (value * (scale / 160) + 0.5f);
-    }
-
-    /**
-     * 将px转化为dp。
-     * @param value
-     * @param context
-     * @return
-     */
-    public static int px2dp(float value, Context context) {
-        final float scale = context.getResources().getDisplayMetrics().densityDpi;
-        return (int) ((value * 160) / scale + 0.5f);
-    }
-
-    /**
-     * 将sp转化为px。
-     * @param value
-     * @param context
-     * @return
-     */
-    public static int sp2px(float value, Context context) {
-        Resources r;
-        if (context == null) {
-            r = Resources.getSystem();
-        } else {
-            r = context.getResources();
-        }
-        float spvalue = value * r.getDisplayMetrics().scaledDensity;
-        return (int) (spvalue + 0.5f);
-    }
-
-    /**
-     * 将px转化为sp。
-     * @param value
-     * @param context
-     * @return
-     */
-    public static int px2sp(float value, Context context) {
-        final float scale = context.getResources().getDisplayMetrics().scaledDensity;
-        return (int) (value / scale + 0.5f);
-    }
-
-    /**
      * 将Bitmap保存到jpeg图片中
      * @param bitmap
      * @param filePath
