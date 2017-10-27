@@ -69,7 +69,7 @@ public class NumberUtils implements IMath {
         return D2H(B2D(binary));
     }
 
-    public String zeronize(String num, int requireLength){
+    public static String zeronize(String num, int requireLength){
         StringBuffer sb = new StringBuffer();
         if(requireLength > num.length()){
             int length = requireLength - num.length();

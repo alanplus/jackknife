@@ -49,20 +49,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * @auther lwh
- */
 public class ImageUtils {
 
-    /**
-     * 将Bitmap保存到jpeg图片中
-     * @param bitmap
-     * @param filePath
-     * @throws IOException
-     */
     public static void saveAsJpeg(Bitmap bitmap, String filePath) throws IOException {
         FileOutputStream fos = null;
-
         try {
             File file = new File(filePath);
             if (!file.getParentFile().exists()) {
@@ -78,12 +68,6 @@ public class ImageUtils {
         }
     }
 
-    /**
-     * 将Bitmap保存到png图片中
-     * @param bitmap
-     * @param filePath
-     * @throws IOException
-     */
     public static void saveAsPng(Bitmap bitmap, String filePath) throws IOException {
         FileOutputStream fos = null;
         try {
@@ -103,37 +87,23 @@ public class ImageUtils {
 
     public static Bitmap decodeSampledBitmapFromResource(Resources res,
                                                          int resId, int reqWidth, int reqHeight) {
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
+        BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(res, resId, options);
-
-        // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth,
                 reqHeight);
-
-        // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options,
-                                            int reqWidth, int reqHeight) {
-        // Raw width and height of image
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int width = options.outWidth;
         final int height = options.outHeight;
         int inSampleSize = 1;
         if (height > reqHeight || width > reqWidth) {
-            // Calculate ratios of height and width to requested height and
-            // width
             final int heightRatio = Math.round((float) height
                     / (float) reqHeight);
             final int widthRatio = Math.round((float) width / (float) reqWidth);
-            // Choose the smallest ratio as inSampleSize value, this will
-            // guarantee
-            // a final image with both dimensions larger than or equal to the
-            // requested height and width.
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
         return inSampleSize;
@@ -148,12 +118,6 @@ public class ImageUtils {
         return BitmapFactory.decodeFile(path, options);
     }
 
-    /**
-     * 截取应用程序界面（去除状态栏）。
-     *
-     * @param activity 界面Activity。
-     * @return Bitmap对象。
-     */
     public static Bitmap takeScreenShot(Activity activity){
         View view =activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
@@ -162,17 +126,11 @@ public class ImageUtils {
         Rect rect = new Rect();
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
         int statusBarHeight = rect.top;
-
         Bitmap bitmap2 = Bitmap.createBitmap(bitmap,0,statusBarHeight, getScreenWH()[0], getScreenWH()[1] - statusBarHeight);
         view.destroyDrawingCache();
         return bitmap2;
     }
 
-    /**
-     * 获取屏幕的宽高，继承{@link Application}此方法才有效。
-     *
-     * @return 屏幕的宽度和高度。
-     */
     public static int[] getScreenWH(){
         WindowManager wm = (WindowManager) Application.getInstance().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -180,43 +138,6 @@ public class ImageUtils {
         return new int[]{outMetrics.widthPixels,outMetrics.heightPixels};
     }
 
-    /**
-     * 截取应用程序界面。
-     *
-     * @param activity 界面Activity。
-     * @return Bitmap对象。
-     */
-    public static Bitmap takeFullScreenShot(Activity activity){
-        activity.getWindow().getDecorView().setDrawingCacheEnabled(true);
-        Bitmap bmp = activity.getWindow().getDecorView().getDrawingCache();
-        View view = activity.getWindow().getDecorView();
-//		Bitmap bmp2 = Bitmap.createBitmap(480, 800, Bitmap.Config.ARGB_8888);
-        //view.draw(new Canvas(bmp2));
-        //bmp就是截取的图片了，可通过bmp.compress(CompressFormat.PNG, 100, new FileOutputStream(file));把图片保存为文件。
-        //1、得到状态栏高度
-        Rect rect = new Rect();
-        view.getWindowVisibleDisplayFrame(rect);
-        int statusBarHeight = rect.top;
-        System.out.println("状态栏高度：" + statusBarHeight);
-        //2、得到标题栏高度
-        int wintop = activity.getWindow().findViewById(android.R.id.content).getTop();
-        int titleBarHeight = wintop - statusBarHeight;
-        System.out.println("标题栏高度:" + titleBarHeight);
-//		//把两个bitmap合到一起
-//		Bitmap bmpall=Biatmap.createBitmap(width,height,Config.ARGB_8888);
-//		Canvas canvas=new Canvas(bmpall);
-//		canvas.drawBitmap(bmp1,x,y,paint);
-//		canvas.drawBitmap(bmp2,x,y,paint);
-        return bmp;
-    }
-
-    /**
-     * 读取图片属性：旋转的角度。
-     *
-     * @param path 图片绝对路径。
-     * @return degree 旋转的角度。
-     * @throws IOException 输入输出异常。
-     */
     public static int getPictureDegree(String path) throws IOException {
         int degree = 0;
         ExifInterface exifInterface = new ExifInterface(path);
@@ -235,12 +156,6 @@ public class ImageUtils {
         return degree;
     }
 
-    /**
-     * Drawable转成Bitmap。
-     *
-     * @param drawable 可绘制的。
-     * @return 位图。
-     */
     public static Bitmap drawable2Bitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
@@ -261,24 +176,10 @@ public class ImageUtils {
         }
     }
 
-    /**
-     * 从资源文件中获取图片。
-     *
-     * @param context 上下文。
-     * @param drawableId 资源文件id。
-     * @return 位图。
-     */
-    public static Bitmap getBitmap(Context context,int drawableId){
-        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), drawableId);
-        return bmp;
+    public static Bitmap getBitmap(Context context,int resId){
+        return BitmapFactory.decodeResource(context.getResources(), resId);
     }
 
-    /**
-     * 灰白图片（去色）。
-     *
-     * @param bitmap 需要灰度的图片。
-     * @return 去色之后的图片。
-     */
     public static Bitmap toBlack(Bitmap bitmap) {
         Bitmap resultBMP = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
                 Bitmap.Config.RGB_565);
@@ -292,24 +193,12 @@ public class ImageUtils {
         return resultBMP;
     }
 
-    /**
-     * 将bitmap转成byte数组。
-     *
-     * @param bitmap 位图。
-     * @return 字节数组。
-     */
     public static byte[] toByteArray(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
     }
 
-    /**
-     * 将byte数组转成bitmap。
-     *
-     * @param b 字节数组。
-     * @return 位图。
-     */
     public static Bitmap bytes2Bitmap(byte[] b) {
         if (b.length != 0) {
             return BitmapFactory.decodeByteArray(b, 0, b.length);
@@ -318,72 +207,33 @@ public class ImageUtils {
         }
     }
 
-    /**
-     * 将Bitmap转换成指定大小。
-     *
-     * @param bitmap 需要改变大小的图片。
-     * @param width 宽。
-     * @param height 高。
-     */
     public static Bitmap createBitmapBySize(Bitmap bitmap, int width, int height) {
         return Bitmap.createScaledBitmap(bitmap, width, height, true);
     }
 
-
-    /**
-     * 在图片右下角添加水印。
-     *
-     * @param srcBMP 原图。
-     * @param markBMP 水印图片。
-     * @return 合成水印后的图片。
-     */
     public static Bitmap composeWatermark(Bitmap srcBMP, Bitmap markBMP) {
         if (srcBMP == null) {
             return null;
         }
-        // 创建一个新的和SRC长度宽度一样的位图
         Bitmap newb = Bitmap.createBitmap(srcBMP.getWidth(), srcBMP.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(newb);
-        // 在 0，0坐标开始画入原图
         cv.drawBitmap(srcBMP, 0, 0, null);
-        // 在原图的右下角画入水印
         cv.drawBitmap(markBMP, srcBMP.getWidth() - markBMP.getWidth() + 5, srcBMP.getHeight() - markBMP.getHeight() + 5, null);
-        // 保存
         cv.save(Canvas.ALL_SAVE_FLAG);
-        // 存储
         cv.restore();
         return newb;
     }
 
-    /**
-     * 缩放图片。
-     *
-     * @param bmp 需要缩放的图片源。
-     * @param newW 需要缩放成的图片宽度。
-     * @param newH 需要缩放成的图片高度。
-     * @return 缩放后的图片。
-     */
     public static Bitmap zoom(Bitmap bmp, int newW, int newH) {
-        // 获得图片的宽高
         int width = bmp.getWidth();
         int height = bmp.getHeight();
-        // 计算缩放比例
         float scaleWidth = ((float) newW) / width;
         float scaleHeight = ((float) newH) / height;
-        // 取得想要缩放的matrix参数
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
-        // 得到新的图片
-        Bitmap newbm = Bitmap.createBitmap(bmp, 0, 0, width, height, matrix,true);
-        return newbm;
+        return Bitmap.createBitmap(bmp, 0, 0, width, height, matrix,true);
     }
 
-    /**
-     * 获得倒影的图片。
-     *
-     * @param bitmap 原始图片。
-     * @return 带倒影的图片。
-     */
     public static Bitmap makeReflectionImage(Bitmap bitmap){
         final int reflectionGap = 4;
         int width = bitmap.getWidth();
@@ -405,38 +255,24 @@ public class ImageUtils {
         return bitmapWithReflection;
     }
 
-    /**
-     * 回收垃圾位图。
-     */
     public static void recycle(Bitmap bitmap) {
-        // 先判断是否已经回收
         if (bitmap != null && !bitmap.isRecycled()) {
-            // 回收并且置为null
             bitmap.recycle();
-            bitmap = null;
         }
         System.gc();
     }
 
-    /**
-     * 获取指定路径下的图片的指定大小的缩略图。
-     *
-     * @return Bitmap 缩略图。
-     */
     public static Bitmap getImageThumbnail(String imagePath, int width,
                                            int height) {
-        Bitmap bitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        // 获取这个图片的宽和高，注意此处的bitmap为null
-        bitmap = BitmapFactory.decodeFile(imagePath, options);
-        options.inJustDecodeBounds = false; // 设为 false
-        // 计算缩放比
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+        options.inJustDecodeBounds = false;
         int h = options.outHeight;
         int w = options.outWidth;
         int beWidth = w / width;
         int beHeight = h / height;
-        int be = 1;
+        int be;
         if (beWidth < beHeight) {
             be = beWidth;
         } else {
@@ -446,20 +282,12 @@ public class ImageUtils {
             be = 1;
         }
         options.inSampleSize = be;
-        // 重新读入图片，读取缩放后的bitmap，注意这次要把options.inJustDecodeBounds 设为 false
         bitmap = BitmapFactory.decodeFile(imagePath, options);
-        // 利用ThumbnailUtils来创建缩略图，这里要指定要缩放哪个Bitmap对象
         bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
                 ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
         return bitmap;
     }
 
-    /**
-     * 读取图片属性：旋转的角度。
-     *
-     * @param path 图片绝对路径。
-     * @return degree旋转的角度。
-     */
     public static int readPictureDegree(String path) {
         int degree = 0;
         try {
@@ -482,33 +310,16 @@ public class ImageUtils {
             e.printStackTrace();
         }
         return degree;
-
     }
 
-    /**
-     * 旋转图片到一定角度。
-     *
-     * @param angle 旋转角。
-     * @param bitmap 原Bitmap图片。
-     * @return 旋转后的图片。
-     */
     public static Bitmap rotateBitmap(int angle, Bitmap bitmap) {
-        // 旋转图片 动作
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
-        // 创建新的图片
         Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,
                 bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         return resizedBitmap;
     }
 
-    /**
-     * 将图片变为圆角图片。
-     *
-     * @param bitmap 原Bitmap图片。
-     * @param pixels 图片圆角的弧度(单位:像素(px))。
-     * @return 带有圆角的图片(Bitmap 类型)。
-     */
     public static Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -527,12 +338,6 @@ public class ImageUtils {
         return output;
     }
 
-    /**
-     * 将图片转化成圆形图片。
-     *
-     * @param bitmap 原Bitmap图片。
-     * @return 圆形图片。
-     */
     public static Bitmap toRoundBitmap(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
@@ -564,19 +369,15 @@ public class ImageUtils {
         }
         Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
-        final Paint paint = new Paint();
-        final Rect src = new Rect((int) left, (int) top, (int) right,
-                (int) bottom);
-        final Rect dst = new Rect((int) dst_left, (int) dst_top,
-                (int) dst_right, (int) dst_bottom);
-        final RectF rectF = new RectF(dst);
-        paint.setAntiAlias(true);// 设置画笔无锯齿
-        canvas.drawARGB(0, 0, 0, 0); // 填充整个Canvas
-        // 以下有两种方法画圆,drawRounRect和drawCircle
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);// 画圆角矩形，第一个参数为图形显示区域，第二个参数和第三个参数分别是水平圆角半径和垂直圆角半径。
-        // canvas.drawCircle(roundPx, roundPx, roundPx, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));// 设置两张图片相交时的模式,参考http://trylovecatch.iteye.com/blog/1189452
-        canvas.drawBitmap(bitmap, src, dst, paint); // 以Mode.SRC_IN模式合并bitmap和已经draw了的Circle
+        Paint paint = new Paint();
+        Rect src = new Rect((int) left, (int) top, (int) right, (int) bottom);
+        Rect dst = new Rect((int) dst_left, (int) dst_top, (int) dst_right, (int) dst_bottom);
+        RectF rectF = new RectF(dst);
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, src, dst, paint);
         return output;
     }
 }

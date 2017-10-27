@@ -174,12 +174,6 @@ public class TextUtils {
         return asc;
     }
 
-    /**
-     * 单字解析。
-     *
-     * @param ch 要解析的汉字。
-     * @return 汉字拼音。
-     */
     public static String getPinyin(String ch) {
         String result = null;
         int ascii = getASCII(ch);
@@ -196,12 +190,6 @@ public class TextUtils {
         return result;
     }
 
-    /**
-     * 词组解析。
-     *
-     * @param chs 要解析的汉语句子。
-     * @return 汉语拼音。
-     */
     public static String getPinyinFromSentence(String chs) {
         String key, value;
         StringBuilder builder = new StringBuilder();
@@ -220,15 +208,7 @@ public class TextUtils {
         return builder.toString();
     }
 
-    /**
-     * 分断文本，常用于16进制字符串加分隔符。
-     *
-     * @param text 要分断的文本。
-     * @param divider 分隔符。
-     * @param sectionLength 每一部分的长度。
-     * @return 分断后的文本。
-     */
-    private String subsection(String text, String divider, int sectionLength) {
+    public static String subsection(String text, String divider, int sectionLength) {
         if (text.length() < sectionLength) {
             return text;
         }
