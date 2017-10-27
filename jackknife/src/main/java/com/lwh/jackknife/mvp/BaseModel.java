@@ -16,12 +16,8 @@
 
 package com.lwh.jackknife.mvp;
 
-import com.lwh.jackknife.util.TextUtils;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,14 +32,6 @@ public abstract class BaseModel<T>{
 
     protected Class<T> mBeanClass;
 
-    private int mLimit = -1;
-
-    private int mSkip;
-
-    private String mSortBy = "";
-
-    protected final String TAG = getClass().getName();
-
     public BaseModel(Class<T> beanClass){
         if (beanClass == null) {
             throw new IllegalArgumentException("beanClass is null.");
@@ -56,9 +44,11 @@ public abstract class BaseModel<T>{
     public void add(T bean){
         mBeans.add(bean);
     }
+
     public void add(List<T> beans){
         mBeans.addAll(beans);
     }
+
     public void clear(){
         mBeans.clear();
     }
@@ -71,27 +61,6 @@ public abstract class BaseModel<T>{
         void onExtract(String elementName, List<E> elements);
     }
 
-    public BaseModel limit(int limit) {
-        this.mLimit = limit;
-        return this;
-    }
-
-    public BaseModel sortBy(String sortBy) {
-        this.mSortBy = sortBy;
-        return this;
-    }
-
-    public BaseModel skip(int skip){
-        this.mSkip = skip;
-        return this;
-    }
-
-    private void restore(){
-        this.mLimit = -1;
-        this.mSkip = 0;
-        this.mSortBy = "";
-    }
-
     public List<T> getBeans() {
         return mBeans;
     }
@@ -100,29 +69,9 @@ public abstract class BaseModel<T>{
         return mBeans.size();
     }
 
-    public int getSkip() {
-        return mSkip;
-    }
-
-    public String getSortBy() {
-        return mSortBy;
-    }
-
-    /**
-     * 初始化Bean。
-     *
-     * @return bean数据。
-     */
     protected abstract List<T> initBeans();
 
-    /**
-     * 得到满足条件的bean对象的数量。
-     *
-     * @param selector 选择器。
-     * @param ignoreLimit true表示拿到实际的数据数量，false表示拿到limit后的数据数量，当实际数据数量小于limit时，不影响结果。
-     * @return bean的数量。
-     */
-    protected int getCount(Selector selector, boolean ignoreLimit){
+    protected int getCount(Selector selector){
         List<T> objects = null;
         try {
             objects = findObjects(selector);
@@ -132,25 +81,11 @@ public abstract class BaseModel<T>{
             e.printStackTrace();
         }
         if(objects != null){
-            if (ignoreLimit) {
-                return objects.size();
-            }else{
-                return objects.size() > mLimit ? mLimit : objects.size();
-            }
+            return objects.size();
         }
         return 0;
     }
 
-    /**
-     * 提取bean对象的某个属性组成新的集合。
-     *
-     * @param selector 选择器。
-     * @param elementName bean数据某个属性的名称。
-     * @param <E> bean数据某个属性。
-     * @return bean数据某个属性的集合。
-     * @throws IllegalAccessException 非法访问异常。
-     * @throws NoSuchFieldException 没有这样一个属性的异常。
-     */
     protected <E> List<E> extractElement(Selector selector, String elementName) throws
             IllegalAccessException, NoSuchFieldException {
         List<E> elements = new ArrayList<>();
@@ -170,14 +105,6 @@ public abstract class BaseModel<T>{
         return elements;
     }
 
-    /**
-     * 查询出所有的bean。
-     *
-     * @param selector 选择器。
-     * @return bean数据的集合。
-     * @throws IllegalAccessException 非法访问异常。
-     * @throws NoSuchFieldException 没有这样一个属性的异常。
-     */
     protected List<T> findObjects(Selector selector) throws IllegalAccessException,
             NoSuchFieldException {
         if (selector == null){
@@ -206,89 +133,7 @@ public abstract class BaseModel<T>{
                 temp.add(bean);
             }
         }
-        List<T> result = new ArrayList<>();
-        if (temp.size() > 0) {
-            if (TextUtils.isNotEmpty(mSortBy)) {//需要排序就排序
-                Collections.sort(temp, new ModelComparator(mSortBy));
-            }
-            if (mLimit < -1){
-                throw new RuntimeException("限制数量不合法");
-            }else if (mLimit != -1) {
-                for (int j = mSkip; j < mSkip + mLimit; j++) {
-                    result.add(temp.get(j));
-                }
-            }else{
-                result.addAll(temp);
-            }
-        }
-        restore();
-        return result;
-    }
-
-    private class ModelComparator implements Comparator<T> {
-
-        private String mName;
-        private boolean mDesc;
-        private final String PLUS = "+";
-        private final String MINUS = "-";
-
-        /* package */ ModelComparator(String sortBy){
-            if (checkSortBy(sortBy)) {
-                String symbol = sortBy.substring(0, 1);
-                if (symbol.equals(PLUS)) {
-                    mDesc = true;
-                } else if (symbol.equals(MINUS)) {
-                    mDesc = false;
-                }
-                mName = sortBy.substring(1);
-            } else {
-                throw new IllegalArgumentException("sortBy format error.");
-            }
-        }
-
-        /* package */ ModelComparator(String name, boolean isDesc) {
-            this.mName = name;
-            this.mDesc = isDesc;
-        }
-
-        private boolean checkSortBy(String sortBy) {
-            if (sortBy.startsWith(MINUS) || sortBy.startsWith(MINUS)) {
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public int compare(T bean1, T bean2) {
-            try {
-                int revise = 1;
-                if (mDesc) {
-                     revise = -revise;
-                }
-                Field nameField = mBeanClass.getDeclaredField(mName);
-                nameField.setAccessible(true);
-                Class<?> type = nameField.getType();
-                if (isAssignableFromString(type)) {
-                    String s1 = (String) nameField.get(bean1);
-                    String s2 = (String) nameField.get(bean2);
-                    String p1 = TextUtils.getPinyinFromSentence(s1);
-                    String p2 = TextUtils.getPinyinFromSentence(s2);
-                    return p1.compareTo(p2) * revise;
-                } else {
-                    Object o1 = nameField.get(bean1);
-                    Object o2 = nameField.get(bean2);
-                    if (o1.hashCode() == o2.hashCode()) {
-                        return 0;
-                    }
-                    return o1.hashCode() > o2.hashCode() ? revise:-revise;
-                }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            return 0;
-        }
+        return temp;
     }
 
     private boolean isAssignableFromBoolean(Class<?> fieldType){
