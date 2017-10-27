@@ -23,56 +23,54 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public abstract class BaseModel<T>{
+public abstract class BaseModel<BEAN>{
 
-    protected List<T> mBeans;
+    protected List<BEAN> mDatas;
 
-    protected Class<T> mBeanClass;
+    protected Class<BEAN> mBeanClass;
 
-    public BaseModel(Class<T> beanClass){
+    public BaseModel(Class<BEAN> beanClass){
         if (beanClass == null) {
             throw new IllegalArgumentException("beanClass is null.");
         }
-        mBeans = new ArrayList<>();//创建一个集合用来存储数据
-        mBeans.addAll(initBeans());
+        mDatas = new ArrayList<>();//创建一个集合用来存储数据
+        mDatas.addAll(initBeans());
         mBeanClass = beanClass;
     }
 
-    public void add(T bean){
-        mBeans.add(bean);
+    public void add(BEAN datas){
+        mDatas.add(datas);
     }
 
-    public void add(List<T> beans){
-        mBeans.addAll(beans);
+    public void add(List<BEAN> beans){
+        mDatas.addAll(beans);
     }
 
     public void clear(){
-        mBeans.clear();
+        mDatas.clear();
     }
 
-    public interface OnLoadListener<T> {
-        void onLoad(List<T> beans);
+    public interface OnLoadListener<BEAN> {
+        void onLoad(List<BEAN> beans);
     }
 
     public interface OnExtractListener<E>{
         void onExtract(String elementName, List<E> elements);
     }
 
-    public List<T> getBeans() {
-        return mBeans;
+    public List<BEAN> getDatas() {
+        return mDatas;
     }
 
     public int getCount(){
-        return mBeans.size();
+        return mDatas.size();
     }
 
-    protected abstract List<T> initBeans();
+    protected abstract List<BEAN> initBeans();
 
-    protected int getCount(Selector selector){
-        List<T> objects = null;
+    protected int countObjects(Selector selector) {
+        List<BEAN> objects = null;
         try {
             objects = findObjects(selector);
         } catch (IllegalAccessException e) {
@@ -86,17 +84,17 @@ public abstract class BaseModel<T>{
         return 0;
     }
 
-    protected <E> List<E> extractElement(Selector selector, String elementName) throws
+    protected <ELEMENT> List<ELEMENT> extractElement(Selector selector, String elementName) throws
             IllegalAccessException, NoSuchFieldException {
-        List<E> elements = new ArrayList<>();
-        List<T> beans = findObjects(selector);
-        if (beans.size() > 0) {
-            for (T bean : beans) {
+        List<ELEMENT> elements = new ArrayList<>();
+        List<BEAN> datas = findObjects(selector);
+        if (datas.size() > 0) {
+            for (BEAN bean : datas) {
                 Field[] fields = mBeanClass.getDeclaredFields();
                 for (Field field : fields) {
                     field.setAccessible(true);
                     if (field.getName().equals(elementName)) {
-                        E element = (E) field.get(bean);
+                        ELEMENT element = (ELEMENT) field.get(bean);
                         elements.add(element);
                     }
                 }
@@ -105,17 +103,17 @@ public abstract class BaseModel<T>{
         return elements;
     }
 
-    protected List<T> findObjects(Selector selector) throws IllegalAccessException,
+    protected List<BEAN> findObjects(Selector selector) throws IllegalAccessException,
             NoSuchFieldException {
         if (selector == null){
-            return mBeans;
+            return mDatas;
         }
-        List<T> temp = new ArrayList<>();
+        List<BEAN> result = new ArrayList<>();
         Map<String, Object> map = selector.getConditionMap();
         Set<String> keys = map.keySet();
-        for (int i=0;i<mBeans.size();i++) {
+        for (int i=0;i<mDatas.size();i++) {
             int matchesCount = 0;
-            T bean = mBeans.get(i);//存储在内存中的真实的数据
+            BEAN bean = mDatas.get(i);//存储在内存中的真实的数据
             Iterator<String> iterator = keys.iterator();//拿到所有的条件key
             while (iterator.hasNext()){//遍历条件key
                 String key = iterator.next();
@@ -130,17 +128,10 @@ public abstract class BaseModel<T>{
                 }
             }
             if (matchesCount == keys.size()){
-                temp.add(bean);
+                result.add(bean);
             }
         }
-        return temp;
-    }
-
-    private boolean isAssignableFromBoolean(Class<?> fieldType){
-        if (boolean.class.isAssignableFrom(fieldType) || Boolean.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return result;
     }
 
     private boolean isAssignableFromByte(Class<?> fieldType){
@@ -157,13 +148,6 @@ public abstract class BaseModel<T>{
                 isAssignableFromLong(fieldType) ||
                 isAssignableFromFloat(fieldType) ||
                 isAssignableFromDouble(fieldType)) {
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isAssignableFromString(Class<?> fieldType) {
-        if (String.class.isAssignableFrom(fieldType)) {
             return true;
         }
         return false;
@@ -204,13 +188,6 @@ public abstract class BaseModel<T>{
         return false;
     }
 
-    private boolean isAssinableFromCharacter(Class<?> fieldType){
-        if (char.class.isAssignableFrom(fieldType) || Character.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
-    }
-
     private boolean isAssinableFromCharSequence(Class<?> fieldType){
         if (CharSequence.class.isAssignableFrom(fieldType)){
             return true;
@@ -237,7 +214,7 @@ public abstract class BaseModel<T>{
         Number n2 = (Number) actualValue;
         double d1 = n1.doubleValue();
         double d2 = n2.doubleValue();
-        if (d1 > d2){
+        if (d1 < d2){
             return true;
         }
         return false;
@@ -248,7 +225,7 @@ public abstract class BaseModel<T>{
         Number n2 = (Number) actualValue;
         double d1 = n1.doubleValue();
         double d2 = n2.doubleValue();
-        if (d1 < d2){
+        if (d1 > d2){
             return true;
         }
         return false;
@@ -259,7 +236,7 @@ public abstract class BaseModel<T>{
         Number n2 = (Number) actualValue;
         double d1 = n1.doubleValue();
         double d2 = n2.doubleValue();
-        if (d1 >= d2){
+        if (d1 <= d2){
             return true;
         }
         return false;
@@ -270,14 +247,7 @@ public abstract class BaseModel<T>{
         Number n2 = (Number) actualValue;
         double d1 = n1.doubleValue();
         double d2 = n2.doubleValue();
-        if (d1 <= d2){
-            return true;
-        }
-        return false;
-    }
-
-    private boolean matchExists(Object actualValue) {
-        if (actualValue != null){
+        if (d1 >= d2){
             return true;
         }
         return false;
@@ -310,15 +280,6 @@ public abstract class BaseModel<T>{
         return false;
     }
 
-    private boolean matchRegex(Object requiredValue, Object actualValue){
-        Pattern p = Pattern.compile((String) requiredValue);
-        Matcher m = p.matcher((String) actualValue);
-        if (m.matches()) {
-            return true;
-        }
-        return false;
-    }
-
     private boolean matchCondition(String key, Object requiredValue, Object actualValue)
             throws IllegalAccessException, NoSuchFieldException {
         String[] keyPart = key.split(Selector.SPACE);
@@ -343,8 +304,6 @@ public abstract class BaseModel<T>{
         } else if (condition.equals(Selector.LESS_THAN_OR_EQUAL_TO_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
             return matchLessThanOrEqualTo(requiredValue, actualValue);
-        } else if (condition.equals(Selector.EXISTS_HOLDER)) {
-            return matchExists(actualValue);
         } else if (condition.equals(Selector.CONTAINS_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
             return matchContains(requiredValue, actualValue);
@@ -354,9 +313,6 @@ public abstract class BaseModel<T>{
         } else if (condition.equals(Selector.ENDS_WITH_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
             return matchEndsWith(requiredValue, actualValue);
-        } else if (condition.equals(Selector.MATCHES_HOLDER)
-                && isAssinableFromCharSequence(fieldType)) {
-            return matchRegex(requiredValue, actualValue);
         } else {
             throw new UndeclaredExpressionException("condition key is illegal.");
         }
@@ -389,15 +345,11 @@ public abstract class BaseModel<T>{
 
         private static final String LESS_THAN_OR_EQUAL_TO_HOLDER = "<=?";
 
-        private static final String EXISTS_HOLDER = "exists?";
-
         private static final String CONTAINS_HOLDER = "contains?";
 
         private static final String STARTS_WITH_HOLDER = "startswith?";
 
         private static final String ENDS_WITH_HOLDER = "endswith?";
-
-        private static final String MATCHES_HOLDER = "matches?";
 
         private Selector(){
             mConditionMap = new ConcurrentHashMap<>();
@@ -447,12 +399,6 @@ public abstract class BaseModel<T>{
             return this;
         }
 
-        public Selector addWhereExists(String elementName){
-            String key = elementName + SPACE + EXISTS_HOLDER;
-            mConditionMap.put(key, null);
-            return this;
-        }
-
         public Selector addWhereContains(String elementName, String value){
             String key = elementName + SPACE + CONTAINS_HOLDER;
             mConditionMap.put(key, value);
@@ -468,12 +414,6 @@ public abstract class BaseModel<T>{
         public Selector addWhereEndsWith(String elementName, String suffix){
             String key = elementName + SPACE + ENDS_WITH_HOLDER;
             mConditionMap.put(key, suffix);
-            return this;
-        }
-
-        public Selector addWhereMatches(String elementName, String regex){
-            String key = elementName + SPACE + MATCHES_HOLDER;
-            mConditionMap.put(key, regex);
             return this;
         }
     }

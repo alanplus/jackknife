@@ -121,7 +121,7 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 		}
 	}
 
-	protected abstract void onBindViewHolder(int position, ViewHolder holder);
+	protected abstract <VIEW extends View> void onBindViewHolder(int position, SparseArray<VIEW> views);
 
 	public List<BEAN> getDatas() {
 		return mDatas;
@@ -150,11 +150,11 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 		} else {
 			mViewHolder = (ViewHolder) mConvertView.getTag();
 		}
-		onBindViewHolder(position, mViewHolder);
+		onBindViewHolder(position, mViewHolder.mItemViews);
 		return mConvertView;
 	}
 
-	private class ViewHolder<VIEW extends View> {
+	public class ViewHolder<VIEW extends View> {
 
 		private SparseArray<VIEW> mItemViews;
 
@@ -162,7 +162,7 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 			mItemViews = new SparseArray<>();
 		}
 
-		private VIEW findViewById(int id) {
+		public VIEW findViewById(int id) {
 			View view = mItemViews.get(id);
 			if (view == null) {
 				view = mConvertView.findViewById(id);

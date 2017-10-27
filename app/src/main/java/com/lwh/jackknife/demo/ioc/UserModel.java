@@ -33,12 +33,19 @@ public class UserModel extends BaseModel<User>{
         users.add(new User("Alm", 17));
         users.add(new User("Celica", 16));
         users.add(new User("Mycen", 54));
+        users.add(new User("Faye", 15));
+        users.add(new User("Tobin", 19));
+        users.add(new User("Gray", 16));
+        users.add(new User("Lukas", 24));
+        users.add(new User("Kliff", 17));
         return users;
     }
 
     public List<User> findNameEqualToCelica() {
-        Selector selector = Selector.create();
-        selector.addWhereEqualTo("name", "Celica");
+        Selector selector = Selector.create()
+        .addWhereEqualTo("name", "Celica")
+        .addWhereContains("name", "Cel")
+        .addWhereGreatorThan("age", 17);
         try {
             return findObjects(selector);
         } catch (IllegalAccessException e) {

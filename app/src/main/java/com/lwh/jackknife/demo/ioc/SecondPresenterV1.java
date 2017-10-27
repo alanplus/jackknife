@@ -30,8 +30,10 @@ public class SecondPresenterV1 extends BasePresenter<ISecondView>{
             mSecondView = getView();
             mUserModel = new UserModel(User.class);
             List<User> users = mUserModel.findNameEqualToCelica();
-            mSecondView.showFirstUser(users.get(0));
-            mSecondView.showLastUser(users.get(users.size()-1));
+            if (users != null) {
+                mSecondView.showFirstUser(users.get(0));
+                mSecondView.showLastUser(users.get(users.size() - 1));
+            }
         }
     }
 }

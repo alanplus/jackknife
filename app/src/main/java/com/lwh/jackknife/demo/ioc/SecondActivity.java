@@ -23,7 +23,7 @@ import com.lwh.jackknife.demo.R;
 import com.lwh.jackknife.ioc.ViewId;
 import com.lwh.jackknife.mvp.BaseActivity;
 
-public class SecondActivity extends BaseActivity<ISecondView, SecondPresenterV2> implements ISecondView{
+public class SecondActivity extends BaseActivity<ISecondView, SecondPresenterV1> implements ISecondView{
 
     @ViewId(R.id.textview_second_firstuser)
     TextView textview_second_firstuser;
@@ -31,8 +31,8 @@ public class SecondActivity extends BaseActivity<ISecondView, SecondPresenterV2>
     TextView textview_second_lastuser;
 
     @Override
-    protected SecondPresenterV2 createPresenter() {
-        return new SecondPresenterV2();
+    protected SecondPresenterV1 createPresenter() {
+        return new SecondPresenterV1();
     }
 
     @Override
