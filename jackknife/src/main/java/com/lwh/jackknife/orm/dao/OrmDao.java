@@ -133,8 +133,12 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields){
             field.setAccessible(true);
+            NonColumn nonColumn = field.getAnnotation(NonColumn.class);
             Column column = field.getAnnotation(Column.class);
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+            if (nonColumn != null) {
+                continue;
+            }
             if (primaryKey != null && primaryKey.value() == AssignType.AUTO_INCREMENT) {
                 continue;
             }
@@ -396,40 +400,42 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                         columnName = TableManager.getInstance().generateColumnName(field.getName());
                     }
                     int columnIndex = cursor.getColumnIndex(columnName);
-                    Class<?> fieldType = field.getType();
-                    if (isAssignableFromCharSequence(fieldType)){
-                        field.set(bean, cursor.getString(columnIndex));
-                    }else if (isAssignableFromBoolean(fieldType)){
-                        int value = cursor.getInt(columnIndex);
-                        switch (value){
-                            case 0:
-                                field.set(bean, false);
-                                break;
-                            case 1:
-                                field.set(bean, true);
-                                break;
+                    if (columnIndex != -1) {
+                        Class<?> fieldType = field.getType();
+                        if (isAssignableFromCharSequence(fieldType)) {
+                            field.set(bean, cursor.getString(columnIndex));
+                        } else if (isAssignableFromBoolean(fieldType)) {
+                            int value = cursor.getInt(columnIndex);
+                            switch (value) {
+                                case 0:
+                                    field.set(bean, false);
+                                    break;
+                                case 1:
+                                    field.set(bean, true);
+                                    break;
+                            }
+                        } else if (isAssignableFromLong(fieldType)) {
+                            field.set(bean, cursor.getLong(columnIndex));
+                        } else if (isAssignableFromInteger(fieldType)) {
+                            field.set(bean, cursor.getInt(columnIndex));
+                        } else if (isAssignableFromShort(fieldType)
+                                || isAssignableFromByte(fieldType)) {
+                            field.set(bean, cursor.getShort(columnIndex));
+                        } else if (isAssignableFromDouble(fieldType)) {
+                            field.set(bean, cursor.getDouble(columnIndex));
+                        } else if (isAssignableFromFloat(fieldType)) {
+                            field.set(bean, cursor.getFloat(columnIndex));
+                        } else if (isAssignableFromCharacter(fieldType)) {
+                            field.set(bean, cursor.getString(columnIndex));
+                        } else if (isAssignableFromClass(fieldType)) {
+                            try {
+                                field.set(bean, Class.forName(cursor.getString(columnIndex)));
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            field.set(bean, cursor.getBlob(columnIndex));
                         }
-                    } else if (isAssignableFromLong(fieldType)){
-                        field.set(bean, cursor.getLong(columnIndex));
-                    } else if (isAssignableFromInteger(fieldType)){
-                        field.set(bean, cursor.getInt(columnIndex));
-                    } else if (isAssignableFromShort(fieldType)
-                            || isAssignableFromByte(fieldType)){
-                        field.set(bean, cursor.getShort(columnIndex));
-                    } else if (isAssignableFromDouble(fieldType)){
-                        field.set(bean, cursor.getDouble(columnIndex));
-                    } else if (isAssignableFromFloat(fieldType)) {
-                        field.set(bean, cursor.getFloat(columnIndex));
-                    } else if (isAssignableFromCharacter(fieldType)) {
-                        field.set(bean, cursor.getString(columnIndex));
-                    } else if (isAssignableFromClass(fieldType)) {
-                        try {
-                            field.set(bean, Class.forName(cursor.getString(columnIndex)));
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        field.set(bean, cursor.getBlob(columnIndex));
                     }
                 }
                 result.add(bean);
