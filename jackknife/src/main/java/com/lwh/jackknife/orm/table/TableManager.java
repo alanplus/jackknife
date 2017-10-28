@@ -1,17 +1,19 @@
 /*
- * Copyright (C) 2017. The JackKnife Open Source Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  * Copyright (C) 2017 The JackKnife Open Source Project
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *      http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
 package com.lwh.jackknife.orm.table;
@@ -81,6 +83,8 @@ public class TableManager {
     private final char A = 'A';
     private final char Z = 'Z';
     private final String CREATE_TABLE = "CREATE TABLE";
+    private final String ALTER_TABLE = "ALTER TABLE";
+    private final String ADD_COLUMN = "ADD COLUMN";
     private final String AUTO_INCREMENT = "AUTOINCREMENT";
     private final String TABLE_NAME = "table_name";
     private final String SPACE = " ";
@@ -212,20 +216,21 @@ public class TableManager {
     }
 
     public <T extends OrmTable> void createTable(Class<T> tableClass){
-        String tableName = getTableName(tableClass);//获取到表名
+        String table = getTableName(tableClass);//获取到表名
         Field[] fields = tableClass.getDeclaredFields();//拿到这个表的所有字段
         StringBuilder sb = new StringBuilder();
-        sb.append(CREATE_TABLE + SPACE + tableName + LEFT_PARENTHESIS);
+        sb.append(CREATE_TABLE + SPACE + table + LEFT_PARENTHESIS);
         List<Annotation> keys = new ArrayList<>();//记录该表有没有主键或外键
-        for (Field field:fields){//遍历表的字段
+        for (Field field : fields) {//遍历表的字段
             field.setAccessible(true);
+            StringBuilder fieldBuilder = new StringBuilder();
             NonColumn nonColumn = field.getAnnotation(NonColumn.class);//不需要映射的列
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);//主键
             ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);//外键
-            if (nonColumn != null){//跳过不需要映射的字段
+            if (nonColumn != null) {//跳过不需要映射的字段
                 continue;
             }
-            if(primaryKey != null) {
+            if (primaryKey != null) {
                 keys.add(primaryKey);//将主键加入集合
             }
             if (foreignKey != null) {
@@ -235,60 +240,66 @@ public class TableManager {
             SqlType sqlType = dataType.getSqlType();
             String columnType = sqlType.name();//列类型
             String columnName = getColumnName(field);//列名
-            sb.append(columnName + SPACE + columnType);//sql:${columnName} ${columnType}
+            fieldBuilder.append(columnName + SPACE + columnType);//sql:${columnName} ${columnType}
             Unique unique = field.getAnnotation(Unique.class);
             if (unique != null) {
-                sb.append(SPACE).append(UNIQUE);//sql: UNIQUE
+                fieldBuilder.append(SPACE).append(UNIQUE);//sql: UNIQUE
             }
             NotNull notNull = field.getAnnotation(NotNull.class);
             if (notNull != null) {
-                sb.append(SPACE).append(NOT_NULL);//sql: NOT NULL
+                fieldBuilder.append(SPACE).append(NOT_NULL);//sql: NOT NULL
             }
             if (primaryKey != null) {
-                sb.append(SPACE).append(PRIMARY_KEY);//sql: PRIMARY KEY
+                fieldBuilder.append(SPACE).append(PRIMARY_KEY);//sql: PRIMARY KEY
                 AssignType assignType = primaryKey.value();//分配类型
                 if (assignType.equals(AssignType.BY_MYSELF)) {
                 } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
-                    sb.append(SPACE).append(AUTO_INCREMENT);
+                    fieldBuilder.append(SPACE).append(AUTO_INCREMENT);
                 }
             }
-            if (foreignKey != null){
+            if (foreignKey != null) {
                 Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
-                if (!foreignKeyTableClass.equals(tableClass)){//建立外键的条件，不能建立在自己的主键基础上
+                if (!foreignKeyTableClass.equals(tableClass)) {//建立外键的条件，不能建立在自己的主键基础上
                     String foreignKeyTableName = foreignKeyTableClass.getName();//外键表的表名
-                    sb.append(SPACE).append(REFERENCES).append(SPACE).append(foreignKeyTableName)
+                    fieldBuilder.append(SPACE).append(REFERENCES).append(SPACE).append(foreignKeyTableName)
                             .append(LEFT_PARENTHESIS);//sql: REFERENCES ${foreignKeyTableName} (
                     Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();//拿到外键所指向表的所有列
-                    for (Field foreignKeyTableField:foreignKeyTableFields){//遍历复合主键，如果有
+                    for (Field foreignKeyTableField : foreignKeyTableFields) {//遍历复合主键，如果有
                         PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField.getAnnotation(PrimaryKey.class);
-                        if (foreignKeyTablePrimaryKey != null){
+                        if (foreignKeyTablePrimaryKey != null) {
                             String foreignKeyTablePrimaryKeyName = field.getName();//外键表的某个主键的名字
-                            sb.append(foreignKeyTablePrimaryKeyName).append(COMMA);//sql:${foreignKeyTablePrimaryKeyName},
+                            fieldBuilder.append(foreignKeyTablePrimaryKeyName).append(COMMA);//sql:${foreignKeyTablePrimaryKeyName},
                         }
                     }
-                    sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS);//删掉最后一个逗号
+                    fieldBuilder.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS);//删掉最后一个逗号
                 }
             }
-            sb.append(COMMA);
+            try {
+                sDatabase.execSQL(ALTER_TABLE+SPACE+table+SPACE+ADD_COLUMN+SPACE+fieldBuilder+SEMICOLON);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            fieldBuilder.append(COMMA);
+            sb.append(fieldBuilder);
         }
-        if (keys.size() == 0){
+        if (keys.size() == 0) {
             throw new ConstraintException("请至少指定一个有效的主键或外键");
         }
         try {
-            String sql = sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS).append(SEMICOLON)
+            String sql = sb.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS).append(SEMICOLON)
                     .toString();//删除最后一个逗号并加上右括号
-            Logger.error(TAG, "execute sql:"+sql);
+            Logger.error(TAG, "execute sql:" + sql);
             sDatabase.execSQL(sql);
-            mTableNameMap.put(tableClass, tableName);//将新创建出来的表加入缓存
+            mTableNameMap.put(tableClass, table);//将新创建出来的表加入缓存
             WhereBuilder whereBuilder = new WhereBuilder()
-                    .addWhereEqualTo(TABLE_NAME, tableName);
+                    .addWhereEqualTo(TABLE_NAME, table);
             QueryBuilder queryBuilder = new QueryBuilder().where(whereBuilder);
             int count = mDao.selectCount(queryBuilder);
             if (count == 0) {//没有从表名表中查询到此表
-                TableName nameTable = new TableName(tableClass, tableName);//存放Orm框架创建的表的系统表
+                TableName nameTable = new TableName(tableClass, table);//存放Orm框架创建的表的系统表
                 mDao.insert(nameTable);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

@@ -320,7 +320,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     @Override
     public T selectOne() {
         List<T> beans = selectAll();
-        if (beans != null) {
+        if (beans.size() != 0) {
             return beans.get(0);
         }
         return null;
@@ -329,7 +329,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     @Override
     public T selectOne(QueryBuilder builder) {
         List<T> beans = select(builder);
-        if (beans != null) {
+        if (beans.size() != 0) {
             return beans.get(0);
         }
         return null;
