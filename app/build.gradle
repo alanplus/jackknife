@@ -28,6 +28,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:palette-v7:23.0.0'
     compile 'com.android.support:support-v4:23.0.0'
-    compile 'com.github.JackWHLiu:jackknife:1.5.4'
-//        compile project(':jackknife')
+//    compile 'com.github.JackWHLiu:jackknife:1.5.4'
+        compile project(':jackknife')
 }

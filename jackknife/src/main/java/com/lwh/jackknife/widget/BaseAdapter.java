@@ -28,19 +28,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lwh.jackknife.widget.annotation.ItemLayout;
-import com.lwh.jackknife.widget.annotation.ItemViews;
 
 public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 
 	private LayoutInflater mInflater;
 	private static final String METHOD_INFLATE = "inflate";
-	private View mConvertView;
-	private ViewHolder<? extends View> mViewHolder;
 	protected List<BEAN> mDatas;
+	private Context mContext;
 
 	public BaseAdapter(Context context) {
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mDatas = new ArrayList<>();
+		mContext = context;
 	}
 
 	public BaseAdapter(Context context, List<BEAN> datas) {
@@ -111,16 +110,6 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
-	private int[] getItemViewIds() {
-		Class<?> adapterClass = getClass();
-		ItemViews itemViews = adapterClass.getAnnotation(ItemViews.class);
-		if (itemViews != null) {
-			return itemViews.value();
-		} else {
-			return null;
-		}
-	}
-
 	protected abstract <VIEW extends View> void onBindViewHolder(int position, SparseArray<VIEW> views);
 
 	public List<BEAN> getDatas() {
@@ -129,17 +118,10 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 
 	@Override
 	public final View getView(int position, View convertView, ViewGroup parent) {
-		if ((mConvertView = convertView) == null) {
-			mViewHolder = new ViewHolder();
+		ViewHolder holder = null;
+		if (convertView == null) {
 			try {
-				mConvertView = inflateView();
-				int[] itemViewIds = getItemViewIds();
-				for (int id : itemViewIds) {
-					mViewHolder.findViewById(id);
-				}
-				mConvertView.setTag(mViewHolder);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				holder = new ViewHolder(mContext, inflateView(), parent, position);
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -148,27 +130,10 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 				e.printStackTrace();
 			}
 		} else {
-			mViewHolder = (ViewHolder) mConvertView.getTag();
+			holder = (ViewHolder) convertView.getTag();
+			holder.setPosition(position);
 		}
-		onBindViewHolder(position, mViewHolder.mItemViews);
-		return mConvertView;
-	}
-
-	public class ViewHolder<VIEW extends View> {
-
-		private SparseArray<VIEW> mItemViews;
-
-		private ViewHolder() {
-			mItemViews = new SparseArray<>();
-		}
-
-		public VIEW findViewById(int id) {
-			View view = mItemViews.get(id);
-			if (view == null) {
-				view = mConvertView.findViewById(id);
-				mItemViews.put(id, (VIEW) view);
-			}
-			return (VIEW) view;
-		}
+		onBindViewHolder(position, holder.getItemViews());
+		return holder.getConvertView();
 	}
 }

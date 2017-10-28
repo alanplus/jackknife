@@ -34,7 +34,7 @@ public abstract class BaseModel<BEAN>{
         if (beanClass == null) {
             throw new IllegalArgumentException("beanClass is null.");
         }
-        mDatas = new ArrayList<>();//创建一个集合用来存储数据
+        mDatas = new ArrayList<>();
         mDatas.addAll(initBeans());
         mBeanClass = beanClass;
     }
@@ -55,8 +55,8 @@ public abstract class BaseModel<BEAN>{
         void onLoad(List<BEAN> beans);
     }
 
-    public interface OnExtractListener<E>{
-        void onExtract(String elementName, List<E> elements);
+    public interface OnExtractListener<ELEMENT>{
+        void onExtract(String elementName, List<ELEMENT> elements);
     }
 
     public List<BEAN> getDatas() {
