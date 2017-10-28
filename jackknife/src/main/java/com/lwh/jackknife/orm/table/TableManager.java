@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The JackKnife Open Source Project
+ * Copyright (C) 2017. The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,10 +159,10 @@ public class TableManager {
         return columnName;
     }
 
-    private String generateTableName(String className){
+    public String generateTableName(String className){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < className.length(); i++) {
-            if (className.charAt(i) >= A && className.charAt(i) <= Z || i == 0) {
+            if (className.charAt(i) >= A && className.charAt(i) <= Z && i != 0) {
                 sb.append(UNDERLINE);
             }
             sb.append(String.valueOf(className.charAt(i)).toLowerCase(Locale.ENGLISH));
@@ -170,10 +170,10 @@ public class TableManager {
         return TABLE_NAME_HEADER + sb.toString().toLowerCase();
     }
 
-    private String generateColumnName(String fieldName){
+    public String generateColumnName(String fieldName){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < fieldName.length(); i++) {
-            if (fieldName.charAt(i) >= A && fieldName.charAt(i) <= Z || i == 0) {
+            if (fieldName.charAt(i) >= A && fieldName.charAt(i) <= Z && i != 0) {
                 sb.append(UNDERLINE);
             }
             sb.append(String.valueOf(fieldName.charAt(i)).toLowerCase(Locale.ENGLISH));
@@ -215,7 +215,7 @@ public class TableManager {
         String tableName = getTableName(tableClass);//获取到表名
         Field[] fields = tableClass.getDeclaredFields();//拿到这个表的所有字段
         StringBuilder sb = new StringBuilder();
-        sb.append(CREATE_TABLE + SPACE + tableName + LEFT_PARENTHESIS);//sql:CREATE TABLE ${tableName} (
+        sb.append(CREATE_TABLE + SPACE + tableName + LEFT_PARENTHESIS);
         List<Annotation> keys = new ArrayList<>();//记录该表有没有主键或外键
         for (Field field:fields){//遍历表的字段
             field.setAccessible(true);
@@ -277,7 +277,7 @@ public class TableManager {
         try {
             String sql = sb.deleteCharAt(sb.length()-1).append(RIGHT_PARENTHESIS).append(SEMICOLON)
                     .toString();//删除最后一个逗号并加上右括号
-            Logger.info(TAG, "execute sql:"+sql);
+            Logger.error(TAG, "execute sql:"+sql);
             sDatabase.execSQL(sql);
             mTableNameMap.put(tableClass, tableName);//将新创建出来的表加入缓存
             WhereBuilder whereBuilder = new WhereBuilder()

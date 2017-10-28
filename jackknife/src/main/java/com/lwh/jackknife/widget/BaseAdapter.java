@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lwh.jackknife.widget.annotation.ItemLayout;
+import com.lwh.jackknife.widget.annotation.ItemViews;
 
 public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 
@@ -69,6 +70,8 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
+
+
 
 	public void addItem(BEAN data) {
 		mDatas.add(data);
@@ -116,12 +119,24 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 		return mDatas;
 	}
 
+
+	private int[] getItemViewIds() {
+		Class<?> adapterClass = getClass();
+		ItemViews itemViews = adapterClass.getAnnotation(ItemViews.class);
+		if (itemViews != null) {
+			return itemViews.value();
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public final View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
 		if (convertView == null) {
 			try {
-				holder = new ViewHolder(mContext, inflateView(), parent, position);
+				int[] itemViewIds = getItemViewIds();
+				holder = new ViewHolder(mContext, inflateView(), itemViewIds, parent, position);
 			} catch (NoSuchMethodException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {

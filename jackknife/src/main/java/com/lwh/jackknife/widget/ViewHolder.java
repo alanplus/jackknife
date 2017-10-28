@@ -21,8 +21,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lwh.jackknife.widget.annotation.ItemViews;
-
 public class ViewHolder<VIEW extends View> {
 
     private SparseArray<VIEW> mItemViews;
@@ -32,28 +30,18 @@ public class ViewHolder<VIEW extends View> {
     private ViewGroup mParent;
     protected int mLayoutId;
 
-    public ViewHolder(Context context, View itemView, ViewGroup parent, int position) {
+    public ViewHolder(Context context, View itemView, int[] itemViewIds, ViewGroup parent, int position) {
         this.mContext = context;
         this.mConvertView = itemView;
         this.mPosition = position;
         this.mItemViews = new SparseArray<>();
         this.mParent = parent;
-        int[] itemViewIds = getItemViewIds();
         for (int id : itemViewIds) {
             findViewById(id);
         }
         this.mConvertView.setTag(this);
     }
 
-    private int[] getItemViewIds() {
-        Class<?> adapterClass = getClass();
-        ItemViews itemViews = adapterClass.getAnnotation(ItemViews.class);
-        if (itemViews != null) {
-            return itemViews.value();
-        } else {
-            return null;
-        }
-    }
 
     public SparseArray<VIEW> getItemViews() {
         return mItemViews;
