@@ -27,23 +27,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lwh.jackknife.widget.annotation.ItemLayout;
-import com.lwh.jackknife.widget.annotation.ItemViews;
-
-public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
+public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 
 	private LayoutInflater mInflater;
 	private static final String METHOD_INFLATE = "inflate";
 	protected List<BEAN> mDatas;
 	private Context mContext;
 
-	public BaseAdapter(Context context) {
+	public CommonAdapter(Context context) {
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mDatas = new ArrayList<>();
 		mContext = context;
 	}
 
-	public BaseAdapter(Context context, List<BEAN> datas) {
+	public CommonAdapter(Context context, List<BEAN> datas) {
 		this(context);
 		addItems(datas);
 	}
@@ -70,8 +67,6 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-
-
 
 	public void addItem(BEAN data) {
 		mDatas.add(data);
@@ -103,31 +98,21 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 		notifyDataSetChanged();
 	}
 
-	private View inflateView()
+	protected abstract int getItemLayoutId();
+	protected abstract int[] getItemViewIds();
+
+	protected View inflateView()
 			throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Class<?> adapterClass = getClass();
-		ItemLayout itemLayout = adapterClass.getAnnotation(ItemLayout.class);
-		int layoutId = itemLayout.value();
+		int layoutId = getItemLayoutId();
 		Class<?> inflaterClass = LayoutInflater.class;
 		Method inflateMethod = inflaterClass.getMethod(METHOD_INFLATE, int.class, ViewGroup.class);
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
-	protected abstract <VIEW extends View> void onBindViewHolder(int position, SparseArray<VIEW> views);
+	protected abstract <VIEW extends View> void onBindViewHolder(int position, ViewHolder<VIEW> holder);
 
 	public List<BEAN> getDatas() {
 		return mDatas;
-	}
-
-
-	private int[] getItemViewIds() {
-		Class<?> adapterClass = getClass();
-		ItemViews itemViews = adapterClass.getAnnotation(ItemViews.class);
-		if (itemViews != null) {
-			return itemViews.value();
-		} else {
-			return null;
-		}
 	}
 
 	@Override
@@ -148,7 +133,7 @@ public abstract class BaseAdapter<BEAN> extends android.widget.BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 			holder.setPosition(position);
 		}
-		onBindViewHolder(position, holder.getItemViews());
+		onBindViewHolder(position, holder);
 		return holder.getConvertView();
 	}
 }

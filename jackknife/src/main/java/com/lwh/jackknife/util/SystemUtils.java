@@ -16,11 +16,17 @@
 
 package com.lwh.jackknife.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class KeyboardUtils {
+import java.util.List;
+
+public class SystemUtils {
+
+    private SystemUtils() {
+    }
 
     public static void openKeyboard(EditText editText, Context context) {
         InputMethodManager imm = (InputMethodManager) context
@@ -35,5 +41,16 @@ public class KeyboardUtils {
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
 
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+    }
+
+    public static boolean isBackground(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> processes = activityManager.getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo processInfo : processes) {
+            if (processInfo.processName.equals(context.getPackageName())) {
+                return processInfo.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+            }
+        }
+        return false;
     }
 }

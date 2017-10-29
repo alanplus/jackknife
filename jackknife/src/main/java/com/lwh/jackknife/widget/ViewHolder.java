@@ -42,7 +42,6 @@ public class ViewHolder<VIEW extends View> {
         this.mConvertView.setTag(this);
     }
 
-
     public SparseArray<VIEW> getItemViews() {
         return mItemViews;
     }
