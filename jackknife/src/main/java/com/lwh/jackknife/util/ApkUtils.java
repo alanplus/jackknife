@@ -158,4 +158,11 @@ public class ApkUtils {
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
     }
+
+    public native static void bspatch(String oldPath, String newPath, String patchPath);
+    public native static void bsdiff(String oldPath, String newPath, String patchPath);
+
+    static {
+        System.loadLibrary("apkutils");
+    }
 }
