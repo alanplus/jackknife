@@ -20,6 +20,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.lwh.jackknife.demo.R;
+import com.lwh.jackknife.demo.mvp.ISecondView;
+import com.lwh.jackknife.demo.mvp.SecondPresenterV1;
+import com.lwh.jackknife.demo.mvp.User;
 import com.lwh.jackknife.ioc.ViewId;
 import com.lwh.jackknife.mvp.BaseActivity;
 

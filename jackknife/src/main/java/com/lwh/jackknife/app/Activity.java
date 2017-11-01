@@ -26,7 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Automatically inject a layout, bind views, and register events for activities.
  */
-public  class Activity extends android.app.Activity implements SupportActivity {
+public class Activity extends android.app.Activity implements SupportActivity {
 
 	/**
 	 * If you are using {@link Application}, it is automatically gonna be added to the Application's
@@ -51,21 +51,9 @@ public  class Activity extends android.app.Activity implements SupportActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		try {
 			ViewInjector.create().inject(this);
 			if (getApplication() instanceof Application){
 				push();
 			}
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 	}
 }

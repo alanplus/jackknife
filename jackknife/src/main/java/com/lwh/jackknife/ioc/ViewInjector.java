@@ -43,15 +43,16 @@ public class ViewInjector<V extends SupportV> {
     private final String UNDERLINE = "_";
     private final String ID = ".R$id";
     private final String LAYOUT = ".R$layout";
-    private final String VIEW_TYPE_ERROR = "viewInjected must be an activity or a fragment.";
-    private final String VIEW_CLASS_NAME_ERROR = "class name is not ends with \'Activity\' or \'Fragment\'.";
     private final int A = 'A';
     private final int Z = 'Z';
+    private final String VIEW_TYPE_ERROR = "viewInjected must be an activity or a fragment.";
+    private final String VIEW_CLASS_NAME_ERROR = "class name is not ends with \'Activity\' or \'Fragment\'.";
 
     enum ViewType {
         Activity,
         Fragment,
         Dialog,
+        View,
         UNDECLARED
     }
 
@@ -62,33 +63,30 @@ public class ViewInjector<V extends SupportV> {
         return new ViewInjector();
     }
 
-    public void inject(V viewInjected) throws InvocationTargetException,
-            NoSuchMethodException, ClassNotFoundException, NoSuchFieldException,
-            IllegalAccessException {
-        if (viewInjected instanceof SupportActivity) {
+    public void inject(V viewInjected) {
+        if (viewInjected instanceof SupportActivity || viewInjected instanceof SupportDialog) {
             injectLayout(viewInjected);
             injectViews(viewInjected);
             injectEvents(viewInjected);
-        } else if (viewInjected instanceof SupportFragment) {
-            injectViews(viewInjected);
-            injectEvents(viewInjected);
-        } else if (viewInjected instanceof SupportDialog) {
-            injectLayout(viewInjected);
+        } else if (viewInjected instanceof SupportFragment || viewInjected instanceof SupportView) {
             injectViews(viewInjected);
             injectEvents(viewInjected);
         }
     }
 
-    protected V getActivity(V viewInjected) {
+    protected SupportContextV getContextV(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
+        SupportContextV v = null;
         if (viewType == ViewType.Fragment) {
-            viewInjected = (V) ((SupportFragment) viewInjected).getFragmentActivity();
+            v = ((SupportFragment) viewInjected).getFragmentActivity();
         } else if (viewType == ViewType.Dialog) {
-            viewInjected = (V)((SupportDialog) viewInjected).getDialogActivity();
+            v = ((SupportDialog) viewInjected).getDialogActivity();
+        } else if (viewType == ViewType.View) {
+            v = (SupportContextV) viewInjected;
         } else if (viewType == ViewType.UNDECLARED) {
             throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
-        return viewInjected;
+        return v;
     }
 
     protected String generateLayoutName(V viewInjected) {
@@ -121,6 +119,10 @@ public class ViewInjector<V extends SupportV> {
             return ViewType.Activity;
         } else if (SupportFragment.class.isAssignableFrom(viewClass)) {
             return ViewType.Fragment;
+        } else if (SupportDialog.class.isAssignableFrom(viewClass)) {
+            return ViewType.Dialog;
+        } else if (SupportView.class.isAssignableFrom(viewClass)) {
+            return ViewType.View;
         } else {
             return ViewType.UNDECLARED;
         }
@@ -133,45 +135,54 @@ public class ViewInjector<V extends SupportV> {
         return false;
     }
 
-    public final View injectLayout(V viewInjected) throws NoSuchMethodException,
-            IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-            ClassNotFoundException, NoSuchFieldException {
+    public final View injectLayout(V viewInjected) {
+        View view = null;
         ViewType viewType = getViewType(viewInjected);
         if (isViewTypeAllowed(viewType)) {
             String layoutName = generateLayoutName(viewInjected);
             ContentView contentView = viewInjected.getClass().getAnnotation(ContentView.class);
-            viewInjected = getActivity(viewInjected);
+            viewInjected = (V) getContextV(viewInjected);
             Class<?> viewClass = viewInjected.getClass();
-            String packageName = ((SupportActivity) viewInjected).getPackageName();
-            Class<?> layoutClass = Class.forName(packageName + LAYOUT);
-            Field field = layoutClass.getDeclaredField(layoutName);
-            int layoutId = field.getInt(viewInjected);
-            if (contentView != null) {
-                layoutId = contentView.value();
+            String packageName = ((SupportContextV) viewInjected).getPackageName();
+            try {
+                Class<?> layoutClass = Class.forName(packageName + LAYOUT);
+                Field field = layoutClass.getDeclaredField(layoutName);
+                int layoutId = field.getInt(viewInjected);
+                if (contentView != null) {
+                    layoutId = contentView.value();
+                }
+                if (viewType == ViewType.Activity || viewType == ViewType.Dialog) {
+                    Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
+                    method.invoke(viewInjected, layoutId);
+                } else if (viewType == ViewType.Fragment || viewType == ViewType.View) {
+                }
+                LayoutInflater inflater = LayoutInflater.from((Context) viewInjected);
+                Class<? extends LayoutInflater> inflaterClass = LayoutInflater.class;
+                Method inflateMethod = inflaterClass.getDeclaredMethod(METHOD_INFLATE, int.class,
+                        ViewGroup.class);
+                view = (View) inflateMethod.invoke(inflater, layoutId, null);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-            if (viewType == ViewType.Activity || viewType == ViewType.Dialog) {
-                Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
-                method.invoke(viewInjected, layoutId);
-            }
-            LayoutInflater inflater = LayoutInflater.from((Context) viewInjected);
-            Class<? extends LayoutInflater> inflaterClass = LayoutInflater.class;
-            Method inflateMethod = inflaterClass.getDeclaredMethod(METHOD_INFLATE, int.class,
-                    ViewGroup.class);
-            return (View) inflateMethod.invoke(inflater, layoutId, null);
-        }else{
-            throw new ViewTypeException(VIEW_TYPE_ERROR);
-        }
+        } else throw new ViewTypeException(VIEW_TYPE_ERROR);
+        return view;
     }
 
-    public final void injectViews(V viewInjected) throws NoSuchMethodException,
-            ClassNotFoundException, InvocationTargetException, IllegalAccessException,
-            NoSuchFieldException {
+    public final void injectViews(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
         if (isViewTypeAllowed(viewType)) {
             Class<?> viewClass = viewInjected.getClass();
             Field[] viewFields = viewClass.getDeclaredFields();
-            SupportActivity activity = (SupportActivity) getActivity(viewInjected);
-            Class<? extends SupportActivity> activityClass = activity.getClass();
+            SupportContextV contextV = getContextV(viewInjected);
+            Class<? extends SupportContextV> contextVClass = contextV.getClass();
             for (Field field : viewFields) {
                 field.setAccessible(true);
                 Class<?> fieldType = field.getType();
@@ -182,23 +193,35 @@ public class ViewInjector<V extends SupportV> {
                     }
                     ViewId viewId = field.getAnnotation(ViewId.class);
                     int id = View.NO_ID;
-                    if (viewId != null) {
-                        id = viewId.value();
-                    } else {
-                        String packageName = activity.getPackageName();
-                        Class<?> idClass = Class.forName(packageName + ID);
-                        Field idField = idClass.getDeclaredField(field.getName());
-                        try {
-                            id = idField.getInt(idField);
-                        } catch (IllegalArgumentException e) {
-                            e.printStackTrace();
+                    try {
+                        if (viewId != null) {
+                            id = viewId.value();
+                        } else {
+                            String packageName = contextV.getPackageName();
+                            Class<?> idClass = Class.forName(packageName + ID);
+                            Field idField = idClass.getDeclaredField(field.getName());
+                            try {
+                                id = idField.getInt(idField);
+                            } catch (IllegalArgumentException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                    Method findViewByIdMethod = activityClass.getMethod(METHOD_FIND_VIEW_BY_ID,
-                            int.class);
-                    Object view = findViewByIdMethod.invoke(activity, id);
-                    if (view != null) {
-                        field.set(viewInjected, view);
+                        Method findViewByIdMethod = contextVClass.getMethod(METHOD_FIND_VIEW_BY_ID,
+                                int.class);
+                        Object view = findViewByIdMethod.invoke(contextV, id);
+                        if (view != null) {
+                            field.set(viewInjected, view);
+                        }
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -207,14 +230,12 @@ public class ViewInjector<V extends SupportV> {
         }
     }
 
-    public final void injectEvents(V viewInjected)
-            throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException,
-            InvocationTargetException {
+    public final void injectEvents(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
         if (isViewTypeAllowed(viewType)) {
             Class<?> viewClass = viewInjected.getClass();
             Method[] methods = viewClass.getDeclaredMethods();
-            SupportActivity activity = (SupportActivity) getActivity(viewInjected);
+            SupportContextV contextV = getContextV(viewInjected);
             for (Method method : methods) {
                 Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {
@@ -226,21 +247,29 @@ public class ViewInjector<V extends SupportV> {
                     String listenerSetter = eventBase.listenerSetter();
                     Class<?> listenerType = eventBase.listenerType();
                     String callbackMethod = eventBase.callbackMethod();
-                    Method valueMethod = annotationType.getDeclaredMethod(METHOD_VALUE);
-                    int[] viewIds = (int[]) valueMethod.invoke(annotation);
-                    for (int viewId : viewIds) {
-                        View view = activity.findViewById(viewId);
-                        if (view == null) {
-                            continue;
+                    try {
+                        Method valueMethod = annotationType.getDeclaredMethod(METHOD_VALUE);
+                        int[] viewIds = (int[]) valueMethod.invoke(annotation);
+                        for (int viewId : viewIds) {
+                            View view = contextV.findViewById(viewId);
+                            if (view == null) {
+                                continue;
+                            }
+                            Method setListenerMethod = view.getClass().getMethod(listenerSetter, listenerType);
+                            HashMap<String, Method> map = new HashMap();
+                            map.put(callbackMethod, method);
+                            EventInvocationHandler handler = new EventInvocationHandler(map,
+                                    viewInjected);
+                            Object proxy = Proxy.newProxyInstance(listenerType.getClassLoader(),
+                                    new Class<?>[]{listenerType}, handler);
+                            setListenerMethod.invoke(view, proxy);
                         }
-                        Method setListenerMethod = view.getClass().getMethod(listenerSetter, listenerType);
-                        HashMap<String, Method> map = new HashMap();
-                        map.put(callbackMethod, method);
-                        EventInvocationHandler handler = new EventInvocationHandler(map,
-                                viewInjected);
-                        Object proxy = Proxy.newProxyInstance(listenerType.getClassLoader(),
-                                new Class<?>[]{listenerType}, handler);
-                        setListenerMethod.invoke(view, proxy);
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
                     }
                 }
             }

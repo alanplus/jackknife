@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.demo.ioc;
+package com.lwh.jackknife.widget;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.content.Context;
+import android.util.AttributeSet;
 
-import com.lwh.jackknife.ioc.SupportActivity;
+import com.lwh.jackknife.ioc.SupportView;
 import com.lwh.jackknife.ioc.ViewInjector;
 
-public class CustomFragmentActivity extends android.support.v4.app.FragmentActivity implements SupportActivity {
+public class View extends android.view.View implements SupportView {
+
+    public View(Context context) {
+        this(context, null);
+    }
+
+    public View(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public View(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        ViewInjector.create().inject(this);
+    }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ViewInjector.create().inject(this);
+    public String getPackageName() {
+        return getContext().getPackageName();
     }
 }

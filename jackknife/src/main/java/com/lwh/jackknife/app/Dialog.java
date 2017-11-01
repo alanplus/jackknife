@@ -24,7 +24,9 @@ import com.lwh.jackknife.ioc.SupportDialog;
 import com.lwh.jackknife.ioc.ViewInjector;
 import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 
-import java.lang.reflect.InvocationTargetException;
+/**
+ * Automatically inject a layout, bind views, and register events for dialogs.
+ */
 
 public class Dialog extends android.app.Dialog implements SupportDialog {
 
@@ -43,19 +45,7 @@ public class Dialog extends android.app.Dialog implements SupportDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            ViewInjector.create().inject(this);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        ViewInjector.create().inject(this);
     }
 
     @Override

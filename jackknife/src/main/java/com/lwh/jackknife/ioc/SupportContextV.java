@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.demo.ioc;
+package com.lwh.jackknife.ioc;
 
-import com.lwh.jackknife.mvp.BasePresenter;
+import android.view.View;
 
-import java.util.List;
+public interface SupportContextV extends SupportV {
 
-public class SecondPresenterV2 extends BasePresenter<ISecondView> {
+    View findViewById(int id);
 
-    private ISecondView mSecondView;
-    private UserModel mUserModel;
-
-    public void fetchUsers(){
-        if (isViewAttached()) {
-            mSecondView = getView();
-            mUserModel = new UserModel(User.class);
-            List<User> users = mUserModel.initBeans();
-            mSecondView.showFirstUser(users.get(0));
-            mSecondView.showLastUser(users.get(users.size()-1));
-        }
-    }
+    String getPackageName();
 }

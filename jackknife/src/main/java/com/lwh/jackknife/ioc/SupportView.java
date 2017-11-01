@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.demo.ioc;
+package com.lwh.jackknife.ioc;
 
-import com.lwh.jackknife.mvp.IBaseView;
-
-public interface ISecondView extends IBaseView {
-
-    void showFirstUser(User user);
-    void showLastUser(User user);
+public interface SupportView extends SupportContextV {
 }

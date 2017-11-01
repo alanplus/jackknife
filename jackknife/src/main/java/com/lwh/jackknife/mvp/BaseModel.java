@@ -70,22 +70,14 @@ public abstract class BaseModel<BEAN>{
     protected abstract List<BEAN> initBeans();
 
     protected int countObjects(Selector selector) {
-        List<BEAN> objects = null;
-        try {
-            objects = findObjects(selector);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        if(objects != null){
+        List<BEAN> objects = findObjects(selector);
+        if (objects != null) {
             return objects.size();
         }
         return 0;
     }
 
-    protected <ELEMENT> List<ELEMENT> extractElement(Selector selector, String elementName) throws
-            IllegalAccessException, NoSuchFieldException {
+    protected <ELEMENT> List<ELEMENT> extractElement(Selector selector, String elementName) {
         List<ELEMENT> elements = new ArrayList<>();
         List<BEAN> datas = findObjects(selector);
         if (datas.size() > 0) {
@@ -94,7 +86,12 @@ public abstract class BaseModel<BEAN>{
                 for (Field field : fields) {
                     field.setAccessible(true);
                     if (field.getName().equals(elementName)) {
-                        ELEMENT element = (ELEMENT) field.get(bean);
+                        ELEMENT element = null;
+                        try {
+                            element = (ELEMENT) field.get(bean);
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                         elements.add(element);
                     }
                 }
@@ -103,8 +100,7 @@ public abstract class BaseModel<BEAN>{
         return elements;
     }
 
-    protected List<BEAN> findObjects(Selector selector) throws IllegalAccessException,
-            NoSuchFieldException {
+    protected List<BEAN> findObjects(Selector selector) {
         if (selector == null){
             return mDatas;
         }
@@ -119,12 +115,19 @@ public abstract class BaseModel<BEAN>{
                 String key = iterator.next();
                 String[] keyPart = key.split(Selector.SPACE);
                 String elementName = keyPart[0];
-                Field targetField = mBeanClass.getDeclaredField(elementName);//要检测的属性
-                targetField.setAccessible(true);
-                Object leftValue = map.get(key);
-                Object rightValue = targetField.get(bean);
-                if (matchCondition(key, leftValue, rightValue)) {
-                    matchesCount++;
+                Field targetField = null;//要检测的属性
+                try {
+                    targetField = mBeanClass.getDeclaredField(elementName);
+                    targetField.setAccessible(true);
+                    Object leftValue = map.get(key);
+                    Object rightValue = targetField.get(bean);
+                    if (matchCondition(key, leftValue, rightValue)) {
+                        matchesCount++;
+                    }
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
             }
             if (matchesCount == keys.size()){
