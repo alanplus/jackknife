@@ -20,6 +20,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lwh.jackknife.orm.dao.DaoFactory;
+import com.lwh.jackknife.orm.dao.OrmDao;
+import com.lwh.jackknife.orm.table.OrmTable;
+import com.lwh.jackknife.orm.table.TableManager;
+
+import java.lang.reflect.Field;
+import java.util.List;
+
 public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public OrmSQLiteOpenHelper(Context context, String name, int version) {
@@ -32,5 +40,26 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (newVersion > oldVersion) {
+            try {
+                Class<? extends OrmTable> tableNameClass = (Class<? extends OrmTable>)
+                        Class.forName("com.lwh.jackknife.orm.table.TableName");
+                OrmDao<?> dao = DaoFactory.getDao(tableNameClass);
+                List<?> tables = dao.selectAll();
+                for (Object table : tables) {
+                    Field field = tableNameClass.getDeclaredField("tableClass");
+                    field.setAccessible(true);
+                    Class<? extends OrmTable> tableClass =
+                            (Class<? extends OrmTable>) field.get(table);
+                    TableManager.getInstance().upgradeTable(tableClass);
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

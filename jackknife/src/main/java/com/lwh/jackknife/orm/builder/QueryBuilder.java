@@ -30,13 +30,13 @@ public class QueryBuilder {
 
     protected String[] mColumns;
 
-    protected String mGroup = "";
+    protected String mGroup;
 
-    protected String mHaving = "";
+    protected String mHaving;
 
-    protected String mOrder = "";
+    protected String mOrder;
 
-    protected String mLimit = "";
+    protected String mLimit;
 
     protected WhereBuilder mWhereBuilder;
 
@@ -64,17 +64,17 @@ public class QueryBuilder {
     }
 
     public QueryBuilder having(String having){
-        mHaving = HAVING + having;
+        mHaving = having;
         return this;
     }
 
     public QueryBuilder orderBy(String order){
-        mOrder = ORDER_BY + order;
+        mOrder = order;
         return this;
     }
 
     public QueryBuilder groupBy(String group){
-        mGroup = GROUP_BY + group;
+        mGroup = group;
         return this;
     }
 

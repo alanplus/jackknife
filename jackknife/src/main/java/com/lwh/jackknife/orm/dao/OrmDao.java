@@ -260,12 +260,12 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         String[] whereArgs = convertWhereArgs(whereBuilder.getWhereArgs());
         Cursor cursor = mDatabase.query(tableName, columns, where, whereArgs, group, having, order);
         List<T> result = getResult(cursor);
-        if (TextUtils.isNotEmpty(limit)) {
+        if (TextUtils.isNotEmpty(limit) && limit.startsWith(QueryBuilder.LIMIT)) {
             if (limit.contains(",")) {
                 String[] limitPart = limit.split(",");
-                return getSpecifiedBeans(result, Integer.valueOf(limitPart[0]), Integer.valueOf(limitPart[1]));
+                return getLimitedBeans(result, Integer.valueOf(limitPart[0]), Integer.valueOf(limitPart[1]));
             } else {
-                return getSpecifiedBeans(result, Integer.valueOf(limit));
+                return getLimitedBeans(result, Integer.valueOf(limit));
             }
         }
         return result;
@@ -274,7 +274,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     @Override
     public T selectOne() {
         List<T> beans = selectAll();
-        if (beans.size() != 0) {
+        if (beans.size() > 0) {
             return beans.get(0);
         }
         return null;
@@ -283,13 +283,13 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     @Override
     public T selectOne(QueryBuilder builder) {
         List<T> beans = select(builder);
-        if (beans.size() != 0) {
+        if (beans.size() > 0) {
             return beans.get(0);
         }
         return null;
     }
 
-    public List<T> getSpecifiedBeans(List<T> beans, int start, int length) {
+    public List<T> getLimitedBeans(List<T> beans, int start, int length) {
         List<T> newBeans = new ArrayList<>();
         for (int i=start;i<length;i++) {
             newBeans.add(beans.get(i));
@@ -297,42 +297,20 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return newBeans;
     }
 
-    public List<T> getSpecifiedBeans(List<T> beans, int limit) {
-        return getSpecifiedBeans(beans, 0, limit);
+    public List<T> getLimitedBeans(List<T> beans, int limit) {
+        return getLimitedBeans(beans, 0, limit);
     }
 
     @Override
     public int selectAllCount() {
-        TableManager manager = TableManager.getInstance();
-        String tableName = manager.getTableName(mBeanClass);
-        Cursor cursor = mDatabase.rawQuery(SELECT_COUNT + tableName, null);
-        if (cursor != null) {
-            return cursor.getCount();
-        }
-        return 0;
+        List<T> beans = selectAll();
+        return beans.size();
     }
 
     @Override
     public int selectCount(QueryBuilder builder) {
-        TableManager manager = TableManager.getInstance();
-        String tableName = manager.getTableName(mBeanClass);
-        WhereBuilder whereBuilder = builder.getWhereBuilder();
-        String sql = SELECT_COUNT + tableName;
-        sql += whereBuilder.getSQL();
-        if (TextUtils.isNotEmpty(builder.getGroup())) {
-            sql += QueryBuilder.GROUP_BY + builder.getGroup();
-        }
-        if (TextUtils.isNotEmpty(builder.getHaving())) {
-            sql += QueryBuilder.HAVING + builder.getHaving();
-        }
-        if (TextUtils.isNotEmpty(builder.getOrder())) {
-            sql += QueryBuilder.ORDER_BY + builder.getOrder();
-        }
-        if (TextUtils.isNotEmpty(builder.getLimit())) {
-            sql += QueryBuilder.LIMIT + builder.getLimit();
-        }
-        Cursor cursor = mDatabase.rawQuery(sql, null);
-        return cursor.getCount();
+        List<T> beans = select(builder);
+        return beans.size();
     }
 
     public List<T> getResult(Cursor cursor) {
