@@ -16,11 +16,12 @@
 
 package com.lwh.jackknife.mvp;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
-public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<V>> extends Activity {
+import com.lwh.jackknife.app.Dialog;
+
+public abstract class BaseDialog<V extends IBaseView, P extends BasePresenter<V>> extends Dialog {
 
     protected P mPresenter;
 
@@ -28,42 +29,28 @@ public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<
 
     protected abstract P createPresenter();
 
+    public BaseDialog(Context context) {
+        super(context);
+    }
+
+    public BaseDialog(Context context, int themeResId) {
+        super(context, themeResId);
+    }
+
+    protected BaseDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
+        super(context, cancelable, cancelListener);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         mPresenter = createPresenter();
         mPresenter.attachView((V)this);
     }
 
     @Override
-    protected void onResume() {
-        Log.i(TAG, "onResume()");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.i(TAG, "onPause()");
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.i(TAG, "onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onStart() {
-        Log.i(TAG, "onStart()");
-        super.onStart();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.i(TAG, "onDestroy()");
-        super.onDestroy();
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         mPresenter.detachView();
     }
 }

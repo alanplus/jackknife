@@ -18,6 +18,6 @@ package com.lwh.jackknife.orm;
 
 public enum AssignType {
 
-    BY_MYSELF,//自己指定主键的值。
-    AUTO_INCREMENT//自增长。
+    BY_MYSELF,//指定主键的值。
+    AUTO_INCREMENT//自增长，从1开始每次递增1。
 }

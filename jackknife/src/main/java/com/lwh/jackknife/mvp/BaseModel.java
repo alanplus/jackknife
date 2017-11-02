@@ -115,7 +115,7 @@ public abstract class BaseModel<BEAN>{
                 String key = iterator.next();
                 String[] keyPart = key.split(Selector.SPACE);
                 String elementName = keyPart[0];
-                Field targetField = null;//要检测的属性
+                Field targetField;//要检测的属性
                 try {
                     targetField = mBeanClass.getDeclaredField(elementName);
                     targetField.setAccessible(true);
@@ -291,34 +291,41 @@ public abstract class BaseModel<BEAN>{
         Field field = mBeanClass.getDeclaredField(elementName);
         field.setAccessible(true);
         Class<?> fieldType = requiredValue.getClass();
-        if (condition.equals(Selector.EQUAL_TO_HOLDER)) {//等于
+        if (condition.equals(Selector.EQUAL_TO_HOLDER)) {
             return matchEqualTo(requiredValue, actualValue);
-        } else if (condition.equals(Selector.NOT_EQUAL_TO_HOLDER)){//不等于
+        }
+        if (condition.equals(Selector.NOT_EQUAL_TO_HOLDER)) {
             return matchNotEqualTo(requiredValue, actualValue);
-        } else if (condition.equals(Selector.GREATOR_THAN_HOLDER)
+        }
+        if (condition.equals(Selector.GREATOR_THAN_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
             return matchGreatorThan(requiredValue, actualValue);
-        } else if (condition.equals(Selector.LESS_THAN_HOLDER)
+        }
+        if (condition.equals(Selector.LESS_THAN_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
             return matchLessThan(requiredValue, actualValue);
-        } else if (condition.equals(Selector.GREATOR_THAN_OR_EQUAL_TO_HOLDER)
+        }
+        if (condition.equals(Selector.GREATOR_THAN_OR_EQUAL_TO_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
             return matchGreatorThanOrEqualTo(requiredValue, actualValue);
-        } else if (condition.equals(Selector.LESS_THAN_OR_EQUAL_TO_HOLDER)
+        }
+        if (condition.equals(Selector.LESS_THAN_OR_EQUAL_TO_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
             return matchLessThanOrEqualTo(requiredValue, actualValue);
-        } else if (condition.equals(Selector.CONTAINS_HOLDER)
+        }
+        if (condition.equals(Selector.CONTAINS_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
             return matchContains(requiredValue, actualValue);
-        } else if (condition.equals(Selector.STARTS_WITH_HOLDER)
+        }
+        if (condition.equals(Selector.STARTS_WITH_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
             return matchStartsWith(requiredValue, actualValue);
-        } else if (condition.equals(Selector.ENDS_WITH_HOLDER)
+        }
+        if (condition.equals(Selector.ENDS_WITH_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
             return matchEndsWith(requiredValue, actualValue);
-        } else {
-            throw new UndeclaredExpressionException("condition key is illegal.");
         }
+        throw new UndeclaredExpressionException("condition key is illegal.");
     }
 
     public static class UndeclaredExpressionException extends RuntimeException {

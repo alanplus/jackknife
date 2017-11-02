@@ -16,14 +16,13 @@
 
 package com.lwh.jackknife.mvp;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.lwh.jackknife.app.Fragment;
-import com.lwh.jackknife.util.Logger;
 
 public abstract class BaseFragment<V extends IBaseView, P extends BasePresenter<V>> extends Fragment {
 
@@ -41,30 +40,30 @@ public abstract class BaseFragment<V extends IBaseView, P extends BasePresenter<
 
     @Override
     public void onAttach(Context context) {
-        Logger.info(TAG, "onAttach()");
+        Log.i(TAG, "onAttach()");
         super.onAttach(context);
     }
 
     @Override
     public void onDetach() {
-        Logger.info(TAG, "onDetach()");
+        Log.i(TAG, "onDetach()");
         super.onDetach();
     }
 
     @Override
     public void onStart() {
-        Logger.info(TAG, "onStart()");
+        Log.i(TAG, "onStart()");
         super.onStart();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Logger.info(TAG, "onCreateView()");
+        Log.i(TAG, "onCreateView()");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     public void onDestroy() {
-        Logger.info(TAG, "onDestroy()");
+        Log.i(TAG, "onDestroy()");
         super.onDestroy();
         mPresenter.detachView();
     }

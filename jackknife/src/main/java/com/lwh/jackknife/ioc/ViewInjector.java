@@ -77,12 +77,14 @@ public class ViewInjector<V extends SupportV> {
     protected SupportContextV getContextV(V viewInjected) {
         ViewType viewType = getViewType(viewInjected);
         SupportContextV v = null;
-        if (viewType == ViewType.Fragment) {
+        if (viewType == ViewType.Activity) {
+            v = (SupportActivity) viewInjected;
+        } if (viewType == ViewType.Fragment) {
             v = ((SupportFragment) viewInjected).getFragmentActivity();
         } else if (viewType == ViewType.Dialog) {
             v = ((SupportDialog) viewInjected).getDialogActivity();
         } else if (viewType == ViewType.View) {
-            v = (SupportContextV) viewInjected;
+            v = (SupportView)viewInjected;
         } else if (viewType == ViewType.UNDECLARED) {
             throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
