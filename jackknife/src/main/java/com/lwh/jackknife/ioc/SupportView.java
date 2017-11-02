@@ -16,9 +16,5 @@
 
 package com.lwh.jackknife.ioc;
 
-import android.content.Context;
-
 public interface SupportView extends SupportContextV {
-
-    Context getContext();
 }

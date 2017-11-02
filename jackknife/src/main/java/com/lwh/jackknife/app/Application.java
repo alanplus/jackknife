@@ -48,8 +48,8 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sApp = this;
         mActivityStacks = new Stack<>();
+        sApp = this;
     }
 
     /**
@@ -80,25 +80,25 @@ public class Application extends android.app.Application {
      * windows (via a theme with {@link android.R.attr#windowIsFloating} set)
      * or embedded inside of another activity (using {@link ActivityGroup}).
      */
-    /* package */ void pushTask(SupportActivity activity){
+    /* package */ void pushTask(SupportActivity activity) {
         mActivityStacks.add(new WeakReference<>(activity));
     }
 
     /**
      * Destroy and remove activity from the top of the task stack.
      */
-    /* package */ void popTask(){
+    /* package */ void popTask() {
         WeakReference<SupportActivity> ref = mActivityStacks.pop();
         SupportActivity activity = ref.get();
         activity.finish();
-        mActivityStacks.remove(activity);
+        mActivityStacks.remove(ref);
     }
 
     /**
      * Destroy and remove all activities in the task stack.
      */
-    protected void removeTasks(){
-        for (WeakReference<SupportActivity> ref:mActivityStacks){
+    protected void removeTasks() {
+        for (WeakReference<SupportActivity> ref:mActivityStacks) {
             SupportActivity activity = ref.get();
             activity.finish();
         }

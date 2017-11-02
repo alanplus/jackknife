@@ -24,42 +24,42 @@ public class Logger {
 
     private static final String TAG = Logger.class.getSimpleName().toLowerCase();
 
-    public static void info(String msg){
+    public static void info(String msg) {
         info(TAG, msg);
     }
 
-    public static void info(String tag, String msg){
-        if (DEBUG){
+    public static void info(String tag, String msg) {
+        if (DEBUG) {
             Log.i(tag, msg);
         }
     }
 
-    public static void error(String msg){
+    public static void error(String msg) {
         error(TAG, msg);
     }
 
-    public static void error(String tag, String msg){
-        if (DEBUG){
+    public static void error(String tag, String msg) {
+        if (DEBUG) {
             Log.e(tag, msg);
         }
     }
 
-    public static void debug(String msg){
+    public static void debug(String msg) {
         debug(TAG, msg);
     }
 
-    public static void debug(String tag, String msg){
-        if (DEBUG){
+    public static void debug(String tag, String msg) {
+        if (DEBUG) {
             Log.d(tag, msg);
         }
     }
 
-    public static void warn(String msg){
+    public static void warn(String msg) {
         warn(TAG, msg);
     }
 
-    public static void warn(String tag, String msg){
-        if (DEBUG){
+    public static void warn(String tag, String msg) {
+        if (DEBUG) {
             Log.w(tag, msg);
         }
     }
@@ -68,8 +68,8 @@ public class Logger {
         verbose(TAG, msg);
     }
 
-    public static void verbose(String tag, String msg){
-        if (DEBUG){
+    public static void verbose(String tag, String msg) {
+        if (DEBUG) {
             Log.v(tag, msg);
         }
     }

@@ -45,8 +45,9 @@ public class ViewInjector<V extends SupportV> {
     private final String LAYOUT = ".R$layout";
     private final int A = 'A';
     private final int Z = 'Z';
-    private final String VIEW_TYPE_ERROR = "viewInjected must be an activity or a fragment.";
-    private final String VIEW_CLASS_NAME_ERROR = "class name is not ends with \'Activity\' or \'Fragment\'.";
+    private final String VIEW_TYPE_ERROR = "The viewInjected must be an activity or a fragment.";
+    private final String VIEW_CLASS_NAME_ERROR = "Class name is not ends with \'Activity\' or " +
+            "\'Fragment\'.";
 
     enum ViewType {
         Activity,
@@ -131,10 +132,7 @@ public class ViewInjector<V extends SupportV> {
     }
 
     protected boolean isViewTypeAllowed(ViewType viewType){
-        if (viewType != ViewType.UNDECLARED){
-            return true;
-        }
-        return false;
+        return viewType != ViewType.UNDECLARED;
     }
 
     public final View injectLayout(V viewInjected) {
@@ -227,7 +225,7 @@ public class ViewInjector<V extends SupportV> {
                     }
                 }
             }
-        }else{
+        } else {
             throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
     }
@@ -257,7 +255,8 @@ public class ViewInjector<V extends SupportV> {
                             if (view == null) {
                                 continue;
                             }
-                            Method setListenerMethod = view.getClass().getMethod(listenerSetter, listenerType);
+                            Method setListenerMethod = view.getClass().getMethod(listenerSetter,
+                                    listenerType);
                             HashMap<String, Method> map = new HashMap();
                             map.put(callbackMethod, method);
                             EventInvocationHandler handler = new EventInvocationHandler(map,
@@ -275,7 +274,7 @@ public class ViewInjector<V extends SupportV> {
                     }
                 }
             }
-        }else{
+        } else {
             throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
     }

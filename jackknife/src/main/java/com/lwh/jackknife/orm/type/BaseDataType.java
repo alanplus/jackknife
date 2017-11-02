@@ -32,7 +32,7 @@ public abstract class BaseDataType implements DataMatcher {
         return mSqlType;
     }
 
-    public boolean matches(Field field){
+    public boolean matches(Field field) {
         Class<?>[] types = getTypes();
         for (Class<?> type:types) {
             if (type.isAssignableFrom(field.getType())){

@@ -23,11 +23,6 @@ import com.lwh.jackknife.orm.annotation.PrimaryKey;
 import com.lwh.jackknife.orm.annotation.Table;
 import com.lwh.jackknife.orm.annotation.Unique;
 
-/**
- * 保存表名的表。
- *
- * @hide
- */
 @Table("jackknife_table")
 class TableName implements OrmTable {
 
@@ -40,7 +35,7 @@ class TableName implements OrmTable {
     @Column("table_name")
     private String tableName;
 
-    TableName(Class<? extends OrmTable> tableClass, String tableName) {
+    /* package */ TableName(Class<? extends OrmTable> tableClass, String tableName) {
         this.tableClass = tableClass;
         this.tableName = tableName;
     }

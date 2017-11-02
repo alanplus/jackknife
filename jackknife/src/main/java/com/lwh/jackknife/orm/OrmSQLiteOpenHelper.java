@@ -20,7 +20,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class OrmSQLiteOpenHelper extends SQLiteOpenHelper{
+public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public OrmSQLiteOpenHelper(Context context, String name, int version) {
         super(context, name, null, version);

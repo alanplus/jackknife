@@ -55,10 +55,10 @@ public class IoUtils {
 
     public static final String GB_2312 = "GB2312";
 
-    private IoUtils(){
+    private IoUtils() {
     }
 
-    public static String b2H(byte b){
+    public static String b2H(byte b) {
         String H = Integer.toHexString(b & 0xFF);
         if (H.length() == 1){
             H = '0'+H;
@@ -66,24 +66,24 @@ public class IoUtils {
         return H;
     }
 
-    public static String bs2H(byte[] src, String separator){
-        StringBuffer buff = new StringBuffer();
-        if (src != null && src.length > 0){
+    public static String bs2H(byte[] src, String separator) {
+        StringBuffer buffer = new StringBuffer();
+        if (src != null && src.length > 0) {
             for (int i=0;i<src.length;i++){
                 int value = src[i] & 0xFF;
                 String H = NumberUtils.D2H(value);
                 if (H.length() < 2){
-                    buff.append(0);
+                    buffer.append(0);
                 }
-                buff.append(H).append(separator);
+                buffer.append(H).append(separator);
             }
-            return buff.substring(0, buff.length()-1);
+            return buffer.substring(0, buffer.length()-1);
         }else {
             return null;
         }
     }
 
-    public static byte[] H2bs(String H, String separator){
+    public static byte[] H2bs(String H, String separator) {
         if (separator != null){
             String[] HS = H.split(separator);
             byte[] bs = new byte[HS.length];
@@ -93,7 +93,7 @@ public class IoUtils {
             }
             return bs;
         }
-        throw new IllegalArgumentException("分隔符不能为空");
+        throw new IllegalArgumentException("Separator can\'t be null.");
     }
 
     public static boolean checkMediaMounted() {
@@ -294,7 +294,7 @@ public class IoUtils {
                 e.printStackTrace();
             }
         }
-        return "<unknown>";
+        return "";
     }
 
     public static int getSubCount(File file) {
@@ -305,7 +305,7 @@ public class IoUtils {
                 return file.list().length;
             }
         }
-        throw new NullPointerException("file can\'t be null.");
+        throw new NullPointerException("File can\'t be null.");
     }
 
     public static String read(String fileName) throws IOException {
@@ -378,7 +378,6 @@ public class IoUtils {
 
     public static File write(InputStream inputStream, String filePath) throws IOException {
         OutputStream outputStream = null;
-        // 在指定目录创建一个空文件并获取文件对象
         File mFile = new File(filePath);
         if (!mFile.getParentFile().exists())
             mFile.getParentFile().mkdirs();
@@ -437,39 +436,37 @@ public class IoUtils {
     public String transcode(String str, String newCharset)
             throws UnsupportedEncodingException {
         if (str != null) {
-            //用默认字符编码解码字符串。
             byte[] bs = str.getBytes();
-            //用新的字符编码生成字符串
             return new String(bs, newCharset);
         }
         return null;
     }
 
-    public static void createFolder(String[] dirs){
-        if (dirs != null){
-            for (String dir:dirs){
+    public static void createFolder(String[] dirs) {
+        if (dirs != null) {
+            for (String dir:dirs) {
                 createFolder(dir);
             }
         }
     }
 
-    public static void createFolder(String dir){
-        if (TextUtils.isNotEmpty(dir)){
+    public static void createFolder(String dir) {
+        if (TextUtils.isNotEmpty(dir)) {
             File folder = new File(dir);
-            if (!folder.exists()){
+            if (!folder.exists()) {
                 folder.mkdirs();
             }
         }
     }
 
-    public static String getSdRoot(){
+    public static String getSdRoot() {
         if (checkMediaMounted()) {
             return Environment.getExternalStorageDirectory().getAbsolutePath();
         }
         return "";
     }
 
-    public static byte[] bytes(Object obj){
+    public static byte[] bytes(Object obj) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos;
         try {

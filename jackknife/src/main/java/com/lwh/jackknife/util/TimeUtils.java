@@ -43,39 +43,27 @@ public class TimeUtils {
 
     public final static String FORMAT_YEAR_MONTH_3 = FORMAT_YEAR + " " + FORMAT_MONTH;
 
-    public final static String FORMAT_YEAR_MONTH_4 = FORMAT_YEAR + "年" + FORMAT_MONTH + "月";
-
     public final static String FORMAT_MONTH_DAY = FORMAT_MONTH + FORMAT_DAY;
 
     public final static String FORMAT_MONTH_DAY_2 = FORMAT_MONTH + "." + FORMAT_DAY;
 
     public final static String FORMAT_MONTH_DAY_3 = FORMAT_MONTH + " " + FORMAT_DAY;
 
-    public final static String FORMAT_MONTH_DAY_4 = FORMAT_MONTH + "月" + FORMAT_DAY + "日";
-
     public final static String FORMAT_DATE = FORMAT_YEAR + FORMAT_MONTH + FORMAT_DAY;
 
     public final static String FORMAT_DATE_2 = FORMAT_YEAR_MONTH_2 + "." + FORMAT_DAY;
-
-    public final static String FORMAT_DATE_3 = FORMAT_YEAR_MONTH_4 + FORMAT_DAY + "日";
 
     public final static String FORMAT_HOUR_MINUTE = FORMAT_HOUR + FORMAT_MINUTE;
 
     public final static String FORMAT_HOUR_MINUTE_2 = FORMAT_HOUR + ":" + FORMAT_MINUTE;
 
-    public final static String FORMAT_HOUR_MINUTE_3 = FORMAT_HOUR + "时" + FORMAT_MINUTE + "分";
-
     public final static String FORMAT_TIME = FORMAT_HOUR + FORMAT_MINUTE + FORMAT_SECOND;
 
     public final static String FORMAT_TIME_2 = FORMAT_HOUR + ":" + FORMAT_MINUTE + ":" + FORMAT_SECOND;
 
-    public final static String FORMAT_TIME_3 = FORMAT_HOUR + "时" + FORMAT_MINUTE + "分" + FORMAT_SECOND + "秒";
-
     public final static String FORMAT_DATE_TIME = FORMAT_DATE + FORMAT_TIME;
 
     public final static String FORMAT_DATE_TIME_2 = FORMAT_DATE_2 + " " + FORMAT_TIME_2;
-
-    public final static String FORMAT_DATE_TIME_3 = FORMAT_DATE_3 + FORMAT_TIME_3;
 
     public static final int SECONDS_IN_MINUTE = 60;
 
@@ -101,35 +89,35 @@ public class TimeUtils {
 
     public static final int MILLISECONDS_IN_WEEK = MILLISECONDS_IN_SECOND * SECONDS_IN_WEEK;
 
-    private TimeUtils(){
+    private TimeUtils() {
     }
 
     public static String date2str(Date data, String formatType) {
-        return new SimpleDateFormat(formatType, Locale.CHINA).format(data);
+        return new SimpleDateFormat(formatType, Locale.ENGLISH).format(data);
     }
 
-    public static String long2str(long currentTime,String formatType){
+    public static String long2str(long currentTime,String formatType) {
         Date date = long2date(currentTime, formatType);
         return date2str(date, formatType);
     }
 
-    public static Date str2date(String strTime, String formatType){
+    public static Date str2date(String strTime, String formatType) {
         Date date = null;
         try {
-            date = new SimpleDateFormat(formatType, Locale.CHINA).parse(strTime);
+            date = new SimpleDateFormat(formatType, Locale.ENGLISH).parse(strTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return date;
     }
 
-    public static Date long2date(long currentTime, String formatType){
+    public static Date long2date(long currentTime, String formatType) {
         Date dateOld = new Date(currentTime);
         String sDateTime = date2str(dateOld, formatType);
         return str2date(sDateTime, formatType);
     }
 
-    public static long str2long(String strTime, String formatType){
+    public static long str2long(String strTime, String formatType) {
         Date date = str2date(strTime, formatType);
         if (date == null) {
             return 0;
@@ -169,33 +157,6 @@ public class TimeUtils {
 
     public static long date2long(Date date) {
         return date.getTime();
-    }
-
-    public static String getDescTime(long timestamp) {
-        long currentTime = System.currentTimeMillis();
-        //时间间隔，与现在时间相差秒数
-        long timeGap = (currentTime - timestamp) / 1000;
-        String timeStr;
-        //我们作为一般的平年处理
-        if (timeGap > SECONDS_IN_LEAP_YEAR) {
-            timeStr = timeGap / SECONDS_IN_LEAP_YEAR + "年前";
-            // 1个月以上
-        } else if (timeGap > SECONDS_IN_MONTH) {
-            timeStr = timeGap / SECONDS_IN_MONTH + "个月前";
-            // 1天以上
-        } else if (timeGap > SECONDS_IN_DAY) {
-            timeStr = timeGap / SECONDS_IN_DAY + "天前";
-            // 1小时-24小时
-        } else if (timeGap > SECONDS_IN_HOUR) {
-            timeStr = timeGap / SECONDS_IN_HOUR + "小时前";
-            // 1分钟-59分钟
-        } else if (timeGap > SECONDS_IN_MINUTE) {
-            timeStr = timeGap / SECONDS_IN_MINUTE + "分钟前";
-            // 1秒钟-59秒钟
-        } else {
-            timeStr = "刚刚";
-        }
-        return timeStr;
     }
 
     public static boolean isLeapYear(int year) {

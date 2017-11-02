@@ -53,6 +53,6 @@ public class Dialog extends android.app.Dialog implements SupportDialog {
         if (getOwnerActivity() instanceof SupportActivity) {
             return (SupportActivity) getOwnerActivity();
         }
-        throw new LackInterfaceException("activity缺少SupportActivity接口");
+        throw new LackInterfaceException("The activity lacks the SupportActivity interface.");
     }
 }

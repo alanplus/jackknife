@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.util;
 
-public interface IMath {
+public interface MathConstants {
 
     int ZERO = 0;
 

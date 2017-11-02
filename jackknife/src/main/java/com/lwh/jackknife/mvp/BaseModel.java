@@ -32,7 +32,7 @@ public abstract class BaseModel<BEAN>{
 
     public BaseModel(Class<BEAN> beanClass){
         if (beanClass == null) {
-            throw new IllegalArgumentException("beanClass is null.");
+            throw new IllegalArgumentException("Unknown bean type.");
         }
         mDatas = new ArrayList<>();
         mDatas.addAll(initBeans());
@@ -109,13 +109,13 @@ public abstract class BaseModel<BEAN>{
         Set<String> keys = map.keySet();
         for (int i=0;i<mDatas.size();i++) {
             int matchesCount = 0;
-            BEAN bean = mDatas.get(i);//存储在内存中的真实的数据
-            Iterator<String> iterator = keys.iterator();//拿到所有的条件key
-            while (iterator.hasNext()){//遍历条件key
+            BEAN bean = mDatas.get(i);
+            Iterator<String> iterator = keys.iterator();
+            while (iterator.hasNext()){
                 String key = iterator.next();
                 String[] keyPart = key.split(Selector.SPACE);
                 String elementName = keyPart[0];
-                Field targetField;//要检测的属性
+                Field targetField;
                 try {
                     targetField = mBeanClass.getDeclaredField(elementName);
                     targetField.setAccessible(true);
@@ -325,7 +325,7 @@ public abstract class BaseModel<BEAN>{
                 && isAssinableFromCharSequence(fieldType)) {
             return matchEndsWith(requiredValue, actualValue);
         }
-        throw new UndeclaredExpressionException("condition key is illegal.");
+        throw new UndeclaredExpressionException("Condition key is illegal.");
     }
 
     public static class UndeclaredExpressionException extends RuntimeException {

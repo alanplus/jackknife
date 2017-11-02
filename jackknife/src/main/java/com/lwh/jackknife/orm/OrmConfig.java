@@ -23,7 +23,7 @@ public class OrmConfig {
     private String mDatabaseName;
     private int mVersionCode;
 
-    private OrmConfig(Builder builder){
+    private OrmConfig(Builder builder) {
         mDatabaseName = builder.mDatabaseName;
         mVersionCode = builder.mVersionCode;
     }
@@ -36,22 +36,22 @@ public class OrmConfig {
         return mVersionCode;
     }
 
-    public static class Builder{
+    public static class Builder {
 
         private String mDatabaseName;
         private int mVersionCode = 1;
 
-        public Builder database(String name){
+        public Builder database(String name) {
             mDatabaseName = name;
             return this;
         }
 
-        public Builder version(int code){
+        public Builder version(int code) {
             mVersionCode = code;
             return this;
         }
 
-        public OrmConfig build(){
+        public OrmConfig build() {
             if (TextUtils.isNotEmpty(mDatabaseName)) {
                 return new OrmConfig(this);
             }

@@ -23,7 +23,7 @@ public abstract class BasePresenter<V extends IBaseView> {
     protected WeakReference<V> mViewRef;
 
     public void attachView(V view){
-        mViewRef = new WeakReference<V>(view);
+        mViewRef = new WeakReference<>(view);
     }
 
     public void detachView(){
@@ -37,10 +37,15 @@ public abstract class BasePresenter<V extends IBaseView> {
         return mViewRef.get();
     }
 
-    protected V getView(Class<V> viewClass) {
-        return getView();
+    protected <T> T getView(Class<T> viewClass) {
+        return (T) getView();
     }
 
+    /**
+     * It's usually called before {@link #getView()} or {@link #getView(Class)}.
+     *
+     * @return Ture means successful attachment, false otherwise.
+     */
     protected boolean isViewAttached(){
         return mViewRef != null && mViewRef.get() != null;
     }

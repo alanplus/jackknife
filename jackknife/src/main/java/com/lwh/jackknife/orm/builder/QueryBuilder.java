@@ -19,16 +19,25 @@ package com.lwh.jackknife.orm.builder;
 public class QueryBuilder {
 
     public static final String GROUP_BY = " GROUP BY ";
+
     public static final String HAVING = " HAVING ";
+
     public static final String ORDER_BY = " ORDER BY ";
+
     public static final String LIMIT = " LIMIT ";
-    public static final String COMMA = ",";
+
+    private static final String COMMA = ",";
 
     protected String[] mColumns;
+
     protected String mGroup = "";
+
     protected String mHaving = "";
+
     protected String mOrder = "";
+
     protected String mLimit = "";
+
     protected WhereBuilder mWhereBuilder;
 
     public QueryBuilder(){

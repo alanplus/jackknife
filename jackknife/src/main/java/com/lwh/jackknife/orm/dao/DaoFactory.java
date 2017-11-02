@@ -26,9 +26,9 @@ public class DaoFactory {
     private static Map<Class<? extends OrmTable>,OrmDao> sDaoMap = new ConcurrentHashMap<>();
 
     public synchronized static <T extends OrmTable> OrmDao<T> getDao(Class<T> beanClass) {
-        if (sDaoMap.containsKey(beanClass)){
+        if (sDaoMap.containsKey(beanClass)) {
             return sDaoMap.get(beanClass);
-        }else{
+        } else {
             OrmDao<T> dao = new OrmDao<>(beanClass);
             sDaoMap.put(beanClass, dao);
             return dao;

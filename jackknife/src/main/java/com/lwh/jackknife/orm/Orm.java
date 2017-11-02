@@ -22,11 +22,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.lwh.jackknife.app.Application;
 
 /**
- * 如果你使用了此类，你将需要继承{@link Application}。
+ * If you use this class, you will need to inherit {@link Application}.
  */
 public class Orm {
 
-    public synchronized static void init(Context context, String databaseName){
+    public synchronized static void init(Context context, String databaseName) {
         SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1);
         Application.getInstance().attach(helper);
     }

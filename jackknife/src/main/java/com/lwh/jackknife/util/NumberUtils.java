@@ -16,9 +16,9 @@
 
 package com.lwh.jackknife.util;
 
-public class NumberUtils implements IMath {
+public class NumberUtils implements MathConstants {
 
-    private NumberUtils(){
+    private NumberUtils() {
     }
 
     public static int H2D(String hexadecimal){
@@ -69,11 +69,11 @@ public class NumberUtils implements IMath {
         return D2H(B2D(binary));
     }
 
-    public static String zeronize(String num, int requireLength){
+    public static String zeronize(String num, int requireLength) {
         StringBuffer sb = new StringBuffer();
-        if(requireLength > num.length()){
+        if(requireLength > num.length()) {
             int length = requireLength - num.length();
-            for (int i=0;i<length;i++){
+            for (int i=0;i<length;i++) {
                 sb.append(0);
             }
             sb.append(num);

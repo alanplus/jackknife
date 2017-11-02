@@ -34,20 +34,17 @@ public class NetworkUtils {
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        }
-        return false;
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     public static boolean isWifiConnected(Context context) {
         if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+            ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mWiFiNetworkInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            if (mWiFiNetworkInfo != null) {
-                if (mWiFiNetworkInfo.isAvailable()) {
-                    return mWiFiNetworkInfo.isConnected();
+            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (networkInfo != null) {
+                if (networkInfo.isAvailable()) {
+                    return networkInfo.isConnected();
                 } else {
                     return false;
                 }
@@ -58,9 +55,9 @@ public class NetworkUtils {
 
     public static boolean isMobileConnected(Context context) {
         if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+            ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mMobileNetworkInfo = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            NetworkInfo mMobileNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             if (mMobileNetworkInfo != null) {
                 if (mMobileNetworkInfo.isAvailable()) {
                     return mMobileNetworkInfo.isConnected();
@@ -74,13 +71,11 @@ public class NetworkUtils {
 
     public static int getConnectedType(Context context) {
         if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+            ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
-            // 获取代表联网状态的NetWorkInfo对象
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            // 判断NetWorkInfo对象是否为空；判断当前的网络连接是否可用
-            if (mNetworkInfo != null && mNetworkInfo.isAvailable()) {
-                return mNetworkInfo.getType();
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isAvailable()) {
+                return networkInfo.getType();
             }
         }
         return -1;
@@ -108,7 +103,6 @@ public class NetworkUtils {
     static public String getConnectWifiSsid(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-
         return wifiInfo.getSSID();
     }
 }

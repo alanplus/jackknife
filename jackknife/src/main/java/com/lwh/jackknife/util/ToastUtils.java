@@ -21,9 +21,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
+
 public class ToastUtils {
 
-	private static Toast sToast;
+	private static WeakReference<Toast> sToastRef;
 	private static Handler sHandler = new Handler(Looper.getMainLooper());
 
 	private ToastUtils() {
@@ -72,22 +74,22 @@ public class ToastUtils {
 	}
 
 	private static void showToastInternal(Context context, String text, int duration) {
-		if (sToast == null) {
-			sToast = Toast.makeText(context, text, duration);
+		if (sToastRef == null || sToastRef.get() == null) {
+			sToastRef = new WeakReference<>(Toast.makeText(context, text, duration));
 		} else {
-			sToast.setDuration(duration);
-			sToast.setText(text);
+            sToastRef.get().setDuration(duration);
+            sToastRef.get().setText(text);
 		}
-		sToast.show();
+        sToastRef.get().show();
 	}
 
 	private static void showToastInternal(Context context, int resId, int duration) {
-		if (sToast == null) {
-			sToast = Toast.makeText(context, resId, duration);
-		} else {
-			sToast.setDuration(duration);
-			sToast.setText(resId);
-		}
-		sToast.show();
+        if (sToastRef == null || sToastRef.get() == null) {
+            sToastRef = new WeakReference<>(Toast.makeText(context, resId, duration));
+        } else {
+            sToastRef.get().setDuration(duration);
+            sToastRef.get().setText(resId);
+        }
+        sToastRef.get().show();
 	}
 }

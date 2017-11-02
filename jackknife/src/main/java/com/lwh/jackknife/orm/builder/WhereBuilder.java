@@ -20,22 +20,38 @@ import com.lwh.jackknife.util.TextUtils;
 
 public class WhereBuilder {
 
-    public static final String WHERE = " WHERE ";
-    public static final String EQUAL_HOLDER = "=?";
-    public static final String NOT_EQUAL_HOLDER = "!=?";
-    public static final String GREATER_THAN_HOLDER = ">?";
-    public static final String LESS_THAN_HOLDER = "<?";
-    public static final String GREATER_THAN_OR_EQUAL_TO_HOLDER = ">=?";
-    public static final String LESS_THAN_OR_EQUAL_TO_HOLDER = "<=?";
-    public static final String COMMA_HOLDER = ",?";
-    public static final String HOLDER = "?";
-    public static final String AND = " AND ";
-    public static final String OR = " OR ";
-    public static final String NOT = " NOT ";
-    public static final String IN = " IN ";
-    public static final String PARENTHESES_LEFT = "(";
-    public static final String PARENTHESES_RIGHT = ")";
+    private static final String WHERE = " WHERE ";
+
+    private static final String EQUAL_HOLDER = "=?";
+
+    private static final String NOT_EQUAL_HOLDER = "!=?";
+
+    private static final String GREATER_THAN_HOLDER = ">?";
+
+    private static final String LESS_THAN_HOLDER = "<?";
+
+    private static final String GREATER_THAN_OR_EQUAL_TO_HOLDER = ">=?";
+
+    private static final String LESS_THAN_OR_EQUAL_TO_HOLDER = "<=?";
+
+    private static final String COMMA_HOLDER = ",?";
+
+    private static final String HOLDER = "?";
+
+    private static final String AND = " AND ";
+
+    private static final String OR = " OR ";
+
+    private static final String NOT = " NOT ";
+
+    private static final String IN = " IN ";
+
+    private static final String PARENTHESES_LEFT = "(";
+
+    private static final String PARENTHESES_RIGHT = ")";
+
     protected String mWhere;
+
     protected Object[] mWhereArgs;
 
     public WhereBuilder(){
@@ -86,7 +102,8 @@ public class WhereBuilder {
 
     public WhereBuilder parenthesesRight(){
         if (mWhere == null){
-            throw new RuntimeException("右括号不能为SQL语句的开始。");
+            throw new RuntimeException("The right parenthesis cannot be the start of an SQL " +
+                    "statement.");
         } else {
             mWhere += PARENTHESES_RIGHT;
         }
@@ -103,15 +120,16 @@ public class WhereBuilder {
             }
             mWhere += where;
             Object[] newWhereArgs = new Object[mWhereArgs.length+whereArgs.length];
-            System.arraycopy(mWhereArgs, 0, newWhereArgs, 0, mWhereArgs.length);//把已有的whereArgs复制到新的数组中
-            System.arraycopy(whereArgs, 0, newWhereArgs, mWhereArgs.length, whereArgs.length);//把传入的whereArgs复制到新的数组中
+            System.arraycopy(mWhereArgs, 0, newWhereArgs, 0, mWhereArgs.length);
+            System.arraycopy(whereArgs, 0, newWhereArgs, mWhereArgs.length, whereArgs.length);
             mWhereArgs = newWhereArgs;
         }
         return this;
     }
 
     public String buildWhereIn(String column, int num){
-        StringBuilder sb = new StringBuilder(column).append(IN).append(PARENTHESES_LEFT).append(HOLDER);
+        StringBuilder sb = new StringBuilder(column).append(IN).append(PARENTHESES_LEFT)
+                .append(HOLDER);
         for (int i=0;i<num-1;i++){
             sb.append(COMMA_HOLDER);
         }
@@ -170,7 +188,7 @@ public class WhereBuilder {
         }
     }
 
-    public String getSQL(){
+    public String getSQL() {
         int position = 0;
         for (int i = 0; i < mWhere.length(); i++) {
             char c = mWhere.charAt(i);
@@ -178,10 +196,10 @@ public class WhereBuilder {
                 String arg;
                 if (mWhereArgs[position] instanceof Number) {
                     arg = String.valueOf(mWhereArgs[position]);
-                }else if (mWhereArgs[position] instanceof String){
+                } else if (mWhereArgs[position] instanceof String) {
                     arg = mWhereArgs[position].toString();
-                }else {
-                    throw new RuntimeException("mWhereArgs类型不为Number和String");
+                } else {
+                    throw new RuntimeException("The where args type is not number or string.");
                 }
                 mWhere.replaceFirst("^?$", arg);
                 position++;

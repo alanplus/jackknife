@@ -18,14 +18,25 @@ package com.lwh.jackknife.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import com.lwh.jackknife.app.Application;
 
 import java.util.List;
 
 public class SystemUtils {
 
     private SystemUtils() {
+    }
+
+    public static int[] getScreenWH(){
+        WindowManager wm = (WindowManager) Application.getInstance().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return new int[]{outMetrics.widthPixels,outMetrics.heightPixels};
     }
 
     public static void openKeyboard(EditText editText, Context context) {

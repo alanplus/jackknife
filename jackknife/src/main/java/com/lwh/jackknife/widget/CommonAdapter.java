@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,10 +98,11 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 	}
 
 	protected abstract int getItemLayoutId();
+
 	protected abstract int[] getItemViewIds();
 
-	protected View inflateView()
-			throws NoSuchMethodException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+	protected View inflateView() throws NoSuchMethodException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException {
 		int layoutId = getItemLayoutId();
 		Class<?> inflaterClass = LayoutInflater.class;
 		Method inflateMethod = inflaterClass.getMethod(METHOD_INFLATE, int.class, ViewGroup.class);

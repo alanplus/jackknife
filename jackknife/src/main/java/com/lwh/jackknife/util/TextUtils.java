@@ -99,7 +99,7 @@ public class TextUtils {
             -10519, -10331, -10329, -10328, -10322, -10315, -10309, -10307, -10296, -10281, -10274,
             -10270, -10262, -10260, -10256, -10254};
 
-    private TextUtils(){
+    private TextUtils() {
     }
 
     public static boolean isEmpty(CharSequence str) {
@@ -110,7 +110,7 @@ public class TextUtils {
         return !isEmpty(str);
     }
 
-    public static boolean checkEmpty(String... text){
+    public static boolean checkEmpty(String... text) {
         for (String element:text){
             boolean isSucceed = isEmpty(element);
             if (!isSucceed){
@@ -120,7 +120,7 @@ public class TextUtils {
         return true;
     }
 
-    public static boolean checkNotEmpty(String... text){
+    public static boolean checkNotEmpty(String... text) {
         for (String element:text){
             boolean isSucceed = isNotEmpty(element);
             if (!isSucceed){
@@ -130,7 +130,7 @@ public class TextUtils {
         return true;
     }
 
-    public static boolean isEqualTo(String lhss, String rhss){
+    public static boolean isEqualTo(String lhss, String rhss) {
         return android.text.TextUtils.equals(lhss, rhss);
     }
 
@@ -138,15 +138,15 @@ public class TextUtils {
         return !isEqualTo(lhss, rhss);
     }
 
-    public static String getUUID(){
+    public static String getUUID() {
         String uuid = UUID.randomUUID().toString();
         return uuid.replaceAll("-", "");
     }
 
-    public static boolean match(String text, String regex){
+    public static boolean match(String text, String regex) {
         Pattern p = Pattern.compile(regex);
         Matcher matcher = p.matcher(text);
-        if (matcher.matches()){
+        if (matcher.matches()) {
             return true;
         }
         return false;
@@ -161,15 +161,15 @@ public class TextUtils {
             e.printStackTrace();
         }
         if (bytes == null || bytes.length > 2 || bytes.length <= 0) {
-            throw new RuntimeException("illegal resource string");
+            throw new RuntimeException("Illegal resource string.");
         }
         if (bytes.length == 1) {
             asc = bytes[0];
         }
         if (bytes.length == 2) {
-            int hightByte = 256 + bytes[0];
+            int highByte = 256 + bytes[0];
             int lowByte = 256 + bytes[1];
-            asc = (256 * hightByte + lowByte) - 256 * 256;
+            asc = (256 * highByte + lowByte) - 256 * 256;
         }
         return asc;
     }
@@ -198,7 +198,7 @@ public class TextUtils {
             if (key.getBytes().length >= 2) {
                 value = getPinyin(key);
                 if (value == null) {
-                    value = "<unknown>";
+                    value = "";
                 }
             } else {
                 value = key;
@@ -219,7 +219,7 @@ public class TextUtils {
         return sb.toString();
     }
 
-    public static String parseJson(String str, String name){
+    public static String parseJson(String str, String name) {
         if (str.isEmpty()||name.isEmpty()) {
             return null;
         }

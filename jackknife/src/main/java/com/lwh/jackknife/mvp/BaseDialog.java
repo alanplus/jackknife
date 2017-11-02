@@ -18,6 +18,7 @@ package com.lwh.jackknife.mvp;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.lwh.jackknife.app.Dialog;
 
@@ -43,6 +44,7 @@ public abstract class BaseDialog<V extends IBaseView, P extends BasePresenter<V>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         mPresenter = createPresenter();
         mPresenter.attachView((V)this);
@@ -50,6 +52,7 @@ public abstract class BaseDialog<V extends IBaseView, P extends BasePresenter<V>
 
     @Override
     public void onDetachedFromWindow() {
+        Log.i(TAG, "onDetachedFromWindow()");
         super.onDetachedFromWindow();
         mPresenter.detachView();
     }

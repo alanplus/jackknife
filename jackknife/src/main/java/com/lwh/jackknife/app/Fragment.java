@@ -26,8 +26,6 @@ import com.lwh.jackknife.ioc.SupportFragment;
 import com.lwh.jackknife.ioc.ViewInjector;
 import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Automatically inject a layout, bind views, and register events for fragments.
  */
@@ -49,6 +47,6 @@ public abstract class Fragment extends android.app.Fragment implements SupportFr
 		if (getActivity() instanceof SupportActivity) {
 			return (SupportActivity) getActivity();
 		}
-		throw new LackInterfaceException("activity缺少SupportActivity接口");
+		throw new LackInterfaceException("The activity lacks the SupportActivity interface.");
 	}
 }
