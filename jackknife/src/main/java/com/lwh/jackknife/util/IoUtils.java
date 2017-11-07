@@ -106,7 +106,7 @@ public class IoUtils {
 
     private static boolean copyFile(File file, String target) {
         File targetFile = new File(target);
-        if (!file.isFile() || !targetFile.isDirectory()) {
+        if (!targetFile.exists() || !file.isFile() || !targetFile.isDirectory()) {
             return false;
         }
         try {
@@ -137,7 +137,7 @@ public class IoUtils {
 
     private static boolean copyFolder(File file, String target) {
         File targetFile = new File(target);
-        if (!file.isDirectory() || !targetFile.isDirectory()) {
+        if (!targetFile.exists() || !file.isDirectory() || !targetFile.isDirectory()) {
             return false;
         }
         if (file.list() != null) {
@@ -155,7 +155,7 @@ public class IoUtils {
 
     public static boolean copy(File file, String target) {
         File targetFile = new File(target);
-        if (!targetFile.isDirectory()) {
+        if (!targetFile.exists() || !targetFile.isDirectory()) {
             return false;
         }
         if (file.isFile()) {
@@ -196,7 +196,7 @@ public class IoUtils {
 
     private static boolean cutFile(File file, String target) {
         File targetFile = new File(target);
-        if (!file.isFile() || !targetFile.isDirectory()) {
+        if (!file.isFile() || !targetFile.exists() || !targetFile.isDirectory()) {
             return false;
         } else {
             copyFile(file, target);
@@ -207,7 +207,7 @@ public class IoUtils {
 
     private static boolean cutFolder(File file, String target) {
         File targetFile = new File(target);
-        if (!file.isDirectory() || !targetFile.isDirectory()) {
+        if (!file.isDirectory() || !targetFile.exists() || !targetFile.isDirectory()) {
             return false;
         } else {
             if (copyFolder(file, target)) {
@@ -220,7 +220,7 @@ public class IoUtils {
 
     public static boolean cut(File file, String target) {
         File targetFile = new File(target);
-        if (!targetFile.isDirectory()) {
+        if (!targetFile.exists() || !targetFile.isDirectory()) {
             return false;
         }
         if (file.isFile()) {

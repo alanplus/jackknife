@@ -74,22 +74,32 @@ public class ToastUtils {
 	}
 
 	private static void showToastInternal(Context context, String text, int duration) {
+		Toast toast;
 		if (sToastRef == null || sToastRef.get() == null) {
-			sToastRef = new WeakReference<>(Toast.makeText(context, text, duration));
+			toast = Toast.makeText(context, text, duration);
+			sToastRef = new WeakReference<>(toast);
 		} else {
-            sToastRef.get().setDuration(duration);
-            sToastRef.get().setText(text);
+			toast = sToastRef.get();
+			if (toast != null) {
+				toast.setDuration(duration);
+				toast.setText(text);
+			} else return;
 		}
-        sToastRef.get().show();
+		toast.show();
 	}
 
 	private static void showToastInternal(Context context, int resId, int duration) {
-        if (sToastRef == null || sToastRef.get() == null) {
-            sToastRef = new WeakReference<>(Toast.makeText(context, resId, duration));
-        } else {
-            sToastRef.get().setDuration(duration);
-            sToastRef.get().setText(resId);
-        }
-        sToastRef.get().show();
+		Toast toast;
+		if (sToastRef == null || sToastRef.get() == null) {
+			toast = Toast.makeText(context, resId, duration);
+			sToastRef = new WeakReference<>(toast);
+		} else {
+			toast = sToastRef.get();
+			if (toast != null) {
+				toast.setDuration(duration);
+				toast.setText(resId);
+			} else return;
+		}
+		toast.show();
 	}
 }
