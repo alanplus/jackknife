@@ -1,4 +1,4 @@
-JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)官方唯一QQ群286417906
+JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
 ================================
 
 一、关于如何配置环境
@@ -21,9 +21,9 @@ dependencies {
 }
 </blockquote>
 
-二、关于如何使用
+二、关于如何使用（参考https://github.com/JackWHLiu/JackKnifeDemo）
 --------------------------------
-### (一)基于IOC的自动注入视图、绑定控件和注册事件（参考jackknife的app模块的Demo）
+### (一)基于IOC的自动注入视图、绑定控件和注册事件
 #### 1、自动注入视图
 ##### （1）Activity继承com.lwh.jackknife.app.Activity,Fragment继承com.lwh.jackknife.app.Fragment
 ##### （2）保证布局的xml文件和Activity和Fragment的Java类的命名遵循一定的对应关系（Java类名必须以Activity或Fragment结尾）。
