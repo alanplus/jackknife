@@ -53,13 +53,17 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 		}
 	}
 
-	@Override
-	public Object getItem(int position) {
+	public BEAN getChildAt(int position) {
 		if (position >= 0 && position < mDatas.size()) {
 			return mDatas.get(position);
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return getChildAt(position);
 	}
 
 	@Override
@@ -109,7 +113,7 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
-	protected abstract <VIEW extends View> void onBindViewHolder(int position, ViewHolder<VIEW> holder);
+	protected abstract <VIEW extends View> void onBindViewHolder(BEAN bean, ViewHolder<VIEW> holder);
 
 	public List<BEAN> getDatas() {
 		return mDatas;
@@ -133,7 +137,8 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 			holder.setPosition(position);
 		}
-		onBindViewHolder(position, holder);
+		BEAN bean = getChildAt(position);
+		onBindViewHolder(bean, holder);
 		return holder.getConvertView();
 	}
 }
