@@ -113,7 +113,7 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
-	protected abstract <VIEW extends View> void onBindViewHolder(BEAN bean, ViewHolder<VIEW> holder);
+	protected abstract <VIEW extends View> void onBindViewHolder(int position, BEAN bean, ViewHolder<VIEW> holder);
 
 	public List<BEAN> getDatas() {
 		return mDatas;
@@ -138,7 +138,7 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 			holder.setPosition(position);
 		}
 		BEAN bean = getChildAt(position);
-		onBindViewHolder(bean, holder);
+		onBindViewHolder(position, bean, holder);
 		return holder.getConvertView();
 	}
 }

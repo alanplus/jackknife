@@ -33,7 +33,7 @@ public class Application extends android.app.Application {
     /**
      * Only a mirror used to record the activity created.
      */
-    private Stack<WeakReference<SupportActivity>> mActivityStacks;
+    private Stack<WeakReference<SupportActivity>> mActivityStacks = new Stack<>();
 
     /**
      * There is only one instance of the program.
@@ -48,7 +48,6 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mActivityStacks = new Stack<>();
         sApp = this;
     }
 
@@ -80,18 +79,22 @@ public class Application extends android.app.Application {
      * windows (via a theme with {@link android.R.attr#windowIsFloating} set)
      * or embedded inside of another activity (using {@link ActivityGroup}).
      */
-    /* package */ void pushTask(SupportActivity activity) {
+    protected void pushTask(SupportActivity activity) {
         mActivityStacks.add(new WeakReference<>(activity));
     }
 
     /**
      * Destroy and remove activity from the top of the task stack.
      */
-    /* package */ void popTask() {
+    protected void popTask() {
         WeakReference<SupportActivity> ref = mActivityStacks.pop();
-        SupportActivity activity = ref.get();
-        activity.finish();
-        mActivityStacks.remove(ref);
+        if (ref != null) {
+            SupportActivity activity = ref.get();
+            if (activity != null) {
+                activity.finish();
+                mActivityStacks.remove(ref);
+            }
+        }
     }
 
     /**
@@ -100,7 +103,9 @@ public class Application extends android.app.Application {
     protected void removeTasks() {
         for (WeakReference<SupportActivity> ref:mActivityStacks) {
             SupportActivity activity = ref.get();
-            activity.finish();
+            if (activity != null) {
+                activity.finish();
+            }
         }
         mActivityStacks.removeAllElements();
     }

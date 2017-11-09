@@ -18,15 +18,6 @@ android {
     }
 }
 
-repositories{
-    flatDir{
-        dirs 'libs'
-    }
-}
-
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:palette-v7:23.0.0'
-    compile 'com.android.support:support-v4:23.0.0'
     compile project(':jackknife')
 }
