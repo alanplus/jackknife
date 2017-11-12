@@ -1,4 +1,4 @@
-JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)-离20个star只有三步之遥了，为这20个人打造最牛逼的框架
+JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)-域名正在备案，访问http://120.77.46.3/jackknife/，擅长Java的可联系我
 ================================
 
 一、关于如何配置环境
