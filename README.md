@@ -1,4 +1,4 @@
-JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)-域名正在备案，访问http://120.77.46.3/jackknife/，擅长Java的可联系我
+JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)-域名正在备案，访问http://120.77.46.3/jackknife/ ，擅长JavaWeb的可联系我
 ================================
 
 一、关于如何配置环境
