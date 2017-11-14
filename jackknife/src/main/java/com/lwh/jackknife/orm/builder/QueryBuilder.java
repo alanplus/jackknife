@@ -102,19 +102,19 @@ public class QueryBuilder {
     }
 
     public String getHaving() {
-        return mHaving != null?new StringBuilder(mHaving).delete(0, HAVING.length()-1).toString():SPACE;
+        return mHaving != null?new StringBuilder(mHaving).delete(0, HAVING.length()).toString():SPACE;
     }
 
     public String getOrder() {
-        return mOrder != null?new StringBuilder(mOrder).delete(0, ORDER_BY.length()-1).toString():SPACE;
+        return mOrder != null?new StringBuilder(mOrder).delete(0, ORDER_BY.length()).toString():SPACE;
     }
 
     public String getGroup() {
-        return mGroup != null?new StringBuilder(mGroup).delete(0, GROUP_BY.length()-1).toString():SPACE;
+        return mGroup != null?new StringBuilder(mGroup).delete(0, GROUP_BY.length()).toString():SPACE;
     }
 
     public String getLimit() {
-        return mLimit != null?new StringBuilder(mLimit).delete(0, LIMIT.length()-1).toString():SPACE;
+        return mLimit != null?new StringBuilder(mLimit).delete(0, LIMIT.length()).toString():SPACE;
     }
 
     public String[] getColumns() {
