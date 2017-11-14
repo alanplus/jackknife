@@ -43,7 +43,6 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     private SQLiteOpenHelper mHelper;
     private SQLiteDatabase mDatabase;
     private final String COMMA = ",";
-    private final String LIMIT = " LIMIT ";
 
     /* package */ OrmDao(Class<T> beanClass) {
         this.mBeanClass = beanClass;
@@ -248,7 +247,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         String[] selectionArgs = where.getSelectionArgs();
         Cursor cursor = mDatabase.query(tableName, columns, selection, selectionArgs, group, having, order);
         List<T> result = getResult(cursor);
-        if (TextUtils.isNotEmpty(limit) && limit.startsWith(LIMIT)) {
+        if (TextUtils.isNotEmpty(limit)) {
             if (limit.contains(COMMA)) {
                 String[] limitPart = limit.split(COMMA);
                 return getLimitedBeans(result, Integer.valueOf(limitPart[0]),

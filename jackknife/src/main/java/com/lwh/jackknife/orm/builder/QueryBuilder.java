@@ -30,6 +30,8 @@ public class QueryBuilder {
 
     private static final String COMMA = ",";
 
+    private static final String SPACE = "";
+
     private String[] mColumns;
 
     private String mGroup;
@@ -81,7 +83,7 @@ public class QueryBuilder {
         return this;
     }
 
-    public QueryBuilder limit(String limit){
+    public QueryBuilder limit(int limit){
         mLimit = LIMIT + limit;
         return this;
     }
@@ -100,19 +102,19 @@ public class QueryBuilder {
     }
 
     public String getHaving() {
-        return new StringBuilder(mHaving).delete(0, HAVING.length()-1).toString();
+        return mHaving != null?new StringBuilder(mHaving).delete(0, HAVING.length()-1).toString():SPACE;
     }
 
     public String getOrder() {
-        return new StringBuilder(mOrder).delete(0, ORDER_BY.length()-1).toString();
+        return mOrder != null?new StringBuilder(mOrder).delete(0, ORDER_BY.length()-1).toString():SPACE;
     }
 
     public String getGroup() {
-        return new StringBuilder(mGroup).delete(0, GROUP_BY.length()-1).toString();
+        return mGroup != null?new StringBuilder(mGroup).delete(0, GROUP_BY.length()-1).toString():SPACE;
     }
 
     public String getLimit() {
-        return new StringBuilder(mLimit).delete(0, LIMIT.length()-1).toString();
+        return mLimit != null?new StringBuilder(mLimit).delete(0, LIMIT.length()-1).toString():SPACE;
     }
 
     public String[] getColumns() {
