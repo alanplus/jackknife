@@ -36,53 +36,79 @@ import java.lang.reflect.Method;
 
 public class ApkUtils {
 
+    private static final String CLASS_PACKAGE_PARSER = "android.content.pm.PackageParser";
+    private static final String METHOD_PARSE_PACKAGE = "parsePackage";
+    private static final String METHOD_COLLECT_CERTIFICATES = "collectCertificates";
+    private static final String FIELD_SIGNATURES = "mSignatures";
+    private static final String URI_INSTALL_PACKAGE = "application/vnd.android.package-archive";
+
     private ApkUtils() {
     }
 
-    public static Signature[] getUninstalledApkSignatures(String apkPath) throws
-            ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-            InvocationTargetException, InstantiationException, NoSuchFieldException {
-        Class<?> packageParserClass = Class.forName("android.content.pm.PackageParser");
-        Class[] typeArgs = new Class[1];
-        typeArgs[0] = String.class;
-        Constructor packageParserConstructor = packageParserClass.getConstructor(typeArgs);
-        Object[] valueArgs = new Object[1];
-        valueArgs[0] = apkPath;
-        Object packageParser = packageParserConstructor.newInstance(valueArgs);
-        DisplayMetrics metrics = new DisplayMetrics();
-        metrics.setToDefaults();
-        typeArgs = new Class[4];
-        typeArgs[0] = File.class;
-        typeArgs[1] = String.class;
-        typeArgs[2] = DisplayMetrics.class;
-        typeArgs[3] = Integer.TYPE;
-        Method parsePackageMethod = packageParserClass.getDeclaredMethod("parsePackage",
-                typeArgs);
-        valueArgs = new Object[4];
-        valueArgs[0] = new File(apkPath);
-        valueArgs[1] = apkPath;
-        valueArgs[2] = metrics;
-        valueArgs[3] = PackageManager.GET_SIGNATURES;
-        Object packageParserPackage = parsePackageMethod.invoke(packageParser, valueArgs);
-        typeArgs = new Class[2];
-        typeArgs[0] = packageParserPackage.getClass();
-        typeArgs[1] = Integer.TYPE;
-        Method collectCertificatesMethod = packageParserClass.getDeclaredMethod("collectCertificates",
-                typeArgs);
-        valueArgs = new Object[2];
-        valueArgs[0] = packageParserPackage;
-        valueArgs[1] = PackageManager.GET_SIGNATURES;
-        collectCertificatesMethod.invoke(packageParser, valueArgs);
-        Field packageInfoField = packageParserPackage.getClass().getDeclaredField("mSignatures");
-        Signature[] signatures = (Signature[]) packageInfoField.get(packageParserPackage);
-        return signatures;
+    public static Signature[] getUninstalledApkSignatures(String apkPath) {
+        try {
+            Class<?> packageParserClass = Class.forName(CLASS_PACKAGE_PARSER);
+            Class[] typeArgs = new Class[1];
+            typeArgs[0] = String.class;
+            Constructor packageParserConstructor = packageParserClass.getConstructor(typeArgs);
+            Object[] valueArgs = new Object[1];
+            valueArgs[0] = apkPath;
+            Object packageParser = packageParserConstructor.newInstance(valueArgs);
+            DisplayMetrics metrics = new DisplayMetrics();
+            metrics.setToDefaults();
+            typeArgs = new Class[4];
+            typeArgs[0] = File.class;
+            typeArgs[1] = String.class;
+            typeArgs[2] = DisplayMetrics.class;
+            typeArgs[3] = Integer.TYPE;
+            Method parsePackageMethod = packageParserClass.getDeclaredMethod(METHOD_PARSE_PACKAGE,
+                    typeArgs);
+            valueArgs = new Object[4];
+            valueArgs[0] = new File(apkPath);
+            valueArgs[1] = apkPath;
+            valueArgs[2] = metrics;
+            valueArgs[3] = PackageManager.GET_SIGNATURES;
+            Object packageParserPackage = parsePackageMethod.invoke(packageParser, valueArgs);
+            typeArgs = new Class[2];
+            typeArgs[0] = packageParserPackage.getClass();
+            typeArgs[1] = Integer.TYPE;
+            Method collectCertificatesMethod = packageParserClass
+                    .getDeclaredMethod(METHOD_COLLECT_CERTIFICATES, typeArgs);
+            valueArgs = new Object[2];
+            valueArgs[0] = packageParserPackage;
+            valueArgs[1] = PackageManager.GET_SIGNATURES;
+            collectCertificatesMethod.invoke(packageParser, valueArgs);
+            Field packageInfoField = packageParserPackage.getClass()
+                    .getDeclaredField(FIELD_SIGNATURES);
+            Signature[] signatures = (Signature[]) packageInfoField.get(packageParserPackage);
+            return signatures;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static Signature[] getSignatures(Context context) throws PackageManager.NameNotFoundException {
+    public static Signature[] getSignatures(Context context) {
         PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(),
-                PackageManager.GET_SIGNATURES);
-        return packageInfo.signatures;
+        PackageInfo packageInfo;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_SIGNATURES);
+            return packageInfo.signatures;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static PackageInfo getUninstalledApkPackageInfo(Context context, String apkPath) {
@@ -92,9 +118,14 @@ public class ApkUtils {
         return packageInfo;
     }
 
-    public static PackageInfo getPackageInfo(Context context, String packageName) throws PackageManager.NameNotFoundException {
+    public static PackageInfo getPackageInfo(Context context, String packageName) {
         PackageManager packageManager = context.getPackageManager();
-        return packageManager.getPackageInfo(packageName, 0);
+        try {
+            return packageManager.getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Drawable getUninstalledApkIcon(Context context, String apkPath) {
@@ -125,16 +156,28 @@ public class ApkUtils {
         return packageManager.getApplicationLabel(applicationInfo);
     }
 
-    public static String getVersionName(Context context) throws PackageManager.NameNotFoundException {
+    public static String getVersionName(Context context) {
         PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-        return packageInfo.versionName;
+        PackageInfo packageInfo;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public static int getVersionCode(Context context) throws PackageManager.NameNotFoundException {
+    public static int getVersionCode(Context context) {
         PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-        return packageInfo.versionCode;
+        PackageInfo packageInfo;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public static File extractApk(Context context){
@@ -145,8 +188,8 @@ public class ApkUtils {
     }
 
     public static void launch(Context context, String packageName, String className){
-        Intent intent = new Intent("android.intent.action.MAIN");
-        intent.addCategory("android.intent.category.LAUNCHER");
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setComponent(new ComponentName(packageName, className));
         context.startActivity(intent);
     }
@@ -155,7 +198,7 @@ public class ApkUtils {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setDataAndType(Uri.fromFile(new File(apkPath)),
-                "application/vnd.android.package-archive");
+                URI_INSTALL_PACKAGE);
         context.startActivity(intent);
     }
 }

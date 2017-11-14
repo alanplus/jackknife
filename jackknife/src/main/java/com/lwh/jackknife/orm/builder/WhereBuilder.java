@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.orm.builder;
 
-import com.lwh.jackknife.util.TextUtils;
+import com.lwh.jackknife.orm.Condition;
 
 public class WhereBuilder {
 
@@ -50,79 +50,67 @@ public class WhereBuilder {
 
     private static final String PARENTHESES_RIGHT = ")";
 
-    protected String mWhere;
+    private Condition mCondition;
 
-    protected Object[] mWhereArgs;
-
-    public WhereBuilder(){
+    private WhereBuilder(){
+        mCondition = new Condition();
     }
 
-    public WhereBuilder (String where, Object[] whereArgs){
-        this.mWhere = where;
-        this.mWhereArgs = whereArgs;
+    private WhereBuilder (Condition condition){
+        this.mCondition = condition;
     }
 
     public static WhereBuilder create(){
         return new WhereBuilder();
     }
 
-    public static WhereBuilder create(String where, Object[] whereArgs){
-        return new WhereBuilder(where, whereArgs);
+    public static WhereBuilder create(Condition condition){
+        return new WhereBuilder(condition);
     }
 
     public WhereBuilder and(){
-        if (mWhere != null) {
-            mWhere += AND;
-        }
+        mCondition.appendSelection(AND);
         return this;
     }
 
     public WhereBuilder or(){
-        if (mWhere != null) {
-            mWhere += OR;
-        }
+        mCondition.appendSelection(OR);
         return this;
     }
 
     public WhereBuilder not(){
-        if (mWhere != null) {
-            mWhere += NOT;
-        }
+        mCondition.appendSelection(AND);
         return this;
     }
 
     public WhereBuilder parenthesesLeft(){
-        if (mWhere == null){
-            mWhere = PARENTHESES_LEFT;
-        }else{
-            mWhere += PARENTHESES_LEFT;
-        }
+        mCondition.appendSelection(PARENTHESES_LEFT);
         return this;
     }
 
     public WhereBuilder parenthesesRight(){
-        if (mWhere == null){
+        if (!mCondition.hasSelection()) {
             throw new RuntimeException("The right parenthesis cannot be the start of an SQL " +
                     "statement.");
         } else {
-            mWhere += PARENTHESES_RIGHT;
+           mCondition.appendSelection(PARENTHESES_RIGHT);
         }
         return this;
     }
 
-    public WhereBuilder append(String connect, String where, Object... whereArgs){
-        if (mWhere == null) {
-            mWhere = where;
-            mWhereArgs = whereArgs;
+    public WhereBuilder append(String connect, String whereClause, String... whereArgs){
+        if (!mCondition.hasSelection()) {
+            mCondition.setSelection(whereClause);
+            mCondition.setSelectionArgs(whereArgs);
         } else {
             if (connect != null){
-                mWhere += connect;
+                mCondition.appendSelection(connect);
             }
-            mWhere += where;
-            Object[] newWhereArgs = new Object[mWhereArgs.length+whereArgs.length];
-            System.arraycopy(mWhereArgs, 0, newWhereArgs, 0, mWhereArgs.length);
-            System.arraycopy(whereArgs, 0, newWhereArgs, mWhereArgs.length, whereArgs.length);
-            mWhereArgs = newWhereArgs;
+            mCondition.appendSelection(whereClause);
+            String[] newWhereArgs = new String[mCondition.getSelection().length()+whereArgs.length];
+            System.arraycopy(mCondition.getSelection(), 0, newWhereArgs, 0, mCondition.getSelection().length());
+            System.arraycopy(whereArgs, 0, newWhereArgs, mCondition.getSelection().length(), whereArgs.length);
+            mCondition.setSelectionArgs(newWhereArgs);
         }
         return this;
     }
@@ -137,74 +125,51 @@ public class WhereBuilder {
     }
 
     public WhereBuilder addWhereEqualTo(String column, Object value){
-        return append(null, column + EQUAL_HOLDER, new Object[]{value});
+        return append(null, column + EQUAL_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereNotEqualTo(String column, Object value){
-        return append(null, column + NOT_EQUAL_HOLDER, new Object[]{value});
+        return append(null, column + NOT_EQUAL_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereGreaterThan(String column, Object value){
-        return append(null, column + GREATER_THAN_HOLDER, new Object[]{value});
+        return append(null, column + GREATER_THAN_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereGreaterThanOrEqualTo(String column, Object value){
-        return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, new Object[]{value});
+        return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereLessThan(String column, Object value){
-        return append(null, column + LESS_THAN_HOLDER, new Object[]{value});
+        return append(null, column + LESS_THAN_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereLessThanOrEqualTo(String column, Object value){
-        return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, new Object[]{value});
+        return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereIn(String column, Object[] values){
-        return append(null, column + IN, values);
+        String[] strVals = new String[values.length];
+        for (int i=0;i<strVals.length;i++) {
+            strVals[i] = String.valueOf(values[i]);
+        }
+        return append(null, column + IN, strVals);
     }
 
-    public String build(){
-        return mWhere != null ? WHERE + mWhere:"";
+    public Condition build(){
+        return mCondition;
     }
 
-    public String getWhere() {
-        return mWhere;
+    public String getWhereClause() {
+        return mCondition.getSelection();
     }
 
     public Object[] getWhereArgs() {
-        return mWhereArgs;
+        return mCondition.getSelectionArgs();
     }
 
-    public WhereBuilder where(String where, Object[] whereArgs){
-        setWhereAndArgs(where, whereArgs);
+    public WhereBuilder where(Condition condition){
+        mCondition = condition;
         return this;
-    }
-
-    private void setWhereAndArgs(String where, Object[] whereArgs) {
-        if (TextUtils.isNotEmpty(where) || whereArgs != null) {
-            mWhere = where;
-            mWhereArgs = whereArgs;
-        }
-    }
-
-    public String getSQL() {
-        int position = 0;
-        for (int i = 0; i < mWhere.length(); i++) {
-            char c = mWhere.charAt(i);
-            if (c == '?'){
-                String arg;
-                if (mWhereArgs[position] instanceof Number) {
-                    arg = String.valueOf(mWhereArgs[position]);
-                } else if (mWhereArgs[position] instanceof String) {
-                    arg = mWhereArgs[position].toString();
-                } else {
-                    throw new RuntimeException("The where args type is not number or string.");
-                }
-                mWhere.replaceFirst("^?$", arg);
-                position++;
-            }
-        }
-        return WHERE + mWhere;
     }
 }

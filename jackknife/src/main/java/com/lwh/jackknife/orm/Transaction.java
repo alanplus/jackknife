@@ -21,8 +21,6 @@ import android.database.sqlite.SQLiteException;
 
 public class Transaction {
 
-    private static final String TAG = Transaction.class.getName();
-
     private Transaction() {
     }
 

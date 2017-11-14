@@ -28,15 +28,15 @@ public abstract class BaseModel<BEAN>{
 
     protected List<BEAN> mDatas;
 
-    protected Class<BEAN> mBeanClass;
+    protected Class<BEAN> mDataClass;
 
-    public BaseModel(Class<BEAN> beanClass){
-        if (beanClass == null) {
+    public BaseModel(Class<BEAN> dataClass){
+        if (dataClass == null) {
             throw new IllegalArgumentException("Unknown bean type.");
         }
         mDatas = new ArrayList<>();
         mDatas.addAll(initBeans());
-        mBeanClass = beanClass;
+        mDataClass = dataClass;
     }
 
     public void add(BEAN datas){
@@ -77,12 +77,16 @@ public abstract class BaseModel<BEAN>{
         return 0;
     }
 
+    protected <ELEMENT> List<ELEMENT> extractElement(String elementName) {
+        return extractElement(null, elementName);
+    }
+
     protected <ELEMENT> List<ELEMENT> extractElement(Selector selector, String elementName) {
         List<ELEMENT> elements = new ArrayList<>();
         List<BEAN> datas = findObjects(selector);
         if (datas.size() > 0) {
             for (BEAN bean : datas) {
-                Field[] fields = mBeanClass.getDeclaredFields();
+                Field[] fields = mDataClass.getDeclaredFields();
                 for (Field field : fields) {
                     field.setAccessible(true);
                     if (field.getName().equals(elementName)) {
@@ -98,6 +102,10 @@ public abstract class BaseModel<BEAN>{
             }
         }
         return elements;
+    }
+
+    protected List<BEAN> findObjects() {
+        return findObjects(null);
     }
 
     protected List<BEAN> findObjects(Selector selector) {
@@ -117,7 +125,7 @@ public abstract class BaseModel<BEAN>{
                 String elementName = keyPart[0];
                 Field targetField;
                 try {
-                    targetField = mBeanClass.getDeclaredField(elementName);
+                    targetField = mDataClass.getDeclaredField(elementName);
                     targetField.setAccessible(true);
                     Object leftValue = map.get(key);
                     Object rightValue = targetField.get(bean);
@@ -138,149 +146,76 @@ public abstract class BaseModel<BEAN>{
     }
 
     private boolean isAssignableFromByte(Class<?> fieldType){
-        if (byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType);
     }
 
     private boolean isAssignableFromNumber(Class<?> fieldType) {
-        if (isAssignableFromByte(fieldType) ||
+        return isAssignableFromByte(fieldType) ||
                 isAssignableFromShort(fieldType) ||
                 isAssignableFromInteger(fieldType) ||
                 isAssignableFromLong(fieldType) ||
                 isAssignableFromFloat(fieldType) ||
-                isAssignableFromDouble(fieldType)) {
-            return true;
-        }
-        return false;
+                isAssignableFromDouble(fieldType);
     }
 
     private boolean isAssignableFromShort(Class<?> fieldType){
-        if (short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType);
     }
 
     private boolean isAssignableFromInteger(Class<?> fieldType){
-        if (int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType);
     }
 
     private boolean isAssignableFromLong(Class<?> fieldType){
-        if (long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType);
     }
 
     private boolean isAssignableFromFloat(Class<?> fieldType){
-        if (float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType);
     }
 
     private boolean isAssignableFromDouble(Class<?> fieldType){
-        if (double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType);
     }
 
     private boolean isAssinableFromCharSequence(Class<?> fieldType){
-        if (CharSequence.class.isAssignableFrom(fieldType)){
-            return true;
-        }
-        return false;
+        return CharSequence.class.isAssignableFrom(fieldType);
     }
 
     private boolean matchEqualTo(Object requiredValue, Object actualValue) {
-        if (requiredValue.equals(actualValue)) {
-            return true;
-        }
-        return false;
+        return requiredValue.equals(actualValue);
     }
 
     private boolean matchNotEqualTo(Object requiredValue, Object actualValue) {
-        if (!requiredValue.equals(actualValue)) {
-            return true;
-        }
-        return false;
+        return !requiredValue.equals(actualValue);
     }
 
-    private boolean matchGreatorThan(Object requiredValue, Object actualValue) {
-        Number n1 = (Number) requiredValue;
-        Number n2 = (Number) actualValue;
-        double d1 = n1.doubleValue();
-        double d2 = n2.doubleValue();
-        if (d1 < d2){
-            return true;
-        }
-        return false;
+    private boolean matchGreatorThan(Number requiredValue, Number actualValue) {
+        return requiredValue.doubleValue() < actualValue.doubleValue();
     }
 
-    private boolean matchLessThan(Object requiredValue, Object actualValue) {
-        Number n1 = (Number) requiredValue;
-        Number n2 = (Number) actualValue;
-        double d1 = n1.doubleValue();
-        double d2 = n2.doubleValue();
-        if (d1 > d2){
-            return true;
-        }
-        return false;
+    private boolean matchLessThan(Number requiredValue, Number actualValue) {
+        return requiredValue.doubleValue() > actualValue.doubleValue();
     }
 
-    private boolean matchGreatorThanOrEqualTo(Object requiredValue, Object actualValue) {
-        Number n1 = (Number) requiredValue;
-        Number n2 = (Number) actualValue;
-        double d1 = n1.doubleValue();
-        double d2 = n2.doubleValue();
-        if (d1 <= d2){
-            return true;
-        }
-        return false;
+    private boolean matchGreatorThanOrEqualTo(Number requiredValue, Number actualValue) {
+        return requiredValue.doubleValue() <= actualValue.doubleValue();
     }
 
-    private boolean matchLessThanOrEqualTo(Object requiredValue, Object actualValue) {
-        Number n1 = (Number) requiredValue;
-        Number n2 = (Number) actualValue;
-        double d1 = n1.doubleValue();
-        double d2 = n2.doubleValue();
-        if (d1 >= d2){
-            return true;
-        }
-        return false;
+    private boolean matchLessThanOrEqualTo(Number requiredValue, Number actualValue) {
+        return requiredValue.doubleValue() >= actualValue.doubleValue();
     }
 
-    private boolean matchContains(Object requiredValue, Object actualValue) {
-        String lhs = (String) requiredValue;
-        String rhs = (String) actualValue;
-        if (rhs.contains(lhs)){
-            return true;
-        }
-        return false;
+    private boolean matchContains(String requiredValue, String actualValue) {
+        return actualValue.contains(requiredValue);
     }
 
-    private boolean matchStartsWith(Object requiredValue, Object actualValue) {
-        String lhs = (String) requiredValue;
-        String rhs = (String) actualValue;
-        if (rhs.startsWith(lhs)){
-            return true;
-        }
-        return false;
+    private boolean matchStartsWith(String requiredValue, String actualValue) {
+        return actualValue.startsWith(requiredValue);
     }
 
-    private boolean matchEndsWith(Object requiredValue, Object actualValue) {
-        String lhs = (String) requiredValue;
-        String rhs = (String) actualValue;
-        if (rhs.endsWith(lhs)){
-            return true;
-        }
-        return false;
+    private boolean matchEndsWith(String requiredValue, String actualValue) {
+        return actualValue.endsWith(requiredValue);
     }
 
     private boolean matchCondition(String key, Object requiredValue, Object actualValue)
@@ -288,7 +223,7 @@ public abstract class BaseModel<BEAN>{
         String[] keyPart = key.split(Selector.SPACE);
         String elementName = keyPart[0];
         String condition = keyPart[1];
-        Field field = mBeanClass.getDeclaredField(elementName);
+        Field field = mDataClass.getDeclaredField(elementName);
         field.setAccessible(true);
         Class<?> fieldType = requiredValue.getClass();
         if (condition.equals(Selector.EQUAL_TO_HOLDER)) {
@@ -299,31 +234,31 @@ public abstract class BaseModel<BEAN>{
         }
         if (condition.equals(Selector.GREATOR_THAN_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchGreatorThan(requiredValue, actualValue);
+            return matchGreatorThan((Number)requiredValue, (Number)actualValue);
         }
         if (condition.equals(Selector.LESS_THAN_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchLessThan(requiredValue, actualValue);
+            return matchLessThan((Number)requiredValue, (Number)actualValue);
         }
         if (condition.equals(Selector.GREATOR_THAN_OR_EQUAL_TO_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchGreatorThanOrEqualTo(requiredValue, actualValue);
+            return matchGreatorThanOrEqualTo((Number)requiredValue, (Number)actualValue);
         }
         if (condition.equals(Selector.LESS_THAN_OR_EQUAL_TO_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchLessThanOrEqualTo(requiredValue, actualValue);
+            return matchLessThanOrEqualTo((Number)requiredValue, (Number)actualValue);
         }
         if (condition.equals(Selector.CONTAINS_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
-            return matchContains(requiredValue, actualValue);
+            return matchContains(requiredValue.toString(), actualValue.toString());
         }
         if (condition.equals(Selector.STARTS_WITH_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
-            return matchStartsWith(requiredValue, actualValue);
+            return matchStartsWith(requiredValue.toString(), actualValue.toString());
         }
         if (condition.equals(Selector.ENDS_WITH_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
-            return matchEndsWith(requiredValue, actualValue);
+            return matchEndsWith(requiredValue.toString(), actualValue.toString());
         }
         throw new UndeclaredExpressionException("Condition key is illegal.");
     }

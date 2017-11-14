@@ -42,7 +42,8 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     private Class<T> mBeanClass;
     private SQLiteOpenHelper mHelper;
     private SQLiteDatabase mDatabase;
-    private final String SELECT_COUNT = "SELECT COUNT(*) FROM ";
+    private final String COMMA = ",";
+    private final String LIMIT = " LIMIT ";
 
     /* package */ OrmDao(Class<T> beanClass) {
         this.mBeanClass = beanClass;
@@ -182,7 +183,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
             public boolean doTransition(SQLiteDatabase db) {
                 TableManager manager = TableManager.getInstance();
                 String tableName = manager.getTableName(mBeanClass);
-                return mDatabase.delete(tableName, builder.getWhere(), convertWhereArgs(builder.getWhereArgs())) > 0;
+                return mDatabase.delete(tableName, builder.getWhereClause(), convertWhereArgs(builder.getWhereArgs())) > 0;
             }
         });
     }
@@ -219,7 +220,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 TableManager manager = TableManager.getInstance();
                 String tableName = manager.getTableName(mBeanClass);
                 ContentValues contentValues = getContentValues(newBean);
-                return mDatabase.update(tableName, contentValues, builder.getWhere(), convertWhereArgs
+                return mDatabase.update(tableName, contentValues, builder.getWhereClause(), convertWhereArgs
                         (builder.getWhereArgs())) > 0;
             }
         });
@@ -256,14 +257,15 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         String order = builder.getOrder();
         String limit = builder.getLimit();
         WhereBuilder whereBuilder = builder.getWhereBuilder();
-        String where = whereBuilder.getWhere();
+        String whereClause = whereBuilder.getWhereClause();
         String[] whereArgs = convertWhereArgs(whereBuilder.getWhereArgs());
-        Cursor cursor = mDatabase.query(tableName, columns, where, whereArgs, group, having, order);
+        Cursor cursor = mDatabase.query(tableName, columns, whereClause, whereArgs, group, having, order);
         List<T> result = getResult(cursor);
-        if (TextUtils.isNotEmpty(limit) && limit.startsWith(QueryBuilder.LIMIT)) {
-            if (limit.contains(",")) {
-                String[] limitPart = limit.split(",");
-                return getLimitedBeans(result, Integer.valueOf(limitPart[0]), Integer.valueOf(limitPart[1]));
+        if (TextUtils.isNotEmpty(limit) && limit.startsWith(LIMIT)) {
+            if (limit.contains(COMMA)) {
+                String[] limitPart = limit.split(COMMA);
+                return getLimitedBeans(result, Integer.valueOf(limitPart[0]),
+                        Integer.valueOf(limitPart[1]));
             } else {
                 return getLimitedBeans(result, Integer.valueOf(limit));
             }
@@ -335,14 +337,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                             field.set(bean, cursor.getString(columnIndex));
                         } else if (isAssignableFromBoolean(fieldType)) {
                             int value = cursor.getInt(columnIndex);
-                            switch (value) {
-                                case 0:
-                                    field.set(bean, false);
-                                    break;
-                                case 1:
-                                    field.set(bean, true);
-                                    break;
-                            }
+                            field.set(bean, value == 1 ? true : false);
                         } else if (isAssignableFromLong(fieldType)) {
                             field.set(bean, cursor.getLong(columnIndex));
                         } else if (isAssignableFromInteger(fieldType)) {

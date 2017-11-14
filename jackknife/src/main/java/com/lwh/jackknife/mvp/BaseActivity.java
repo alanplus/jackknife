@@ -20,7 +20,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<V>> extends Activity {
+public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<V>>
+        extends Activity {
 
     protected P mPresenter;
 

@@ -279,9 +279,9 @@ public class TableManager {
             Log.i(TAG, "execute create table sql:" + sql);
             sDatabase.execSQL(sql);
             mTableNameMap.put(tableClass, tableName);
-            WhereBuilder whereBuilder = new WhereBuilder()
+            WhereBuilder whereBuilder = WhereBuilder.create()
                     .addWhereEqualTo(TABLE_NAME, tableName);
-            QueryBuilder queryBuilder = new QueryBuilder().where(whereBuilder);
+            QueryBuilder queryBuilder = QueryBuilder.create().where(whereBuilder);
             int count = mDao.selectCount(queryBuilder);
             if (count == 0) {
                 TableName nameTable = new TableName(tableClass, tableName);
