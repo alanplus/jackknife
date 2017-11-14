@@ -50,14 +50,18 @@ public class WhereBuilder {
 
     private static final String PARENTHESES_RIGHT = ")";
 
-    private Condition mCondition;
+    private static final String SPACE = "";
+
+    private String mSelection;
+
+    private String[] mSelectionArgs;
 
     private WhereBuilder(){
-        mCondition = new Condition();
     }
 
-    private WhereBuilder (Condition condition){
-        this.mCondition = condition;
+    private WhereBuilder(Condition condition){
+        this.mSelection = condition.getSelection();
+        this.mSelectionArgs = condition.getSelectionArgs();
     }
 
     public static WhereBuilder create(){
@@ -69,48 +73,59 @@ public class WhereBuilder {
     }
 
     public WhereBuilder and(){
-        mCondition.appendSelection(AND);
+        if (mSelection != null) {
+            mSelection += AND;
+        }
         return this;
     }
 
     public WhereBuilder or(){
-        mCondition.appendSelection(OR);
+        if (mSelection != null) {
+            mSelection += OR;
+        }
         return this;
     }
 
     public WhereBuilder not(){
-        mCondition.appendSelection(AND);
+        if (mSelection != null) {
+            mSelection += NOT;
+        } else {
+            mSelection = NOT;
+        }
         return this;
     }
 
     public WhereBuilder parenthesesLeft(){
-        mCondition.appendSelection(PARENTHESES_LEFT);
+        if (mSelection != null) {
+            mSelection += PARENTHESES_LEFT;
+        } else {
+            mSelection = PARENTHESES_LEFT;
+        }
         return this;
     }
 
     public WhereBuilder parenthesesRight(){
-        if (!mCondition.hasSelection()) {
-            throw new RuntimeException("The right parenthesis cannot be the start of an SQL " +
-                    "statement.");
+        if (mSelection != null) {
+            mSelection += PARENTHESES_RIGHT;
         } else {
-           mCondition.appendSelection(PARENTHESES_RIGHT);
+            mSelection = PARENTHESES_RIGHT;
         }
         return this;
     }
 
     public WhereBuilder append(String connect, String whereClause, String... whereArgs){
-        if (!mCondition.hasSelection()) {
-            mCondition.setSelection(whereClause);
-            mCondition.setSelectionArgs(whereArgs);
+        if (mSelection == null) {
+            mSelection = whereClause;
+            mSelectionArgs = whereArgs;
         } else {
             if (connect != null){
-                mCondition.appendSelection(connect);
+                mSelection += connect;
             }
-            mCondition.appendSelection(whereClause);
-            String[] newWhereArgs = new String[mCondition.getSelection().length()+whereArgs.length];
-            System.arraycopy(mCondition.getSelection(), 0, newWhereArgs, 0, mCondition.getSelection().length());
-            System.arraycopy(whereArgs, 0, newWhereArgs, mCondition.getSelection().length(), whereArgs.length);
-            mCondition.setSelectionArgs(newWhereArgs);
+            mSelection += whereClause;
+            String[] selectionArgs = new String[mSelection.length()+whereArgs.length];
+            System.arraycopy(mSelection, 0, selectionArgs, 0, mSelection.length());
+            System.arraycopy(whereArgs, 0, selectionArgs, mSelection.length(), whereArgs.length);
+            mSelectionArgs = selectionArgs;
         }
         return this;
     }
@@ -156,20 +171,21 @@ public class WhereBuilder {
         return append(null, column + IN, strVals);
     }
 
-    public Condition build(){
-        return mCondition;
+    public String build() {
+        return mSelection != null ? WHERE + mSelection:SPACE;
     }
 
-    public String getWhereClause() {
-        return mCondition.getSelection();
+    public String getSelection() {
+        return mSelection;
     }
 
-    public Object[] getWhereArgs() {
-        return mCondition.getSelectionArgs();
+    public String[] getSelectionArgs() {
+        return mSelectionArgs;
     }
 
     public WhereBuilder where(Condition condition){
-        mCondition = condition;
+        mSelection = condition.getSelection();
+        mSelectionArgs = condition.getSelectionArgs();
         return this;
     }
 }

@@ -91,6 +91,10 @@ public class QueryBuilder {
         return this;
     }
 
+    public String build() {
+        return mWhereBuilder.build() + mGroup + mHaving + mOrder + LIMIT;
+    }
+
     public WhereBuilder getWhereBuilder() {
         return mWhereBuilder;
     }

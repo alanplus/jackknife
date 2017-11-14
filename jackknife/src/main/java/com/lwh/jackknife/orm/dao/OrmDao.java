@@ -140,7 +140,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return values;
     }
 
-    private String getColumns() {
+    private String getColumnHack() {
         StringBuilder sb = new StringBuilder();
         Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields) {
@@ -161,7 +161,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
         ContentValues contentValues = getContentValues(bean);
-        return mDatabase.insert(tableName, getColumns(), contentValues) > 0;
+        return mDatabase.insert(tableName, getColumnHack(), contentValues) > 0;
     }
 
     @Override
@@ -183,7 +183,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
             public boolean doTransition(SQLiteDatabase db) {
                 TableManager manager = TableManager.getInstance();
                 String tableName = manager.getTableName(mBeanClass);
-                return mDatabase.delete(tableName, builder.getWhereClause(), convertWhereArgs(builder.getWhereArgs())) > 0;
+                return mDatabase.delete(tableName, builder.getSelection(), builder.getSelectionArgs()) > 0;
             }
         });
     }
@@ -200,18 +200,6 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         });
     }
 
-    public String[] convertWhereArgs(Object[] objects) {
-        List<String> result = new ArrayList<>();
-        for (Object obj:objects) {
-            if (obj instanceof Number) {
-                result.add(String.valueOf(obj));
-            } else if (obj instanceof String) {
-                result.add(obj.toString());
-            }
-        }
-        return result.toArray(new String[]{});
-    }
-
     @Override
     public boolean update(final WhereBuilder builder, final T newBean) {
         return Transaction.execute(mDatabase, new Transaction.Worker() {
@@ -220,8 +208,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 TableManager manager = TableManager.getInstance();
                 String tableName = manager.getTableName(mBeanClass);
                 ContentValues contentValues = getContentValues(newBean);
-                return mDatabase.update(tableName, contentValues, builder.getWhereClause(), convertWhereArgs
-                        (builder.getWhereArgs())) > 0;
+                return mDatabase.update(tableName, contentValues, builder.getSelection(), builder.getSelectionArgs()) > 0;
             }
         });
     }
@@ -256,10 +243,10 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         String having = builder.getHaving();
         String order = builder.getOrder();
         String limit = builder.getLimit();
-        WhereBuilder whereBuilder = builder.getWhereBuilder();
-        String whereClause = whereBuilder.getWhereClause();
-        String[] whereArgs = convertWhereArgs(whereBuilder.getWhereArgs());
-        Cursor cursor = mDatabase.query(tableName, columns, whereClause, whereArgs, group, having, order);
+        WhereBuilder where = builder.getWhereBuilder();
+        String selection = where.getSelection();
+        String[] selectionArgs = where.getSelectionArgs();
+        Cursor cursor = mDatabase.query(tableName, columns, selection, selectionArgs, group, having, order);
         List<T> result = getResult(cursor);
         if (TextUtils.isNotEmpty(limit) && limit.startsWith(LIMIT)) {
             if (limit.contains(COMMA)) {

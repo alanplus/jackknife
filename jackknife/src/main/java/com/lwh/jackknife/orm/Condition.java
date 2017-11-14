@@ -21,27 +21,9 @@ public class Condition {
     private String selection;
     private String[] selectionArgs;
 
-    public Condition() {
-    }
-
     public Condition(String selection, String[] selectionArgs) {
         this.selection = selection;
         this.selectionArgs = selectionArgs;
-    }
-
-    public void setSelection(String selection) {
-        this.selection = selection;
-    }
-
-    public void setSelectionArgs(String[] selectionArgs) {
-        this.selectionArgs = selectionArgs;
-    }
-
-    public void appendSelection(String selection) {
-        if (hasSelection()) {
-            this.selection = new StringBuilder(this.selection).append(selection).toString();
-        }
-        setSelection(selection);
     }
 
     public String getSelection() {
@@ -50,13 +32,5 @@ public class Condition {
 
     public String[] getSelectionArgs() {
         return selectionArgs;
-    }
-
-    public boolean hasSelection() {
-        return selection != null;
-    }
-
-    public boolean hasSelectionArgs() {
-        return selectionArgs != null;
     }
 }
