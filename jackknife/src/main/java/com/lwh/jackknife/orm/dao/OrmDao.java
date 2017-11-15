@@ -91,7 +91,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return Class.class.isAssignableFrom(fieldType);
     }
 
-    public ContentValues getContentValues(T bean) {
+    private ContentValues getContentValues(T bean) {
         ContentValues values = new ContentValues();
         Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields) {
@@ -277,15 +277,18 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return null;
     }
 
-    public List<T> getLimitedBeans(List<T> beans, int start, int length) {
+    private List<T> getLimitedBeans(List<T> beans, int start, int end) {
         List<T> newBeans = new ArrayList<>();
-        for (int i=start;i<length;i++) {
-            newBeans.add(beans.get(i));
+        int size = beans.size();
+        if (end >= start && size >= end) {
+            for (int i = start; i < end; i++) {
+                newBeans.add(beans.get(i));
+            }
         }
         return newBeans;
     }
 
-    public List<T> getLimitedBeans(List<T> beans, int limit) {
+    private List<T> getLimitedBeans(List<T> beans, int limit) {
         return getLimitedBeans(beans, 0, limit);
     }
 
@@ -301,7 +304,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return beans.size();
     }
 
-    public List<T> getResult(Cursor cursor) {
+    private List<T> getResult(Cursor cursor) {
         List<T> result = new ArrayList<>();
         while (cursor.moveToNext()) {
             try {

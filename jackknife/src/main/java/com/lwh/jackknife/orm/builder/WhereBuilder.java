@@ -113,7 +113,7 @@ public class WhereBuilder {
         return this;
     }
 
-    public WhereBuilder append(String connect, String whereClause, String... whereArgs){
+    private WhereBuilder append(String connect, String whereClause, String... whereArgs){
         if (mSelection == null) {
             mSelection = whereClause;
             mSelectionArgs = whereArgs;
@@ -130,8 +130,8 @@ public class WhereBuilder {
         return this;
     }
 
-    public String buildWhereIn(String column, int num){
-        StringBuilder sb = new StringBuilder(column).append(IN).append(PARENTHESES_LEFT)
+    private String buildWhereIn(String column, int num){
+        StringBuilder sb = new StringBuilder(column).append(SPACE).append(IN).append(PARENTHESES_LEFT)
                 .append(HOLDER);
         for (int i=0;i<num-1;i++){
             sb.append(COMMA_HOLDER);
@@ -164,11 +164,12 @@ public class WhereBuilder {
     }
 
     public WhereBuilder addWhereIn(String column, Object[] values){
+        String whereIn = buildWhereIn(column, values.length);
         String[] strVals = new String[values.length];
         for (int i=0;i<strVals.length;i++) {
             strVals[i] = String.valueOf(values[i]);
         }
-        return append(null, column + IN, strVals);
+        return append(null, whereIn, strVals);
     }
 
     public String build() {

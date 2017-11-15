@@ -88,8 +88,8 @@ public class QueryBuilder {
         return this;
     }
 
-    public QueryBuilder limit(int start, int length){
-        mLimit = LIMIT + start + COMMA + length;
+    public QueryBuilder limit(int start, int end){
+        mLimit = LIMIT + start + COMMA + end;
         return this;
     }
 
