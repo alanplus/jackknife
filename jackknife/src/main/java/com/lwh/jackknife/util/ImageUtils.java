@@ -122,15 +122,6 @@ public class ImageUtils {
         return inSampleSize;
     }
 
-    public static Bitmap compressBitmap(String path) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-        options.inSampleSize = calculateInSampleSize(options, 480, 800);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(path, options);
-    }
-
     public static Bitmap takeScreenShot(Activity activity){
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
@@ -144,7 +135,6 @@ public class ImageUtils {
         view.destroyDrawingCache();
         return outputBitmap;
     }
-
 
     public static int getPictureDegree(String path) {
         int degree = 0;
@@ -194,19 +184,6 @@ public class ImageUtils {
         return BitmapFactory.decodeResource(context.getResources(), resId);
     }
 
-    public static Bitmap toBlack(Bitmap bitmap) {
-        Bitmap outputBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
-                Bitmap.Config.RGB_565);
-        Canvas canvas = new Canvas(outputBitmap);
-        Paint paint = new Paint();
-        ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);
-        ColorMatrixColorFilter f = new ColorMatrixColorFilter(matrix);
-        paint.setColorFilter(f);
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-        return outputBitmap;
-    }
-
     public static byte[] toByteArray(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -250,29 +227,12 @@ public class ImageUtils {
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
 
-    public static Bitmap makeReflectionImage(Bitmap bitmap) {
-        int reflectionGap = 4;
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
+    public static Bitmap rotate(int angle, Bitmap bitmap) {
         Matrix matrix = new Matrix();
-        matrix.preScale(1, -1);
-        Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, height/2, width, height/2, matrix,
-                false);
-        Bitmap bitmapWithReflection = Bitmap.createBitmap(width, (height + height/2),
-                Bitmap.Config.ARGB_8888);
-        Paint defaultPaint = new Paint();
-        Canvas canvas = new Canvas(bitmapWithReflection);
-        canvas.drawBitmap(bitmap, 0, 0, null);
-        canvas.drawRect(0, height,width,height + reflectionGap, defaultPaint);
-        canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
-        Paint paint = new Paint();
-        LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0,
-                bitmapWithReflection.getHeight()+reflectionGap, 0x70ffffff, 0x00ffffff,
-                Shader.TileMode.CLAMP);
-        paint.setShader(shader);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()+reflectionGap, paint);
-        return bitmapWithReflection;
+        matrix.postRotate(angle);
+        Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return outputBitmap;
     }
 
     public static void recycle(Bitmap bitmap) {
@@ -306,23 +266,15 @@ public class ImageUtils {
         return bitmap;
     }
 
-    public static Bitmap rotateBitmap(int angle, Bitmap bitmap) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        return outputBitmap;
-    }
 
-    public static Bitmap toRoundCorner(Bitmap bitmap, int pixels) {
+    public static Bitmap makeRoundCornerBitmap(Bitmap bitmap, int pixels, int color) {
         Bitmap outputBitmap = Bitmap.createBitmap(bitmap.getWidth(),
                 bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(outputBitmap);
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-        final float roundPx = pixels;
+        Paint paint = new Paint();
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        RectF rectF = new RectF(rect);
+        float roundPx = pixels;
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
@@ -332,7 +284,45 @@ public class ImageUtils {
         return outputBitmap;
     }
 
-    public static Bitmap toRoundBitmap(Bitmap bitmap) {
+    public static Bitmap makeReflectionImage(Bitmap bitmap) {
+        int reflectionGap = 4;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.preScale(1, -1);
+        Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, height/2, width, height/2, matrix,
+                false);
+        Bitmap bitmapWithReflection = Bitmap.createBitmap(width, (height + height/2),
+                Bitmap.Config.ARGB_8888);
+        Paint defaultPaint = new Paint();
+        Canvas canvas = new Canvas(bitmapWithReflection);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+        canvas.drawRect(0, height,width,height + reflectionGap, defaultPaint);
+        canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
+        Paint paint = new Paint();
+        LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0,
+                bitmapWithReflection.getHeight()+reflectionGap, 0x70FFFFFF, 0x00FFFFFF,
+                Shader.TileMode.CLAMP);
+        paint.setShader(shader);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()+reflectionGap, paint);
+        return bitmapWithReflection;
+    }
+
+    public static Bitmap makeBlackBitmap(Bitmap bitmap) {
+        Bitmap outputBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+                Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(outputBitmap);
+        Paint paint = new Paint();
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter f = new ColorMatrixColorFilter(matrix);
+        paint.setColorFilter(f);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return outputBitmap;
+    }
+
+    public static Bitmap makeRoundBitmap(Bitmap bitmap) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         float roundPx;
