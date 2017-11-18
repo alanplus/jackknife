@@ -19,9 +19,6 @@
 
 <resources>
     <style name="JackKnife.Theme" parent="android:Theme.Light.NoTitleBar">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="shadeViewStyle">@style/JackKnife.Theme.ShadeView</item>
+        <item name="shadeViewStyle">@style/JackKnife.Theme.Widget.ShadeView</item>
     </style>
 </resources>

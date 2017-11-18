@@ -18,7 +18,9 @@
   -->
 
 <resources>
-    <style name="JackKnife.Theme.ShadeView">
+    <style name="JackKnife.Theme.Widget">
+    </style>
+    <style name="JackKnife.Theme.Widget.ShadeView">
         <item name="shadeview_textColor">@color/gray</item>
         <item name="shadeview_textSize">12sp</item>
         <item name="shadeview_hoverColor">@color/green</item>
