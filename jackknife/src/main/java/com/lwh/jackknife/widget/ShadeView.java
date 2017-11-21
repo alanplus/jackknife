@@ -52,7 +52,7 @@ public class ShadeView extends RadioButton {
 
     private int mTextColor;
 
-    private int mTextSize;
+    private float mTextSize;
 
     private int mHoverColor;
 
@@ -93,7 +93,7 @@ public class ShadeView extends RadioButton {
         mTextColor = a.getColor(R.styleable.ShadeView_shadeview_textColor, DEFAULT_TEXT_COLOR);
         mHoverColor = a.getColor(R.styleable.ShadeView_shadeview_hoverColor, DEFAULT_HOVER_COLOR);
         mText = a.getString(R.styleable.ShadeView_shadeview_text);
-        mTextSize = (int) a.getDimension(R.styleable.ShadeView_shadeview_textSize,
+        mTextSize = a.getDimension(R.styleable.ShadeView_shadeview_textSize,
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, DEFAULT_TEXT_SIZE,
                         getResources().getDisplayMetrics()));
         a.recycle();
@@ -206,6 +206,42 @@ public class ShadeView extends RadioButton {
         } else {
             postInvalidate();
         }
+    }
+
+    public String getText() {
+        return mText;
+    }
+
+    public void setText(String text) {
+        this.mText = text;
+        invalidateView();
+    }
+
+    public int getTextColor() {
+        return mTextColor;
+    }
+
+    public void setTextColor(int color) {
+        this.mTextColor = color;
+        invalidateView();
+    }
+
+    public float getTextSize() {
+        return mTextSize;
+    }
+
+    public void setTextSize(float size) {
+        this.mTextSize = size;
+        invalidateView();
+    }
+
+    public int getHoverColor() {
+        return mHoverColor;
+    }
+
+    public void setHoverColor(int color) {
+        this.mHoverColor = color;
+        invalidateView();
     }
 
     @Override
