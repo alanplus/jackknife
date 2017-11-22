@@ -20,10 +20,29 @@
 <resources>
     <declare-styleable name="ShadeView">
         <attr name="shadeview_icon" format="reference"/>
-        <attr name="shadeview_text" format="string"/>
-        <attr name="shadeview_textColor" format="color"/>
-        <attr name="shadeview_textSize" format="dimension"/>
-        <attr name="shadeview_hoverColor" format="color"/>
+        <attr name="shadeview_text" format="string|reference"/>
+        <attr name="shadeview_textColor" format="color|reference"/>
+        <attr name="shadeview_textSize" format="dimension|reference"/>
+        <attr name="shadeview_hoverColor" format="color|reference"/>
+    </declare-styleable>
+    <declare-styleable name="HorizontalTabBar">
+        <attr name="horizontaltabbar_underlineHeight" format="dimension|reference" />
+        <attr name="horizontaltabbar_underlineColor" format="color|reference" />
+        <attr name="horizontaltabbar_indicatorHeight" format="dimension|reference" />
+        <attr name="horizontaltabbar_indicatorColor" format="color|reference" />
+        <attr name="horizontaltabbar_dividerWidth" format="dimension|reference"/>
+        <attr name="horizontaltabbar_dividerColor" format="color|reference" />
+        <attr name="horizontaltabbar_dividerPaddingTop" format="dimension|reference" />
+        <attr name="horizontaltabbar_dividerPaddingBottom" format="dimension|reference" />
+        <attr name="horizontaltabbar_tabPaddingLeft" format="dimension|reference" />
+        <attr name="horizontaltabbar_tabPaddingRight" format="dimension|reference" />
+        <attr name="horizontaltabbar_tabColor" format="color|reference"/>
+        <attr name="horizontaltabbar_tabTextSize" format="dimension|reference"/>
+        <attr name="horizontaltabbar_tabTextColor" format="color|reference" />
+        <attr name="horizontaltabbar_tabSelectedTextColor" format="color|reference"/>
+        <attr name="horizontaltabbar_isAverage" format="boolean" />
+        <attr name="horizontaltabbar_textAllCaps" format="boolean" />
     </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
+    <attr name="horizontalTabBarStyle" format="reference"/>
 </resources>

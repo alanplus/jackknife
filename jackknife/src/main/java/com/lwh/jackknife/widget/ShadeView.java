@@ -88,14 +88,14 @@ public class ShadeView extends RadioButton {
         BitmapDrawable drawable = (BitmapDrawable) a.getDrawable(
                 R.styleable.ShadeView_shadeview_icon);
         if (drawable != null) {
-            mIconBitmap = drawable.getBitmap();
+            setIconBitmap(drawable.getBitmap());
         }
-        mTextColor = a.getColor(R.styleable.ShadeView_shadeview_textColor, DEFAULT_TEXT_COLOR);
-        mHoverColor = a.getColor(R.styleable.ShadeView_shadeview_hoverColor, DEFAULT_HOVER_COLOR);
-        mText = a.getString(R.styleable.ShadeView_shadeview_text);
-        mTextSize = a.getDimension(R.styleable.ShadeView_shadeview_textSize,
+        setTextColor(a.getColor(R.styleable.ShadeView_shadeview_textColor, DEFAULT_TEXT_COLOR));
+        setHoverColor(a.getColor(R.styleable.ShadeView_shadeview_hoverColor, DEFAULT_HOVER_COLOR));
+        setText(a.getString(R.styleable.ShadeView_shadeview_text));
+        setTextSize(a.getDimension(R.styleable.ShadeView_shadeview_textSize,
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, DEFAULT_TEXT_SIZE,
-                        getResources().getDisplayMetrics()));
+                        getResources().getDisplayMetrics())));
         a.recycle();
     }
 
@@ -213,8 +213,10 @@ public class ShadeView extends RadioButton {
     }
 
     public void setText(String text) {
-        this.mText = text;
-        invalidateView();
+        if (!text.equals(mText)) {
+            this.mText = text;
+            invalidateView();
+        }
     }
 
     public int getTextColor() {
@@ -222,8 +224,10 @@ public class ShadeView extends RadioButton {
     }
 
     public void setTextColor(int color) {
-        this.mTextColor = color;
-        invalidateView();
+        if (color != mTextColor) {
+            this.mTextColor = color;
+            invalidateView();
+        }
     }
 
     public float getTextSize() {
@@ -231,8 +235,10 @@ public class ShadeView extends RadioButton {
     }
 
     public void setTextSize(float size) {
-        this.mTextSize = size;
-        invalidateView();
+        if (size != mTextSize) {
+            this.mTextSize = size;
+            invalidateView();
+        }
     }
 
     public int getHoverColor() {
@@ -240,8 +246,10 @@ public class ShadeView extends RadioButton {
     }
 
     public void setHoverColor(int color) {
-        this.mHoverColor = color;
-        invalidateView();
+        if (color != mHoverColor) {
+            this.mHoverColor = color;
+            invalidateView();
+        }
     }
 
     @Override

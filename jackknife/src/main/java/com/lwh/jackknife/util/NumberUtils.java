@@ -76,8 +76,7 @@ public class NumberUtils implements MathConstants {
             for (int i=0;i<length;i++) {
                 sb.append(0);
             }
-            sb.append(num);
         }
-        return sb.toString();
+        return sb.append(num).toString();
     }
 }
