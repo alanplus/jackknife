@@ -75,6 +75,8 @@ public class TableManager {
 
     private final String ALTER_TABLE = "ALTER TABLE";
 
+    private final String IF_NOT_EXISTS = "IF NOT EXISTS";
+
     private final String ADD_COLUMN = "ADD COLUMN";
 
     private final String AUTO_INCREMENT = "AUTOINCREMENT";
@@ -211,7 +213,7 @@ public class TableManager {
         String tableName = getTableName(tableClass);
         Field[] fields = tableClass.getDeclaredFields();
         StringBuilder sb = new StringBuilder();
-        sb.append(CREATE_TABLE + SPACE + tableName + LEFT_PARENTHESIS);
+        sb.append(CREATE_TABLE + SPACE + IF_NOT_EXISTS + SPACE + tableName + LEFT_PARENTHESIS);
         List<Annotation> keys = new ArrayList<>();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -355,7 +357,8 @@ public class TableManager {
                 }
             }
             try {
-                sDatabase.execSQL(ALTER_TABLE+SPACE+tableName+SPACE+ADD_COLUMN+SPACE+sb +SEMICOLON);
+                sDatabase.execSQL(ALTER_TABLE + SPACE + tableName + SPACE + ADD_COLUMN + SPACE +
+                        IF_NOT_EXISTS + SPACE + sb.toString() + SEMICOLON);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

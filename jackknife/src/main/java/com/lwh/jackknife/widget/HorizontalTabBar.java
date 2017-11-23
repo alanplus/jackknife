@@ -415,35 +415,11 @@ public class HorizontalTabBar extends HorizontalScrollView {
         }
     }
 
-    public class Adapter {
+    public static class Adapter extends DataSetObservable {
 
         private ArrayList<String> mTabTitles;
 
-        private final DataSetObservable mDataSetObservable = new DataSetObservable(){
-            @Override
-            public void notifyChanged() {
-                mTabCount = mAdapter.getCount();
-                if (mTabCount > 0) {
-                    ArrayList<String> titles = mAdapter.getTitles();
-                    mTabContainer.removeAllViews();
-                    for (int i=0;i<titles.size();i++) {
-                        addTextTab(i, titles.get(i));
-                    }
-                    updateTextTab();
-                    scrollToChild(mPosition, 0);
-                }
-            }
-
-            @Override
-            public void notifyInvalidated() {
-                mTabCount = mAdapter.getCount();
-                if (mTabCount == 0) {
-                    mTabContainer.removeAllViews();
-                    mPosition = 0;
-                    mPositionOffset = 0.0f;
-                }
-            }
-        };
+        private final DataSetObservable mDataSetObservable = new DataSetObservable();
 
         public Adapter(String[] titles) {
             this.mTabTitles = new ArrayList<>();
@@ -497,7 +473,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
 
         public void clearTitle() {
             this.mTabTitles.clear();
-            notifyDataSetChanged();
+            notifyDataSetInvalidated();
         }
 
         public int getCount() {
