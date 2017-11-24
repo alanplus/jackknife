@@ -76,7 +76,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * The text size of the tab.
      */
-    private int mTabTextSize;
+    private float mTabTextSize;
 
     /**
      * Default tab text color.
@@ -339,7 +339,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
         mSelectedTabTextColor = a.getColor(
                 R.styleable.HorizontalTabBar_horizontaltabbar_tabSelectedTextColor,
                 DEFAULT_SELECTED_TAB_TEXT_COLOR);
-        mTabTextSize = a.getDimensionPixelSize(
+        mTabTextSize = a.getDimension(
                 R.styleable.HorizontalTabBar_horizontaltabbar_tabTextSize, mTabTextSize);
         mAverage = a.getBoolean(R.styleable.HorizontalTabBar_horizontaltabbar_isAverage, mAverage);
         mTextAllCaps = a.getBoolean(R.styleable.HorizontalTabBar_horizontaltabbar_textAllCaps,
@@ -680,7 +680,15 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Sets the indicator color.
      */
-    public void setIndicatorColor(int resId) {
+    public void setIndicatorColor(int color) {
+        this.mIndicatorColor = color;
+        invalidateView();
+    }
+
+    /**
+     * Sets the indicator color.
+     */
+    public void setIndicatorColorResource(int resId) {
         this.mIndicatorColor = getResources().getColor(resId);
         invalidateView();
     }
@@ -710,7 +718,15 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Sets the underline color.
      */
-    public void setUnderlineColor(int resId) {
+    public void setUnderlineColor(int color) {
+        this.mUnderlineColor = color;
+        invalidateView();
+    }
+
+    /**
+     * Sets the underline color.
+     */
+    public void setUnderlineColorResource(int resId) {
         this.mUnderlineColor = getResources().getColor(resId);
         invalidateView();
     }
@@ -725,7 +741,15 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Sets the divider color.
      */
-    public void setDividerColor(int resId) {
+    public void setDividerColor(int color) {
+        this.mDividerColor = color;
+        invalidateView();
+    }
+
+    /**
+     * Sets the divider color.
+     */
+    public void setDividerColorResource(int resId) {
         this.mDividerColor = getResources().getColor(resId);
         invalidateView();
     }
@@ -799,7 +823,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Sets the text size of the tab.
      */
-    public void setTabTextSize(int size) {
+    public void setTabTextSize(float size) {
         this.mTabTextSize = size;
         refreshTabs();
     }
@@ -807,14 +831,22 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Gets the text size of the tab.
      */
-    public int getTabTextSize() {
+    public float getTabTextSize() {
         return mTabTextSize;
     }
 
     /**
      * Sets the text color of the tab.
      */
-    public void setTabTextColor(int resId) {
+    public void setTabTextColor(int color) {
+        this.mTabTextColor = color;
+        refreshTabs();
+    }
+
+    /**
+     * Sets the text color of the tab.
+     */
+    public void setTabTextColorResource(int resId) {
         this.mTabTextColor = getResources().getColor(resId);
         refreshTabs();
     }
@@ -829,7 +861,15 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Sets the text color of the selected tab.
      */
-    public void setSelectedTextColor(int resId) {
+    public void setSelectedTextColor(int color) {
+        this.mSelectedTabTextColor = color;
+        refreshTabs();
+    }
+
+    /**
+     * Sets the text color of the selected tab.
+     */
+    public void setSelectedTextColorResource(int resId) {
         this.mSelectedTabTextColor = getResources().getColor(resId);
         refreshTabs();
     }
@@ -844,7 +884,15 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Sets the background color of the tab.
      */
-    public void setTabColor(int resId) {
+    public void setTabColor(int color) {
+        this.mTabColor = color;
+        refreshTabs();
+    }
+
+    /**
+     * Sets the background color of the tab.
+     */
+    public void setTabColorResource(int resId) {
         this.mTabColor = getResources().getColor(resId);
         refreshTabs();
     }
