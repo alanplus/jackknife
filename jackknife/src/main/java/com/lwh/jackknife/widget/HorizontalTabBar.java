@@ -471,8 +471,10 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * True represents converting all letters to upper case, false ignore.
      */
     public void setTextAllCaps(boolean caps) {
-        this.mTextAllCaps = caps;
-        refreshTabs();
+        if (caps != mTextAllCaps) {
+            this.mTextAllCaps = caps;
+            refreshTabs();
+        }
     }
 
     /**
@@ -511,7 +513,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
             v.setBackgroundColor(mTabColor);
             if (v instanceof TextView) {
                 TextView tab = (TextView) v;
-                tab.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTabTextSize);
+                tab.setTextSize(mTabTextSize);
                 tab.setTypeface(mTabTypeface, mTabTypefaceStyle);
                 tab.setTextColor(mTabTextColor);
                 if (mTextAllCaps) {
@@ -545,61 +547,36 @@ public class HorizontalTabBar extends HorizontalScrollView {
     }
 
     /**
-     * Adds a tab.You can look up {@link #addTextTab(int, String)}.
-     */
-    private void addTab(final int position,View tab){
-        tab.setFocusable(true);
-        tab.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                boolean isSwallowed = false;
-                if (mOnTabClickListener != null) {
-                    isSwallowed = mOnTabClickListener.onTabClick(v, position);
-                }
-                if (!isSwallowed) {
-                    setSelectedPosition(position);
-                }
-            }
-        });
-        tab.setPadding(mTabPaddingLeft, 0, mTabPaddingRight, mUnderlineHeight);
-        mTabContainer.addView(tab,position,mAverage ? mAverageTabLayoutParams
-                : mWrapTabLayoutParams);
-    }
-
-    /**
      * You can invoke the method in a scrollable container{@literal '}s callback method.
      */
     public void setSelectedPosition(int position) {
-        mSelectedPosition = position;
-        refreshTabs();
+        if (position != mSelectedPosition) {
+            mSelectedPosition = position;
+            refreshTabs();
+        }
     }
 
     /**
      * You can invoke the method in a scrollable container{@literal '}s callback method.
      */
     public void setPositionOffset(int position, float positionOffset){
-        mPosition = position;
-        mPositionOffset = positionOffset;
-        scrollToChild(position, (int) (positionOffset * getTabWidth(position)));
-        invalidateView();
+        if (position != mPosition || positionOffset != mPositionOffset) {
+            mPosition = position;
+            mPositionOffset = positionOffset;
+            scrollToChild(position, (int) (positionOffset * getTabWidth(position)));
+            invalidateView();
+        }
     }
 
     /**
      * Sets the typeface of the tab.
      */
     public void setTypeface(Typeface typeface, int style) {
-        this.mTabTypeface = typeface;
-        this.mTabTypefaceStyle = style;
-        refreshTabs();
-    }
-
-    public void addTextTab(int position, String title){
-        TextView textTab = new TextView(getContext());
-        textTab.setText(title);
-        textTab.setGravity(Gravity.CENTER);
-        textTab.setSingleLine();
-        addTab(position, textTab);
+        if (typeface != mTabTypeface || style != mTabTypefaceStyle) {
+            this.mTabTypeface = typeface;
+            this.mTabTypefaceStyle = style;
+            refreshTabs();
+        }
     }
 
     /**
@@ -607,27 +584,6 @@ public class HorizontalTabBar extends HorizontalScrollView {
      */
     public LinearLayout getTabContainer() {
         return mTabContainer;
-    }
-
-    /**
-     * You can invoke the method if you need to rearrange.
-     */
-    public void notifyDataSetChanged() {
-        mTabCount = mTabTitles.size();
-        mTabContainer.removeAllViews();
-        if (mTabTitles != null && mTabTitles.size() > 0) {
-            for (int i = 0; i < mTabTitles.size(); i++) {
-                addTextTab(i,mTabTitles.get(i));
-            }
-        }
-        refreshTabs();
-        getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-
-            public void onGlobalLayout() {
-                getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                scrollToChild(mPosition, 0);
-            }
-        });
     }
 
     /**
@@ -681,16 +637,17 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the indicator color.
      */
     public void setIndicatorColor(int color) {
-        this.mIndicatorColor = color;
-        invalidateView();
+        if (color != mIndicatorColor) {
+            this.mIndicatorColor = color;
+            invalidateView();
+        }
     }
 
     /**
      * Sets the indicator color.
      */
     public void setIndicatorColorResource(int resId) {
-        this.mIndicatorColor = getResources().getColor(resId);
-        invalidateView();
+        setIndicatorColor(getResources().getColor(resId));
     }
 
     /**
@@ -704,8 +661,10 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the indicator height.
      */
     public void setIndicatorHeight(int height) {
-        this.mIndicatorHeight = height;
-        invalidateView();
+        if (height != mIndicatorHeight) {
+            this.mIndicatorHeight = height;
+            invalidateView();
+        }
     }
 
     /**
@@ -719,16 +678,17 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the underline color.
      */
     public void setUnderlineColor(int color) {
-        this.mUnderlineColor = color;
-        invalidateView();
+        if (color != mUnderlineColor) {
+            this.mUnderlineColor = color;
+            invalidateView();
+        }
     }
 
     /**
      * Sets the underline color.
      */
     public void setUnderlineColorResource(int resId) {
-        this.mUnderlineColor = getResources().getColor(resId);
-        invalidateView();
+        setUnderlineColor(getResources().getColor(resId));
     }
 
     /**
@@ -742,16 +702,17 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the divider color.
      */
     public void setDividerColor(int color) {
-        this.mDividerColor = color;
-        invalidateView();
+        if (color != mDividerColor) {
+            this.mDividerColor = color;
+            invalidateView();
+        }
     }
 
     /**
      * Sets the divider color.
      */
     public void setDividerColorResource(int resId) {
-        this.mDividerColor = getResources().getColor(resId);
-        invalidateView();
+        setDividerColor(getResources().getColor(resId));
     }
 
     /**
@@ -765,8 +726,10 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the underline height.
      */
     public void setUnderlineHeight(int height) {
-        this.mUnderlineHeight = height;
-        invalidateView();
+        if (height != mUnderlineHeight) {
+            this.mUnderlineHeight = height;
+            invalidateView();
+        }
     }
 
     /**
@@ -780,14 +743,20 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets top-padding of the divider.
      */
     public void setDividerPaddingTop(int padding) {
-        this.mDividerPaddingTop = padding;
+        if (padding != mDividerPaddingTop) {
+            this.mDividerPaddingTop = padding;
+            invalidateView();
+        }
     }
 
     /**
      * Sets bottom-padding of the divider.
      */
     public void setDividerPaddingBottom(int padding) {
-        this.mDividerPaddingBottom = padding;
+        if (padding != mDividerPaddingBottom) {
+            this.mDividerPaddingBottom = padding;
+            invalidateView();
+        }
     }
 
     /**
@@ -816,16 +785,20 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * {@link #mWrapTabLayoutParams}.
      */
     public void setAverage(boolean isAverage) {
-        this.mAverage = isAverage;
-        notifyDataSetChanged();
+        if (isAverage != mAverage) {
+            this.mAverage = isAverage;
+            notifyDataSetChanged();
+        }
     }
 
     /**
      * Sets the text size of the tab.
      */
     public void setTabTextSize(float size) {
-        this.mTabTextSize = size;
-        refreshTabs();
+        if (size != mTabTextSize) {
+            this.mTabTextSize = size;
+            refreshTabs();
+        }
     }
 
     /**
@@ -839,16 +812,17 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the text color of the tab.
      */
     public void setTabTextColor(int color) {
-        this.mTabTextColor = color;
-        refreshTabs();
+        if (color != mTabTextColor) {
+            this.mTabTextColor = color;
+            refreshTabs();
+        }
     }
 
     /**
      * Sets the text color of the tab.
      */
     public void setTabTextColorResource(int resId) {
-        this.mTabTextColor = getResources().getColor(resId);
-        refreshTabs();
+        setTabTextColor(getResources().getColor(resId));
     }
 
     /**
@@ -862,16 +836,17 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the text color of the selected tab.
      */
     public void setSelectedTextColor(int color) {
-        this.mSelectedTabTextColor = color;
-        refreshTabs();
+        if (color != mSelectedTabTextColor) {
+            this.mSelectedTabTextColor = color;
+            refreshTabs();
+        }
     }
 
     /**
      * Sets the text color of the selected tab.
      */
     public void setSelectedTextColorResource(int resId) {
-        this.mSelectedTabTextColor = getResources().getColor(resId);
-        refreshTabs();
+        setSelectedTextColor(getResources().getColor(resId));
     }
 
     /**
@@ -885,16 +860,17 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the background color of the tab.
      */
     public void setTabColor(int color) {
-        this.mTabColor = color;
-        refreshTabs();
+        if (color != mTabColor) {
+            this.mTabColor = color;
+            refreshTabs();
+        }
     }
 
     /**
      * Sets the background color of the tab.
      */
     public void setTabColorResource(int resId) {
-        this.mTabColor = getResources().getColor(resId);
-        refreshTabs();
+        setTabColor(getResources().getColor(resId));
     }
 
     /**
@@ -908,14 +884,31 @@ public class HorizontalTabBar extends HorizontalScrollView {
      * Sets the left-padding of the tab.
      */
     public void setTabPaddingLeft(int padding) {
-        this.mTabPaddingLeft = padding;
+        if (padding != mTabPaddingLeft) {
+            this.mTabPaddingLeft = padding;
+            refreshTabs();
+        }
     }
 
     /**
      * Sets the right-padding of the tab.
      */
     public void setTabPaddingRight(int padding) {
-        this.mTabPaddingRight = padding;
+        if (padding != mTabPaddingRight) {
+            this.mTabPaddingRight = padding;
+            refreshTabs();
+        }
+    }
+
+    /**
+     * The refresh view operation of the automatic processing thread.
+     */
+    private void invalidateView() {
+        if (Looper.getMainLooper() == Looper.myLooper()) {
+            invalidate();
+        } else {
+            postInvalidate();
+        }
     }
 
     /**
@@ -930,17 +923,6 @@ public class HorizontalTabBar extends HorizontalScrollView {
      */
     public int getTabPaddingRight() {
         return mTabPaddingRight;
-    }
-
-    /**
-     * The refresh view operation of the automatic processing thread.
-     */
-    private void invalidateView() {
-        if (Looper.getMainLooper() == Looper.myLooper()) {
-            invalidate();
-        } else {
-            postInvalidate();
-        }
     }
 
     @Override
@@ -960,5 +942,57 @@ public class HorizontalTabBar extends HorizontalScrollView {
         } else {
             super.onRestoreInstanceState(parcelable);
         }
+    }
+
+    /**
+     * Adds a tab.You can look up {@link #addTextTab(int, String)}.
+     */
+    private void addTab(final int position,View tab){
+        tab.setFocusable(true);
+        tab.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                boolean isSwallowed = false;
+                if (mOnTabClickListener != null) {
+                    isSwallowed = mOnTabClickListener.onTabClick(v, position);
+                }
+                if (!isSwallowed) {
+                    setSelectedPosition(position);
+                }
+            }
+        });
+        tab.setPadding(mTabPaddingLeft, 0, mTabPaddingRight, mUnderlineHeight);
+        mTabContainer.addView(tab,position,mAverage ? mAverageTabLayoutParams
+                : mWrapTabLayoutParams);
+    }
+
+    public void addTextTab(int position, String title){
+        TextView textTab = new TextView(getContext());
+        textTab.setText(title);
+        textTab.setGravity(Gravity.CENTER);
+        textTab.setSingleLine();
+        addTab(position, textTab);
+    }
+
+    /**
+     * You can invoke the method if you need to rearrange.
+     */
+    public void notifyDataSetChanged() {
+        mTabCount = mTabTitles.size();
+        mTabContainer.removeAllViews();
+        if (mTabTitles != null && mTabTitles.size() > 0) {
+            for (int i = 0; i < mTabTitles.size(); i++) {
+                addTextTab(i,mTabTitles.get(i));
+            }
+        }
+        refreshTabs();
+        getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                scrollToChild(mPosition, 0);
+            }
+        });
     }
 }
