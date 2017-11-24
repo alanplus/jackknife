@@ -36,7 +36,8 @@
         <item name="horizontaltabbar_dividerPaddingBottom">5dp</item>
         <item name="horizontaltabbar_tabPaddingLeft">20dp</item>
         <item name="horizontaltabbar_tabPaddingRight">20dp</item>
-        <item name="horizontaltabbar_tabColor">@android:color/transparent</item>
+        <item name="horizontaltabbar_tabColor">@android:color/white</item>
+        <item name="horizontaltabbar_tabSelectedTextColor">@color/green</item>
         <item name="horizontaltabbar_tabTextSize">15sp</item>
         <item name="horizontaltabbar_tabTextColor">@color/green</item>
         <item name="horizontaltabbar_isAverage">false</item>

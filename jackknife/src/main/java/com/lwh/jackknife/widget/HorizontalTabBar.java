@@ -16,16 +16,19 @@
 
 package com.lwh.jackknife.widget;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.database.DataSetObservable;
-import android.database.DataSetObserver;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -35,130 +38,232 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lwh.jackknife.R;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 public class HorizontalTabBar extends HorizontalScrollView {
 
-    private float mUnderlineHeight;
-
-    private int mUnderlineColor;
-
-    private float mIndicatorHeight;
-
-    private int mIndicatorColor;
-
-    private float mDividerWidth;
-
-    private int mDividerColor;
-
-    private float mDividerPaddingTop;
-
-    private float mDividerPaddingBottom;
-
-    private int mTabPaddingLeft;
-
-    private int mTabPaddingRight;
-
-    private float mTabTextSize;
-
-    private int mTabTextColor;
-
-    private int mSelectedTabTextColor;
-
-    private int mTabColor;
-
-    private int mTabCount;
-
-    private Adapter mAdapter;
-
+    /**
+     * Current selected location.
+     */
     private int mPosition;
 
+    /**
+     * The current selected position offset.
+     */
     private float mPositionOffset;
 
-    private float mLastScrollX;
+    /**
+     * Default layout parameters, wrap tab content size.
+     */
+    private LinearLayout.LayoutParams mWrapTabLayoutParams;
 
-    private boolean mTextAllCaps;
+    /**
+     * If the screen width is greater than the width of all tabs, then divide tabs{@literal '} total
+     * width to layout.
+     */
+    private LinearLayout.LayoutParams mAverageTabLayoutParams;
 
-    private boolean mAverage;
-
-    private DisplayMetrics mMetrics;
-
-    private RectF mUnderlineRect;
-
-    private RectF mIndicatorRect;
-
-    private Paint mIndicatorPaint;
-
-    private Paint mUnderlinePaint;
-
-    private Paint mDividerPaint;
-
-    private final int DEFAULT_UNDERLINE_COLOR = 0xFFFFFFFF;
-
-    private final int DEFAULT_INDICATOR_COLOR = 0xFFFFA500;
-
-    private final int DEFAULT_DIVIDER_COLOR = 0xFF2B2B2B;
-
-    private final int DEFAULT_TAB_COLOR = 0x00000000;
-
-    private final int DEFAULT_TAB_TEXT_COLOR = 0xFF2B2B2B;
-
-    private final int DEFAULT_SELECTED_TAB_TEXT_COLOR = 0xFFFFA500;
-
+    /**
+     * Store all tabs{@literal '} containers.
+     */
     private LinearLayout mTabContainer;
 
-    private LinearLayout.LayoutParams mTabContainerLayoutParams =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+    /**
+     * The text size of the tab.
+     */
+    private int mTabTextSize;
 
-    private LinearLayout.LayoutParams mDefaultTabLayoutParams =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.MATCH_PARENT);
+    /**
+     * Default tab text color.
+     */
+    private final int DEFAULT_TAB_TEXT_COLOR = Color.BLACK;
 
-    private LinearLayout.LayoutParams mAverageTabLayoutParams =
-            new LinearLayout.LayoutParams(
-            0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+    /**
+     * The text color of the tab.
+     */
+    private int mTabTextColor;
 
+    /**
+     * The height of the indicator.
+     */
+    private int mIndicatorHeight;
+
+    /**
+     * Default indicator color, it{@literal '} s far too ugly, so you can invoke
+     * {@link #setIndicatorColor(int)} method making it beautiful.
+     */
+    private final int DEFAULT_INDICATOR_COLOR = 0xFFFFA500;
+
+    /**
+     * The color of the indicator.
+     */
+    private int mIndicatorColor;
+
+    /**
+     * The height of the underline.
+     */
+    private int mUnderlineHeight;
+
+    /**
+     * Default underline color.
+     */
+    private final int DEFAULT_UNDERLINE_COLOR = Color.TRANSPARENT;
+
+    /**
+     * The color of the underline.
+     */
+    private int mUnderlineColor;
+
+    /**
+     * The width of the dividing line.
+     */
+    private int mDividerWidth;
+
+    /**
+     * Default dividing line color.
+     */
+    private final int DEFAULT_DIVIDER_COLOR = Color.TRANSPARENT;
+
+    /**
+     * The color of the dividing line.
+     */
+    private int mDividerColor;
+
+    /**
+     * The top-padding of the dividing line.
+     */
+    private int mDividerPaddingTop;
+
+    /**
+     * The bottom-padding of the dividing line.
+     */
+    private int mDividerPaddingBottom;
+
+    /**
+     * The left-padding of the tab.
+     */
+    private int mTabPaddingLeft;
+
+    /**
+     * The right-padding of the tab.
+     */
+    private int mTabPaddingRight;
+
+    /**
+     * Default tab background color.
+     */
+    private final int DEFAULT_TAB_COLOR = Color.TRANSPARENT;
+
+    /**
+     * The background color of the tab.
+     */
+    private int mTabColor;
+
+    /**
+     * The number of tabs.
+     */
+    private int mTabCount;
+
+    /**
+     * The position of the selected tab.
+     */
+    private int mSelectedPosition;
+
+    /**
+     * Default selected tab{@literal '} text color.
+     */
+    private final int DEFAULT_SELECTED_TAB_TEXT_COLOR = 0xFFFFA500;
+
+    /**
+     * The text color of the selected tab.
+     */
+    private int mSelectedTabTextColor;
+
+    /**
+     * The typeface of the tab.
+     */
+    private Typeface mTabTypeface;
+
+    /**
+     * The typeface style of the tab.
+     */
+    private int mTabTypefaceStyle = Typeface.NORMAL;
+
+    /**
+     * All letters are automatically to upper case.
+     */
+    private boolean mTextAllCaps;
+
+    /**
+     * Look up {@link #mAverageTabLayoutParams}.
+     */
+    private boolean mAverage;
+
+    /**
+     * The paint of the indicator and underline{@literal '}s.
+     */
+    private Paint mRectPaint;
+
+    /**
+     * The paint of the dividing line.
+     */
+    private Paint mDividerPaint;
+
+    /**
+     * Interface definition for a callback to be invoked when the {@link HorizontalTabBar}
+     * {@literal '}s tab is clicked.
+     */
     private OnTabClickListener mOnTabClickListener;
 
-    private ViewPagerObserver mViewPagerObserver = new ViewPagerObserver() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset) {
-            if (position != mPosition || positionOffset != mPositionOffset) {
-                mPosition = position;
-                mPositionOffset = positionOffset;
-                scrollToChild(position, (int) (positionOffset * mTabContainer.getChildAt(position)
-                        .getWidth()));
-                invalidateView();
-            }
-        }
+    /**
+     * The all titles of tabs.
+     */
+    private List<String> mTabTitles;
 
-        @Override
-        public void onPageSelected(int position) {
-            if (position != mPosition) {
-                mPosition = position;
-                invalidateView();
-            }
-        }
-    };
+    /**
+     * The x coordinate last time scrolled to stay.
+     */
+    private int mScrollX;
 
-    private Context mContext;
+    /**
+     * The saved instance state.
+     */
+    private static final String STATE_INSTANCE = "state_instance";
 
+    /**
+     * The current position state.
+     */
+    private static final String STATE_POSITION = "state_position";
+
+    /**
+     * The rectangular area of the underline.
+     */
+    private RectF mUnderlineRect;
+
+    /**
+     * The rectangular area of the indicator.
+     */
+    private RectF mIndicatorRect;
+
+    /**
+     * A structure describing general information about a display, such as its
+     * size, density, and font scaling.
+     */
+    private DisplayMetrics mMetrics;
+
+    /**
+     * {@code Locale} represents a language/country/variant combination. Locales are used to
+     * alter the presentation of information such as numbers or dates to suit the conventions
+     * in the region they describe.
+     */
     private Locale mLocale;
 
-    private final String STATE_INSTANCE = "state_instance";
-
-    private final String STATE_CURRENT = "state_current";
-
-    public HorizontalTabBar(Context context) {
+    public HorizontalTabBar(Context context){
         this(context, null);
     }
 
@@ -166,74 +271,76 @@ public class HorizontalTabBar extends HorizontalScrollView {
         this(context, attrs, R.attr.horizontalTabBarStyle);
     }
 
-    public HorizontalTabBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public HorizontalTabBar(Context context, AttributeSet attrs,
+                             int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.mContext = context;
-        this.mMetrics = getResources().getDisplayMetrics();
-        this.mLocale = getResources().getConfiguration().locale;
-        initAttrs(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        setFillViewport(true);
+        setHorizontalScrollBarEnabled(false);
+        mAverageTabLayoutParams = new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        mWrapTabLayoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        mMetrics = getResources().getDisplayMetrics();
+        mLocale = getResources().getConfiguration().locale;
+        initAttrs(context,attrs, defStyleAttr);
         initRects();
         initPaints();
         initTabContainer();
     }
 
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
-        mAverageTabLayoutParams = new LinearLayout.LayoutParams(
-                0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-        mDefaultTabLayoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        mUnderlineHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, mMetrics);
-        mUnderlineColor = DEFAULT_UNDERLINE_COLOR;
-        mIndicatorHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, mMetrics);
-        mIndicatorColor = DEFAULT_INDICATOR_COLOR;
-        mDividerWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, mMetrics);
-        mDividerColor = DEFAULT_DIVIDER_COLOR;
-        mDividerPaddingTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, mMetrics);
-        mDividerPaddingBottom = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
-                mMetrics);
-        mTabPaddingLeft = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, mMetrics);
-        mTabPaddingRight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
-                mMetrics);
-        mTabColor = DEFAULT_TAB_COLOR;
-        mTabTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 15, mMetrics);
-        mTabTextColor = DEFAULT_TAB_TEXT_COLOR;
-        mSelectedTabTextColor = DEFAULT_SELECTED_TAB_TEXT_COLOR;
-        mAverage = true;
-        mTextAllCaps = true;
+        mIndicatorHeight = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, mMetrics);
+        mUnderlineHeight = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, mMetrics);
+        mDividerWidth = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, mMetrics);
+        mDividerPaddingTop = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, mMetrics);
+        mDividerPaddingBottom = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, mMetrics);
+        mTabPaddingLeft = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, mMetrics);
+        mTabPaddingRight = (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, mMetrics);
+        mTabTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, mMetrics);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HorizontalTabBar,
                 defStyleAttr, 0);
-        mUnderlineHeight = a.getDimension(
-                R.styleable.HorizontalTabBar_horizontaltabbar_underlineHeight, mUnderlineHeight);
-        mUnderlineColor = a.getColor(R.styleable.HorizontalTabBar_horizontaltabbar_underlineColor,
-                mUnderlineColor);
-        mIndicatorHeight = a.getDimension(
-                R.styleable.HorizontalTabBar_horizontaltabbar_indicatorHeight, mIndicatorHeight);
         mIndicatorColor = a.getColor(R.styleable.HorizontalTabBar_horizontaltabbar_indicatorColor,
-                mIndicatorColor);
-        mDividerWidth = a.getDimension(R.styleable.HorizontalTabBar_horizontaltabbar_dividerWidth,
-                mDividerWidth);
+                DEFAULT_INDICATOR_COLOR);
+        mUnderlineColor = a.getColor(R.styleable.HorizontalTabBar_horizontaltabbar_underlineColor,
+                DEFAULT_UNDERLINE_COLOR);
         mDividerColor = a.getColor(R.styleable.HorizontalTabBar_horizontaltabbar_dividerColor,
-                mDividerColor);
-        mDividerPaddingTop = a.getDimension(
+                DEFAULT_DIVIDER_COLOR);
+        mIndicatorHeight = a.getDimensionPixelSize(
+                R.styleable.HorizontalTabBar_horizontaltabbar_indicatorHeight, mIndicatorHeight);
+        mUnderlineHeight = a.getDimensionPixelSize(
+                R.styleable.HorizontalTabBar_horizontaltabbar_underlineHeight, mUnderlineHeight);
+        mDividerPaddingTop = a.getDimensionPixelSize(
                 R.styleable.HorizontalTabBar_horizontaltabbar_dividerPaddingTop,
                 mDividerPaddingTop);
-        mDividerPaddingBottom = a.getDimension(
-                R.styleable.HorizontalTabBar_horizontaltabbar_dividerPaddingBottom,
-                mDividerPaddingBottom);
-        mTabPaddingLeft = a.getDimensionPixelOffset(
+        mDividerPaddingBottom = a.
+                getDimensionPixelSize(
+                        R.styleable.HorizontalTabBar_horizontaltabbar_dividerPaddingBottom,
+                        mDividerPaddingBottom);
+        mTabPaddingLeft = a.getDimensionPixelSize(
                 R.styleable.HorizontalTabBar_horizontaltabbar_tabPaddingLeft, mTabPaddingLeft);
-        mTabPaddingRight = a.getDimensionPixelOffset(
+        mTabPaddingRight = a.getDimensionPixelSize(
                 R.styleable.HorizontalTabBar_horizontaltabbar_tabPaddingRight, mTabPaddingRight);
-        mTabColor = a.getColor(R.styleable.HorizontalTabBar_horizontaltabbar_tabColor,
-                mTabColor);
-        mTabTextSize = a.getDimension(R.styleable.HorizontalTabBar_horizontaltabbar_tabTextSize,
-                mTabTextSize);
-        mTabTextColor = a.getColor(R.styleable.HorizontalTabBar_horizontaltabbar_tabColor,
-                mTabTextColor);
+        mTabColor = a.getResourceId(R.styleable.HorizontalTabBar_horizontaltabbar_tabColor,
+                DEFAULT_TAB_COLOR);
+        mTabTextColor = a.getColor(R.styleable.HorizontalTabBar_horizontaltabbar_tabTextColor,
+                DEFAULT_TAB_TEXT_COLOR);
         mSelectedTabTextColor = a.getColor(
                 R.styleable.HorizontalTabBar_horizontaltabbar_tabSelectedTextColor,
-                mSelectedTabTextColor);
+                DEFAULT_SELECTED_TAB_TEXT_COLOR);
+        mTabTextSize = a.getDimensionPixelSize(
+                R.styleable.HorizontalTabBar_horizontaltabbar_tabTextSize, mTabTextSize);
         mAverage = a.getBoolean(R.styleable.HorizontalTabBar_horizontaltabbar_isAverage, mAverage);
         mTextAllCaps = a.getBoolean(R.styleable.HorizontalTabBar_horizontaltabbar_textAllCaps,
                 mTextAllCaps);
@@ -245,56 +352,13 @@ public class HorizontalTabBar extends HorizontalScrollView {
         mIndicatorRect = new RectF();
     }
 
-
     private void initPaints() {
-        mUnderlinePaint = new Paint();
-        mUnderlinePaint.setAntiAlias(true);
-        mUnderlinePaint.setDither(true);
-        mUnderlinePaint.setColor(mUnderlineColor);
-        mUnderlinePaint.setStyle(Paint.Style.FILL);
-        mIndicatorPaint = new Paint();
-        mIndicatorPaint.setAntiAlias(true);
-        mIndicatorPaint.setDither(true);
-        mIndicatorPaint.setColor(mIndicatorColor);
-        mIndicatorPaint.setStyle(Paint.Style.FILL);
+        mRectPaint = new Paint();
+        mRectPaint.setAntiAlias(true);
+        mRectPaint.setStyle(Style.FILL);
         mDividerPaint = new Paint();
         mDividerPaint.setAntiAlias(true);
-        mDividerPaint.setDither(true);
-        mDividerPaint.setColor(mDividerColor);
         mDividerPaint.setStrokeWidth(mDividerWidth);
-    }
-
-    private void initTabContainer() {
-        mTabContainer = new LinearLayout(mContext);
-        mTabContainer.setLayoutParams(mTabContainerLayoutParams);
-        mTabContainer.setOrientation(LinearLayout.HORIZONTAL);
-        addView(mTabContainer);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int height = getMeasuredHeight();
-        float underlineLeft = 0;
-        float underlineTop = height - mUnderlineHeight;
-        float underlineRight = mTabContainer.getWidth();
-        float underlineBottom = height;
-        mUnderlineRect.set(underlineLeft, underlineTop, underlineRight, underlineBottom);
-        View currentTab = mTabContainer.getChildAt(mPosition);
-        float indicatorLeft = currentTab.getLeft();
-        float indicatorTop = height - mIndicatorHeight;
-        float indicatorRight = currentTab.getRight();
-        float indicatorBottom = height;
-        if (mPositionOffset > 0.0f && mPosition < mTabCount - 1) {
-            View nextTab = mTabContainer.getChildAt(mPosition + 1);
-            float nextTabLeft = nextTab.getLeft();
-            float nextTabRight = nextTab.getRight();
-            indicatorLeft = (mPositionOffset * nextTabLeft + (1.0f - mPositionOffset)
-                    * indicatorLeft);
-            indicatorRight = (mPositionOffset * nextTabRight + (1.0f - mPositionOffset)
-                    * indicatorRight);
-        }
-        mIndicatorRect.set(indicatorLeft, indicatorTop, indicatorRight, indicatorBottom);
     }
 
     @Override
@@ -302,419 +366,527 @@ public class HorizontalTabBar extends HorizontalScrollView {
         if (isInEditMode() || mTabCount == 0) {
             return;
         }
-        drawUnderline(canvas);
-        drawIndicator(canvas);
-        drawDivider(canvas);
-    }
-
-    private void drawUnderline(Canvas canvas) {
-        canvas.drawRect(mUnderlineRect, mUnderlinePaint);
-    }
-
-    private void drawIndicator(Canvas canvas) {
-        canvas.drawRect(mIndicatorRect, mIndicatorPaint);
-    }
-
-    private void drawDivider(Canvas canvas) {
         int height = getHeight();
-        for (int i=0;i<mTabCount-1;i++) {
+        drawUnderline(height, canvas);
+        drawIndicator(height, canvas);
+        drawDivider(height, canvas);
+    }
+
+    /**
+     * Draw divider, divider is vertical lines between tabs.
+     */
+    private void drawDivider(int height, Canvas canvas) {
+        mDividerPaint.setColor(mDividerColor);
+        for (int i = 0; i < mTabCount - 1; i++) {
             View tab = mTabContainer.getChildAt(i);
-            canvas.drawLine(tab.getRight(), mDividerPaddingTop, tab.getRight(),
-                    height - mDividerPaddingBottom, mDividerPaint);
+            canvas.drawLine(tab.getRight(), mDividerPaddingTop, tab.getRight(), height -
+                    mDividerPaddingBottom, mDividerPaint);
         }
     }
 
+    /**
+     * Draw underline, underline is under all tabs.
+     */
+    private void drawUnderline(int height, Canvas canvas) {
+        mRectPaint.setColor(mUnderlineColor);
+        mUnderlineRect.set(0, height-mUnderlineHeight, getTabContainerWidth(), height);
+        canvas.drawRect(mUnderlineRect, mRectPaint);
+    }
+
+    /**
+     * Draw indicator, indicator is traveling in underline while their height is same.
+     */
+    private void drawIndicator(int height, Canvas canvas) {
+        mRectPaint.setColor(mIndicatorColor);
+        View currentTab = mTabContainer.getChildAt(mPosition);
+        float lineLeft = currentTab.getLeft();
+        float lineRight = currentTab.getRight();
+        if (mPositionOffset > 0.0f && mPosition < mTabCount -1) {
+            View nextTab = mTabContainer.getChildAt(mPosition + 1);
+            float nextTabLeft = nextTab.getLeft();
+            float nextTabRight = nextTab.getRight();
+            lineLeft = (mPositionOffset * nextTabLeft + (1.0f - mPositionOffset) * lineLeft);
+            lineRight = (mPositionOffset * nextTabRight + (1.0f - mPositionOffset) * lineRight);
+        }
+        mIndicatorRect.set(lineLeft, height-mIndicatorHeight, lineRight, height);
+        canvas.drawRect(mIndicatorRect, mRectPaint);
+    }
+
+    /**
+     * Initializes the Tab title, if you not invoke the method, there are no display on layout.
+     */
+    public void setTitles(String[] titles){
+        if (mTabTitles == null) {
+            mTabTitles = new ArrayList<>();
+        }
+        if (titles != null && titles.length != 0) {
+            mTabTitles.addAll(Arrays.asList(titles));
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Gets all titles of all tabs.
+     */
+    public String[] getTitles(){
+        if (mTabTitles != null && mTabTitles.size() > 0) {
+            return (String[]) mTabTitles.toArray();
+        }
+        return null;
+    }
+
+    /**
+     * Check whether the position belongs to a title index.
+     */
+    private boolean isInScope(int position) {
+        return mTabTitles != null && mTabTitles.size() > 0 && position >= 0
+                && position < mTabTitles.size();
+    }
+
+    /**
+     * Gets the Tab title of the specified location.
+     */
+    public String getTabTilte(int position){
+        if (isInScope(position)) {
+            return mTabTitles.get(position);
+        }
+        return null;
+    }
+
+    /**
+     * Gets the width of the tab container.
+     */
+    public int getTabContainerWidth() {
+        return mTabContainer.getWidth();
+    }
+
+    /**
+     * Check that all letters are automatically converted to capital letters.
+     */
+    public boolean isTextAllCaps() {
+        return mTextAllCaps;
+    }
+
+    /**
+     * True represents converting all letters to upper case, false ignore.
+     */
+    public void setTextAllCaps(boolean caps) {
+        this.mTextAllCaps = caps;
+        refreshTabs();
+    }
+
+    /**
+     * Gets the selected position.
+     */
+    public int getSelectedPosition() {
+        return mSelectedPosition;
+    }
+
+    /**
+     * Interface definition for a callback to be invoked when the {@link HorizontalTabBar}
+     * {@literal '}s tab is clicked.
+     */
+    public interface OnTabClickListener {
+
+        /**
+         * @return True represents consumption events, such as when used with ViewPager, false
+         * otherwise.
+         */
+        boolean onTabClick(View view, int position);
+    }
+
+    /**
+     * Set an observer for {@link HorizontalTabBar}.
+     */
     public void setOnTabClickListener(OnTabClickListener l) {
         this.mOnTabClickListener = l;
     }
 
-    public void registerViewPagerObserver(ViewPagerObserver observer) {
-        this.mViewPagerObserver = observer;
-    }
-
-    public void unregisterViewPagerObserver() {
-        this.mViewPagerObserver = null;
-    }
-
-    private void addTab(final int position, final View tab) {
-        tab.setFocusable(true);
-        tab.setPadding(mTabPaddingLeft, 0, mTabPaddingRight, 0);
-        tab.setBackgroundColor(mTabColor);
-        mTabContainer.addView(tab, position, mAverage ?
-                mAverageTabLayoutParams : mDefaultTabLayoutParams);
-        tab.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPosition = position;
-                if (tab instanceof TextView) {
-                    updateTextTab();
-                }
-                if (mOnTabClickListener != null) {
-                    mOnTabClickListener.onClick(v, position);
-                }
-            }
-        });
-    }
-
-    public void addTextTab(final int position, String title) {
-        TextView tab = new TextView(mContext);
-        tab.setText(title);
-        tab.setTextSize(mTabTextSize);
-        tab.setTextColor(mTabTextColor);
-        tab.setGravity(Gravity.CENTER);
-        tab.setSingleLine();
-        addTab(position, tab);
-    }
-
-    public void addIconTab(final int position, int resId) {
-        ImageView tab = new ImageView(mContext);
-        tab.setImageResource(resId);
-        addTab(position, tab);
-    }
-
-    public void addIconTab(final int position, Drawable drawable) {
-        ImageView tab = new ImageView(mContext);
-        tab.setImageDrawable(drawable);
-        addTab(position, tab);
-    }
-
-    public void addIconTab(final int position, Bitmap bitmap) {
-        ImageView tab = new ImageView(mContext);
-        tab.setImageBitmap(bitmap);
-        addTab(position, tab);
-    }
-
-    public void addIconTab(final int position, Uri uri) {
-        ImageView tab = new ImageView(mContext);
-        tab.setImageURI(uri);
-        addTab(position, tab);
-    }
-
-    private void updateTextTab() {
-        if (mTabCount > 0) {
-            for (int i = 0; i < mTabCount; i++) {
-                View tab = mTabContainer.getChildAt(i);
-                if (tab instanceof TextView) {
-                    TextView textTab = (TextView) tab;
-                    textTab.setTextSize(mTabTextSize);
-                    textTab.setTextColor(mTabTextColor);
-                    if (mTextAllCaps) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                            textTab.setAllCaps(true);
-                        } else {
-                            String title = textTab.getText().toString();
-                            textTab.setText(title.toUpperCase(mLocale));
-                        }
-                    }
-                    if (i == mPosition) {
-                        textTab.setTextColor(mSelectedTabTextColor);
+    /**
+     * When the property of the tab changes, the style of each tab changes.
+     */
+    public void refreshTabs() {
+        for (int i = 0; i < mTabCount; i++) {
+            View v = mTabContainer.getChildAt(i);
+            v.setBackgroundColor(mTabColor);
+            if (v instanceof TextView) {
+                TextView tab = (TextView) v;
+                tab.setTextSize(TypedValue.COMPLEX_UNIT_SP, mTabTextSize);
+                tab.setTypeface(mTabTypeface, mTabTypefaceStyle);
+                tab.setTextColor(mTabTextColor);
+                if (mTextAllCaps) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        tab.setAllCaps(true);
+                    } else {
+                        tab.setText(tab.getText().toString().toUpperCase(mLocale));
                     }
                 }
-            }
-            invalidateView();
-        }
-    }
-
-    public static class Adapter extends DataSetObservable {
-
-        private ArrayList<String> mTabTitles;
-
-        private final DataSetObservable mDataSetObservable = new DataSetObservable();
-
-        public Adapter(String[] titles) {
-            this.mTabTitles = new ArrayList<>();
-            for (String title : titles) {
-                mTabTitles.add(title);
+                if (i == mSelectedPosition) {
+                    tab.setTextColor(mSelectedTabTextColor);
+                }
             }
         }
-
-        public Adapter(ArrayList<String> titles) {
-            this.mTabTitles = titles;
-        }
-
-        public void registerDataSetObserver(DataSetObserver observer) {
-            mDataSetObservable.registerObserver(observer);
-        }
-
-        public void unregisterDataSetObserver(DataSetObserver observer) {
-            mDataSetObservable.unregisterObserver(observer);
-        }
-
-        public ArrayList<String> getTitles() {
-            return mTabTitles;
-        }
-
-        public void addTitle(String title) {
-            this.mTabTitles.add(title);
-            notifyDataSetChanged();
-        }
-
-        public void addTitle(ArrayList<String> titles) {
-            this.mTabTitles.addAll(titles);
-            notifyDataSetChanged();
-        }
-
-        public void addTitle(String[] titles) {
-            for (String title : titles) {
-                this.mTabTitles.add(title);
-            }
-            notifyDataSetChanged();
-        }
-
-        public void removeTitle(int position) {
-            this.mTabTitles.remove(position);
-            notifyDataSetChanged();
-        }
-
-        public void replaceTitle(int position, String title) {
-            this.mTabTitles.set(position, title);
-            notifyDataSetChanged();
-        }
-
-        public void clearTitle() {
-            this.mTabTitles.clear();
-            notifyDataSetInvalidated();
-        }
-
-        public int getCount() {
-            return mTabTitles.size();
-        }
-
-        public String getTitleAt(int position) {
-            return mTabTitles.get(position);
-        }
-
-        /**
-         * Notifies the attached observers that the underlying data has been changed
-         * and any View reflecting the data set should refresh itself.
-         */
-        public void notifyDataSetChanged() {
-            mDataSetObservable.notifyChanged();
-        }
-
-        /**
-         * Notifies the attached observers that the underlying data is no longer valid
-         * or available. Once invoked this adapter is no longer valid and should
-         * not report further data set changes.
-         */
-        public void notifyDataSetInvalidated() {
-            mDataSetObservable.notifyInvalidated();
-        }
     }
 
-    public Adapter getAdapter() {
-        return mAdapter;
-    }
-
-    public void setAdapter(Adapter adapter) {
-        this.mAdapter = adapter;
-    }
-
-    public float getUnderlineHeight() {
-        return mUnderlineHeight;
-    }
-
-    public void setUnderlineHeight(float height) {
-        if (height != mUnderlineHeight) {
-            this.mUnderlineHeight = height;
-            invalidateView();
-        }
-    }
-
-    public int getUnderlineColor() {
-        return mUnderlineColor;
-    }
-
-    public void setUnderlineColor(int color) {
-        if (color != mUnderlineColor) {
-            this.mUnderlineColor = color;
-            invalidateView();
-        }
-    }
-
-    public float getIndicatorHeight() {
-        return mIndicatorHeight;
-    }
-
-    public void setIndicatorHeight(float height) {
-        if (height != mIndicatorHeight) {
-            this.mIndicatorHeight = height;
-            invalidateView();
-        }
-    }
-
-    public int getIndicatorColor() {
-        return mIndicatorColor;
-    }
-
-    public void setIndicatorColor(int color) {
-        if (color != mIndicatorColor) {
-            this.mIndicatorColor = color;
-            invalidateView();
-        }
-    }
-
-    public float getDividerWidth() {
-        return mDividerWidth;
-    }
-
-    public void setDividerWidth(float width) {
-        if (width != mDividerWidth) {
-            this.mDividerWidth = width;
-        }
-    }
-
-    public int getDividerColor() {
-        return mDividerColor;
-    }
-
-    public void setDividerColor(int color) {
-        if (color != mDividerColor) {
-            this.mDividerColor = color;
-            invalidateView();
-        }
-    }
-
-    public float getDividerPaddingTop() {
-        return mDividerPaddingTop;
-    }
-
-    public void setDividerPaddingTop(float padding) {
-        if (padding != mDividerPaddingTop) {
-            this.mDividerPaddingTop = padding;
-            invalidateView();
-        }
-    }
-
-    public float getDividerPaddingBottom() {
-        return mDividerPaddingBottom;
-    }
-
-    public void setDividerPaddingBottom(float padding) {
-        if (padding != mDividerPaddingBottom) {
-            this.mDividerPaddingBottom = padding;
-            invalidateView();
-        }
-    }
-
-    public int getTabPaddingLeft() {
-        return mTabPaddingLeft;
-    }
-
-    public void setTabPaddingLeft(int padding) {
-        if (padding != mTabPaddingLeft) {
-            this.mTabPaddingLeft = padding;
-            invalidateView();
-        }
-    }
-
-    public int getTabPaddingRight() {
-        return mTabPaddingRight;
-    }
-
-    public void setTabPaddingRight(int padding) {
-        if (padding != mTabPaddingRight) {
-            this.mTabPaddingRight = padding;
-            invalidateView();
-        }
-    }
-
-    public float getTabTextSize() {
-        return mTabTextSize;
-    }
-
-    public void setTabTextSize(float size) {
-        if (size != mTabTextSize) {
-            this.mTabTextSize = size;
-            updateTextTab();
-        }
-    }
-
-    public int getTabTextColor() {
-        return mTabTextColor;
-    }
-
-    public void setTabTextColor(int color) {
-        if (color != mTabTextColor) {
-            this.mTabTextColor = color;
-            updateTextTab();
-        }
-    }
-
-    public int getSelectedTabTextColor() {
-        return mSelectedTabTextColor;
-    }
-
-    public void setSelectedTabTextColor(int color) {
-        if (color != mSelectedTabTextColor) {
-            this.mSelectedTabTextColor = color;
-            updateTextTab();
-        }
-    }
-
-    public int getTabColor() {
-        return mTabColor;
-    }
-
-    public void setTabColor(int color) {
-        if (color != mTabColor) {
-            this.mTabColor = color;
-            invalidateView();
-        }
+    private void initTabContainer() {
+        mTabContainer = new LinearLayout(getContext());
+        mTabContainer.setLayoutParams(new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT));
+        mTabContainer.setOrientation(LinearLayout.HORIZONTAL);
+        addView(mTabContainer);
     }
 
     public int getPosition() {
         return mPosition;
     }
 
-    public void setPosition(int position) {
-        if (position != mPosition) {
-            this.mPosition = position;
-            invalidateView();
-        }
-    }
-
     public float getPositionOffset() {
         return mPositionOffset;
     }
 
-    public void setPositionOffset(float offset) {
-        if (offset != mPositionOffset) {
-            this.mPositionOffset = offset;
-            invalidateView();
+    /**
+     * Adds a tab.You can look up {@link #addTextTab(int, String)}.
+     */
+    private void addTab(final int position,View tab){
+        tab.setFocusable(true);
+        tab.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                boolean isSwallowed = false;
+                if (mOnTabClickListener != null) {
+                    isSwallowed = mOnTabClickListener.onTabClick(v, position);
+                }
+                if (!isSwallowed) {
+                    setSelectedPosition(position);
+                }
+            }
+        });
+        tab.setPadding(mTabPaddingLeft, 0, mTabPaddingRight, mUnderlineHeight);
+        mTabContainer.addView(tab,position,mAverage ? mAverageTabLayoutParams
+                : mWrapTabLayoutParams);
+    }
+
+    /**
+     * You can invoke the method in a scrollable container{@literal '}s callback method.
+     */
+    public void setSelectedPosition(int position) {
+        mSelectedPosition = position;
+        refreshTabs();
+    }
+
+    /**
+     * You can invoke the method in a scrollable container{@literal '}s callback method.
+     */
+    public void setPositionOffset(int position, float positionOffset){
+        mPosition = position;
+        mPositionOffset = positionOffset;
+        scrollToChild(position, (int) (positionOffset * getTabWidth(position)));
+        invalidateView();
+    }
+
+    /**
+     * Sets the typeface of the tab.
+     */
+    public void setTypeface(Typeface typeface, int style) {
+        this.mTabTypeface = typeface;
+        this.mTabTypefaceStyle = style;
+        refreshTabs();
+    }
+
+    public void addTextTab(int position, String title){
+        TextView textTab = new TextView(getContext());
+        textTab.setText(title);
+        textTab.setGravity(Gravity.CENTER);
+        textTab.setSingleLine();
+        addTab(position, textTab);
+    }
+
+    /**
+     * Gets the tab container.
+     */
+    public LinearLayout getTabContainer() {
+        return mTabContainer;
+    }
+
+    /**
+     * You can invoke the method if you need to rearrange.
+     */
+    public void notifyDataSetChanged() {
+        mTabCount = mTabTitles.size();
+        mTabContainer.removeAllViews();
+        if (mTabTitles != null && mTabTitles.size() > 0) {
+            for (int i = 0; i < mTabTitles.size(); i++) {
+                addTextTab(i,mTabTitles.get(i));
+            }
+        }
+        refreshTabs();
+        getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                scrollToChild(mPosition, 0);
+            }
+        });
+    }
+
+    /**
+     * Scroll to the location of a tab.
+     */
+    public void scrollToChild(int position,int offsetPixels){
+        if (mTabCount == 0) {
+            return;
+        }
+        int width = getWidth();
+        int scrollOffset = (width-getTabWidth(position)) / 2;
+        int scrollX = getTabLeft(position) + offsetPixels;
+        if (position > 0 || offsetPixels > 0) {
+            scrollX -= scrollOffset;
+        }
+        if (scrollX != mScrollX) {
+            this.mScrollX = scrollX;
+            smoothScrollTo(scrollX, 0);
         }
     }
 
-    public boolean isTextAllCaps() {
-        return mTextAllCaps;
+    /**
+     * Gets the tab of the specified position.
+     */
+    public View getTab(int position) {
+        return mTabContainer.getChildAt(position);
     }
 
-    public void setTextAllCaps(boolean textAllCaps) {
-        if (textAllCaps != mTextAllCaps) {
-            this.mTextAllCaps = textAllCaps;
-            updateTextTab();
-        }
+    /**
+     * Gets the tab{@literal '}s width of the specified position.
+     */
+    public int getTabWidth(int position) {
+        return getTab(position).getWidth();
     }
 
+    /**
+     * Gets the tab{@literal '}s left x coordinate of the specified position.
+     */
+    public int getTabLeft(int position) {
+        return getTab(position).getLeft();
+    }
+
+    /**
+     * Gets the tab{@literal '}s right x coordinate of the specified position.
+     */
+    public int getTabRight(int position) {
+        return getTab(position).getRight();
+    }
+
+    /**
+     * Sets the indicator color.
+     */
+    public void setIndicatorColor(int resId) {
+        this.mIndicatorColor = getResources().getColor(resId);
+        invalidateView();
+    }
+
+    /**
+     * Gets the indicator color.
+     */
+    public int getIndicatorColor() {
+        return this.mIndicatorColor;
+    }
+
+    /**
+     * Sets the indicator height.
+     */
+    public void setIndicatorHeight(int height) {
+        this.mIndicatorHeight = height;
+        invalidateView();
+    }
+
+    /**
+     * Gets the indicator height.
+     */
+    public int getIndicatorHeight() {
+        return mIndicatorHeight;
+    }
+
+    /**
+     * Sets the underline color.
+     */
+    public void setUnderlineColor(int resId) {
+        this.mUnderlineColor = getResources().getColor(resId);
+        invalidateView();
+    }
+
+    /**
+     * Gets the underline color.
+     */
+    public int getUnderlineColor() {
+        return mUnderlineColor;
+    }
+
+    /**
+     * Sets the divider color.
+     */
+    public void setDividerColor(int resId) {
+        this.mDividerColor = getResources().getColor(resId);
+        invalidateView();
+    }
+
+    /**
+     * Gets the divider color.
+     */
+    public int getDividerColor() {
+        return mDividerColor;
+    }
+
+    /**
+     * Sets the underline height.
+     */
+    public void setUnderlineHeight(int height) {
+        this.mUnderlineHeight = height;
+        invalidateView();
+    }
+
+    /**
+     * Gets the underline height.
+     */
+    public int getUnderlineHeight() {
+        return mUnderlineHeight;
+    }
+
+    /**
+     * Sets top-padding of the divider.
+     */
+    public void setDividerPaddingTop(int padding) {
+        this.mDividerPaddingTop = padding;
+    }
+
+    /**
+     * Sets bottom-padding of the divider.
+     */
+    public void setDividerPaddingBottom(int padding) {
+        this.mDividerPaddingBottom = padding;
+    }
+
+    /**
+     * Gets top-padding of the divider.
+     */
+    public int getDividerPaddingTop() {
+        return mDividerPaddingTop;
+    }
+
+    /**
+     * Sets bottom-padding of the divider.
+     */
+    public int getDividerPaddingBottom() {
+        return mDividerPaddingBottom;
+    }
+
+    /**
+     * Check layout parameters is {@link #mAverageTabLayoutParams}.
+     */
     public boolean isAverage() {
         return mAverage;
     }
 
-    public void setAverage(boolean average) {
-        if (average != mAverage) {
-            this.mAverage = average;
-            invalidateView();
-        }
+    /**
+     * True represents using {@link #mAverageTabLayoutParams}, the otherwise using
+     * {@link #mWrapTabLayoutParams}.
+     */
+    public void setAverage(boolean isAverage) {
+        this.mAverage = isAverage;
+        notifyDataSetChanged();
     }
 
-    public int getTabCount() {
-        return mTabCount;
+    /**
+     * Sets the text size of the tab.
+     */
+    public void setTabTextSize(int size) {
+        this.mTabTextSize = size;
+        refreshTabs();
     }
 
-    public ViewPagerObserver getViewPagerObserver() {
-        return mViewPagerObserver;
+    /**
+     * Gets the text size of the tab.
+     */
+    public int getTabTextSize() {
+        return mTabTextSize;
     }
 
+    /**
+     * Sets the text color of the tab.
+     */
+    public void setTabTextColor(int resId) {
+        this.mTabTextColor = getResources().getColor(resId);
+        refreshTabs();
+    }
+
+    /**
+     * Gets the text color of the tab.
+     */
+    public int getTabTextColor() {
+        return mTabTextColor;
+    }
+
+    /**
+     * Sets the text color of the selected tab.
+     */
+    public void setSelectedTextColor(int resId) {
+        this.mSelectedTabTextColor = getResources().getColor(resId);
+        refreshTabs();
+    }
+
+    /**
+     * Gets the text color of the selected tab.
+     */
+    public int getSelectedTabTextColor() {
+        return mSelectedTabTextColor;
+    }
+
+    /**
+     * Sets the background color of the tab.
+     */
+    public void setTabColor(int resId) {
+        this.mTabColor = getResources().getColor(resId);
+        refreshTabs();
+    }
+
+    /**
+     * Gets the background color of the tab.
+     */
+    public int getTabColor() {
+        return mTabColor;
+    }
+
+    /**
+     * Sets the left-padding of the tab.
+     */
+    public void setTabPaddingLeft(int padding) {
+        this.mTabPaddingLeft = padding;
+    }
+
+    /**
+     * Sets the right-padding of the tab.
+     */
+    public void setTabPaddingRight(int padding) {
+        this.mTabPaddingRight = padding;
+    }
+
+    /**
+     * Gets the left-padding of the tab.
+     */
+    public int getTabPaddingLeft() {
+        return mTabPaddingLeft;
+    }
+
+    /**
+     * Gets the right-padding of the tab.
+     */
+    public int getTabPaddingRight() {
+        return mTabPaddingRight;
+    }
+
+    /**
+     * The refresh view operation of the automatic processing thread.
+     */
     private void invalidateView() {
         if (Looper.getMainLooper() == Looper.myLooper()) {
             invalidate();
@@ -723,43 +895,11 @@ public class HorizontalTabBar extends HorizontalScrollView {
         }
     }
 
-    public void scrollToChild(int position, float offset) {
-        if (mTabCount == 0) {
-            return;
-        }
-        int width = getWidth();
-        View tab = mTabContainer.getChildAt(position);
-        int tabWidth = tab.getWidth();
-        int tabLeft = tab.getLeft();
-        int scrollOffset = (width-tabWidth)/2;
-        float scrollX = tabLeft + offset;
-        if (position > 0 || offset > 0) {
-            scrollX -= scrollOffset;
-        }
-        if (scrollX != mLastScrollX) {
-            mLastScrollX = scrollX;
-            if (mViewPagerObserver != null) {
-                mViewPagerObserver.onPageScrolled(position, offset);
-                mViewPagerObserver.onPageSelected(position);
-            }
-            smoothScrollTo((int) scrollX, 0);
-        }
-    }
-
-    public interface OnTabClickListener {
-        void onClick(View view, int position);
-    }
-
-    public interface ViewPagerObserver {
-        void onPageScrolled(int position, float positionOffset);
-        void onPageSelected(int position);
-    }
-
     @Override
     public Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
         bundle.putParcelable(STATE_INSTANCE, super.onSaveInstanceState());
-        bundle.putInt(STATE_CURRENT, mPosition);
+        bundle.putFloat(STATE_POSITION, mSelectedPosition);
         return bundle;
     }
 
@@ -767,7 +907,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     public void onRestoreInstanceState(Parcelable parcelable) {
         if (parcelable instanceof Bundle) {
             Bundle bundle = (Bundle) parcelable;
-            mPosition = bundle.getInt(STATE_CURRENT);
+            mSelectedPosition = bundle.getInt(STATE_POSITION);
             super.onRestoreInstanceState(bundle.getParcelable(STATE_INSTANCE));
         } else {
             super.onRestoreInstanceState(parcelable);
