@@ -1,4 +1,4 @@
-JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)-http://www.jackwhliu.cn/jackknife/
+JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
 ================================
 
 一、关于如何配置环境
