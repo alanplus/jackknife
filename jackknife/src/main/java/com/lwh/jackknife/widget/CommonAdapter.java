@@ -37,11 +37,7 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mDatas = new ArrayList<>();
 		mContext = context;
-	}
-
-	public CommonAdapter(Context context, List<BEAN> datas) {
-		this(context);
-		addItems(datas);
+		addItems(initDatas());
 	}
 
 	@Override
@@ -105,6 +101,8 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 
 	protected abstract int[] getItemViewIds();
 
+	protected abstract List<BEAN> initDatas();
+
 	protected View inflateView() throws NoSuchMethodException, IllegalArgumentException,
 			IllegalAccessException, InvocationTargetException {
 		int layoutId = getItemLayoutId();
@@ -113,7 +111,7 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
-	protected abstract <VIEW extends View> void onBindViewHolder(int position, BEAN bean, ViewHolder<VIEW> holder);
+	protected abstract <VIEW extends View> void onBindViewHolder(int position, BEAN data, ViewHolder<VIEW> holder);
 
 	public List<BEAN> getDatas() {
 		return mDatas;
