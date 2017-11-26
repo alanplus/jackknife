@@ -947,7 +947,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Adds a tab.You can look up {@link #addTextTab(int, String)}.
      */
-    private void addTab(final int position,View tab){
+    private void addTab(final int position,View tab) {
         tab.setFocusable(true);
         tab.setOnClickListener(new OnClickListener() {
 
@@ -967,7 +967,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
                 : mWrapTabLayoutParams);
     }
 
-    public void addTextTab(int position, String title){
+    public void addTextTab(int position, String title) {
         TextView textTab = new TextView(getContext());
         textTab.setText(title);
         textTab.setGravity(Gravity.CENTER);
@@ -983,7 +983,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
         mTabContainer.removeAllViews();
         if (mTabTitles != null && mTabTitles.size() > 0) {
             for (int i = 0; i < mTabTitles.size(); i++) {
-                addTextTab(i,mTabTitles.get(i));
+                addTextTab(i, mTabTitles.get(i));
             }
         }
         refreshTabs();
