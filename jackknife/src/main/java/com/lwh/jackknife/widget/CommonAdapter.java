@@ -37,7 +37,10 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mDatas = new ArrayList<>();
 		mContext = context;
-		addItems(initDatas());
+		List<BEAN> datas = initDatas();
+		if (datas != null) {
+			addItems(datas);
+		}
 	}
 
 	@Override
