@@ -16,16 +16,19 @@
 
 package com.lwh.jackknife.orm;
 
+import com.lwh.jackknife.orm.table.OrmTable;
 import com.lwh.jackknife.util.TextUtils;
 
 public class OrmConfig {
 
     private String mDatabaseName;
     private int mVersionCode;
+    private Class<? extends OrmTable>[] mTableClasses;
 
     private OrmConfig(Builder builder) {
         mDatabaseName = builder.mDatabaseName;
         mVersionCode = builder.mVersionCode;
+        mTableClasses = builder.mTableClasses;
     }
 
     public String getDatabaseName() {
@@ -36,10 +39,15 @@ public class OrmConfig {
         return mVersionCode;
     }
 
+    public Class<? extends OrmTable>[] getTables() {
+        return mTableClasses;
+    }
+
     public static class Builder {
 
         private String mDatabaseName;
         private int mVersionCode = 1;
+        private Class<? extends OrmTable>[] mTableClasses;
 
         public Builder database(String name) {
             mDatabaseName = name;
@@ -48,6 +56,11 @@ public class OrmConfig {
 
         public Builder version(int code) {
             mVersionCode = code;
+            return this;
+        }
+
+        public Builder tables(Class<? extends OrmTable>[] tableClasses) {
+            mTableClasses = tableClasses;
             return this;
         }
 

@@ -18,10 +18,7 @@ package com.lwh.jackknife.orm.table;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.AssignType;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.ForeignKey;
@@ -30,10 +27,6 @@ import com.lwh.jackknife.orm.annotation.NotNull;
 import com.lwh.jackknife.orm.annotation.PrimaryKey;
 import com.lwh.jackknife.orm.annotation.Table;
 import com.lwh.jackknife.orm.annotation.Unique;
-import com.lwh.jackknife.orm.builder.QueryBuilder;
-import com.lwh.jackknife.orm.builder.WhereBuilder;
-import com.lwh.jackknife.orm.dao.DaoFactory;
-import com.lwh.jackknife.orm.dao.OrmDao;
 import com.lwh.jackknife.orm.exception.ConstraintException;
 import com.lwh.jackknife.orm.type.BaseDataType;
 import com.lwh.jackknife.orm.type.BooleanType;
@@ -54,18 +47,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class TableManager {
 
     private static TableManager sInstance;
 
-    private static SQLiteDatabase sDatabase;
-
     private final String TAG = getClass().getSimpleName();
-
-    private Map<Class<? extends OrmTable>, String> mTableNameMap = new ConcurrentHashMap<>();
 
     private final char A = 'A';
 
@@ -80,8 +67,6 @@ public class TableManager {
     private final String ADD_COLUMN = "ADD COLUMN";
 
     private final String AUTO_INCREMENT = "AUTOINCREMENT";
-
-    private final String TABLE_NAME = "table_name";
 
     private final String SPACE = " ";
 
@@ -105,33 +90,14 @@ public class TableManager {
 
     private final String TABLE_NAME_HEADER = "t" + UNDERLINE;
 
-    private OrmDao<TableName> mDao;
-
-    private TableManager(SQLiteDatabase db) {
-        this.sDatabase = db;
-        mDao = DaoFactory.getDao(TableName.class);
-    }
-
-    public void installTables() {
-        createTable(TableName.class);
-        List<TableName> tables = mDao.selectAll();
-        for (TableName table:tables) {
-            String tableName = table.getTableName();
-            Class<? extends OrmTable> tableClass = table.getTableClass();
-            mTableNameMap.put(tableClass, tableName);
-        }
+    private TableManager() {
     }
 
     public static TableManager getInstance() {
         if (sInstance == null) {
             synchronized (TableManager.class) {
                 if (sInstance == null) {
-                    if (Application.getInstance() instanceof Application) {
-                        SQLiteOpenHelper helper = Application.getInstance().getSQLiteOpenHelper();
-                        sDatabase = helper.getWritableDatabase();
-                        sInstance = new TableManager(sDatabase);
-                        sInstance.installTables();
-                    }
+                    sInstance = new TableManager();
                 }
             }
         }
@@ -209,7 +175,7 @@ public class TableManager {
         return ByteArrayType.getInstance();
     }
 
-    public <T extends OrmTable> void createTable(Class<T> tableClass) {
+    public <T extends OrmTable> void createTable(Class<T> tableClass, SQLiteDatabase db) {
         String tableName = getTableName(tableClass);
         Field[] fields = tableClass.getDeclaredFields();
         StringBuilder sb = new StringBuilder();
@@ -278,87 +244,73 @@ public class TableManager {
         try {
             String sql = sb.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS)
                     .append(SEMICOLON).toString();
-            Log.i(TAG, "execute create table sql:" + sql);
-            sDatabase.execSQL(sql);
-            mTableNameMap.put(tableClass, tableName);
-            WhereBuilder whereBuilder = WhereBuilder.create()
-                    .addWhereEqualTo(TABLE_NAME, tableName);
-            QueryBuilder queryBuilder = QueryBuilder.create().where(whereBuilder);
-            int count = mDao.selectCount(queryBuilder);
-            if (count == 0) {
-                TableName nameTable = new TableName(tableClass, tableName);
-                mDao.insert(nameTable);
-            }
+            db.execSQL(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public <T extends OrmTable> void upgradeTable(Class<T> tableClass) {
-        TableName nameTable = mDao.selectOne(QueryBuilder.create().where(WhereBuilder.create()
-                .addWhereEqualTo("table_class", tableClass)));
-        if (nameTable != null) {
-            String tableName = getTableName(tableClass);
-            Field[] fields = tableClass.getDeclaredFields();
+    public <T extends OrmTable> void upgradeTable(Class<T> tableClass, SQLiteDatabase db) {
+        String tableName = getTableName(tableClass);
+        Field[] fields = tableClass.getDeclaredFields();
+        List<Annotation> keys = new ArrayList<>();
+        for (Field field : fields) {
+            field.setAccessible(true);
             StringBuilder sb = new StringBuilder();
-            List<Annotation> keys = new ArrayList<>();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                NonColumn nonColumn = field.getAnnotation(NonColumn.class);
-                PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-                ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
-                if (nonColumn != null) {
-                    continue;
+            NonColumn nonColumn = field.getAnnotation(NonColumn.class);
+            PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
+            ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
+            if (nonColumn != null) {
+                continue;
+            }
+            if (primaryKey != null) {
+                keys.add(primaryKey);
+            }
+            if (foreignKey != null) {
+                keys.add(foreignKey);
+            }
+            BaseDataType dataType = matchDataType(field);
+            SqlType sqlType = dataType.getSqlType();
+            String columnType = sqlType.name();
+            String columnName = getColumnName(field);
+            sb.append(columnName + SPACE + columnType);
+            Unique unique = field.getAnnotation(Unique.class);
+            if (unique != null) {
+                sb.append(SPACE).append(UNIQUE);
+            }
+            NotNull notNull = field.getAnnotation(NotNull.class);
+            if (notNull != null) {
+                sb.append(SPACE).append(NOT_NULL);
+            }
+            if (primaryKey != null) {
+                sb.append(SPACE).append(PRIMARY_KEY);
+                AssignType assignType = primaryKey.value();
+                if (assignType.equals(AssignType.BY_MYSELF)) {
+                } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
+                    sb.append(SPACE).append(AUTO_INCREMENT);
                 }
-                if (primaryKey != null) {
-                    keys.add(primaryKey);
-                }
-                if (foreignKey != null) {
-                    keys.add(foreignKey);
-                }
-                BaseDataType dataType = matchDataType(field);
-                SqlType sqlType = dataType.getSqlType();
-                String columnType = sqlType.name();
-                String columnName = getColumnName(field);
-                sb.append(columnName + SPACE + columnType);
-                Unique unique = field.getAnnotation(Unique.class);
-                if (unique != null) {
-                    sb.append(SPACE).append(UNIQUE);
-                }
-                NotNull notNull = field.getAnnotation(NotNull.class);
-                if (notNull != null) {
-                    sb.append(SPACE).append(NOT_NULL);
-                }
-                if (primaryKey != null) {
-                    sb.append(SPACE).append(PRIMARY_KEY);
-                    AssignType assignType = primaryKey.value();
-                    if (assignType.equals(AssignType.BY_MYSELF)) {
-                    } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
-                        sb.append(SPACE).append(AUTO_INCREMENT);
-                    }
-                }
-                if (foreignKey != null) {
-                    Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
-                    if (!foreignKeyTableClass.equals(tableClass)) {
-                        String foreignKeyTableName = foreignKeyTableClass.getName();
-                        sb.append(SPACE).append(REFERENCES).append(SPACE)
-                                .append(foreignKeyTableName).append(LEFT_PARENTHESIS);
-                        Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();
-                        for (Field foreignKeyTableField : foreignKeyTableFields) {
-                            PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField
-                                    .getAnnotation(PrimaryKey.class);
-                            if (foreignKeyTablePrimaryKey != null) {
-                                String foreignKeyTablePrimaryKeyName = field.getName();
-                                sb.append(foreignKeyTablePrimaryKeyName).append(COMMA);
-                            }
+            }
+            if (foreignKey != null) {
+                Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
+                if (!foreignKeyTableClass.equals(tableClass)) {
+                    String foreignKeyTableName = foreignKeyTableClass.getName();
+                    sb.append(SPACE).append(REFERENCES).append(SPACE)
+                            .append(foreignKeyTableName).append(LEFT_PARENTHESIS);
+                    Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();
+                    for (Field foreignKeyTableField : foreignKeyTableFields) {
+                        PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField
+                                .getAnnotation(PrimaryKey.class);
+                        if (foreignKeyTablePrimaryKey != null) {
+                            String foreignKeyTablePrimaryKeyName = field.getName();
+                            sb.append(foreignKeyTablePrimaryKeyName).append(COMMA);
                         }
-                        sb.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS);
                     }
+                    sb.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS);
                 }
             }
             try {
-                sDatabase.execSQL(ALTER_TABLE + SPACE + tableName + SPACE + ADD_COLUMN + SPACE +
-                        IF_NOT_EXISTS + SPACE + sb.toString() + SEMICOLON);
+                db.execSQL(ALTER_TABLE + SPACE + tableName + SPACE + IF_NOT_EXISTS + SPACE
+                        + columnName + SPACE + ADD_COLUMN + SPACE + sb.toString() + SEMICOLON);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

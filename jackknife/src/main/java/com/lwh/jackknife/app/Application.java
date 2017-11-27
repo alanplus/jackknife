@@ -17,7 +17,7 @@
 package com.lwh.jackknife.app;
 
 import android.app.ActivityGroup;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.lwh.jackknife.ioc.SupportActivity;
 
@@ -40,10 +40,7 @@ public class Application extends android.app.Application {
      */
     private static Application sApp;
 
-    /**
-     * It is attached to the application context and is easy to access anywhere in the program.
-     */
-    private SQLiteOpenHelper mSQLiteOpenHelper;
+    private SQLiteDatabase mDatabase;
 
     @Override
     public void onCreate() {
@@ -52,16 +49,14 @@ public class Application extends android.app.Application {
     }
 
     /**
-     * After attachment, you can get it in {@link #getSQLiteOpenHelper()}.
-     *
-     * @param helper A helper class to manage database creation and version management.
+     * After attachment, you can get it in {@link #getDatabase()}.
      */
-    public void attach(SQLiteOpenHelper helper){
-        this.mSQLiteOpenHelper = helper;
+    public void attach(SQLiteDatabase db){
+        this.mDatabase = db;
     }
 
-    public SQLiteOpenHelper getSQLiteOpenHelper(){
-        return mSQLiteOpenHelper;
+    public SQLiteDatabase getDatabase() {
+        return mDatabase;
     }
 
     public static Application getInstance(){

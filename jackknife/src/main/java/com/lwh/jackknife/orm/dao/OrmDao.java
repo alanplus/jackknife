@@ -19,7 +19,6 @@ package com.lwh.jackknife.orm.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.AssignType;
@@ -40,14 +39,12 @@ import java.util.List;
 public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     private Class<T> mBeanClass;
-    private SQLiteOpenHelper mHelper;
     private SQLiteDatabase mDatabase;
     private final String COMMA = ",";
 
     /* package */ OrmDao(Class<T> beanClass) {
         this.mBeanClass = beanClass;
-        this.mHelper = Application.getInstance().getSQLiteOpenHelper();
-        this.mDatabase = mHelper.getWritableDatabase();
+        this.mDatabase = Application.getInstance().getDatabase();
     }
 
     private boolean isAssignableFromBoolean(Class<?> fieldType) {

@@ -17,24 +17,26 @@
 package com.lwh.jackknife.orm;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.app.Application;
+import com.lwh.jackknife.orm.table.OrmTable;
 
-/**
- * If you use this class, you will need to inherit {@link Application}.
- */
 public class Orm {
 
     public synchronized static void init(Context context, String databaseName) {
-        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1);
-        Application.getInstance().attach(helper);
+        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1, null);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        Application.getInstance().attach(database);
     }
 
     public synchronized static void init(Context context, OrmConfig config) {
         String name = config.getDatabaseName();
         int versionCode = config.getVersionCode();
-        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode);
-        Application.getInstance().attach(helper);
+        Class<? extends OrmTable>[] tables = config.getTables();
+        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode, tables);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        Application.getInstance().attach(database);
     }
 }

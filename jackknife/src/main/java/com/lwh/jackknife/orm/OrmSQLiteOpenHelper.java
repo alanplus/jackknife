@@ -26,39 +26,41 @@ import com.lwh.jackknife.orm.table.OrmTable;
 import com.lwh.jackknife.orm.table.TableManager;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    public OrmSQLiteOpenHelper(Context context, String name, int version) {
+    private List<Class<? extends OrmTable>> mTableClasses;
+
+    public OrmSQLiteOpenHelper(Context context, String name, int version, Class<? extends OrmTable>[] tables) {
         super(context, name, null, version);
+        if (tables != null) {
+            mTableClasses = Arrays.asList(tables);
+        }
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        if (mTableClasses != null && !mTableClasses.isEmpty()) {
+            Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
+            while (iterator.hasNext()) {
+                Class<? extends OrmTable> tableClass = iterator.next();
+                TableManager.getInstance().createTable(tableClass, db);
+            }
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            try {
-                Class<? extends OrmTable> tableNameClass = (Class<? extends OrmTable>)
-                        Class.forName("com.lwh.jackknife.orm.table.TableName");
-                OrmDao<?> dao = DaoFactory.getDao(tableNameClass);
-                List<?> tables = dao.selectAll();
-                for (Object table : tables) {
-                    Field field = tableNameClass.getDeclaredField("tableClass");
-                    field.setAccessible(true);
-                    Class<? extends OrmTable> tableClass =
-                            (Class<? extends OrmTable>) field.get(table);
-                    TableManager.getInstance().upgradeTable(tableClass);
+            if (mTableClasses != null && !mTableClasses.isEmpty()) {
+                Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
+                while (iterator.hasNext()) {
+                    Class<? extends OrmTable> tableClass = iterator.next();
+                    TableManager.getInstance().upgradeTable(tableClass, db);
                 }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
         }
     }
