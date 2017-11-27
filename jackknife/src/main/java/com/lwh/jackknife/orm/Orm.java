@@ -28,7 +28,9 @@ public class Orm {
     public synchronized static void init(Context context, String databaseName) {
         SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1, null);
         SQLiteDatabase database = helper.getWritableDatabase();
-        Application.getInstance().attach(database);
+        if (context.getApplicationContext() instanceof Application) {
+            Application.getInstance().attach(database);
+        }
     }
 
     public synchronized static void init(Context context, OrmConfig config) {
@@ -37,6 +39,8 @@ public class Orm {
         Class<? extends OrmTable>[] tables = config.getTables();
         SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode, tables);
         SQLiteDatabase database = helper.getWritableDatabase();
-        Application.getInstance().attach(database);
+        if (context.getApplicationContext() instanceof Application) {
+            Application.getInstance().attach(database);
+        }
     }
 }
