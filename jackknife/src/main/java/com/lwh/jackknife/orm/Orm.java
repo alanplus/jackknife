@@ -43,6 +43,9 @@ public class Orm {
     public synchronized static void init(Context context, String databaseName) {
         SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1, null);
         sDatabase = helper.getWritableDatabase();
+        if (sDatabase != null) {
+            sDatabaseState = STATE_DATABASE_EXISTS;
+        }
     }
 
     public synchronized static void init(Context context, OrmConfig config) {
@@ -51,5 +54,8 @@ public class Orm {
         Class<? extends OrmTable>[] tables = config.getTables();
         SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode, tables);
         sDatabase = helper.getWritableDatabase();
+        if (sDatabase != null) {
+            sDatabaseState = STATE_DATABASE_EXISTS;
+        }
     }
 }

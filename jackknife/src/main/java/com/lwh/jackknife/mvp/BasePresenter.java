@@ -16,6 +16,11 @@
 
 package com.lwh.jackknife.mvp;
 
+import android.content.Context;
+
+import com.lwh.jackknife.ioc.SupportActivity;
+import com.lwh.jackknife.ioc.SupportFragment;
+
 import java.lang.ref.WeakReference;
 
 public abstract class BasePresenter<V extends IBaseView> {
@@ -37,12 +42,17 @@ public abstract class BasePresenter<V extends IBaseView> {
         return mViewRef.get();
     }
 
-    protected <T> T getView(Class<T> viewClass) {
-        return (T) getView();
+    protected <C extends Context> C getContext(Class<C> viewClass) {
+        if (SupportActivity.class.isAssignableFrom(viewClass)) {
+            return (C) getView();
+        } else if (SupportFragment.class.isAssignableFrom(viewClass)) {
+            return (C) ((SupportFragment)getView()).getFragmentActivity();
+        }
+        return null;
     }
 
     /**
-     * It's usually called before {@link #getView()} or {@link #getView(Class)}.
+     * It's usually called before {@link #getView()} or {@link #getContext(Class)}.
      *
      * @return Ture means successful attachment, false otherwise.
      */

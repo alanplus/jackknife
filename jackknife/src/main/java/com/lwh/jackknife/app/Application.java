@@ -40,23 +40,10 @@ public class Application extends android.app.Application {
      */
     private static Application sApp;
 
-    private SQLiteDatabase mDatabase;
-
     @Override
     public void onCreate() {
         super.onCreate();
         sApp = this;
-    }
-
-    /**
-     * After attachment, you can get it in {@link #getDatabase()}.
-     */
-    public void attach(SQLiteDatabase db){
-        this.mDatabase = db;
-    }
-
-    public SQLiteDatabase getDatabase() {
-        return mDatabase;
     }
 
     public static Application getInstance(){
