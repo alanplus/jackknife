@@ -62,9 +62,9 @@ dependencies {
 > 配置唯一约束
 ##### （6）@NotNull
 > 配置非空约束
-#### 3.创表
+#### 3、创表
 > 以User为例，TableManager.getInstance().createTable(User.class);//创建OrmTable的实现类的表
-#### 4.数据的增删改查
+#### 4、数据的增删改查
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 ##### （1）单条插入
@@ -104,3 +104,5 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 ##### （4）BaseActivity或BaseFragment（V层）
 > 比如public class MainActivity extends BaseActivity<IMainView, MainPresenter> implements
 IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，也可以参考它自己来实现。
+#### 2、一些思考
+> 关于mvp这个架构，市面上众说纷纭，有赞赏的，也有批评的。总之，这个架构既有优点，又有缺点。先说优点，解除模型数据和UI显示的耦合，界面显示和业务操作逻辑分离，易于创建副本，提高可维护性。缺点也是显而易见的，Presenter和View类爆炸的问题很严重，也就是说，如果你只需要写一个很小的项目，是完全没有必要使用mvp的。
