@@ -16,10 +16,11 @@
 
 package com.lwh.jackknife.mvp;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
-
-import com.lwh.jackknife.ioc.SupportActivity;
-import com.lwh.jackknife.ioc.SupportFragment;
+import android.view.View;
 
 import java.lang.ref.WeakReference;
 
@@ -42,11 +43,15 @@ public abstract class BasePresenter<V extends IBaseView> {
         return mViewRef.get();
     }
 
-    protected <C extends Context> C getContext(Class<C> viewClass) {
-        if (SupportActivity.class.isAssignableFrom(viewClass)) {
-            return (C) getView();
-        } else if (SupportFragment.class.isAssignableFrom(viewClass)) {
-            return (C) ((SupportFragment)getView()).getFragmentActivity();
+    protected Context getContext(Class<V> viewClass) {
+        if (Activity.class.isAssignableFrom(viewClass)) {
+            return (Context) getView();
+        } else if (Fragment.class.isAssignableFrom(viewClass)) {
+            return ((Fragment)getView()).getActivity();
+        } else if (Dialog.class.isAssignableFrom(viewClass)) {
+            return ((Dialog)getView()).getOwnerActivity();
+        } else if (View.class.isAssignableFrom(viewClass)) {
+            return ((View)getView()).getContext();
         }
         return null;
     }

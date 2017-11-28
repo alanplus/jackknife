@@ -29,7 +29,7 @@ import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 /**
  * Automatically inject a layout, bind views, and register events for fragments.
  */
-public abstract class Fragment extends android.app.Fragment implements SupportFragment{
+public class Fragment extends android.app.Fragment implements SupportFragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

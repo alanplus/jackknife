@@ -1,4 +1,4 @@
-JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
+JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg) - CSDN博客 http://blog.csdn.net/yiranaini_/
 ================================
 
 一、关于如何配置环境
@@ -46,7 +46,7 @@ dependencies {
 
 ### (二)数据库ORM模块（jackknife-orm）
 #### 1、初始化配置
-> 继承com.lwh.jackknife.app.Application，并在Application中完成初始化。可使用Orm.init(OrmConfig);//调用Orm的init方法
+> 继承com.lwh.jackknife.app.Application，并在Application中完成初始化，2.0.15之后不再需要。可使用Orm.init(OrmConfig);//调用Orm的init方法
 #### 2、完成实体类的编写
 > 如果你想使用jackknife-orm自动创表，你只需要实现OrmTable接口再配置一些基本信息即可。
 需要注意的是，在一个OrmTable的实现类中，至少要有一个配置主键或外键的属性。
@@ -91,3 +91,16 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 > dao.selectOne();
 ##### （12）查询最满足条件的一条记录
 > dao.selectOne(QueryBuilder);
+
+### (三)基于MVP设计理念的开发（jackknife-mvp）
+#### 1、所需要依赖的类
+##### （1）BaseModel（M层）
+> 它是一个强大的数据筛选器，可以支持多条件筛选。
+##### （2）IBaseView（V层）
+> 在继承这个接口的接口中提供与界面显示相关的操作，比如显示某某数据，或获取从控件中获取用户输入的结果。建议继承这个
+接口的接口也以I开头命名，避免与自定义View混淆。
+##### （3）BasePresenter（P层）
+> 在presenter中持有view和model的引用，它的职责是处理业务层的操作，如把model中的数据加载到view上显示、文件下载等。耗时操作务必在presenter中完成，此mvp框架可以有效防止activity的内存泄漏的。
+##### （4）BaseActivity或BaseFragment（V层）
+> 比如public class MainActivity extends BaseActivity<IMainView, MainPresenter> implements
+IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，也可以参考它自己来实现。

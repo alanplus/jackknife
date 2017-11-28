@@ -19,8 +19,8 @@ package com.lwh.jackknife.orm.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
-import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.AssignType;
 import com.lwh.jackknife.orm.Orm;
 import com.lwh.jackknife.orm.Transaction;
@@ -31,7 +31,6 @@ import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
 import com.lwh.jackknife.orm.table.OrmTable;
 import com.lwh.jackknife.orm.table.TableManager;
-import com.lwh.jackknife.util.TextUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -245,7 +244,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         String[] selectionArgs = where.getSelectionArgs();
         Cursor cursor = mDatabase.query(tableName, columns, selection, selectionArgs, group, having, order);
         List<T> result = getResult(cursor);
-        if (TextUtils.isNotEmpty(limit)) {
+        if (!TextUtils.isEmpty(limit)) {
             if (limit.contains(COMMA)) {
                 String[] limitPart = limit.split(COMMA);
                 return getLimitedBeans(result, Integer.valueOf(limitPart[0]),

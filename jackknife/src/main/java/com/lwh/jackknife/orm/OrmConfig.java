@@ -16,8 +16,9 @@
 
 package com.lwh.jackknife.orm;
 
+import android.text.TextUtils;
+
 import com.lwh.jackknife.orm.table.OrmTable;
-import com.lwh.jackknife.util.TextUtils;
 
 public class OrmConfig {
 
@@ -65,7 +66,7 @@ public class OrmConfig {
         }
 
         public OrmConfig build() {
-            if (TextUtils.isNotEmpty(mDatabaseName)) {
+            if (!TextUtils.isEmpty(mDatabaseName)) {
                 return new OrmConfig(this);
             }
             return null;
