@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.util;
 
-public class NumberUtils implements MathConstants {
+public class NumberUtils implements NumberConstants {
 
     private NumberUtils() {
     }

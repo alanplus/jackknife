@@ -26,9 +26,10 @@ import java.lang.ref.WeakReference;
 public class ToastUtils {
 
 	private static WeakReference<Toast> sToastRef;
-	private static Handler sHandler = new Handler(Looper.getMainLooper());
+	private static Handler sHandler;
 
 	private ToastUtils() {
+		sHandler = new Handler(Looper.getMainLooper());
 	}
 
 	public static void showShort(Context context, String text) {

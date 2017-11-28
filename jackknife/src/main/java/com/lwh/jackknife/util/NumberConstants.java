@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.util;
 
-public interface MathConstants {
+public interface NumberConstants {
 
     int ZERO = 0;
 

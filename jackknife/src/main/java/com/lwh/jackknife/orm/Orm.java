@@ -20,17 +20,29 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.lwh.jackknife.app.Application;
+import com.lwh.jackknife.orm.exception.OrmStateException;
 import com.lwh.jackknife.orm.table.OrmTable;
 
 public class Orm {
 
+    private static SQLiteDatabase sDatabase;
+    private static int STATE_DATABASE_NOT_EXISTS = 0;
+    private static int STATE_DATABASE_EXISTS = 1;
+    private static int sDatabaseState = STATE_DATABASE_NOT_EXISTS;
+
+    public static boolean isPrepared() {
+        return sDatabaseState == STATE_DATABASE_EXISTS;
+    }
+
+    public static SQLiteDatabase getDatabase() {
+        if (isPrepared()) {
+            return sDatabase;
+        } else throw new OrmStateException("Database is not exists.");
+    }
+
     public synchronized static void init(Context context, String databaseName) {
         SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1, null);
-        SQLiteDatabase database = helper.getWritableDatabase();
-        if (context.getApplicationContext() instanceof Application) {
-            Application.getInstance().attach(database);
-        }
+        sDatabase = helper.getWritableDatabase();
     }
 
     public synchronized static void init(Context context, OrmConfig config) {
@@ -38,9 +50,6 @@ public class Orm {
         int versionCode = config.getVersionCode();
         Class<? extends OrmTable>[] tables = config.getTables();
         SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode, tables);
-        SQLiteDatabase database = helper.getWritableDatabase();
-        if (context.getApplicationContext() instanceof Application) {
-            Application.getInstance().attach(database);
-        }
+        sDatabase = helper.getWritableDatabase();
     }
 }

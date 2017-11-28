@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.orm.AssignType;
+import com.lwh.jackknife.orm.Orm;
 import com.lwh.jackknife.orm.Transaction;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.NonColumn;
@@ -44,7 +45,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     /* package */ OrmDao(Class<T> beanClass) {
         this.mBeanClass = beanClass;
-        this.mDatabase = Application.getInstance().getDatabase();
+        mDatabase = Orm.getDatabase();
     }
 
     private boolean isAssignableFromBoolean(Class<?> fieldType) {

@@ -37,7 +37,10 @@ public class WifiAdmin {
     private WifiLock mWifiLock;
 
     public enum WifiCipherType {
-        WIFICIPHER_WEP, WIFICIPHER_WPA, WIFICIPHER_NOPASS, WIFICIPHER_INVALID
+        WIFICIPHER_WEP,
+        WIFICIPHER_WPA,
+        WIFICIPHER_NOPASS,
+        WIFICIPHER_INVALID
     }
 
     public WifiAdmin(Context context) {
@@ -77,7 +80,7 @@ public class WifiAdmin {
         mWifiLock = mWifiManager.createWifiLock(tag);
     }
 
-    public List<WifiConfiguration> getConfiguration() {
+    public List<WifiConfiguration> getConfigurations() {
         return mWifiConfigurations;  
     }
 
