@@ -130,13 +130,17 @@ public class WifiAdmin {
         return mWifiInfo == null ? "" : mWifiInfo.toString();
     }
 
-    public boolean addNetwork(WifiConfiguration config) {
+    public int addNetwork(WifiConfiguration config) {
         if (config == null) {
             return false;
         }
         int networkId = mWifiManager.addNetwork(config);
         mWifiManager.enableNetwork(networkId, true);
-        return mWifiManager.saveConfiguration();
+        boolean isOk = mWifiManager.saveConfiguration();
+        if (isOk) {
+            return networkId;
+        }
+        return -1;
     }
 
     public void disconnectWifi(int netId) {
@@ -214,7 +218,6 @@ public class WifiAdmin {
             mWifiManager.removeNetwork(tempConfig.networkId);
         }
         int networkId = mWifiManager.addNetwork(currentConfig);
-        mWifiManager.disconnect();
         mWifiManager.enableNetwork(networkId, true);
         return mWifiManager.reconnect();
     }
@@ -256,7 +259,11 @@ public class WifiAdmin {
         }
         if (isOk && !enabling) {
             WifiConfiguration config = createWifiInfo(result, password);
-            isOk = addNetwork(config);
+            int networkId = addNetwork(config);
+            isOk = mWifiManager.enableNetwork(networkId, true);
+            if (isOk) {
+                mWifiManager.reconnect();
+            }
         }
         return isOk;
     }
