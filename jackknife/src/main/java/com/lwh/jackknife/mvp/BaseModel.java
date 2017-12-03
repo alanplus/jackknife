@@ -16,8 +16,12 @@
 
 package com.lwh.jackknife.mvp;
 
+import com.lwh.jackknife.util.TextUtils;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +34,8 @@ public abstract class BaseModel<BEAN>{
 
     protected Class<BEAN> mDataClass;
 
+    private Comparator<BEAN> mComparator;
+
     public BaseModel(Class<BEAN> dataClass){
         if (dataClass == null) {
             throw new IllegalArgumentException("Unknown bean type.");
@@ -39,16 +45,63 @@ public abstract class BaseModel<BEAN>{
         mDataClass = dataClass;
     }
 
-    public void add(BEAN datas){
+    public enum SortStrategy {
+        ASC, DESC
+    }
+
+    public BaseModel add(BEAN datas){
         mDatas.add(datas);
+        return this;
     }
 
-    public void add(List<BEAN> beans){
+    public BaseModel add(List<BEAN> beans){
         mDatas.addAll(beans);
+        return this;
     }
 
-    public void clear(){
+    public BaseModel clear(){
         mDatas.clear();
+        return this;
+    }
+
+    public BaseModel sort(final String sortKey, final SortStrategy strategy) {
+        mComparator = new Comparator<BEAN>() {
+
+            @Override
+            public int compare(BEAN lhs, BEAN rhs) {
+                int reverse = 1;
+                if (strategy == SortStrategy.DESC) {
+                    reverse = -reverse;
+                }
+                try {
+                    Field field = mDataClass.getDeclaredField(sortKey);
+                    field.setAccessible(true);
+                    Class<?> fieldType = field.getType();
+                    if (String.class.isAssignableFrom(fieldType)) {
+                        return (TextUtils.getPinyin((String) field.get(lhs)).compareTo
+                                (TextUtils.getPinyin((String) field.get(rhs)))) * reverse;
+                    } else {
+                        return (field.get(rhs).hashCode() - field.get(lhs).hashCode()) * reverse;
+                    }
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                throw new RuntimeException("Unknown condition.");
+            }
+
+            @Override
+            public boolean equals(Object object) {
+                return false;
+            }
+        };
+        Collections.sort(mDatas, mComparator);
+        return this;
+    }
+
+    public BaseModel sort(String sortKey) {
+        return sort(sortKey, SortStrategy.ASC);
     }
 
     public interface OnLoadListener<BEAN> {

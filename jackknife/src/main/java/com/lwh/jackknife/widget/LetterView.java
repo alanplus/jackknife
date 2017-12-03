@@ -19,9 +19,7 @@ package com.lwh.jackknife.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.text.TextPaint;
@@ -51,7 +49,6 @@ public class LetterView extends View {
     private int mSelected = -1;
     private final int DEFAULT_TEXT_COLOR = 0xFF000000;
     private final int DEFAULT_HOVER_TEXT_COLOR = 0xFF000000;
-    private final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
     private DisplayMetrics mMetrics;
     private Locale mLocale;
     private OnLetterChangeListener mOnLetterChangeListener;
