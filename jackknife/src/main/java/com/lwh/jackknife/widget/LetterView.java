@@ -21,7 +21,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.text.TextPaint;
@@ -42,7 +42,8 @@ public class LetterView extends View {
     private float mTextSize;
     private int mTextColor;
     private int mHoverTextColor;
-    private int mHoverBackgroundColor;
+    private Drawable mBackgroundDrawable;
+    private Drawable mHoverBackgroundDrawable;
     private String[] mLetters = { "A", "B", "C", "D", "E", "F", "G", "H", "I",
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
             "W", "X", "Y", "Z", "#" };
@@ -50,7 +51,7 @@ public class LetterView extends View {
     private int mSelected = -1;
     private final int DEFAULT_TEXT_COLOR = 0xFF000000;
     private final int DEFAULT_HOVER_TEXT_COLOR = 0xFF000000;
-    private final int DEFAULT_HOVER_BACKGROUND_COLOR = 0xFFFFA500;
+    private final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
     private DisplayMetrics mMetrics;
     private Locale mLocale;
     private OnLetterChangeListener mOnLetterChangeListener;
@@ -67,6 +68,7 @@ public class LetterView extends View {
         super(context, attrs, defStyleAttr);
         mMetrics = getResources().getDisplayMetrics();
         mLocale = getResources().getConfiguration().locale;
+        mBackgroundDrawable = getBackground();
         initAttrs(context, attrs, defStyleAttr);
         initPaint();
     }
@@ -79,8 +81,7 @@ public class LetterView extends View {
         mTextColor = a.getColor(R.styleable.LetterView_letterview_textColor, DEFAULT_TEXT_COLOR);
         mHoverTextColor = a
                 .getColor(R.styleable.LetterView_letterview_hoverTextColor, DEFAULT_HOVER_TEXT_COLOR);
-        mHoverBackgroundColor = a.getColor(R.styleable.LetterView_letterview_hoverBackgroundColor,
-                DEFAULT_HOVER_BACKGROUND_COLOR);
+        mHoverBackgroundDrawable = a.getDrawable(R.styleable.LetterView_letterview_hoverBackgroundDrawable);
         mTextAllCaps = a.getBoolean(R.styleable.LetterView_letterview_textAllCaps, false);
         a.recycle();
     }
@@ -171,15 +172,11 @@ public class LetterView extends View {
         setHoverTextColor(getResources().getColor(resId));
     }
 
-    public void setHoverBackgroundColor(int color) {
-        if (color != mHoverBackgroundColor) {
-            this.mHoverBackgroundColor = color;
+    public void setHoverBackgroundDrawable(Drawable drawable) {
+        if (!drawable.getConstantState().equals(mHoverBackgroundDrawable.getConstantState())) {
+            this.mHoverBackgroundDrawable = drawable;
             invalidateView();
         }
-    }
-
-    public void setHoverBackgroundColorResource(int resId) {
-        setHoverBackgroundColor(getResources().getColor(resId));
     }
 
     public void setTextAllCaps(boolean caps) {
@@ -201,8 +198,8 @@ public class LetterView extends View {
         return mHoverTextColor;
     }
 
-    public int getHoverBackgroundColor() {
-        return mHoverBackgroundColor;
+    public Drawable getHoverBackgroundDrawable() {
+        return mHoverBackgroundDrawable;
     }
 
     public boolean isTextAllCaps() {
@@ -214,7 +211,7 @@ public class LetterView extends View {
     }
 
     public interface OnLetterChangeListener {
-        void onLetterChanged(String letter);
+        void onChanged(String letter);
     }
 
     @Override
@@ -239,19 +236,21 @@ public class LetterView extends View {
         int index = (int) (y * mLetters.length / height);
         switch (action) {
             case MotionEvent.ACTION_UP:
+                setBackgroundDrawable(mBackgroundDrawable);
                 mSelected = -1;
+                invalidateView();
                 break;
             default:
-                setBackgroundColor(mHoverBackgroundColor);
+                setBackgroundDrawable(mHoverBackgroundDrawable);
                 if (index < mLetters.length && index >= 0) {
                     mSelected = index;
+                    invalidateView();
                     if (mOnLetterChangeListener != null) {
-                        mOnLetterChangeListener.onLetterChanged(mLetters[index]);
+                        mOnLetterChangeListener.onChanged(mLetters[index]);
                     }
                 }
                 break;
         }
-        invalidateView();
         return true;
     }
 

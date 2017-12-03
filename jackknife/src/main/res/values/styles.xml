@@ -48,7 +48,6 @@
         <item name="letterview_textSize">12sp</item>
         <item name="letterview_textColor">@color/light_gray</item>
         <item name="letterview_hoverTextColor">@color/light_blue</item>
-        <item name="letterview_hoverBackgroundColor">@color/gray</item>
         <item name="letterview_textAllCaps">true</item>
     </style>
 </resources>

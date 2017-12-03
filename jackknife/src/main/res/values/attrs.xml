@@ -48,7 +48,7 @@
         <attr name="letterview_textSize" format="dimension|reference"/>
         <attr name="letterview_textColor" format="color|reference"/>
         <attr name="letterview_hoverTextColor" format="color|reference"/>
-        <attr name="letterview_hoverBackgroundColor" format="color|reference"/>
+        <attr name="letterview_hoverBackgroundDrawable" format="reference"/>
         <attr name="letterview_textAllCaps" format="boolean"/>
     </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
