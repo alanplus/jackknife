@@ -21,5 +21,6 @@
     <style name="JackKnife.Theme" parent="android:Theme.Light.NoTitleBar">
         <item name="shadeViewStyle">@style/JackKnife.Theme.Widget.ShadeView</item>
         <item name="horizontalTabBarStyle">@style/JackKnife.Theme.Widget.HorizontalTabBar</item>
+        <item name="letterViewStyle">@style/JackKnife.Theme.Widget.HorizontalTabBar</item>
     </style>
 </resources>

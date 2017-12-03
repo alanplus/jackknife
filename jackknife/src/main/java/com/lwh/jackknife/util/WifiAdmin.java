@@ -132,7 +132,7 @@ public class WifiAdmin {
 
     public int addNetwork(WifiConfiguration config) {
         if (config == null) {
-            return false;
+            return -1;
         }
         int networkId = mWifiManager.addNetwork(config);
         mWifiManager.enableNetwork(networkId, true);

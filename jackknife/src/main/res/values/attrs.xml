@@ -43,6 +43,15 @@
         <attr name="horizontaltabbar_isAverage" format="boolean" />
         <attr name="horizontaltabbar_textAllCaps" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="LetterView">
+        <attr name="letterview_letters" format="string|reference"/>
+        <attr name="letterview_textSize" format="dimension|reference"/>
+        <attr name="letterview_textColor" format="color|reference"/>
+        <attr name="letterview_hoverTextColor" format="color|reference"/>
+        <attr name="letterview_hoverBackgroundColor" format="color|reference"/>
+        <attr name="letterview_textAllCaps" format="boolean"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
+    <attr name="letterViewStyle" format="reference"/>
 </resources>
