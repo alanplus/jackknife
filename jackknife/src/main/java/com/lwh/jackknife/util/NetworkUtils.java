@@ -107,7 +107,7 @@ public class NetworkUtils {
         return wifiInfo.getSSID();
     }
 
-    public InetSocketAddress parseAddress(String address) {
+    public static InetSocketAddress parseAddress(String address) {
         String[] addressPart = address.split(":");
         String host = addressPart[0];
         int port = Integer.valueOf(addressPart[1]);
