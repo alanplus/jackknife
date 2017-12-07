@@ -78,8 +78,8 @@ public abstract class BaseModel<BEAN>{
                     field.setAccessible(true);
                     Class<?> fieldType = field.getType();
                     if (String.class.isAssignableFrom(fieldType)) {
-                        return (TextUtils.getPinyin((String) field.get(lhs)).compareTo
-                                (TextUtils.getPinyin((String) field.get(rhs)))) * reverse;
+                        return (TextUtils.getPinyinFromSentence((String) field.get(lhs)).compareTo
+                                (TextUtils.getPinyinFromSentence((String) field.get(rhs)))) * reverse;
                     } else {
                         return (field.get(rhs).hashCode() - field.get(lhs).hashCode()) * reverse;
                     }

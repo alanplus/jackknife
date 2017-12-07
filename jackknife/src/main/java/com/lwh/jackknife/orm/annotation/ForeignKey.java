@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.orm.annotation;
 
-import com.lwh.jackknife.orm.table.OrmTable;
+import com.lwh.jackknife.orm.OrmTable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

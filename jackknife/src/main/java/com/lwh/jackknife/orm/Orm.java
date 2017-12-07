@@ -21,7 +21,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.lwh.jackknife.orm.exception.OrmStateException;
-import com.lwh.jackknife.orm.table.OrmTable;
 
 public class Orm {
 

@@ -18,8 +18,6 @@ package com.lwh.jackknife.orm;
 
 import android.text.TextUtils;
 
-import com.lwh.jackknife.orm.table.OrmTable;
-
 public class OrmConfig {
 
     private String mDatabaseName;

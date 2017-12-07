@@ -29,8 +29,8 @@ import com.lwh.jackknife.orm.annotation.NonColumn;
 import com.lwh.jackknife.orm.annotation.PrimaryKey;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
-import com.lwh.jackknife.orm.table.OrmTable;
-import com.lwh.jackknife.orm.table.TableManager;
+import com.lwh.jackknife.orm.OrmTable;
+import com.lwh.jackknife.orm.TableManager;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

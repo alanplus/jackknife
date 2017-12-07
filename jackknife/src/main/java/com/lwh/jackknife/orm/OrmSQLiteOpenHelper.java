@@ -20,12 +20,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.lwh.jackknife.orm.dao.DaoFactory;
-import com.lwh.jackknife.orm.dao.OrmDao;
-import com.lwh.jackknife.orm.table.OrmTable;
-import com.lwh.jackknife.orm.table.TableManager;
-
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -47,7 +41,7 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
             Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
             while (iterator.hasNext()) {
                 Class<? extends OrmTable> tableClass = iterator.next();
-                TableManager.getInstance().createTable(tableClass, db);
+                TableManager.getInstance().createTableInternal(tableClass, db);
             }
         }
     }
@@ -59,7 +53,7 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
                 Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
                 while (iterator.hasNext()) {
                     Class<? extends OrmTable> tableClass = iterator.next();
-                    TableManager.getInstance().upgradeTable(tableClass, db);
+                    TableManager.getInstance().upgradeTableInternal(tableClass, db);
                 }
             }
         }

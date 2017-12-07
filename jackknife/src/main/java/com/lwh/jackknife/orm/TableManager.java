@@ -1,25 +1,26 @@
 /*
- * Copyright (C) 2017 The JackKnife Open Source Project
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  * Copyright (C) 2017 The JackKnife Open Source Project
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *      http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 
-package com.lwh.jackknife.orm.table;
+package com.lwh.jackknife.orm;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.lwh.jackknife.orm.AssignType;
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.ForeignKey;
 import com.lwh.jackknife.orm.annotation.NonColumn;
@@ -175,7 +176,11 @@ public class TableManager {
         return ByteArrayType.getInstance();
     }
 
-    public <T extends OrmTable> void createTable(Class<T> tableClass, SQLiteDatabase db) {
+    public <T extends OrmTable> void createTable(Class<T> tableClass) {
+        createTableInternal(tableClass, Orm.getDatabase());
+    }
+
+    protected <T extends OrmTable> void createTableInternal(Class<T> tableClass, SQLiteDatabase db) {
         String tableName = getTableName(tableClass);
         Field[] fields = tableClass.getDeclaredFields();
         StringBuilder sb = new StringBuilder();
@@ -250,7 +255,11 @@ public class TableManager {
         }
     }
 
-    public <T extends OrmTable> void upgradeTable(Class<T> tableClass, SQLiteDatabase db) {
+    public <T extends OrmTable> void upgradeTable(Class<T> tableClass) {
+        upgradeTableInternal(tableClass, Orm.getDatabase());
+    }
+
+    protected <T extends OrmTable> void upgradeTableInternal(Class<T> tableClass, SQLiteDatabase db) {
         String tableName = getTableName(tableClass);
         Field[] fields = tableClass.getDeclaredFields();
         List<Annotation> keys = new ArrayList<>();

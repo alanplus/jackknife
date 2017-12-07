@@ -23,6 +23,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
 public class NetworkUtils {
@@ -104,5 +105,12 @@ public class NetworkUtils {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         return wifiInfo.getSSID();
+    }
+
+    public InetSocketAddress parseAddress(String address) {
+        String[] addressPart = address.split(":");
+        String host = addressPart[0];
+        int port = Integer.valueOf(addressPart[1]);
+        return new InetSocketAddress(host, port);
     }
 }
