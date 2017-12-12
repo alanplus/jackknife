@@ -58,10 +58,10 @@ public class OrmConfig {
             return this;
         }
 
-        public Builder tables(Class<? extends OrmTable>[] tableClasses) {
-            mTableClasses = tableClasses;
-            return this;
-        }
+//        public Builder tables(Class<? extends OrmTable>[] tableClasses) {
+//            mTableClasses = tableClasses;
+//            return this;
+//        }
 
         public OrmConfig build() {
             if (!TextUtils.isEmpty(mDatabaseName)) {

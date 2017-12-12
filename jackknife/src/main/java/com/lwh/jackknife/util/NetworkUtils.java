@@ -113,4 +113,9 @@ public class NetworkUtils {
         int port = Integer.valueOf(addressPart[1]);
         return new InetSocketAddress(host, port);
     }
+
+    public static String getHostAddress(int ip) {
+        return String.format("%d.%d.%d.%d", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF,
+                (ip >> 24) & 0xFF);
+    }
 }

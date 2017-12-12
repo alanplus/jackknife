@@ -101,7 +101,7 @@ public class WifiAdmin {
         return mScanResults;
     }
 
-    public StringBuffer lookUpScan() {
+    public StringBuffer printWifiResult() {
         StringBuffer sb=new StringBuffer();  
         for(int i=0;i<mScanResults.size();i++){
             sb.append("Index_" + new Integer(i + 1).toString() + ":");  
@@ -120,6 +120,10 @@ public class WifiAdmin {
 
     public int getIpAddress() {
         return mWifiInfo == null ? 0 : mWifiInfo.getIpAddress();
+    }
+
+    public String getIpAddressString() {
+        return NetworkUtils.getHostAddress(getIpAddress());
     }
 
     public int getNetworkId() {
