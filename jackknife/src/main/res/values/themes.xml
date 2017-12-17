@@ -22,5 +22,6 @@
         <item name="shadeViewStyle">@style/JackKnife.Theme.Widget.ShadeView</item>
         <item name="horizontalTabBarStyle">@style/JackKnife.Theme.Widget.HorizontalTabBar</item>
         <item name="letterViewStyle">@style/JackKnife.Theme.Widget.HorizontalTabBar</item>
+        <item name="radarViewStyle">@style/JackKnife.Theme.Widget.RadarView</item>
     </style>
 </resources>

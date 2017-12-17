@@ -50,4 +50,14 @@
         <item name="letterview_hoverTextColor">@color/light_blue</item>
         <item name="letterview_textAllCaps">true</item>
     </style>
+    <style name="JackKnife.Theme.Widget.RadarView">
+        <item name="radarview_radarColor">@color/green</item>
+        <item name="radarview_circleRadius">15dp</item>
+        <item name="radarview_spaceRadius">20dp</item>
+        <item name="radarview_annulusNum">5</item>
+        <item name="radarview_annulusWidth">1dp</item>
+        <item name="radarview_annulusColor">@color/green</item>
+        <item name="radarview_rotateRate">slow</item>
+        <item name="radarview_reverse">false</item>
+    </style>
 </resources>
