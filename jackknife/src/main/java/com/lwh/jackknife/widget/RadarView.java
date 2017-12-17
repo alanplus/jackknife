@@ -22,8 +22,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
+import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -53,6 +55,7 @@ public class RadarView extends View {
     private RotateRate mRotateRate;
     private boolean mReverse;
     private int mRange = 1;
+    private Drawable mBackgroundDrawable;
 
     public enum RotateRate {
         SLOW, FAST
@@ -68,11 +71,12 @@ public class RadarView extends View {
 
     public RadarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mBackgroundDrawable = getBackground();
         mMetrics = getResources().getDisplayMetrics();
         mMatrix = new Matrix();
         mRadarRunnable = new RadarRunnable();
         initAttrs(context, attrs, defStyleAttr);
-        initPaint();
+        initPaints();
     }
 
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -99,7 +103,7 @@ public class RadarView extends View {
         a.recycle();
     }
 
-    private void initPaint() {
+    private void initPaints() {
         mAnnulusPaint = new Paint();
         mAnnulusPaint.setAntiAlias(true);
         mAnnulusPaint.setDither(true);
@@ -138,6 +142,17 @@ public class RadarView extends View {
             canvas.concat(mMatrix);
             canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius + mAnnulusNum * mSpaceRadius,
                     mRadarPaint);
+        } else {
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            if (mBackgroundDrawable != null) {
+                mBackgroundDrawable.draw(canvas);
+            } else {
+                canvas.drawColor(Color.WHITE);
+            }
+            for (int i=0;i<mAnnulusNum;i++) {
+                canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius + i * mSpaceRadius,
+                        mAnnulusPaint);
+            }
         }
     }
 
@@ -151,6 +166,9 @@ public class RadarView extends View {
 
     public void stop() {
         mRunning = false;
+        mDegree = 0;
+        mMatrix.reset();
+        invalidateView();
     }
 
     public float getCircleRadius() {
