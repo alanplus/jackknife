@@ -123,11 +123,11 @@ public class WhereBuilder {
     }
 
     public WhereBuilder orEqualTo(String column, Object value) {
-        return append(OR, column + EQUAL_HOLDER, String.valueOf(value));
+        return append(OR, column + EQUAL_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder andEqualTo(String column, Object value) {
-        return append(AND, column + EQUAL_HOLDER, String.valueOf(value));
+        return append(AND, column + EQUAL_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder in(String column, Object... values) {
@@ -169,27 +169,27 @@ public class WhereBuilder {
     }
 
     public WhereBuilder addWhereEqualTo(String column, Object value){
-        return append(null, column + EQUAL_HOLDER, String.valueOf(value));
+        return append(null, column + EQUAL_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereNotEqualTo(String column, Object value){
-        return append(null, column + NOT_EQUAL_HOLDER, String.valueOf(value));
+        return append(null, column + NOT_EQUAL_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereGreaterThan(String column, Object value){
-        return append(null, column + GREATER_THAN_HOLDER, String.valueOf(value));
+        return append(null, column + GREATER_THAN_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereGreaterThanOrEqualTo(String column, Object value){
-        return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereLessThan(String column, Object value){
-        return append(null, column + LESS_THAN_HOLDER, String.valueOf(value));
+        return append(null, column + LESS_THAN_HOLDER, new String[]{String.valueOf(value)});
     }
 
     public WhereBuilder addWhereLessThanOrEqualTo(String column, Object value){
-        return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, new String[]{String.valueOf(value)});
     }
 
     private WhereBuilder addWhereIn(String connect, String column, Object[] values){
