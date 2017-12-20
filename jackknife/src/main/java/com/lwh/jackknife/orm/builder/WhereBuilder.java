@@ -52,21 +52,21 @@ public class WhereBuilder {
 
     private static final String SPACE = "";
 
-    private String mSelection;
+    private String mWhereClause;
 
-    private String[] mSelectionArgs;
+    private Object[] mWhereArgs;
 
     private WhereBuilder(){
     }
 
     private WhereBuilder(Condition condition){
-        this.mSelection = condition.getSelection();
-        this.mSelectionArgs = condition.getSelectionArgs();
+        this.mWhereClause = condition.getSelection();
+        this.mWhereArgs = condition.getSelectionArgs();
     }
 
     private WhereBuilder(String whereClause, String[] whereArgs) {
-        this.mSelection = whereClause;
-        this.mSelectionArgs = whereArgs;
+        this.mWhereClause = whereClause;
+        this.mWhereArgs = whereArgs;
     }
 
     public static WhereBuilder create(){
@@ -82,45 +82,45 @@ public class WhereBuilder {
     }
 
     public WhereBuilder and(){
-        if (mSelection != null) {
-            mSelection += AND;
+        if (mWhereClause != null) {
+            mWhereClause += AND;
         }
         return this;
     }
 
     public WhereBuilder or(){
-        if (mSelection != null) {
-            mSelection += OR;
+        if (mWhereClause != null) {
+            mWhereClause += OR;
         }
         return this;
     }
 
     public WhereBuilder not(){
-        if (mSelection != null) {
-            mSelection += NOT;
+        if (mWhereClause != null) {
+            mWhereClause += NOT;
         } else {
-            mSelection = NOT;
+            mWhereClause = NOT;
         }
         return this;
     }
 
-    public WhereBuilder and(String whereClause, String... whereArgs) {
+    public WhereBuilder and(String whereClause, Object... whereArgs) {
         return append(AND, whereClause, whereArgs);
     }
 
-    public WhereBuilder or(String whereClause, String... whereArgs) {
+    public WhereBuilder or(String whereClause, Object... whereArgs) {
         return append(OR, whereClause, whereArgs);
     }
 
-    public WhereBuilder not(String whereClause, String... whereArgs) {
+    public WhereBuilder not(String whereClause, Object... whereArgs) {
         return not().parenthesesLeft().append(null, whereClause, whereArgs).parenthesesRight();
     }
 
-    public WhereBuilder andNot(String whereClause, String... whereArgs) {
+    public WhereBuilder andNot(String whereClause, Object... whereArgs) {
         return and(not(whereClause, whereArgs));
     }
 
-    public WhereBuilder orNot(String whereClause, String... whereArgs) {
+    public WhereBuilder orNot(String whereClause, Object... whereArgs) {
         return or(not(whereClause, whereArgs));
     }
 
@@ -151,43 +151,43 @@ public class WhereBuilder {
     }
 
     public WhereBuilder parenthesesLeft(){
-        if (mSelection != null) {
-            mSelection += PARENTHESES_LEFT;
+        if (mWhereClause != null) {
+            mWhereClause += PARENTHESES_LEFT;
         } else {
-            mSelection = PARENTHESES_LEFT;
+            mWhereClause = PARENTHESES_LEFT;
         }
         return this;
     }
 
     public WhereBuilder parenthesesRight(){
-        if (mSelection != null) {
-            mSelection += PARENTHESES_RIGHT;
+        if (mWhereClause != null) {
+            mWhereClause += PARENTHESES_RIGHT;
         }
         return this;
     }
 
     public WhereBuilder addWhereEqualTo(String column, Object value){
-        return append(null, column + EQUAL_HOLDER, String.valueOf(value));
+        return append(null, column + EQUAL_HOLDER, value);
     }
 
     public WhereBuilder addWhereNotEqualTo(String column, Object value){
-        return append(null, column + NOT_EQUAL_HOLDER, String.valueOf(value));
+        return append(null, column + NOT_EQUAL_HOLDER, value);
     }
 
     public WhereBuilder addWhereGreaterThan(String column, Object value){
-        return append(null, column + GREATER_THAN_HOLDER, String.valueOf(value));
+        return append(null, column + GREATER_THAN_HOLDER, value);
     }
 
     public WhereBuilder addWhereGreaterThanOrEqualTo(String column, Object value){
-        return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
     public WhereBuilder addWhereLessThan(String column, Object value){
-        return append(null, column + LESS_THAN_HOLDER, String.valueOf(value));
+        return append(null, column + LESS_THAN_HOLDER, value);
     }
 
     public WhereBuilder addWhereLessThanOrEqualTo(String column, Object value){
-        return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
     public WhereBuilder addWhereIn(String column, Object... values) {
@@ -195,27 +195,27 @@ public class WhereBuilder {
     }
 
     public WhereBuilder andWhereEqualTo(String column, Object value) {
-        return append(AND, column + EQUAL_HOLDER, String.valueOf(value));
+        return append(AND, column + EQUAL_HOLDER, value);
     }
 
     public WhereBuilder andWhereNotEqualTo(String column, Object value) {
-        return append(AND, column + NOT_EQUAL_HOLDER, String.valueOf(value));
+        return append(AND, column + NOT_EQUAL_HOLDER, value);
     }
 
     public WhereBuilder andWhereGreatorThan(String column, Object value) {
-        return append(AND, column + GREATER_THAN_HOLDER, String.valueOf(value));
+        return append(AND, column + GREATER_THAN_HOLDER, value);
     }
 
     public WhereBuilder andWhereGreatorThanOrEqualTo(String column, Object value) {
-        return append(AND, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(AND, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
     public WhereBuilder andWhereLessThan(String column, Object value) {
-        return append(AND, column + LESS_THAN_HOLDER, String.valueOf(value));
+        return append(AND, column + LESS_THAN_HOLDER, value);
     }
 
     public WhereBuilder andWhereLessThanOrEqualTo(String column, Object value) {
-        return append(AND, column + LESS_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(AND, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
     public WhereBuilder andWhereIn(String column, Object... values) {
@@ -223,55 +223,61 @@ public class WhereBuilder {
     }
 
     public WhereBuilder orWhereEqualTo(String column, Object value) {
-        return append(OR, column + EQUAL_HOLDER, String.valueOf(value));
+        return append(OR, column + EQUAL_HOLDER, value);
     }
 
     public WhereBuilder orWhereNotEqualTo(String column, Object value) {
-        return append(OR, column + NOT_EQUAL_HOLDER, String.valueOf(value));
+        return append(OR, column + NOT_EQUAL_HOLDER, value);
     }
     public WhereBuilder orWhereGreatorThan(String column, Object value) {
-        return append(OR, column + GREATER_THAN_HOLDER, String.valueOf(value));
+        return append(OR, column + GREATER_THAN_HOLDER, value);
     }
     public WhereBuilder orWhereGreatorThanOrEqualTo(String column, Object value) {
-        return append(OR, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(OR, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, value);
     }
     public WhereBuilder orWhereLessThan(String column, Object value) {
-        return append(OR, column + LESS_THAN_HOLDER, String.valueOf(value));
+        return append(OR, column + LESS_THAN_HOLDER, value);
     }
     public WhereBuilder orWhereLessThanOrEqualTo(String column, Object value) {
-        return append(OR, column + LESS_THAN_OR_EQUAL_TO_HOLDER, String.valueOf(value));
+        return append(OR, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
     public WhereBuilder orWhereIn(String column, Object... values) {
         return appendWhereIn(OR, column, values);
     }
 
-    private WhereBuilder append(String connect, String whereClause, String... whereArgs){
-        if (mSelection == null) {
-            mSelection = whereClause;
-            String[] selectionArgs = new String[whereArgs.length];
-            System.arraycopy(whereArgs, 0, selectionArgs, 0, whereArgs.length);
-            mSelectionArgs = selectionArgs;
+    public String[] toStringArgs(Object[] objArgs) {
+        String[] tempValues = new String[objArgs.length];
+        for (int i=0;i<tempValues.length;i++) {
+            tempValues[i] = String.valueOf(objArgs[i]);
+        }
+        return tempValues;
+    }
+
+    private WhereBuilder append(String connect, String whereClause, Object... whereArgs){
+        if (mWhereClause == null) {
+            mWhereClause = whereClause;
+            mWhereArgs = whereArgs;
         } else {
             if (connect != null) {
-                mSelection += connect;
+                mWhereClause += connect;
             }
-            mSelection += whereClause;
-            String[] selectionArgs = new String[mSelection.length()+whereArgs.length];
-            System.arraycopy(mSelection, 0, selectionArgs, 0, mSelection.length());
-            System.arraycopy(whereArgs, 0, selectionArgs, mSelection.length(), whereArgs.length);
-            mSelectionArgs = selectionArgs;
+            this.mWhereClause += whereClause;
+            if (mWhereArgs == null) {
+                mWhereArgs = whereArgs;
+            } else {
+                Object[] tempArgs = new Object[mWhereArgs.length + whereArgs.length];
+                System.arraycopy(mWhereArgs, 0, tempArgs, 0, mWhereArgs.length);
+                System.arraycopy(whereArgs, 0, tempArgs, mWhereArgs.length, whereArgs.length);
+                mWhereArgs = tempArgs;
+            }
         }
         return this;
     }
 
     private WhereBuilder appendWhereIn(String connect, String column, Object[] values){
         String whereIn = buildWhereIn(column, values.length);
-        String[] tempValues = new String[values.length];
-        for (int i=0;i<tempValues.length;i++) {
-            tempValues[i] = String.valueOf(values[i]);
-        }
-        return append(connect, whereIn, tempValues);
+        return append(connect, whereIn, toStringArgs(values));
     }
 
     private String buildWhereIn(String column, int num) {
@@ -284,20 +290,20 @@ public class WhereBuilder {
     }
 
     public String build() {
-        return mSelection != null ? WHERE + mSelection:SPACE;
+        return mWhereClause != null ? WHERE + mWhereClause:SPACE;
     }
 
     public String getSelection() {
-        return mSelection;
+        return mWhereClause;
     }
 
     public String[] getSelectionArgs() {
-        return mSelectionArgs;
+        return toStringArgs(mWhereArgs);
     }
 
     public WhereBuilder where(Condition condition){
-        mSelection = condition.getSelection();
-        mSelectionArgs = condition.getSelectionArgs();
+        mWhereClause = condition.getSelection();
+        mWhereArgs = condition.getSelectionArgs();
         return this;
     }
 }
