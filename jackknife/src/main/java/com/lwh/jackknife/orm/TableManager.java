@@ -20,6 +20,7 @@ package com.lwh.jackknife.orm;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.lwh.jackknife.orm.annotation.Column;
 import com.lwh.jackknife.orm.annotation.ForeignKey;
@@ -70,6 +71,8 @@ public class TableManager {
     private final String AUTO_INCREMENT = "AUTOINCREMENT";
 
     private final String SPACE = " ";
+
+    private final String DOT = ".";
 
     private final String UNIQUE = "UNIQUE";
 
@@ -225,7 +228,7 @@ public class TableManager {
             if (foreignKey != null) {
                 Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
                 if (!foreignKeyTableClass.equals(tableClass)) {
-                    String foreignKeyTableName = foreignKeyTableClass.getName();
+                    String foreignKeyTableName = getTableName(foreignKeyTableClass);
                     fieldBuilder.append(SPACE).append(REFERENCES).append(SPACE)
                             .append(foreignKeyTableName).append(LEFT_PARENTHESIS);
                     Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();
@@ -233,11 +236,11 @@ public class TableManager {
                         PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField
                                 .getAnnotation(PrimaryKey.class);
                         if (foreignKeyTablePrimaryKey != null) {
-                            String foreignKeyTablePrimaryKeyName = field.getName();
+                            String foreignKeyTablePrimaryKeyName = getColumnName(foreignKeyTableField);
                             fieldBuilder.append(foreignKeyTablePrimaryKeyName).append(COMMA);
                         }
                     }
-                    fieldBuilder.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS);
+                    fieldBuilder.deleteCharAt(fieldBuilder.length() - 1).append(RIGHT_PARENTHESIS);
                 }
             }
             fieldBuilder.append(COMMA);
@@ -302,7 +305,7 @@ public class TableManager {
             if (foreignKey != null) {
                 Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
                 if (!foreignKeyTableClass.equals(tableClass)) {
-                    String foreignKeyTableName = foreignKeyTableClass.getName();
+                    String foreignKeyTableName = getTableName(foreignKeyTableClass);
                     sb.append(SPACE).append(REFERENCES).append(SPACE)
                             .append(foreignKeyTableName).append(LEFT_PARENTHESIS);
                     Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();
@@ -310,7 +313,7 @@ public class TableManager {
                         PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField
                                 .getAnnotation(PrimaryKey.class);
                         if (foreignKeyTablePrimaryKey != null) {
-                            String foreignKeyTablePrimaryKeyName = field.getName();
+                            String foreignKeyTablePrimaryKeyName = getColumnName(foreignKeyTableField);
                             sb.append(foreignKeyTablePrimaryKeyName).append(COMMA);
                         }
                     }
