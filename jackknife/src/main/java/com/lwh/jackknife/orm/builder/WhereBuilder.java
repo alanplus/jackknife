@@ -298,7 +298,7 @@ public class WhereBuilder {
     }
 
     public String[] getSelectionArgs() {
-        return toStringArgs(mWhereArgs);
+        return mWhereArgs != null?toStringArgs(mWhereArgs):null;
     }
 
     public WhereBuilder where(Condition condition){

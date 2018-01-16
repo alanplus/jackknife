@@ -22,7 +22,7 @@ public abstract class BasePresenter<V extends IBaseView> {
 
     protected WeakReference<V> mViewRef;
 
-    public void attachView(V view){
+    public void attachView(V view) {
         mViewRef = new WeakReference<>(view);
     }
 
