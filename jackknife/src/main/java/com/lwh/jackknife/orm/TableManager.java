@@ -120,7 +120,7 @@ public class TableManager {
         return tableName;
     }
 
-    public String getColumnName(Field field){
+    public String getColumnName(Field field) {
         String columnName;
         Column column = field.getAnnotation(Column.class);
         if (column != null) {

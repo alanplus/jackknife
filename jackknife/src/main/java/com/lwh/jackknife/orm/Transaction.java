@@ -24,7 +24,12 @@ public class Transaction {
     private Transaction() {
     }
 
-    public static boolean execute(SQLiteDatabase db, Worker worker) {
+    public interface Worker {
+        boolean doTransition(SQLiteDatabase db);
+    }
+
+    public static boolean execute(Worker worker) {
+        SQLiteDatabase db = Orm.getDatabase();
         db.beginTransaction();
         try {
             boolean isOk = worker.doTransition(db);
@@ -38,9 +43,5 @@ public class Transaction {
             db.endTransaction();
         }
         return false;
-    }
-
-    public interface Worker {
-        boolean doTransition(SQLiteDatabase db);
     }
 }

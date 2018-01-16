@@ -28,7 +28,7 @@ import android.graphics.drawable.Drawable;
 public class RoundDrawable extends Drawable {
 
     private Paint mPaint;
-    private int mWidth;
+    private int mRadius;
     private Bitmap mBitmap ;
 
     public RoundDrawable(Bitmap bitmap) {
@@ -38,22 +38,22 @@ public class RoundDrawable extends Drawable {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setShader(bitmapShader);
-        mWidth = Math.min(mBitmap.getWidth(), mBitmap.getHeight());
+        mRadius = Math.min(mBitmap.getWidth(), mBitmap.getHeight());
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawCircle(mWidth / 2, mWidth / 2, mWidth / 2, mPaint);
+        canvas.drawCircle(mRadius / 2, mRadius / 2, mRadius / 2, mPaint);
     }
 
     @Override
     public int getIntrinsicWidth() {
-        return mWidth;
+        return mRadius;
     }
 
     @Override
     public int getIntrinsicHeight() {
-        return mWidth;
+        return mRadius;
     }
 
     @Override

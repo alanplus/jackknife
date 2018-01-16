@@ -82,7 +82,7 @@ public class NetworkUtils {
         return -1;
     }
 
-    public static String getCurentWifiSSID(Context context) {
+    public static String getCurrentWifiSSID(Context context) {
         String ssid = "";
         if (context != null) {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);

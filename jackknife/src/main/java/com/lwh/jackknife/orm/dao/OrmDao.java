@@ -174,7 +174,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     @Override
     public boolean delete(final WhereBuilder builder) {
-        return Transaction.execute(mDatabase, new Transaction.Worker() {
+        return Transaction.execute(new Transaction.Worker() {
             @Override
             public boolean doTransition(SQLiteDatabase db) {
                 TableManager manager = TableManager.getInstance();
@@ -186,7 +186,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     @Override
     public boolean deleteAll() {
-        return Transaction.execute(mDatabase, new Transaction.Worker() {
+        return Transaction.execute(new Transaction.Worker() {
             @Override
             public boolean doTransition(SQLiteDatabase db) {
                 TableManager manager = TableManager.getInstance();
@@ -198,7 +198,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     @Override
     public boolean update(final WhereBuilder builder, final T newBean) {
-        return Transaction.execute(mDatabase, new Transaction.Worker() {
+        return Transaction.execute(new Transaction.Worker() {
             @Override
             public boolean doTransition(SQLiteDatabase db) {
                 TableManager manager = TableManager.getInstance();
@@ -211,7 +211,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     @Override
     public boolean updateAll(final T newBean) {
-        return Transaction.execute(mDatabase, new Transaction.Worker() {
+        return Transaction.execute(new Transaction.Worker() {
             @Override
             public boolean doTransition(SQLiteDatabase db) {
                 TableManager manager = TableManager.getInstance();
@@ -276,10 +276,16 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     private List<T> getLimitedBeans(List<T> beans, int start, int end) {
         List<T> newBeans = new ArrayList<>();
-        int size = beans.size();
-        if (end >= start && size >= end) {
-            for (int i = start; i < end; i++) {
-                newBeans.add(beans.get(i));
+        if (beans != null) {
+            int size = beans.size();
+            if (start >= 0 && end >= start) {
+                if (size >= end - start) {
+                    for (int i = start; i < end; i++) {
+                        newBeans.add(beans.get(i));
+                    }
+                } else {
+                    newBeans.addAll(beans);
+                }
             }
         }
         return newBeans;
@@ -353,8 +359,6 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
-            } finally {
-                cursor.close();
             }
         }
         return result;

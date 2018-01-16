@@ -114,6 +114,14 @@ public abstract class CommonAdapter<BEAN> extends android.widget.BaseAdapter {
 		return (View) inflateMethod.invoke(mInflater, layoutId, null);
 	}
 
+	/**
+	 * To determine how each item is displayed?
+	 *
+	 * @param position The position of the entity class in the collection.
+	 * @param data The entity class.
+	 * @param holder The view cache.
+	 * @param <VIEW> Subtype of view.
+	 */
 	protected abstract <VIEW extends View> void onBindViewHolder(int position, BEAN data, ViewHolder<VIEW> holder);
 
 	public List<BEAN> getDatas() {

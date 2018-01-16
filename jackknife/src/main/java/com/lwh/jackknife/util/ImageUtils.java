@@ -128,7 +128,7 @@ public class ImageUtils {
         view.buildDrawingCache();
         Bitmap bitmap = view.getDrawingCache();
         Rect rect = new Rect();
-        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+        view.getWindowVisibleDisplayFrame(rect);
         int statusBarHeight = rect.top;
         Bitmap outputBitmap = Bitmap.createBitmap(bitmap,0,statusBarHeight,
                 SystemUtils.getScreenWH()[0], SystemUtils.getScreenWH()[1] - statusBarHeight);
@@ -180,7 +180,7 @@ public class ImageUtils {
         }
     }
 
-    public static Bitmap getBitmap(Context context,int resId){
+    public static Bitmap getBitmap(Context context, int resId) {
         return BitmapFactory.decodeResource(context.getResources(), resId);
     }
 
@@ -266,24 +266,6 @@ public class ImageUtils {
         return bitmap;
     }
 
-
-    public static Bitmap makeRoundCornerBitmap(Bitmap bitmap, int pixels, int color) {
-        Bitmap outputBitmap = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(outputBitmap);
-        Paint paint = new Paint();
-        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        RectF rectF = new RectF(rect);
-        float roundPx = pixels;
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        return outputBitmap;
-    }
-
     public static Bitmap makeReflectionImage(Bitmap bitmap) {
         int reflectionGap = 4;
         int width = bitmap.getWidth();
@@ -355,6 +337,23 @@ public class ImageUtils {
         canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, src, dst, paint);
+        return outputBitmap;
+    }
+
+    public static Bitmap makeRoundCornerBitmap(Bitmap bitmap, int pixels, int color) {
+        Bitmap outputBitmap = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(outputBitmap);
+        Paint paint = new Paint();
+        Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        RectF rectF = new RectF(rect);
+        float roundPx = pixels;
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
         return outputBitmap;
     }
 }
