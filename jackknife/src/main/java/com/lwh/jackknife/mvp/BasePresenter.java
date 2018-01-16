@@ -16,12 +16,6 @@
 
 package com.lwh.jackknife.mvp;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.Fragment;
-import android.content.Context;
-import android.view.View;
-
 import java.lang.ref.WeakReference;
 
 public abstract class BasePresenter<V extends IBaseView> {
@@ -43,21 +37,8 @@ public abstract class BasePresenter<V extends IBaseView> {
         return mViewRef.get();
     }
 
-    protected Context getContext(Class<V> viewClass) {
-        if (Activity.class.isAssignableFrom(viewClass)) {
-            return (Context) getView();
-        } else if (Fragment.class.isAssignableFrom(viewClass)) {
-            return ((Fragment)getView()).getActivity();
-        } else if (Dialog.class.isAssignableFrom(viewClass)) {
-            return ((Dialog)getView()).getOwnerActivity();
-        } else if (View.class.isAssignableFrom(viewClass)) {
-            return ((View)getView()).getContext();
-        }
-        return null;
-    }
-
     /**
-     * It's usually called before {@link #getView()} or {@link #getContext(Class)}.
+     * It's usually called before {@link #getView()}.
      *
      * @return Ture means successful attachment, false otherwise.
      */

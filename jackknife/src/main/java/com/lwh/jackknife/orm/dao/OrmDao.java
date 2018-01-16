@@ -353,6 +353,8 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } finally {
+                cursor.close();
             }
         }
         return result;

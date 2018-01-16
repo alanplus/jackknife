@@ -16,7 +16,6 @@
 
 package com.lwh.jackknife.app;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import com.lwh.jackknife.ioc.SupportActivity;

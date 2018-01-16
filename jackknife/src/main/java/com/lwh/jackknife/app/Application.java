@@ -17,7 +17,6 @@
 package com.lwh.jackknife.app;
 
 import android.app.ActivityGroup;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.lwh.jackknife.ioc.SupportActivity;
 

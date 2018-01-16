@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The JackKnife Open Source Project
+ * Copyright (C) 2018 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,38 +22,54 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 
-public class RoundDrawable extends Drawable {
+public class RoundCornerDrawable extends Drawable {
 
     private Paint mPaint;
-    private int mWidth;
-    private Bitmap mBitmap ;
+    private Bitmap mBitmap;
+    private RectF mRectF;
+    private int mCorner = 20;
 
-    public RoundDrawable(Bitmap bitmap) {
-        mBitmap = bitmap ;
+    public RoundCornerDrawable(Bitmap bitmap, int corner) {
+        mBitmap = bitmap;
         BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP,
                 Shader.TileMode.CLAMP);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setShader(bitmapShader);
-        mWidth = Math.min(mBitmap.getWidth(), mBitmap.getHeight());
+        mCorner = corner;
+    }
+
+    public void setCorner(int corner) {
+        this.mCorner = corner;
+    }
+
+    public int getCorner() {
+        return mCorner;
+    }
+
+    @Override
+    public void setBounds(int left, int top, int right, int bottom) {
+        super.setBounds(left, top, right, bottom);
+        mRectF = new RectF(left, top, right, bottom);
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawCircle(mWidth / 2, mWidth / 2, mWidth / 2, mPaint);
+        canvas.drawRoundRect(mRectF, mCorner, mCorner, mPaint);
     }
 
     @Override
     public int getIntrinsicWidth() {
-        return mWidth;
+        return mBitmap.getWidth();
     }
 
     @Override
     public int getIntrinsicHeight() {
-        return mWidth;
+        return mBitmap.getHeight();
     }
 
     @Override
