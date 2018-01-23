@@ -17,7 +17,6 @@
 package com.lwh.jackknife.util;
 
 import java.util.List;
-import java.util.TreeMap;
 
 import android.content.Context;  
 import android.net.wifi.ScanResult;  
@@ -221,7 +220,7 @@ public class WifiAdmin {
             return false;
         }
         WifiConfiguration tempConfig = exists(SSID);
-        if (tempConfig == null) {
+        if (tempConfig != null) {
             mWifiManager.removeNetwork(tempConfig.networkId);
         }
         int networkId = addNetwork(currentConfig);
