@@ -40,9 +40,8 @@ public abstract class BaseModel<BEAN>{
         if (dataClass == null) {
             throw new IllegalArgumentException("Unknown bean type.");
         }
-        mDatas = new ArrayList<>();
-        mDatas.addAll(initBeans());
         mDataClass = dataClass;
+        mDatas = new ArrayList<>();
     }
 
     public enum SortStrategy {
@@ -117,10 +116,11 @@ public abstract class BaseModel<BEAN>{
     }
 
     public int getCount(){
-        return mDatas.size();
+        if (mDatas != null) {
+            return mDatas.size();
+        }
+        return -1;
     }
-
-    protected abstract List<BEAN> initBeans();
 
     protected int countObjects(Selector selector) {
         List<BEAN> objects = findObjects(selector);
