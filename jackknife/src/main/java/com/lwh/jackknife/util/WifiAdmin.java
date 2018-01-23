@@ -125,9 +125,11 @@ public class WifiAdmin {
 
     private WifiConfiguration exists(String SSID) {
         List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
-        for (WifiConfiguration config : configs) {
-            if (config.SSID.equals(SSID)) {
-                return config;
+        if (configs != null && configs.size() > 0) {
+            for (WifiConfiguration config : configs) {
+                if (config.SSID.equals(SSID)) {
+                    return config;
+                }
             }
         }
         return null;
