@@ -17,7 +17,8 @@
 package com.lwh.jackknife.util;
 
 import java.util.List;
-  
+import java.util.TreeMap;
+
 import android.content.Context;  
 import android.net.wifi.ScanResult;  
 import android.net.wifi.WifiConfiguration;  
@@ -97,19 +98,6 @@ public class WifiAdmin {
 
     public List<ScanResult> getScanResults() {
         return mScanResults;
-    }
-
-    public List<ScanResult> getSortedScanResults() {
-        if (mScanResults != null) {
-            WifiInfo wifiInfo = getCurrentWifiInfo();
-            for (ScanResult result : mScanResults) {
-                if (wifiInfo.getBSSID().equals(result.BSSID)) {
-                    mScanResults.remove(result);
-                    mScanResults.add(0, result);
-                }
-            }
-        }
-        return null;
     }
 
     public List<WifiConfiguration> getConfigurations() {
