@@ -19,6 +19,7 @@ package com.lwh.jackknife.orm.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import com.lwh.jackknife.orm.AssignType;
@@ -242,18 +243,8 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         WhereBuilder where = builder.getWhereBuilder();
         String selection = where.getSelection();
         String[] selectionArgs = where.getSelectionArgs();
-        Cursor cursor = mDatabase.query(tableName, columns, selection, selectionArgs, group, having, order);
-        List<T> result = getResult(cursor);
-        if (!TextUtils.isEmpty(limit)) {
-            if (limit.contains(COMMA)) {
-                String[] limitPart = limit.split(COMMA);
-                return getLimitedBeans(result, Integer.valueOf(limitPart[0]),
-                        Integer.valueOf(limitPart[1]));
-            } else {
-                return getLimitedBeans(result, Integer.valueOf(limit));
-            }
-        }
-        return result;
+        Cursor cursor = mDatabase.query(tableName, columns, selection, selectionArgs, group, having, order, limit);
+        return getResult(cursor);
     }
 
     @Override
@@ -274,37 +265,28 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return null;
     }
 
-    private List<T> getLimitedBeans(List<T> beans, int start, int end) {
-        List<T> newBeans = new ArrayList<>();
-        if (beans != null) {
-            int size = beans.size();
-            if (start >= 0 && end >= start) {
-                if (size >= end - start) {
-                    for (int i = start; i < end; i++) {
-                        newBeans.add(beans.get(i));
-                    }
-                } else {
-                    newBeans.addAll(beans);
-                }
-            }
-        }
-        return newBeans;
-    }
-
-    private List<T> getLimitedBeans(List<T> beans, int limit) {
-        return getLimitedBeans(beans, 0, limit);
-    }
-
     @Override
-    public int selectAllCount() {
-        List<T> beans = selectAll();
-        return beans.size();
+    public int selectCount() {
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
+        if (cursor != null) {
+            return cursor.getCount();
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public int selectCount(QueryBuilder builder) {
-        List<T> beans = select(builder);
-        return beans.size();
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + tableName + builder.build(), null);
+        if (cursor != null) {
+            return cursor.getCount();
+        } else {
+            return 0;
+        }
     }
 
     private List<T> getResult(Cursor cursor) {
