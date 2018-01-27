@@ -44,7 +44,7 @@ public interface Dao<T extends OrmTable> {
 
     T selectOne(QueryBuilder builder);
 
-    int selectCount();
+    long selectCount();
 
-    int selectCount(QueryBuilder builder);
+    long selectCount(QueryBuilder builder);
 }
