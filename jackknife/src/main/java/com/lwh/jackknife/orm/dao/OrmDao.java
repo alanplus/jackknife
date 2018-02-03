@@ -312,7 +312,9 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         long count = 0;
         TableManager manager = TableManager.getInstance();
         String tableName = manager.getTableName(mBeanClass);
-        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + tableName + builder.build(), null);
+        String sql = builder.build();
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + tableName + sql,
+                builder.getWhereBuilder().getSelectionArgs());
         if (cursor != null) {
             cursor.moveToFirst();
             count = cursor.getLong(0);

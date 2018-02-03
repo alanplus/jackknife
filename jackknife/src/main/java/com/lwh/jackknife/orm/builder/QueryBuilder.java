@@ -94,7 +94,8 @@ public class QueryBuilder {
     }
 
     public String build() {
-        return mWhereBuilder.build() + mGroup + mHaving + mOrder + LIMIT;
+        return mWhereBuilder.build() + (mGroup!=null?mGroup:SPACE) + (mHaving!=null?mHaving:SPACE)
+                + (mOrder!=null?mOrder:SPACE) + (mLimit!=null?mLimit:SPACE);
     }
 
     public WhereBuilder getWhereBuilder() {

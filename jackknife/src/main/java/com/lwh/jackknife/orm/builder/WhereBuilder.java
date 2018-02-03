@@ -56,10 +56,10 @@ public class WhereBuilder {
 
     private Object[] mWhereArgs;
 
-    private WhereBuilder(){
+    private WhereBuilder() {
     }
 
-    private WhereBuilder(Condition condition){
+    private WhereBuilder(Condition condition) {
         this.mWhereClause = condition.getSelection();
         this.mWhereArgs = condition.getSelectionArgs();
     }
