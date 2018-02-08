@@ -60,4 +60,8 @@
         <item name="radarview_rotateRate">slow</item>
         <item name="radarview_reverse">false</item>
     </style>
+    <style name="JackKnife.Theme.Widget.HighlightTextView">
+        <item name="highlighttextview_defaultColor">#22ffffff</item>
+        <item name="highlighttextview_highlightColor">#ffffffff</item>
+    </style>
 </resources>

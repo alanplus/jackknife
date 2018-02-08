@@ -64,8 +64,13 @@
         </attr>
         <attr name="radarview_reverse" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="HighlightTextView">
+        <attr name="highlighttextview_defaultColor" format="color|reference"/>
+        <attr name="highlighttextview_highlightColor" format="color|reference"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
     <attr name="radarViewStyle" format="reference"/>
+    <attr name="highlightTextViewStyle" format="reference"/>
 </resources>
