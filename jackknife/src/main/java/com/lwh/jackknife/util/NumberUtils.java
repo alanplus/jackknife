@@ -69,14 +69,31 @@ public class NumberUtils implements NumberConstants {
         return D2H(B2D(binary));
     }
 
-    public static String zeronize(String num, int requireLength) {
+    public static String zeroH(String num, int requiredLength) {
+        if (requiredLength < 0) {
+            throw new IllegalArgumentException("requiredLength must be more than 0.");
+        }
         StringBuffer sb = new StringBuffer();
-        if(requireLength > num.length()) {
-            int length = requireLength - num.length();
+        if (requiredLength > num.length()) {
+            int length = requiredLength - num.length();
             for (int i=0;i<length;i++) {
                 sb.append(0);
             }
         }
         return sb.append(num).toString();
+    }
+
+    public static String zeroL(String num, int requiredLength) {
+        if (requiredLength < 0) {
+            throw new IllegalArgumentException("requiredLength must be more than 0.");
+        }
+        StringBuffer sb = new StringBuffer(num);
+        if (requiredLength > num.length()) {
+            int length = requiredLength - num.length();
+            for (int i=0;i<length;i++) {
+                sb.append(0);
+            }
+        }
+        return sb.toString();
     }
 }
