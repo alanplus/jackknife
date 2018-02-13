@@ -17,6 +17,7 @@
 package com.lwh.jackknife.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -32,16 +33,21 @@ import com.lwh.jackknife.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AutoEditTextGroup extends LinearLayout implements TextWatcher {
+public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLayout
+        implements TextWatcher {
 
-    protected List<AutoEditText> mSections;
+    protected List<E> mSections;
+    protected float mSectionTextSize;
+    protected float mSemicolonTextSize;
+    protected int mSectionPadding;
+    protected int mSemicolonPadding;
 
     public AutoEditTextGroup(Context context) {
         this(context, null);
     }
 
     public AutoEditTextGroup(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this(context, attrs, R.attr.autoEditTextGroupStyle);
     }
 
     public AutoEditTextGroup(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -57,9 +63,18 @@ public abstract class AutoEditTextGroup extends LinearLayout implements TextWatc
     }
 
     protected void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoEditTextGroup, defStyleAttr, 0);
+        mSectionTextSize = a.getDimension(R.styleable.AutoEditTextGroup_autoedittextgroup_sectionTextSize,
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20, getResources().getDisplayMetrics()));
+        mSemicolonTextSize = a.getDimension(R.styleable.AutoEditTextGroup_autoedittextgroup_semicolonTextSize,
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 15, getResources().getDisplayMetrics()));
+        mSemicolonPadding = a.getDimensionPixelOffset(R.styleable.AutoEditTextGroup_autoedittextgroup_sectionPadding,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()));
+        mSectionPadding = a.getDimensionPixelOffset(R.styleable.AutoEditTextGroup_autoedittextgroup_semicolonPadding,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()));
     }
 
-    public boolean checkChildrenInputValue(AutoEditText... editTexts) {
+    public boolean checkInputValue(E... editTexts) {
         boolean result = true;
         for (int i = 0; i < editTexts.length - 1; i++) {
             if (!editTexts[i].checkInputValue()) {
@@ -81,25 +96,25 @@ public abstract class AutoEditTextGroup extends LinearLayout implements TextWatc
         return result;
     }
 
-    protected abstract AutoEditText createEditText();
+    protected abstract E createEditText();
 
     private class OnDelKeyListener implements OnKeyListener{
 
-        private AutoEditText mClearEditText;
-        private AutoEditText mRequestEditText;
+        private E mRequestEditText;
+        private E mClearEditText;
 
-        public OnDelKeyListener(AutoEditText clear, AutoEditText request){
-            this.mClearEditText = clear;
+        public OnDelKeyListener(E request, E clear){
             this.mRequestEditText = request;
+            this.mClearEditText = clear;
         }
 
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_UP &&
-                    mRequestEditText.getText().toString().trim().equals("")) {
-                if (mRequestEditText.hasFocus()) {
-                    mRequestEditText.clearFocus();
-                    mClearEditText.requestFocus();
+                    mClearEditText.getText().toString().trim().equals("")) {
+                if (mClearEditText.hasFocus()) {
+                    mClearEditText.clearFocus();
+                    mRequestEditText.requestFocus();
                 }
                 return true;
             }
@@ -127,12 +142,12 @@ public abstract class AutoEditTextGroup extends LinearLayout implements TextWatc
     }
 
     protected void initViews() {
-        int count = getChildCount() * 2 - 1;
+        int count = getChildCount();
         for (int i=0;i<count;i++) {
             if (i%2 == 0) {
-                AutoEditText section = createEditText();
-                mSections.add(section);
+                E section = createEditText();
                 addView(section);
+                mSections.add(section);
             } else {
                 addView(createSemicolonTextView());
             }
@@ -141,9 +156,10 @@ public abstract class AutoEditTextGroup extends LinearLayout implements TextWatc
 
     private View createSemicolonTextView() {
         TextView textView = new TextView(getContext());
-        LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(lp);
-        textView.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 6, getResources().getDisplayMetrics()));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSemicolonTextSize);
         textView.setTextColor(getResources().getColor(R.color.gray));
         textView.setText(getSemicolonText());
         applySemicolonTextViewTheme(textView);
@@ -163,22 +179,11 @@ public abstract class AutoEditTextGroup extends LinearLayout implements TextWatc
         int maxLength = getMaxLength();
         int length = s.toString().length();
         if (maxLength == length) {
-            for (int i=0;i<mSections.size()-1;i++){
-                if (mSections.get(i).hasFocus()){//hasFocus √ & isFocus ×
+            for (int i=0;i<mSections.size()-1;i++) {
+                if (mSections.get(i).hasFocus()) {//hasFocus √ & isFocus ×
                     mSections.get(i).clearFocus();
                     mSections.get(i+1).requestFocus();
                     break;
-                }
-            }
-        }
-        if (!checkChildrenInputValue((AutoEditText[]) mSections.toArray())) {
-            for (int i=0;i<mSections.size()-1;i++){
-                if (mSections.get(i).hasFocus()){//hasFocus √ & isFocus ×
-                    if (!mSections.get(i).checkInputValue()) {
-                        mSections.get(i).clearFocus();
-                        mSections.get(i + 1).requestFocus();
-                        break;
-                    }
                 }
             }
         }

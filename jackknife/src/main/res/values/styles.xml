@@ -61,7 +61,13 @@
         <item name="radarview_reverse">false</item>
     </style>
     <style name="JackKnife.Theme.Widget.HighlightTextView">
-        <item name="highlighttextview_defaultColor">#22ffffff</item>
-        <item name="highlighttextview_highlightColor">#ffffffff</item>
+        <item name="highlighttextview_defaultColor">@color/gray</item>
+        <item name="highlighttextview_highlightColor">@color/white</item>
+    </style>
+    <style name="JackKnife.Theme.Widget.AutoEditTextGroup">
+        <item name="autoedittextgroup_sectionTextSize">15sp</item>
+        <item name="autoedittextgroup_semicolonTextSize">12sp</item>
+        <item name="autoedittextgroup_sectionPadding">4dp</item>
+        <item name="autoedittextgroup_semicolonPadding">4dp</item>
     </style>
 </resources>

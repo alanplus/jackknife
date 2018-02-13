@@ -27,11 +27,11 @@ import android.widget.TextView;
 public class MacEditTextGroup extends AutoEditTextGroup {
 
     public MacEditTextGroup(Context context) {
-        this(context, null);
+        super(context);
     }
 
     public MacEditTextGroup(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
     }
 
     public MacEditTextGroup(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -39,19 +39,13 @@ public class MacEditTextGroup extends AutoEditTextGroup {
     }
 
     @Override
-    protected void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
-    }
-
-    @Override
     protected AutoEditText createEditText() {
         AutoEditText section = new MacEditText(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT);
-        lp.weight = 1;
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1);
         section.setLayoutParams(lp);
-        section.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 6, getResources().getDisplayMetrics()));
+        section.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSectionTextSize);
         section.setGravity(Gravity.CENTER);
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-        section.setPadding(padding, padding, padding, padding);
+        section.setPadding(mSectionPadding, mSectionPadding, mSectionPadding, mSectionPadding);
         section.setSingleLine();
         section.setFocusableInTouchMode(true);
         section.addInputFilter(InputType.TYPE_CLASS_TEXT);
@@ -61,7 +55,7 @@ public class MacEditTextGroup extends AutoEditTextGroup {
 
     @Override
     public int getChildCount() {
-        return 6;
+        return 11;
     }
 
     @Override
@@ -77,8 +71,8 @@ public class MacEditTextGroup extends AutoEditTextGroup {
     @Override
     public void applySemicolonTextViewTheme(TextView semicolonTextView) {
         semicolonTextView.setGravity(Gravity.CENTER);
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-        semicolonTextView.setPadding(padding, padding, padding, padding);
+        semicolonTextView.setPadding(mSemicolonPadding, mSemicolonPadding, mSemicolonPadding,
+                mSemicolonPadding);
     }
 
     @Override

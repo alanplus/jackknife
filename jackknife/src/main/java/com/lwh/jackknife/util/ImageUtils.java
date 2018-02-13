@@ -38,6 +38,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
+import android.util.TypedValue;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
@@ -131,7 +132,7 @@ public class ImageUtils {
         view.getWindowVisibleDisplayFrame(rect);
         int statusBarHeight = rect.top;
         Bitmap outputBitmap = Bitmap.createBitmap(bitmap,0,statusBarHeight,
-                SystemUtils.getScreenWH()[0], SystemUtils.getScreenWH()[1] - statusBarHeight);
+                SystemUtils.getScreenWidth(), SystemUtils.getScreenHeight() - statusBarHeight);
         view.destroyDrawingCache();
         return outputBitmap;
     }

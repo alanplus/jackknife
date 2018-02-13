@@ -68,9 +68,16 @@
         <attr name="highlighttextview_defaultColor" format="color|reference"/>
         <attr name="highlighttextview_highlightColor" format="color|reference"/>
     </declare-styleable>
+    <declare-styleable name="AutoEditTextGroup">
+        <attr name="autoedittextgroup_sectionTextSize" format="dimension|reference"/>
+        <attr name="autoedittextgroup_semicolonTextSize" format="dimension|reference"/>
+        <attr name="autoedittextgroup_sectionPadding" format="dimension|reference"/>
+        <attr name="autoedittextgroup_semicolonPadding" format="dimension|reference"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
     <attr name="radarViewStyle" format="reference"/>
     <attr name="highlightTextViewStyle" format="reference"/>
+    <attr name="autoEditTextGroupStyle" format="reference"/>
 </resources>
