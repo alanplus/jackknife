@@ -166,10 +166,10 @@ public class TimeUtils {
     public static String formatTime(long milliSecs) {
         StringBuffer sb = new StringBuffer();
         long m = milliSecs / (60 * 1000);
-        sb.append(NumberUtils.zeronize(String.valueOf(m), 2));
+        sb.append(NumberUtils.zeroH(String.valueOf(m), 2));
         sb.append(":");
         long s = (milliSecs % (60 * 1000)) / 1000;
-        sb.append(NumberUtils.zeronize(String.valueOf(s), 2));
+        sb.append(NumberUtils.zeroH(String.valueOf(s), 2));
         return sb.toString();
     }
 }
