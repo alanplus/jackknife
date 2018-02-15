@@ -76,7 +76,7 @@ public class AnimatorHorizontalScrollView extends HorizontalScrollView {
         int scrollViewWidth = getWidth();
         for (int i=0;i<mContentRecycler.getChildCount();i++) {
             View child = mContentRecycler.getChildAt(i);
-            if (!(child instanceof AnimatorScrollView.OnDragListener)) {
+            if (!(child instanceof AnimatorDragger)) {
                 continue;
             }
             AnimatorDragger dragger = (AnimatorDragger) child;

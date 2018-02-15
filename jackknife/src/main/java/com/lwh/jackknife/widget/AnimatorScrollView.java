@@ -76,7 +76,7 @@ public class AnimatorScrollView extends ScrollView {
         int scrollViewHeight = getHeight();
         for (int i=0;i<mContentRecycler.getChildCount();i++) {
             View child = mContentRecycler.getChildAt(i);
-            if (!(child instanceof OnDragListener)) {
+            if (!(child instanceof AnimatorDragger)) {
                 continue;
             }
             AnimatorDragger dragger =  (AnimatorDragger) child;
