@@ -23,5 +23,10 @@
         <item name="horizontalTabBarStyle">@style/JackKnife.Theme.Widget.HorizontalTabBar</item>
         <item name="letterViewStyle">@style/JackKnife.Theme.Widget.HorizontalTabBar</item>
         <item name="radarViewStyle">@style/JackKnife.Theme.Widget.RadarView</item>
+        <item name="highlightTextViewStyle">@style/JackKnife.Theme.Widget.HighlightTextView</item>
+        <item name="autoEditTextGroupStyle">@style/JackKnife.Theme.Widget.AutoEditTextGroup</item>
+        <item name="animatorScrollViewStyle">@style/JackKnife.Theme.Widget.AnimatorScrollView</item>
+        <item name="animatorHorizontalScrollViewStyle">@style/JackKnife.Theme.Widget.AnimatorHorizontalScrollView</item>
+        <item name="animatorViewWrapperStyle">@style/JackKnife.Theme.Widget.AnimatorViewWrapper</item>
     </style>
 </resources>

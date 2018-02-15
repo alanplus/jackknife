@@ -70,4 +70,15 @@
         <item name="autoedittextgroup_sectionPadding">4dp</item>
         <item name="autoedittextgroup_semicolonPadding">4dp</item>
     </style>
+    <style name="JackKnife.Theme.Widget.AnimatorScrollView">
+        <item name="animatorscrollview_firstMatchHeight">true</item>
+    </style>
+    <style name="JackKnife.Theme.Widget.AnimatorHorizontalScrollView">
+        <item name="animatorhorizontalscrollview_firstMatchWidth">true</item>
+    </style>
+    <style name="JackKnife.Theme.Widget.AnimatorViewWrapper">
+        <item name="animatorviewwrapper_alpha">true</item>
+        <item name="animatorviewwrapper_scaleX">true</item>
+        <item name="animatorviewwrapper_scaleY">true</item>
+    </style>
 </resources>

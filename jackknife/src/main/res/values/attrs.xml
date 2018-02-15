@@ -74,10 +74,35 @@
         <attr name="autoedittextgroup_sectionPadding" format="dimension|reference"/>
         <attr name="autoedittextgroup_semicolonPadding" format="dimension|reference"/>
     </declare-styleable>
+    <declare-styleable name="AnimatorScrollView">
+        <attr name="animatorscrollview_firstMatchHeight" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="AnimatorHorizontalScrollView">
+        <attr name="animatorhorizontalscrollview_firstMatchWidth" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="AnimatorViewWrapper">
+        <attr name="animatorviewwrapper_alpha" format="boolean"/>
+        <attr name="animatorviewwrapper_scaleX" format="boolean"/>
+        <attr name="animatorviewwrapper_scaleY" format="boolean"/>
+        <attr name="animatorviewwrapper_fromColor" format="color"/>
+        <attr name="animatorviewwrapper_toColor" format="color"/>
+        <attr name="animatorviewwrapper_translation"/>
+    </declare-styleable>
+    <attr name="animatorviewwrapper_translation">
+        <flag name="fromLeft" value="0x01"/>
+        <flag name="fromTop" value="0x02"/>
+        <flag name="fromRight" value="0x04"/>
+        <flag name="fromBottom" value="0x08"/>
+    </attr>
+
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
     <attr name="radarViewStyle" format="reference"/>
     <attr name="highlightTextViewStyle" format="reference"/>
     <attr name="autoEditTextGroupStyle" format="reference"/>
+    <attr name="animatorScrollViewStyle" format="reference"/>
+    <attr name="animatorHorizontalScrollViewStyle" format="reference"/>
+    <attr name="animatorViewWrapperStyle" format="reference"/>
+
 </resources>

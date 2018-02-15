@@ -96,4 +96,8 @@ public class NumberUtils implements NumberConstants {
         }
         return sb.toString();
     }
+
+    public static float clamp(float value, float max, float min) {
+        return Math.max(Math.min(value, max), min);
+    }
 }
