@@ -44,21 +44,20 @@ public class AnimatorLinearLayout extends LinearLayout implements
         return new LayoutParams(getContext(), attrs);
     }
 
-
     @Override
     public void addView(View child, int index,
                         android.view.ViewGroup.LayoutParams params) {
-        LayoutParams p = (LayoutParams) params;
-        if (!applyAnimation(p)) {
+        LayoutParams lp = (LayoutParams) params;
+        if (!applyAnimation(lp)) {
             super.addView(child, index, params);
         } else {
             AnimatorViewWrapper wrapper = new AnimatorViewWrapper(getContext());
-            wrapper.setAlpha(p.mAlpha);
-            wrapper.setTranslation(p.mTranslation);
-            wrapper.setScaleX(p.mScaleX);
-            wrapper.setScaleY(p.mScaleY);
-            wrapper.setFromColor(p.mFromColor);
-            wrapper.setToColor(p.mToColor);
+            wrapper.setAlpha(lp.mAlpha);
+            wrapper.setTranslation(lp.mTranslation);
+            wrapper.setScaleX(lp.mScaleX);
+            wrapper.setScaleY(lp.mScaleY);
+            wrapper.setFromColor(lp.mFromColor);
+            wrapper.setToColor(lp.mToColor);
             wrapper.addView(child);
             super.addView(wrapper, index, params);
         }
