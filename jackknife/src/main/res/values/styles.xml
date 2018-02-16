@@ -81,4 +81,7 @@
         <item name="animatorviewwrapper_scaleX">true</item>
         <item name="animatorviewwrapper_scaleY">true</item>
     </style>
+    <style name="JackKnife.Theme.Widget.BottomNavigationBar">
+        <item name="bottomnavigationbar_checkedButton">-1</item>
+    </style>
 </resources>

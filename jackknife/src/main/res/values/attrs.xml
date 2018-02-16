@@ -94,6 +94,9 @@
         <flag name="fromRight" value="0x04"/>
         <flag name="fromBottom" value="0x08"/>
     </attr>
+    <declare-styleable name="BottomNavigationBar">
+        <attr name="bottomnavigationbar_checkedButton" format="integer"/>
+    </declare-styleable>
 
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
@@ -104,5 +107,6 @@
     <attr name="animatorScrollViewStyle" format="reference"/>
     <attr name="animatorHorizontalScrollViewStyle" format="reference"/>
     <attr name="animatorViewWrapperStyle" format="reference"/>
+    <attr name="bottomNavigationBarStyle" format="reference"/>
 
 </resources>

@@ -25,6 +25,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.Parcelable;
@@ -85,10 +86,10 @@ public class ShadeView extends RadioButton {
 
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ShadeView, defStyleAttr, 0);
-        BitmapDrawable drawable = (BitmapDrawable) a.getDrawable(
+        BitmapDrawable iconDrawable = (BitmapDrawable) a.getDrawable(
                 R.styleable.ShadeView_shadeview_icon);
-        if (drawable != null) {
-            setIconBitmap(drawable.getBitmap());
+        if (iconDrawable != null) {
+            setIconBitmap(iconDrawable.getBitmap());
         }
         setTextColor(a.getColor(R.styleable.ShadeView_shadeview_textColor, DEFAULT_TEXT_COLOR));
         setHoverColor(a.getColor(R.styleable.ShadeView_shadeview_hoverColor, DEFAULT_HOVER_COLOR));
