@@ -32,8 +32,10 @@ import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
 import com.lwh.jackknife.orm.OrmTable;
 import com.lwh.jackknife.orm.TableManager;
+import com.lwh.jackknife.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -259,6 +261,8 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
         }
         return null;
@@ -288,6 +292,8 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
@@ -332,14 +338,16 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
             }
         }
         return result;
     }
 
     private T createResult(Cursor cursor) throws IllegalAccessException,
-            InstantiationException {
-        T bean = mBeanClass.newInstance();
+            InstantiationException, InvocationTargetException {
+        T bean = ReflectionUtils.newInstance(mBeanClass);
         Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields) {
             field.setAccessible(true);
