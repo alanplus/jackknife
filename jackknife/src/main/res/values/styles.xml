@@ -84,4 +84,17 @@
     <style name="JackKnife.Theme.Widget.BottomNavigationBar">
         <item name="bottomnavigationbar_checkedButton">-1</item>
     </style>
+    <style name="JackKnife.Theme.Widget.InstrumentView">
+        <item name="instrumentview_title">Title</item>
+        <item name="instrumentview_body">Body</item>
+        <item name="instrumentview_titleTextColor">@color/blue</item>
+        <item name="instrumentview_titleTextSize">15sp</item>
+        <item name="instrumentview_bodyTextColor">@color/black</item>
+        <item name="instrumentview_bodyTextSize">12sp</item>
+        <item name="instrumentview_annulusWidth">5dp</item>
+        <item name="instrumentview_backgroundColor">@color/gray</item>
+        <item name="instrumentview_annulusColor">@color/snow</item>
+        <item name="instrumentview_annulusHoverColor">@color/light_sky_blue</item>
+        <item name="instrumentview_animationTime">500</item>
+    </style>
 </resources>

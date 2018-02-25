@@ -97,7 +97,19 @@
     <declare-styleable name="BottomNavigationBar">
         <attr name="bottomnavigationbar_checkedButton" format="integer"/>
     </declare-styleable>
-
+    <declare-styleable name="InstrumentView">
+        <attr name="instrumentview_title" format="string|reference"/>
+        <attr name="instrumentview_body" format="string|reference"/>
+        <attr name="instrumentview_titleTextColor" format="color|reference"/>
+        <attr name="instrumentview_titleTextSize" format="dimension|reference"/>
+        <attr name="instrumentview_bodyTextColor" format="color|reference"/>
+        <attr name="instrumentview_bodyTextSize" format="dimension|reference"/>
+        <attr name="instrumentview_annulusWidth" format="dimension|reference"/>
+        <attr name="instrumentview_backgroundColor" format="color|reference"/>
+        <attr name="instrumentview_annulusColor" format="color|reference"/>
+        <attr name="instrumentview_annulusHoverColor" format="color|reference"/>
+        <attr name="instrumentview_animationTime" format="integer"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
@@ -108,5 +120,5 @@
     <attr name="animatorHorizontalScrollViewStyle" format="reference"/>
     <attr name="animatorViewWrapperStyle" format="reference"/>
     <attr name="bottomNavigationBarStyle" format="reference"/>
-
+    <attr name="instrumentViewStyle" format="reference"/>
 </resources>

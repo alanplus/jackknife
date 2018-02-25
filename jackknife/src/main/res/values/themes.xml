@@ -29,5 +29,6 @@
         <item name="animatorHorizontalScrollViewStyle">@style/JackKnife.Theme.Widget.AnimatorHorizontalScrollView</item>
         <item name="animatorViewWrapperStyle">@style/JackKnife.Theme.Widget.AnimatorViewWrapper</item>
         <item name="bottomNavigationBarStyle">@style/JackKnife.Theme.Widget.BottomNavigationBar</item>
+        <item name="instrumentViewStyle">@style/JackKnife.Theme.Widget.InstrumentView</item>
     </style>
 </resources>
