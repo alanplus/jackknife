@@ -116,6 +116,15 @@
             <enum name="lengthSix" value="1"/>
         </attr>
     </declare-styleable>
+    <declare-styleable name="TitleBar">
+        <attr name="titlebar_title" format="string"/>
+        <attr name="titlebar_titleTextColor" format="color"/>
+        <attr name="titlebar_titleTextSize" format="dimension"/>
+        <attr name="titlebar_leftDrawable" format="reference"/>
+        <attr name="titlebar_rightDrawable" format="reference"/>
+        <attr name="titlebar_leftDrawableSize" format="dimension"/>
+        <attr name="titlebar_rightDrawableSize" format="dimension"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
@@ -128,4 +137,5 @@
     <attr name="bottomNavigationBarStyle" format="reference"/>
     <attr name="instrumentViewStyle" format="reference"/>
     <attr name="verifyCodeEditTextGroupStyle" format="reference"/>
+    <attr name="titleBarStyle" format="reference"/>
 </resources>

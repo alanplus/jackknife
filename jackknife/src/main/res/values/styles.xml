@@ -100,4 +100,11 @@
     <style name="JackKnife.Theme.Widget.VerifyCodeEditTextGroup">
         <item name="verifycodeedittextgroup_type">lengthFour</item>
     </style>
+    <style name="JackKnife.Theme.Widget.TitleBar">
+        <item name="titlebar_title">title</item>
+        <item name="titlebar_titleTextColor">@color/gray</item>
+        <item name="titlebar_titleTextSize">15sp</item>
+        <item name="titlebar_leftDrawableSize">20dp</item>
+        <item name="titlebar_rightDrawableSize">20dp</item>
+    </style>
 </resources>
