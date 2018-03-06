@@ -30,5 +30,6 @@
         <item name="animatorViewWrapperStyle">@style/JackKnife.Theme.Widget.AnimatorViewWrapper</item>
         <item name="bottomNavigationBarStyle">@style/JackKnife.Theme.Widget.BottomNavigationBar</item>
         <item name="instrumentViewStyle">@style/JackKnife.Theme.Widget.InstrumentView</item>
+        <item name="verifyCodeEditTextGroupStyle">@style/JackKnife.Theme.Widget.VerifyCodeEditTextGroup</item>
     </style>
 </resources>

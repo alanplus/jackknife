@@ -110,6 +110,12 @@
         <attr name="instrumentview_annulusHoverColor" format="color|reference"/>
         <attr name="instrumentview_animationTime" format="integer"/>
     </declare-styleable>
+    <declare-styleable name="VerifyCodeEditTextGroup">
+        <attr name="verifycodeedittextgroup_type">
+            <enum name="lengthFour" value="0"/>
+            <enum name="lengthSix" value="1"/>
+        </attr>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
@@ -121,4 +127,5 @@
     <attr name="animatorViewWrapperStyle" format="reference"/>
     <attr name="bottomNavigationBarStyle" format="reference"/>
     <attr name="instrumentViewStyle" format="reference"/>
+    <attr name="verifyCodeEditTextGroupStyle" format="reference"/>
 </resources>

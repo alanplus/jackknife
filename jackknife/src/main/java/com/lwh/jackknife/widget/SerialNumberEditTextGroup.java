@@ -73,7 +73,7 @@ public class SerialNumberEditTextGroup extends AutoEditTextGroup<SerialNumberEdi
             }
         });
         section.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.shape_serial_number_edit_text_border));
+                R.drawable.shape_edit_text_border));
         section.setFocusableInTouchMode(true);
         section.setTransformationMethod(new ReplacementTransformationMethod() {
             @Override

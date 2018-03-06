@@ -97,4 +97,7 @@
         <item name="instrumentview_annulusHoverColor">@color/light_sky_blue</item>
         <item name="instrumentview_animationTime">500</item>
     </style>
+    <style name="JackKnife.Theme.Widget.VerifyCodeEditTextGroup">
+        <item name="verifycodeedittextgroup_type">lengthFour</item>
+    </style>
 </resources>

@@ -150,7 +150,7 @@ public class WhereBuilder {
         return or(not(builder));
     }
 
-    public WhereBuilder parenthesesLeft(){
+    public WhereBuilder parenthesesLeft() {
         if (mWhereClause != null) {
             mWhereClause += PARENTHESES_LEFT;
         } else {
@@ -159,34 +159,34 @@ public class WhereBuilder {
         return this;
     }
 
-    public WhereBuilder parenthesesRight(){
+    public WhereBuilder parenthesesRight() {
         if (mWhereClause != null) {
             mWhereClause += PARENTHESES_RIGHT;
         }
         return this;
     }
 
-    public WhereBuilder addWhereEqualTo(String column, Object value){
+    public WhereBuilder addWhereEqualTo(String column, Object value) {
         return append(null, column + EQUAL_HOLDER, value);
     }
 
-    public WhereBuilder addWhereNotEqualTo(String column, Object value){
+    public WhereBuilder addWhereNotEqualTo(String column, Object value) {
         return append(null, column + NOT_EQUAL_HOLDER, value);
     }
 
-    public WhereBuilder addWhereGreaterThan(String column, Object value){
+    public WhereBuilder addWhereGreaterThan(String column, Object value) {
         return append(null, column + GREATER_THAN_HOLDER, value);
     }
 
-    public WhereBuilder addWhereGreaterThanOrEqualTo(String column, Object value){
+    public WhereBuilder addWhereGreaterThanOrEqualTo(String column, Object value) {
         return append(null, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
-    public WhereBuilder addWhereLessThan(String column, Object value){
+    public WhereBuilder addWhereLessThan(String column, Object value) {
         return append(null, column + LESS_THAN_HOLDER, value);
     }
 
-    public WhereBuilder addWhereLessThanOrEqualTo(String column, Object value){
+    public WhereBuilder addWhereLessThanOrEqualTo(String column, Object value) {
         return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
@@ -254,7 +254,7 @@ public class WhereBuilder {
         return tempValues;
     }
 
-    private WhereBuilder append(String connect, String whereClause, Object... whereArgs){
+    private WhereBuilder append(String connect, String whereClause, Object... whereArgs) {
         if (mWhereClause == null) {
             mWhereClause = whereClause;
             mWhereArgs = whereArgs;
@@ -275,7 +275,7 @@ public class WhereBuilder {
         return this;
     }
 
-    private WhereBuilder appendWhereIn(String connect, String column, Object[] values){
+    private WhereBuilder appendWhereIn(String connect, String column, Object[] values) {
         String whereIn = buildWhereIn(column, values.length);
         return append(connect, whereIn, toStringArgs(values));
     }
@@ -301,7 +301,7 @@ public class WhereBuilder {
         return mWhereArgs != null?toStringArgs(mWhereArgs):null;
     }
 
-    public WhereBuilder where(Condition condition){
+    public WhereBuilder where(Condition condition) {
         mWhereClause = condition.getSelection();
         mWhereArgs = condition.getSelectionArgs();
         return this;
