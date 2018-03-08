@@ -65,13 +65,14 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
     protected void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AutoEditTextGroup, defStyleAttr, 0);
         mSectionTextSize = a.getDimension(R.styleable.AutoEditTextGroup_autoedittextgroup_sectionTextSize,
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20, getResources().getDisplayMetrics()));
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 5, getResources().getDisplayMetrics()));
         mSemicolonTextSize = a.getDimension(R.styleable.AutoEditTextGroup_autoedittextgroup_semicolonTextSize,
-                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 15, getResources().getDisplayMetrics()));
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 5, getResources().getDisplayMetrics()));
         mSemicolonPadding = a.getDimensionPixelOffset(R.styleable.AutoEditTextGroup_autoedittextgroup_sectionPadding,
                 (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()));
         mSectionPadding = a.getDimensionPixelOffset(R.styleable.AutoEditTextGroup_autoedittextgroup_semicolonPadding,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics()));
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
+        a.recycle();
     }
 
     public boolean checkInputValue(E... editTexts) {
@@ -96,9 +97,39 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
         return result;
     }
 
+    public E getSectionAt(int position) {
+        int size = mSections.size();
+        if (position >=0 && position < size) {
+            return mSections.get(position);
+        }
+        return null;
+    }
+
+    public void clearText() {
+        for (int i=0;i<mSections.size();i++) {
+            E section = getSectionAt(i);
+            section.setText("");
+        }
+    }
+
+    public void setText(String[] sectionTexts) {
+        if (sectionTexts == null || sectionTexts.length == 0) {
+            return;
+        }
+        clearText();
+        int size = mSections.size();
+        for (int i=0;i<sectionTexts.length;i++) {
+            if (i < size) {
+                E section = getSectionAt(i);
+                section.setText(sectionTexts[i]);
+                section.setSelection(sectionTexts[i].length());
+            }
+        }
+    }
+
     protected abstract E createEditText();
 
-    private class OnDelKeyListener implements OnKeyListener{
+    private class OnDelKeyListener implements OnKeyListener {
 
         private E mRequestEditText;
         private E mClearEditText;
@@ -135,7 +166,7 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
     private void initListeners() {
         for (int i=0;i<mSections.size();i++) {
             mSections.get(i).addTextChangedListener(this);
-            if (i != 0){
+            if (i != 0) {
                 mSections.get(i).setOnKeyListener(new OnDelKeyListener(mSections.get(i-1),mSections.get(i)));
             }
         }

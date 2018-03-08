@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
@@ -46,6 +47,7 @@ public class ClearEditText extends EditText implements OnFocusChangeListener, Te
 	}
 
 	private void init() {
+		setBackgroundResource(R.drawable.shape_edit_text_border);
 		mClearDrawable = getCompoundDrawables()[2];
 		if (mClearDrawable == null) {
 			mClearDrawable = getResources().getDrawable(R.drawable.icon_clear_edit_text_clear);

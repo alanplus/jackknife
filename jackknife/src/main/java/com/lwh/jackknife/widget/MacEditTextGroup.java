@@ -17,14 +17,20 @@
 package com.lwh.jackknife.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.InputType;
+import android.text.method.ReplacementTransformationMethod;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MacEditTextGroup extends AutoEditTextGroup {
+import com.lwh.jackknife.R;
+
+public class MacEditTextGroup extends AutoEditTextGroup<MacEditText> {
 
     public MacEditTextGroup(Context context) {
         super(context);
@@ -39,16 +45,32 @@ public class MacEditTextGroup extends AutoEditTextGroup {
     }
 
     @Override
-    protected AutoEditText createEditText() {
-        AutoEditText section = new MacEditText(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT, 1);
+    protected MacEditText createEditText() {
+        MacEditText section = new MacEditText(getContext());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
         section.setLayoutParams(lp);
         section.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSectionTextSize);
+        section.setTextColor(Color.GRAY);
         section.setGravity(Gravity.CENTER);
         section.setPadding(mSectionPadding, mSectionPadding, mSectionPadding, mSectionPadding);
         section.setSingleLine();
+        section.addInputType(InputType.TYPE_CLASS_TEXT);
         section.setFocusableInTouchMode(true);
-        section.addInputFilter(InputType.TYPE_CLASS_TEXT);
+        section.setTransformationMethod(new ReplacementTransformationMethod() {
+            @Override
+            protected char[] getOriginal() {
+                char[] lowerLetters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                        'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+                return lowerLetters;
+            }
+
+            @Override
+            protected char[] getReplacement() {
+                char[] upperLetters = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                        'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+                return upperLetters;
+            }
+        });
         applyEditTextTheme(section);
         return section;
     }
@@ -71,11 +93,13 @@ public class MacEditTextGroup extends AutoEditTextGroup {
     @Override
     public void applySemicolonTextViewTheme(TextView semicolonTextView) {
         semicolonTextView.setGravity(Gravity.CENTER);
+        semicolonTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         semicolonTextView.setPadding(mSemicolonPadding, mSemicolonPadding, mSemicolonPadding,
                 mSemicolonPadding);
     }
 
     @Override
-    public void applyEditTextTheme(AutoEditText absEditText) {
+    public void applyEditTextTheme(AutoEditText autoEditText) {
+        autoEditText.setBackgroundResource(R.drawable.shape_edit_text_border);
     }
 }

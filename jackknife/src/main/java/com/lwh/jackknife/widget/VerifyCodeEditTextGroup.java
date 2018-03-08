@@ -18,9 +18,12 @@ package com.lwh.jackknife.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lwh.jackknife.R;
@@ -43,9 +46,10 @@ public class VerifyCodeEditTextGroup extends AutoEditTextGroup<VerifyCodeEditTex
 
     @Override
     protected void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
+        super.initAttrs(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VerifyCodeEditTextGroup,
                 defStyleAttr, 0);
-        int type = a.getColor(R.styleable.VerifyCodeEditTextGroup_verifycodeedittextgroup_type, 0);
+        int type = a.getInt(R.styleable.VerifyCodeEditTextGroup_verifycodeedittextgroup_type, 0);
         switch (type) {
             case 0:
                 mLength = 4;
@@ -54,26 +58,32 @@ public class VerifyCodeEditTextGroup extends AutoEditTextGroup<VerifyCodeEditTex
                 mLength = 6;
                 break;
         }
+        a.recycle();
     }
 
     @Override
     protected VerifyCodeEditText createEditText() {
         VerifyCodeEditText section = new VerifyCodeEditText(getContext());
-        LayoutParams lp = new LayoutParams(0, LayoutParams.MATCH_PARENT);
-        lp.weight = 1;
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
         section.setLayoutParams(lp);
-        section.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 6,
-                getResources().getDisplayMetrics()));
+        section.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSectionTextSize);
+        section.setTextColor(Color.GRAY);
         section.setGravity(Gravity.CENTER);
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
-                getResources().getDisplayMetrics());
-        section.setPadding(padding, padding, padding, padding);
+        section.setPadding(mSectionPadding, mSectionPadding, mSectionPadding, mSectionPadding);
         section.setSingleLine();
+        section.addInputType(InputType.TYPE_CLASS_NUMBER);
         section.setFocusableInTouchMode(true);
         applyEditTextTheme(section);
-        section.setBackgroundResource(R.drawable.shape_edit_text_border);
-        applyEditTextTheme(section);
         return section;
+    }
+
+    @Override
+    public String getText() {
+        String result = "";
+        for (int i = 0; i < mSections.size(); i++) {
+            result += mSections.get(i).getText().toString();
+        }
+        return result;
     }
 
     @Override
@@ -83,7 +93,7 @@ public class VerifyCodeEditTextGroup extends AutoEditTextGroup<VerifyCodeEditTex
 
     @Override
     public String getSemicolonText() {
-        return "";
+        return " ";
     }
 
     @Override
@@ -92,14 +102,15 @@ public class VerifyCodeEditTextGroup extends AutoEditTextGroup<VerifyCodeEditTex
     }
 
     @Override
-    public void applySemicolonTextViewTheme(TextView textView) {
-        textView.setPadding(0, 0, 0, 5);
-        textView.getPaint().setFakeBoldText(true);
-        textView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        textView.setGravity(Gravity.BOTTOM);
+    public void applySemicolonTextViewTheme(TextView semicolonTextView) {
+        semicolonTextView.setGravity(Gravity.CENTER);
+        semicolonTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        semicolonTextView.setPadding(mSemicolonPadding, mSemicolonPadding, mSemicolonPadding,
+                mSemicolonPadding);
     }
 
     @Override
-    public void applyEditTextTheme(AutoEditText absEditText) {
+    public void applyEditTextTheme(AutoEditText autoEditText) {
+        autoEditText.setBackgroundResource(R.drawable.shape_edit_text_border);
     }
 }

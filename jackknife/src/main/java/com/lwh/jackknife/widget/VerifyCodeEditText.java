@@ -36,6 +36,6 @@ public class VerifyCodeEditText extends AutoEditText {
 
     @Override
     public boolean checkInputValue() {
-        return getText().length()==0?false:true;
+        return getText().length()==1?true:false;
     }
 }

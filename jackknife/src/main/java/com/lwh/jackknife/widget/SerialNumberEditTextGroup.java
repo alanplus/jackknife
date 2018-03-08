@@ -44,36 +44,16 @@ public class SerialNumberEditTextGroup extends AutoEditTextGroup<SerialNumberEdi
     }
 
     @Override
-    protected void initAttrs(Context context, AttributeSet attributeSet, int i) {
-    }
-
-    @Override
     protected SerialNumberEditText createEditText() {
-        final SerialNumberEditText section = new SerialNumberEditText(getContext());
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.MATCH_PARENT);
-        lp.weight = 1;
-        lp.setMargins(10, 10, 10, 10);
+        SerialNumberEditText section = new SerialNumberEditText(getContext());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
         section.setLayoutParams(lp);
-        section.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 4, getResources()
-                .getDisplayMetrics()));
-        section.setGravity(Gravity.CENTER);
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1 ,
-                getResources().getDisplayMetrics());
-        section.setPadding(padding, padding, padding, padding);
-        section.setSingleLine();
+        section.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSectionTextSize);
         section.setTextColor(Color.GRAY);
-        section.setKeyListener(new NumberKeyListener() {
-            protected char[] getAcceptedChars() {
-                return section.getInputFilterAcceptedChars();
-            }
-
-            public int getInputType() {
-                return InputType.TYPE_MASK_CLASS;
-
-            }
-        });
-        section.setBackgroundDrawable(getResources().getDrawable(
-                R.drawable.shape_edit_text_border));
+        section.setGravity(Gravity.CENTER);
+        section.setPadding(mSectionPadding, mSectionPadding, mSectionPadding, mSectionPadding);
+        section.setSingleLine();
+        section.addInputType(InputType.TYPE_CLASS_TEXT);
         section.setFocusableInTouchMode(true);
         section.setTransformationMethod(new ReplacementTransformationMethod() {
             @Override
@@ -95,13 +75,22 @@ public class SerialNumberEditTextGroup extends AutoEditTextGroup<SerialNumberEdi
     }
 
     @Override
+    public String getText() {
+        String result = "";
+        for (int i = 0; i < mSections.size(); i++) {
+            result += mSections.get(i).getText().toString();
+        }
+        return result;
+    }
+
+    @Override
     public int getChildCount() {
         return 23;
     }
 
     @Override
     public String getSemicolonText() {
-        return "";
+        return " ";
     }
 
     @Override
@@ -111,9 +100,14 @@ public class SerialNumberEditTextGroup extends AutoEditTextGroup<SerialNumberEdi
 
     @Override
     public void applySemicolonTextViewTheme(TextView semicolonTextView) {
+        semicolonTextView.setGravity(Gravity.CENTER);
+        semicolonTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        semicolonTextView.setPadding(mSemicolonPadding, mSemicolonPadding, mSemicolonPadding,
+                mSemicolonPadding);
     }
 
     @Override
     public void applyEditTextTheme(AutoEditText autoEditText) {
+        autoEditText.setBackgroundResource(R.drawable.shape_edit_text_border);
     }
 }

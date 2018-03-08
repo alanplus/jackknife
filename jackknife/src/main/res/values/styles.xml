@@ -65,10 +65,10 @@
         <item name="highlighttextview_highlightColor">@color/white</item>
     </style>
     <style name="JackKnife.Theme.Widget.AutoEditTextGroup">
-        <item name="autoedittextgroup_sectionTextSize">15sp</item>
-        <item name="autoedittextgroup_semicolonTextSize">12sp</item>
+        <item name="autoedittextgroup_sectionTextSize">6sp</item>
+        <item name="autoedittextgroup_semicolonTextSize">5sp</item>
         <item name="autoedittextgroup_sectionPadding">4dp</item>
-        <item name="autoedittextgroup_semicolonPadding">4dp</item>
+        <item name="autoedittextgroup_semicolonPadding">2dp</item>
     </style>
     <style name="JackKnife.Theme.Widget.AnimatorScrollView">
         <item name="animatorscrollview_firstMatchHeight">true</item>
@@ -97,8 +97,9 @@
         <item name="instrumentview_annulusHoverColor">@color/light_sky_blue</item>
         <item name="instrumentview_animationTime">500</item>
     </style>
-    <style name="JackKnife.Theme.Widget.VerifyCodeEditTextGroup">
-        <item name="verifycodeedittextgroup_type">lengthFour</item>
+    <style name="JackKnife.Theme.Widget.VerifyCodeEditTextGroup"
+        parent="JackKnife.Theme.Widget.AutoEditTextGroup">
+        <item name="verifycodeedittextgroup_type">lengthSix</item>
     </style>
     <style name="JackKnife.Theme.Widget.TitleBar">
         <item name="titlebar_title">title</item>

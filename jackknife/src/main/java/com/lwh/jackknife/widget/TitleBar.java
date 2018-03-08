@@ -21,7 +21,6 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,20 +96,17 @@ public class TitleBar extends RelativeLayout {
     }
 
     private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TitleBar, 0, defStyleAttr);
         mTitle = a.getString(R.styleable.TitleBar_titlebar_title);
         mTitleTextColor = a.getColor(R.styleable.TitleBar_titlebar_titleTextColor,
                 getResources().getColor(R.color.gray));
-        mTitleTextSize = a.getDimension(R.styleable.TitleBar_titlebar_titleTextSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize, displayMetrics));
+        mTitleTextSize = a.getDimension(R.styleable.TitleBar_titlebar_titleTextSize, mTitleTextSize);
         mLeftDrawable = a.getDrawable(R.styleable.TitleBar_titlebar_leftDrawable);
         mRightDrawable = a.getDrawable(R.styleable.TitleBar_titlebar_rightDrawable);
         mLeftDrawableSize = a.getDimensionPixelOffset(R.styleable.TitleBar_titlebar_leftDrawableSize,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mLeftDrawableSize,
-                        displayMetrics));
+                mLeftDrawableSize);
         mRightDrawableSize = a.getDimensionPixelOffset(R.styleable.TitleBar_titlebar_rightDrawableSize,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mRightDrawableSize,
-                        displayMetrics));
+                mRightDrawableSize);
         a.recycle();
     }
 

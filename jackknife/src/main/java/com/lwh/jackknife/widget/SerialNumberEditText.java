@@ -19,18 +19,12 @@ package com.lwh.jackknife.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.lwh.jackknife.R;
+
 public class SerialNumberEditText extends AutoEditText {
 
     public SerialNumberEditText(Context context) {
         super(context);
-    }
-
-    public SerialNumberEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public SerialNumberEditText(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
     }
 
     @Override
@@ -51,6 +45,6 @@ public class SerialNumberEditText extends AutoEditText {
 
     @Override
     public boolean checkInputValue() {
-        return getText().length() > 0 && getText().length() <=1;
+        return getText().length()==1?true:false;
     }
 }
