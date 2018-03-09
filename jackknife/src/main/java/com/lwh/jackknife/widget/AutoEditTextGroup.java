@@ -90,7 +90,7 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
         String result = "";
         for (int i = 0; i < mSections.size(); i++) {
             result += mSections.get(i).getText().toString();
-            if (i != mSections.size()-1){
+            if (i != mSections.size()-1) {
                 result += getSemicolonText();
             }
         }
@@ -108,7 +108,10 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
     public void clearText() {
         for (int i=0;i<mSections.size();i++) {
             E section = getSectionAt(i);
-            section.setText("");
+            if (section != null) {
+                section.setText("");
+                section.setSelection(0);
+            }
         }
     }
 
@@ -121,8 +124,13 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
         for (int i=0;i<sectionTexts.length;i++) {
             if (i < size) {
                 E section = getSectionAt(i);
-                section.setText(sectionTexts[i]);
-                section.setSelection(sectionTexts[i].length());
+                if (section != null) {
+                    if (!hasFocus()) {
+                        section.requestFocus();
+                    }
+                    section.setText(sectionTexts[i]);
+                    section.setSelection(sectionTexts[i].length());
+                }
             }
         }
     }
