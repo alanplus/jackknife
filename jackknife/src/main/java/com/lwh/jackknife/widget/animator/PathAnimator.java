@@ -62,8 +62,6 @@ public class PathAnimator<PA extends PathAction> extends ActionWrapper<PA> {
 
         @Override
         public PA evaluate(float fraction, PA startValue, PA endValue) {
-            ToastUtils.showShort(mTargetView.getContext(),
-                    "eval="+startValue.getClass().getSimpleName()+endValue.getClass().getSimpleName());
             float x = 0;
             float y = 0;
             if (endValue instanceof MoveTo) {
