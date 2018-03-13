@@ -41,7 +41,7 @@ public abstract class AutoEditText extends EditText {
         setFilters(new InputFilter[]{new InputFilter.LengthFilter(getMaxLength())});
     }
 
-    protected void addInputType(final int inputType) {
+    public void addInputType(final int inputType) {
         setKeyListener(new NumberKeyListener() {
             @Override
             protected char[] getAcceptedChars() {

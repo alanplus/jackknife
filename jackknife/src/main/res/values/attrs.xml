@@ -125,6 +125,9 @@
         <attr name="titlebar_leftDrawableSize" format="dimension"/>
         <attr name="titlebar_rightDrawableSize" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="SlidingMenu">
+        <attr name="slidingmenu_menuRightPadding" format="dimension|reference"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
@@ -138,4 +141,5 @@
     <attr name="instrumentViewStyle" format="reference"/>
     <attr name="verifyCodeEditTextGroupStyle" format="reference"/>
     <attr name="titleBarStyle" format="reference"/>
+    <attr name="slidingMenuStyle" format="reference"/>
 </resources>
