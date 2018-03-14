@@ -128,6 +128,18 @@
     <declare-styleable name="SlidingMenu">
         <attr name="slidingmenu_menuRightPadding" format="dimension|reference"/>
     </declare-styleable>
+    <declare-styleable name="ProgressButton">
+        <attr name="progressbutton_cornerRadius" format="dimension|reference"/>
+        <attr name="progressbutton_showBorder" format="boolean"/>
+        <attr name="progressbutton_borderWidth" format="dimension|reference"/>
+        <attr name="progressbutton_textSize" format="dimension|reference"/>
+        <attr name="progressbutton_textColor" format="color|reference"/>
+        <attr name="progressbutton_hoverTextColor" format="color|reference"/>
+        <attr name="progressbutton_backgroundColor" format="color|reference"/>
+        <attr name="progressbutton_secondaryBackgroundColor" format="color|reference"/>
+        <attr name="progressbutton_ballSpacing" format="dimension|reference"/>
+        <attr name="progressbutton_ballRadius" format="dimension|reference"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
@@ -142,4 +154,5 @@
     <attr name="verifyCodeEditTextGroupStyle" format="reference"/>
     <attr name="titleBarStyle" format="reference"/>
     <attr name="slidingMenuStyle" format="reference"/>
+    <attr name="progressButtonStyle" format="reference"/>
 </resources>

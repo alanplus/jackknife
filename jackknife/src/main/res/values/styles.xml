@@ -111,4 +111,16 @@
     <style name="JackKnife.Theme.Widget.SlidingMenu">
         <item name="slidingmenu_menuRightPadding">100dp</item>
     </style>
+    <style name="JackKnife.Theme.Widget.ProgressButton">
+        <item name="progressbutton_cornerRadius">4dp</item>
+        <item name="progressbutton_showBorder">true</item>
+        <item name="progressbutton_borderWidth">1dp</item>
+        <item name="progressbutton_textSize">15sp</item>
+        <item name="progressbutton_textColor">@color/light_sky_blue</item>
+        <item name="progressbutton_hoverTextColor">@color/white</item>
+        <item name="progressbutton_backgroundColor">@color/light_sky_blue</item>
+        <item name="progressbutton_secondaryBackgroundColor">@color/blue</item>
+        <item name="progressbutton_ballSpacing">1dp</item>
+        <item name="progressbutton_ballRadius">1dp</item>
+    </style>
 </resources>

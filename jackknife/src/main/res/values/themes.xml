@@ -32,5 +32,6 @@
         <item name="instrumentViewStyle">@style/JackKnife.Theme.Widget.InstrumentView</item>
         <item name="verifyCodeEditTextGroupStyle">@style/JackKnife.Theme.Widget.VerifyCodeEditTextGroup</item>
         <item name="slidingMenuStyle">@style/JackKnife.Theme.Widget.SlidingMenu</item>
+        <item name="progressButtonStyle">@style/JackKnife.Theme.Widget.ProgressButton</item>
     </style>
 </resources>
