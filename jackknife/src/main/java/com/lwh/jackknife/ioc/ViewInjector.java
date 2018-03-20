@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lwh.jackknife.ioc.exception.IllegalViewClassNameException;
+import com.lwh.jackknife.ioc.exception.InjectException;
 import com.lwh.jackknife.ioc.exception.ViewTypeException;
 
 public class ViewInjector<V extends SupportV> {
@@ -211,6 +212,9 @@ public class ViewInjector<V extends SupportV> {
                         Object view = findViewByIdMethod.invoke(contextV, id);
                         if (view != null) {
                             field.set(viewInjected, view);
+                        } else {
+                            throw new InjectException(
+                                    fieldType.getName()+" id("+id+") can\'t be injected.");
                         }
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
