@@ -39,6 +39,7 @@ import android.graphics.drawable.NinePatchDrawable;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 
 import java.io.ByteArrayOutputStream;
@@ -49,15 +50,35 @@ import java.io.IOException;
 
 public class ImageUtils {
 
-    public static void saveAsJpeg(Bitmap bitmap, String filePath) {
+    public static int dp2px(Context context, float dpVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
+    }
+
+    public static int sp2px(Context context, float spVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+                spVal, context.getResources().getDisplayMetrics());
+    }
+
+    public static float px2dp(Context context, float pxVal) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return (pxVal / scale);
+    }
+
+    public static float px2sp(Context context, float pxVal) {
+        float scale = context.getResources().getDisplayMetrics().scaledDensity;
+        return pxVal / scale;
+    }
+
+    public static void saveAsJpeg(Bitmap bitmap, String path, int quality) {
         FileOutputStream fos = null;
         try {
-            File file = new File(filePath);
+            File file = new File(path);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
             fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, fos);
             fos.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -74,15 +95,19 @@ public class ImageUtils {
         }
     }
 
-    public static void saveAsPng(Bitmap bitmap, String filePath) {
+    public static void saveAsJpeg(Bitmap bitmap, String path) {
+        saveAsJpeg(bitmap, path, 100);
+    }
+
+    public static void saveAsPng(Bitmap bitmap, String path, int quality) {
         FileOutputStream fos = null;
         try {
-            File file = new File(filePath);
+            File file = new File(path);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
             fos = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, quality, fos);
             fos.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -99,18 +124,11 @@ public class ImageUtils {
         }
     }
 
-    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                         int requiredWidth, int requiredHeight) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
-                requiredHeight);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
+    public static void saveAsPng(Bitmap bitmap, String path) {
+        saveAsPng(bitmap, path, 100);
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int requiredWidth,
+    private static int calculateInSampleSize(BitmapFactory.Options options, int requiredWidth,
                                             int requiredHeight) {
         int width = options.outWidth;
         int height = options.outHeight;
@@ -123,7 +141,18 @@ public class ImageUtils {
         return inSampleSize;
     }
 
-    public static Bitmap takeScreenShot(Activity activity){
+    public static Bitmap decodeSampledBitmap(Resources res, int resId, int requiredWidth,
+                                             int requiredHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
+                requiredHeight);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static Bitmap takeScreenShot(Activity activity) {
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
@@ -161,12 +190,33 @@ public class ImageUtils {
         return degree;
     }
 
-    public static Bitmap drawable2Bitmap(Drawable drawable) {
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    public static Bitmap createBitmap(Context context, int resId) {
+        return BitmapFactory.decodeResource(context.getResources(), resId);
+    }
+
+    public static Bitmap createBitmap(byte[] bytes) {
+        if (bytes != null && bytes.length != 0) {
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        } else {
+            return null;
+        }
+    }
+
+    public static Bitmap createBitmap(Bitmap bitmap, int width, int height) {
+        return Bitmap.createScaledBitmap(bitmap, width, height, true);
+    }
+
+    public static Bitmap createBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable) drawable).getBitmap();
         } else if (drawable instanceof NinePatchDrawable) {
-            Bitmap bitmap = Bitmap
-                    .createBitmap(
+            Bitmap bitmap = Bitmap.createBitmap(
                             drawable.getIntrinsicWidth(),
                             drawable.getIntrinsicHeight(),
                             drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
@@ -181,58 +231,47 @@ public class ImageUtils {
         }
     }
 
-    public static Bitmap getBitmap(Context context, int resId) {
-        return BitmapFactory.decodeResource(context.getResources(), resId);
-    }
-
-    public static byte[] toByteArray(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
-    }
-
-    public static Bitmap bytes2Bitmap(byte[] bs) {
-        if (bs.length != 0) {
-            return BitmapFactory.decodeByteArray(bs, 0, bs.length);
-        } else {
+    public static Bitmap composeWatermark(Bitmap dstBitmap, Bitmap markBitmap, int gravity, float offsetX, float offsetY) {
+        if (dstBitmap == null) {
             return null;
         }
-    }
-
-    public static Bitmap createBitmapBySize(Bitmap bitmap, int width, int height) {
-        return Bitmap.createScaledBitmap(bitmap, width, height, true);
-    }
-
-    public static Bitmap composeWatermark(Bitmap bitmap, Bitmap markBitmap) {
-        if (bitmap == null) {
-            return null;
-        }
-        Bitmap outputBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),
+        Bitmap outputBitmap = Bitmap.createBitmap(dstBitmap.getWidth(), dstBitmap.getHeight(),
                 Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(outputBitmap);
-        canvas.drawBitmap(bitmap, 0, 0, null);
-        canvas.drawBitmap(markBitmap, bitmap.getWidth() - markBitmap.getWidth() + 5, bitmap.getHeight()
-                - markBitmap.getHeight() + 5, null);
+        canvas.drawBitmap(dstBitmap, 0, 0, null);
+        Rect outRect = new Rect();
+        Rect containerRect = new Rect(0, 0, dstBitmap.getWidth(), dstBitmap.getHeight());
+        Gravity.apply(gravity, outputBitmap.getWidth(), outputBitmap.getHeight(), containerRect, outRect);
+        int left = (int) (outRect.left+offsetX);
+        int top = (int) (outRect.top+offsetY);
+        int right = (int) (outRect.right+offsetX);
+        int bottom = (int) (outRect.bottom+offsetY);
+        outRect.set(left, top, right, bottom);
+        canvas.drawBitmap(markBitmap, null, outRect, null);
         canvas.save(Canvas.ALL_SAVE_FLAG);
         canvas.restore();
         return outputBitmap;
     }
 
-    public static Bitmap zoom(Bitmap bitmap, int newWidth, int newHeight) {
+    public static Bitmap composeWatermark(Bitmap dstBitmap, Bitmap markBitmap) {
+        return composeWatermark(dstBitmap, markBitmap, Gravity.RIGHT|Gravity.BOTTOM, 0, 0);
+    }
+
+    public static Bitmap zoomBitmap(Bitmap bitmap, int requiredWidth, int requiredHeight) {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
+        float scaleWidth = ((float) requiredWidth) / width;
+        float scaleHeight = ((float) requiredHeight) / height;
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
     }
 
-    public static Bitmap rotate(int angle, Bitmap bitmap) {
+    public static Bitmap rotateBitmap(int angle, Bitmap bitmap) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
-        Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, 0,
-                bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                bitmap.getHeight(), matrix, true);
         return outputBitmap;
     }
 
@@ -243,7 +282,7 @@ public class ImageUtils {
         System.gc();
     }
 
-    public static Bitmap getImageThumbnail(String imagePath, int width, int height) {
+    public static Bitmap createImageThumbnail(String imagePath, int width, int height) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         options.inJustDecodeBounds = false;
@@ -267,7 +306,7 @@ public class ImageUtils {
         return bitmap;
     }
 
-    public static Bitmap makeReflectionImage(Bitmap bitmap) {
+    public static Bitmap makeReflectionBitmap(Bitmap bitmap) {
         int reflectionGap = 4;
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
