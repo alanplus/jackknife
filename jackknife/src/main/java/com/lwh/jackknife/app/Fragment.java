@@ -29,16 +29,16 @@ import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 /**
  * Automatically inject a layout, bind views, and register events for fragments.
  */
-public class Fragment extends android.app.Fragment implements SupportFragment{
+public abstract class Fragment extends android.app.Fragment implements SupportFragment{
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return ViewInjector.create().injectLayout(this);
 	}
 
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		ViewInjector.create().inject(this);
 	}
 

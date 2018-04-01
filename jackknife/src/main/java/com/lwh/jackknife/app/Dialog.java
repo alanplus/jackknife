@@ -17,7 +17,9 @@
 package com.lwh.jackknife.app;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import com.lwh.jackknife.ioc.SupportActivity;
 import com.lwh.jackknife.ioc.SupportDialog;
@@ -28,7 +30,8 @@ import com.lwh.jackknife.ioc.exception.LackInterfaceException;
  * Automatically inject a layout, bind views, and register events for dialogs.
  */
 
-public class Dialog extends android.app.Dialog implements SupportDialog {
+public abstract class Dialog extends android.app.Dialog implements SupportDialog,
+        DialogInterface.OnShowListener, DialogInterface.OnDismissListener {
 
     public Dialog(Context context) {
         super(context);
@@ -44,8 +47,15 @@ public class Dialog extends android.app.Dialog implements SupportDialog {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        setContentView(onCreateView());
         ViewInjector.create().inject(this);
+        setOnShowListener(this);
+        setOnDismissListener(this);
+    }
+
+    @Override
+    public final void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
     }
 
     @Override
@@ -55,4 +65,10 @@ public class Dialog extends android.app.Dialog implements SupportDialog {
         }
         throw new LackInterfaceException("The activity lacks the SupportActivity interface.");
     }
+
+    protected abstract View onCreateView();
+
+    public abstract void onShow(DialogInterface dialog);
+
+    public abstract void onDismiss(DialogInterface dialog);
 }

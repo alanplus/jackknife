@@ -24,13 +24,26 @@ import com.lwh.jackknife.ioc.ViewInjector;
 /**
  * Automatically inject a layout, bind views, and register events for activities.
  */
-public class Activity extends android.app.Activity implements SupportActivity {
+public abstract class Activity extends android.app.Activity implements SupportActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		ViewInjector.create().inject(this);
+		push();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		pop();
+	}
 
 	/**
 	 * If you are using {@link Application}, it is automatically gonna be added to the Application's
 	 * task stack when creating the Activity.
 	 */
-	protected void push() {
+	private void push() {
 		if (getApplication() instanceof Application) {
 			Application.getInstance().pushTask(this);
 		}
@@ -40,18 +53,9 @@ public class Activity extends android.app.Activity implements SupportActivity {
 	 * Equivalent to {@link android.app.Activity#finish()}, the difference is that it is gonna be
 	 * removed from the Application's task stack when the activity is destroyed.
 	 */
-	public void pop() {
+	private void pop() {
 		if (getApplication() instanceof Application) {
 			Application.getInstance().popTask();
-		}
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		ViewInjector.create().inject(this);
-		if (getApplication() instanceof Application) {
-			push();
 		}
 	}
 }

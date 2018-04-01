@@ -42,15 +42,15 @@ public class ViewInjector<V extends SupportV> {
     private final String METHOD_INFLATE = "inflate";
     private final String METHOD_VALUE = "value";
     private final String UNDERLINE = "_";
-    private final String ID = ".R$id";
-    private final String LAYOUT = ".R$layout";
-    private final int A = 'A';
-    private final int Z = 'Z';
+    private final String R_ID = ".R$id";
+    private final String R_LAYOUT = ".R$layout";
+    private final int A_INDEX = 'A';
+    private final int Z_INDEX = 'Z';
     private final String VIEW_TYPE_ERROR = "The viewInjected must be an activity or a fragment.";
     private final String VIEW_CLASS_NAME_ERROR = "Class name is not ends with \'Activity\' or " +
             "\'Fragment\'.";
 
-    enum ViewType {
+    public enum ViewType {
         Activity,
         Fragment,
         Dialog,
@@ -58,10 +58,19 @@ public class ViewInjector<V extends SupportV> {
         UNDECLARED
     }
 
+    private static ViewInjector sInstance;
+
     private ViewInjector() {
     }
 
     public static ViewInjector create() {
+        if (sInstance == null) {
+            synchronized (ViewInjector.class) {
+                if (sInstance == null) {
+                    sInstance = new ViewInjector();
+                }
+            }
+        }
         return new ViewInjector();
     }
 
@@ -105,7 +114,7 @@ public class ViewInjector<V extends SupportV> {
                 String name = layoutName.substring(0, layoutName.length() - suffix.length());
                 sb = new StringBuffer(suffix.toLowerCase(Locale.ENGLISH));
                 for (int i = 0; i < name.length(); i++) {
-                    if (name.charAt(i) >= A && name.charAt(i) <= Z || i == 0) {
+                    if (name.charAt(i) >= A_INDEX && name.charAt(i) <= Z_INDEX || i == 0) {
                         sb.append(UNDERLINE);
                     }
                     sb.append(String.valueOf(name.charAt(i)).toLowerCase(Locale.ENGLISH));
@@ -146,7 +155,7 @@ public class ViewInjector<V extends SupportV> {
             Class<?> viewClass = viewInjected.getClass();
             String packageName = ((SupportContextV) viewInjected).getPackageName();
             try {
-                Class<?> layoutClass = Class.forName(packageName + LAYOUT);
+                Class<?> layoutClass = Class.forName(packageName + R_LAYOUT);
                 Field field = layoutClass.getDeclaredField(layoutName);
                 int layoutId = field.getInt(viewInjected);
                 if (contentView != null) {
@@ -199,7 +208,7 @@ public class ViewInjector<V extends SupportV> {
                             id = viewId.value();
                         } else {
                             String packageName = contextV.getPackageName();
-                            Class<?> idClass = Class.forName(packageName + ID);
+                            Class<?> idClass = Class.forName(packageName + R_ID);
                             Field idField = idClass.getDeclaredField(field.getName());
                             try {
                                 id = idField.getInt(idField);

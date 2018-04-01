@@ -32,7 +32,7 @@ public class Application extends android.app.Application {
     /**
      * Only a mirror used to record the activity created.
      */
-    private Stack<WeakReference<SupportActivity>> mActivityStacks = new Stack<>();
+    private Stack<WeakReference<SupportActivity>> mActivityStacks;
 
     /**
      * There is only one instance of the program.
@@ -42,6 +42,7 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mActivityStacks = new Stack<>();
         sApp = this;
     }
 
@@ -81,13 +82,17 @@ public class Application extends android.app.Application {
     /**
      * Destroy and remove all activities in the task stack.
      */
-    protected void removeTasks() {
+    public void close() {
         for (WeakReference<SupportActivity> ref:mActivityStacks) {
             SupportActivity activity = ref.get();
             if (activity != null) {
                 activity.finish();
             }
         }
-        mActivityStacks.removeAllElements();
+    }
+
+    public void forceClose() {
+        close();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
