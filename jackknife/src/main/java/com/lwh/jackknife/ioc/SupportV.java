@@ -16,5 +16,11 @@
 
 package com.lwh.jackknife.ioc;
 
+import android.view.View;
+
 public interface SupportV {
+
+    View findViewById(int id);
+
+    String getPackageName();
 }

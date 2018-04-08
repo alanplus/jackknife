@@ -35,7 +35,7 @@ import com.lwh.jackknife.ioc.exception.IllegalViewClassNameException;
 import com.lwh.jackknife.ioc.exception.InjectException;
 import com.lwh.jackknife.ioc.exception.ViewTypeException;
 
-public class ViewInjector<V extends SupportV> {
+public class ViewInjector {
 
     private final String METHOD_SET_CONTENT_VIEW = "setContentView";
     private final String METHOD_FIND_VIEW_BY_ID = "findViewById";
@@ -51,11 +51,10 @@ public class ViewInjector<V extends SupportV> {
             "\'Fragment\'.";
 
     public enum ViewType {
+        UNDECLARED,
         Activity,
         Fragment,
-        Dialog,
-        View,
-        UNDECLARED
+        Dialog
     }
 
     private static ViewInjector sInstance;
@@ -63,7 +62,7 @@ public class ViewInjector<V extends SupportV> {
     private ViewInjector() {
     }
 
-    public static ViewInjector create() {
+    private static ViewInjector getInstance() {
         if (sInstance == null) {
             synchronized (ViewInjector.class) {
                 if (sInstance == null) {
@@ -74,40 +73,38 @@ public class ViewInjector<V extends SupportV> {
         return new ViewInjector();
     }
 
-    public void inject(V viewInjected) {
-        if (viewInjected instanceof SupportActivity || viewInjected instanceof SupportDialog) {
-            injectLayout(viewInjected);
-            injectViews(viewInjected);
-            injectEvents(viewInjected);
-        } else if (viewInjected instanceof SupportFragment || viewInjected instanceof SupportView) {
-            injectViews(viewInjected);
-            injectEvents(viewInjected);
+    public static void inject(SupportV v) {
+        if (v instanceof SupportActivity || v instanceof SupportDialog) {
+            injectLayout(v);
+            injectViews(v);
+            injectEvents(v);
+        } else if (v instanceof SupportFragment) {
+            injectViews(v);
+            injectEvents(v);
         }
     }
 
-    protected SupportContextV getContextV(V viewInjected) {
-        ViewType viewType = getViewType(viewInjected);
-        SupportContextV v = null;
+    protected SupportActivity getSupportActivity(SupportV v) {
+        ViewType viewType = getViewType(v);
+        SupportActivity activity = null;
         if (viewType == ViewType.Activity) {
-            v = (SupportActivity) viewInjected;
+            activity = (SupportActivity) v;
         } if (viewType == ViewType.Fragment) {
-            v = ((SupportFragment) viewInjected).getFragmentActivity();
+            activity = ((SupportFragment) v).getFragmentActivity();
         } else if (viewType == ViewType.Dialog) {
-            v = ((SupportDialog) viewInjected).getDialogActivity();
-        } else if (viewType == ViewType.View) {
-            v = (SupportView)viewInjected;
+            activity = ((SupportDialog) v).getDialogActivity();
         } else if (viewType == ViewType.UNDECLARED) {
             throw new ViewTypeException(VIEW_TYPE_ERROR);
         }
-        return v;
+        return activity;
     }
 
-    protected String generateLayoutName(V viewInjected) {
-        ViewType viewType = getViewType(viewInjected);
+    protected String generateLayoutName(SupportV v) {
+        ViewType viewType = getViewType(v);
         if (isViewTypeAllowed(viewType)) {
             String suffix = viewType.name();
             StringBuffer sb;
-            String layoutName = viewInjected.getClass().getSimpleName();
+            String layoutName = v.getClass().getSimpleName();
             if (!layoutName.endsWith(suffix)) {
                 throw new IllegalViewClassNameException(VIEW_CLASS_NAME_ERROR);
             } else {
@@ -126,16 +123,14 @@ public class ViewInjector<V extends SupportV> {
         }
     }
 
-    protected ViewType getViewType(V viewInjected) {
-        Class<V> viewClass = (Class<V>) viewInjected.getClass();
+    protected ViewType getViewType(SupportV v) {
+        Class<? extends SupportV> viewClass = v.getClass();
         if (SupportActivity.class.isAssignableFrom(viewClass)) {
             return ViewType.Activity;
         } else if (SupportFragment.class.isAssignableFrom(viewClass)) {
             return ViewType.Fragment;
         } else if (SupportDialog.class.isAssignableFrom(viewClass)) {
             return ViewType.Dialog;
-        } else if (SupportView.class.isAssignableFrom(viewClass)) {
-            return ViewType.View;
         } else {
             return ViewType.UNDECLARED;
         }
@@ -145,28 +140,32 @@ public class ViewInjector<V extends SupportV> {
         return viewType != ViewType.UNDECLARED;
     }
 
-    public final View injectLayout(V viewInjected) {
+    public static View injectLayout(SupportV v) {
+        return getInstance()._injectLayout(v);
+    }
+
+    private final View _injectLayout(SupportV v) {
         View view = null;
-        ViewType viewType = getViewType(viewInjected);
+        ViewType viewType = getViewType(v);
         if (isViewTypeAllowed(viewType)) {
-            String layoutName = generateLayoutName(viewInjected);
-            ContentView contentView = viewInjected.getClass().getAnnotation(ContentView.class);
-            viewInjected = (V) getContextV(viewInjected);
-            Class<?> viewClass = viewInjected.getClass();
-            String packageName = ((SupportContextV) viewInjected).getPackageName();
+            String layoutName = generateLayoutName(v);
+            ContentView contentView = v.getClass().getAnnotation(ContentView.class);
+            SupportActivity activity = getSupportActivity(v);
+            Class<? extends SupportV> viewClass = v.getClass();
+            String packageName = v.getPackageName();
             try {
                 Class<?> layoutClass = Class.forName(packageName + R_LAYOUT);
                 Field field = layoutClass.getDeclaredField(layoutName);
-                int layoutId = field.getInt(viewInjected);
+                int layoutId = field.getInt(v);
                 if (contentView != null) {
                     layoutId = contentView.value();
                 }
                 if (viewType == ViewType.Activity || viewType == ViewType.Dialog) {
                     Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
-                    method.invoke(viewInjected, layoutId);
-                } else if (viewType == ViewType.Fragment || viewType == ViewType.View) {
+                    method.invoke(activity, layoutId);
+                } else if (viewType == ViewType.Fragment) {
                 }
-                LayoutInflater inflater = LayoutInflater.from((Context) viewInjected);
+                LayoutInflater inflater = LayoutInflater.from((Context) v);
                 Class<? extends LayoutInflater> inflaterClass = LayoutInflater.class;
                 Method inflateMethod = inflaterClass.getDeclaredMethod(METHOD_INFLATE, int.class,
                         ViewGroup.class);
@@ -186,13 +185,17 @@ public class ViewInjector<V extends SupportV> {
         return view;
     }
 
-    public final void injectViews(V viewInjected) {
-        ViewType viewType = getViewType(viewInjected);
+    public static void injectViews(SupportV v) {
+        getInstance()._injectViews(v);
+    }
+
+    private final void _injectViews(SupportV v) {
+        ViewType viewType = getViewType(v);
         if (isViewTypeAllowed(viewType)) {
-            Class<?> viewClass = viewInjected.getClass();
+            Class<?> viewClass = v.getClass();
             Field[] viewFields = viewClass.getDeclaredFields();
-            SupportContextV contextV = getContextV(viewInjected);
-            Class<? extends SupportContextV> contextVClass = contextV.getClass();
+            SupportActivity activity = getSupportActivity(v);
+            Class<? extends SupportActivity> activityClass = activity.getClass();
             for (Field field : viewFields) {
                 field.setAccessible(true);
                 Class<?> fieldType = field.getType();
@@ -207,7 +210,7 @@ public class ViewInjector<V extends SupportV> {
                         if (viewId != null) {
                             id = viewId.value();
                         } else {
-                            String packageName = contextV.getPackageName();
+                            String packageName = activity.getPackageName();
                             Class<?> idClass = Class.forName(packageName + R_ID);
                             Field idField = idClass.getDeclaredField(field.getName());
                             try {
@@ -216,11 +219,11 @@ public class ViewInjector<V extends SupportV> {
                                 e.printStackTrace();
                             }
                         }
-                        Method findViewByIdMethod = contextVClass.getMethod(METHOD_FIND_VIEW_BY_ID,
+                        Method findViewByIdMethod = activityClass.getMethod(METHOD_FIND_VIEW_BY_ID,
                                 int.class);
-                        Object view = findViewByIdMethod.invoke(contextV, id);
+                        Object view = findViewByIdMethod.invoke(activity, id);
                         if (view != null) {
-                            field.set(viewInjected, view);
+                            field.set(v, view);
                         } else {
                             throw new InjectException(
                                     fieldType.getName()+" id("+id+") can\'t be injected.");
@@ -243,12 +246,16 @@ public class ViewInjector<V extends SupportV> {
         }
     }
 
-    public final void injectEvents(V viewInjected) {
-        ViewType viewType = getViewType(viewInjected);
+    public static void injectEvents(SupportV v) {
+        getInstance()._injectEvents(v);
+    }
+
+    private final void _injectEvents(SupportV v) {
+        ViewType viewType = getViewType(v);
         if (isViewTypeAllowed(viewType)) {
-            Class<?> viewClass = viewInjected.getClass();
+            Class<?> viewClass = v.getClass();
             Method[] methods = viewClass.getDeclaredMethods();
-            SupportContextV contextV = getContextV(viewInjected);
+            SupportActivity activity = getSupportActivity(v);
             for (Method method : methods) {
                 Annotation[] annotations = method.getAnnotations();
                 for (Annotation annotation : annotations) {
@@ -264,7 +271,7 @@ public class ViewInjector<V extends SupportV> {
                         Method valueMethod = annotationType.getDeclaredMethod(METHOD_VALUE);
                         int[] viewIds = (int[]) valueMethod.invoke(annotation);
                         for (int viewId : viewIds) {
-                            View view = contextV.findViewById(viewId);
+                            View view = activity.findViewById(viewId);
                             if (view == null) {
                                 continue;
                             }
@@ -272,8 +279,7 @@ public class ViewInjector<V extends SupportV> {
                                     listenerType);
                             HashMap<String, Method> map = new HashMap();
                             map.put(callbackMethod, method);
-                            EventInvocationHandler handler = new EventInvocationHandler(map,
-                                    viewInjected);
+                            EventInvocationHandler handler = new EventInvocationHandler(map, v);
                             Object proxy = Proxy.newProxyInstance(listenerType.getClassLoader(),
                                     new Class<?>[]{listenerType}, handler);
                             setListenerMethod.invoke(view, proxy);
@@ -295,11 +301,11 @@ public class ViewInjector<V extends SupportV> {
     private class EventInvocationHandler implements InvocationHandler {
 
         private Map<String, Method> mCallbackMethodMap;
-        private V mViewInjected;
+        private SupportV mViewInjected;
 
-        public EventInvocationHandler(HashMap<String, Method> callbackMethodMap, V view) {
+        public EventInvocationHandler(HashMap<String, Method> callbackMethodMap, SupportV v) {
             this.mCallbackMethodMap = callbackMethodMap;
-            this.mViewInjected = view;
+            this.mViewInjected = v;
         }
 
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

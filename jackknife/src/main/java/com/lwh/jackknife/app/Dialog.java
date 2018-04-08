@@ -48,7 +48,7 @@ public abstract class Dialog extends android.app.Dialog implements SupportDialog
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(onCreateView());
-        ViewInjector.create().inject(this);
+        ViewInjector.inject(this);
         setOnShowListener(this);
         setOnDismissListener(this);
     }

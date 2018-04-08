@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.ioc;
 
-public interface SupportActivity extends SupportContextV {
+public interface SupportActivity extends SupportV {
 
     void finish();
 }

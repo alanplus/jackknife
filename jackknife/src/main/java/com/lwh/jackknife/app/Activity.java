@@ -29,7 +29,7 @@ public abstract class Activity extends android.app.Activity implements SupportAc
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ViewInjector.create().inject(this);
+		ViewInjector.inject(this);
 		push();
 	}
 
