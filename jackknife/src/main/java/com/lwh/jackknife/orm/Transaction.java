@@ -19,7 +19,7 @@ package com.lwh.jackknife.orm;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-public class Transaction {
+public final class Transaction {
 
     private Transaction() {
     }

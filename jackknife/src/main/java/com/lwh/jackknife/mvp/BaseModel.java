@@ -53,8 +53,8 @@ public abstract class BaseModel<BEAN>{
         return this;
     }
 
-    public BaseModel add(List<BEAN> beans){
-        mDatas.addAll(beans);
+    public BaseModel add(List<BEAN> datas){
+        mDatas.addAll(datas);
         return this;
     }
 

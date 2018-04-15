@@ -70,7 +70,7 @@ public class ViewInjector {
                 }
             }
         }
-        return new ViewInjector();
+        return sInstance;
     }
 
     public static void inject(SupportV v) {
@@ -205,7 +205,7 @@ public class ViewInjector {
                         continue;
                     }
                     ViewId viewId = field.getAnnotation(ViewId.class);
-                    int id = View.NO_ID;
+                    int id;
                     try {
                         if (viewId != null) {
                             id = viewId.value();
@@ -213,11 +213,7 @@ public class ViewInjector {
                             String packageName = activity.getPackageName();
                             Class<?> idClass = Class.forName(packageName + R_ID);
                             Field idField = idClass.getDeclaredField(field.getName());
-                            try {
-                                id = idField.getInt(idField);
-                            } catch (IllegalArgumentException e) {
-                                e.printStackTrace();
-                            }
+                            id = idField.getInt(idField);
                         }
                         Method findViewByIdMethod = activityClass.getMethod(METHOD_FIND_VIEW_BY_ID,
                                 int.class);

@@ -31,7 +31,8 @@ public class RoundCornerDrawable extends Drawable {
     private Paint mPaint;
     private Bitmap mBitmap;
     private RectF mRectF;
-    private int mCorner = 20;
+    private static final int DEFAULT_CORNER_SIZE = 20;
+    private int mCorner = DEFAULT_CORNER_SIZE;
 
     public RoundCornerDrawable(Bitmap bitmap, int corner) {
         mBitmap = bitmap;

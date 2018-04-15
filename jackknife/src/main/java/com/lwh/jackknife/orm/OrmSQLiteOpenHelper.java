@@ -40,8 +40,7 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
         if (mTableClasses != null && !mTableClasses.isEmpty()) {
             Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
             while (iterator.hasNext()) {
-                Class<? extends OrmTable> tableClass = iterator.next();
-                TableManager.getInstance().createTableInternal(tableClass, db);
+                TableManager.createTable(iterator.next());
             }
         }
     }
@@ -52,8 +51,7 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
             if (mTableClasses != null && !mTableClasses.isEmpty()) {
                 Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
                 while (iterator.hasNext()) {
-                    Class<? extends OrmTable> tableClass = iterator.next();
-                    TableManager.getInstance().upgradeTableInternal(tableClass, db);
+                    TableManager.upgradeTable(iterator.next());
                 }
             }
         }
