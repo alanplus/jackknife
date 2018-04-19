@@ -17,6 +17,7 @@
 package com.lwh.jackknife.app;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.lwh.jackknife.ioc.SupportActivity;
 import com.lwh.jackknife.ioc.ViewInjector;

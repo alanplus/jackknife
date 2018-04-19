@@ -61,14 +61,14 @@ public class Application extends android.app.Application {
      * windows (via a theme with {@link android.R.attr#windowIsFloating} set)
      * or embedded inside of another activity (using {@link ActivityGroup}).
      */
-    protected void pushTask(SupportActivity activity) {
+    public void pushTask(SupportActivity activity) {
         mActivityStacks.add(new WeakReference<>(activity));
     }
 
     /**
      * Destroy and remove activity from the top of the task stack.
      */
-    protected void popTask() {
+    public void popTask() {
         WeakReference<SupportActivity> ref = mActivityStacks.pop();
         if (ref != null) {
             SupportActivity activity = ref.get();
