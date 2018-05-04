@@ -97,6 +97,15 @@ Name | Academy | score
 Harry Potter | Gryffindor| 90 
 Hermione Granger | Gryffindor | 100 
 Draco Malfoy | Slytherin | 90
+Harry Potter | Gryffindor| 90 
+Hermione Granger | Gryffindor | 100 
+Draco Malfoy | Slytherin | 90
+Harry Potter | Gryffindor| 90 
+Hermione Granger | Gryffindor | 100 
+Draco Malfoy | Slytherin | 90
+Harry Potter | Gryffindor| 90 
+Hermione Granger | Gryffindor | 100 
+Draco Malfoy | Slytherin | 90
 
 
 ### (三)基于MVP设计理念的开发（jackknife-mvp）
