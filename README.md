@@ -94,9 +94,9 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 
 | 名称 | 所在类 | 描述 | 
 | - | :-: | -: | 
-| Harry Potter | Gryffindor| 90 | 
-| Hermione Granger | Gryffindor | 100 | 
-| Draco Malfoy | Slytherin | 90 |
+| insert | OrmDao| 插入数据 | 
+| delete | OrmDao | 删除数据 | 
+| select | OrmDao | 查询数据 |
 
 ### (三)基于MVP设计理念的开发（jackknife-mvp）
 #### 1、所需要依赖的类
