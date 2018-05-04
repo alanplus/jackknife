@@ -17,7 +17,7 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码。
 <blockquote>
 dependencies {
-  <b>compile 'com.github.JackWHLiu:jackknife:1.0.0'</b>
+  <b>compile 'com.github.JackWHLiu:jackknife:2.3.8'</b>
 }
 </blockquote>
 
