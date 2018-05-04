@@ -46,7 +46,7 @@ dependencies {
 
 ### (二)数据库ORM模块（jackknife-orm）
 #### 1、初始化配置
-> 继承com.lwh.jackknife.app.Application，并在Application中完成初始化，2.0.15之后不再需要。可使用Orm.init(OrmConfig);//调用Orm的init方法
+> 继承com.lwh.jackknife.app.Application，并在Application中完成初始化，2.0.15之后不再需要继承。可使用Orm.init(OrmConfig);//调用Orm的init方法
 #### 2、完成实体类的编写
 > 如果你想使用jackknife-orm自动创表，你只需要实现OrmTable接口再配置一些基本信息即可。
 需要注意的是，在一个OrmTable的实现类中，至少要有一个配置主键或外键的属性。
@@ -63,34 +63,10 @@ dependencies {
 ##### （6）@NotNull
 > 配置非空约束
 #### 3、创表
-> 以User为例，TableManager.getInstance().createTable(User.class);//创建OrmTable的实现类的表
+> 以User为例，TableManager.createTable(User.class);//创建OrmTable的实现类的表
 #### 4、数据的增删改查
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
-##### （1）单条插入
-> dao.insert(User);
-##### （2）多条插入
-> dao.insert(List&lt;User&gt;);
-##### （3）删除所有
-> dao.deleteAll();
-##### （4）按条件删除
-> dao.delete(WhereBuilder);
-##### （5）修改所有
-> dao.updateAll();
-##### （6）按条件修改
-> dao.update(WhereBuilder);
-##### （7）查询所有
-> dao.selectAll();
-##### （8）按条件查询
-> dao.select(QueryBuilder);
-##### （9）查询所有记录的条数
-> dao.selectAllCount();
-##### （10）查询满足条件记录的条数
-> dao.selectCount(QueryBuilder);
-##### （11）查询第一条记录
-> dao.selectOne();
-##### （12）查询最满足条件的一条记录
-> dao.selectOne(QueryBuilder);
 
 | 名称 | 所在类 | 描述 | 
 | - | :-: | -: | 
