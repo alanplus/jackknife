@@ -79,6 +79,8 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 | selectOne(QueryBuilder builder) | OrmDao | 查询最符合条件的一条数据 |
 | select(QueryBuilder builder) | OrmDao | 按条件查询数据 |
 | selectAll() | OrmDao | 查询所有数据 |
+| selectCount() | OrmDao | 查询数据的条数 |
+| selectCount(QueryBuilder builder) | OrmDao | 查询符合条件数据的条数 |
 
 ### (三)基于MVP设计理念的开发（jackknife-mvp）
 #### 1、所需要依赖的类
