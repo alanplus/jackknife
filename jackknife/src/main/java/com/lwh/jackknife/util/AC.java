@@ -17,15 +17,19 @@
 package com.lwh.jackknife.util;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-public class DataUtils {
+public class AC {
 
-    public static List<?> array2List(Object[] array) {
+    private AC() {
+    }
+
+    public static List<?> toC(Object[] array) {
         return Arrays.asList(array);
     }
 
-    public static Object[] list2Array(List<?> collection) {
+    public static Object[] toA(Collection<?> collection) {
         return collection.toArray();
     }
 }

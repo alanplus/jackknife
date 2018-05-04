@@ -77,7 +77,7 @@ public class WhereBuilder {
         return new WhereBuilder(whereClause, whereArgs);
     }
 
-    public static WhereBuilder create(Condition condition){
+    public static WhereBuilder create(Condition condition) {
         return new WhereBuilder(condition);
     }
 
@@ -95,7 +95,7 @@ public class WhereBuilder {
         return this;
     }
 
-    public WhereBuilder not(){
+    public WhereBuilder not() {
         if (mWhereClause != null) {
             mWhereClause += NOT;
         } else {

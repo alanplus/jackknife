@@ -20,87 +20,51 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
 
 public class ReflectionUtils {
 
-    public static <T> T newInstance(Class<T> clazz)
-            throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static <T> T newInstance(Class<T> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         for (Constructor<?> c : constructors) {
             c.setAccessible(true);
             Class[] cls = c.getParameterTypes();
             if (cls.length == 0) {
-                return (T) c.newInstance();
+                try {
+                    return (T) c.newInstance();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             } else {
                 Object[] objs = new Object[cls.length];
                 for (int i = 0; i < cls.length; i++) {
-                    objs[i] = getDefaultPrimitiveValue(cls[i]);
+                    objs[i] = getPrimitiveDefaultValue(cls[i]);
                 }
-                return (T) c.newInstance(objs);
+                try {
+                    return (T) c.newInstance(objs);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;
     }
 
-    public static Object getDefaultPrimitiveValue(Class clazz) {
+    public static Object getPrimitiveDefaultValue(Class clazz) {
         if (clazz.isPrimitive()) {
             return clazz == boolean.class ? false : 0;
         }
         return null;
-    }
-
-    public static boolean isNumber(Class<?> clazz) {
-        return clazz == long.class
-                || clazz == Long.class
-                || clazz == int.class
-                || clazz == Integer.class
-                || clazz == short.class
-                || clazz == Short.class
-                || clazz == byte.class
-                || clazz == Byte.class;
-    }
-
-    public static void setNumber(Object o, Field field, long n) throws IllegalAccessException {
-        field.setAccessible(true);
-        Class clazz = field.getType();
-        if (clazz == long.class) {
-            field.setLong(o, n);
-        } else if (clazz == int.class) {
-            field.setInt(o, (int) n);
-        } else if (clazz == short.class) {
-            field.setShort(o, (short) n);
-        } else if (clazz == byte.class) {
-            field.setByte(o, (byte) n);
-        } else if (clazz == Long.class) {
-            field.set(o, new Long(n));
-        } else if (clazz == Integer.class) {
-            field.set(o, new Integer((int) n));
-        } else if (clazz == Short.class) {
-            field.set(o, new Short((short) n));
-        } else if (clazz == Byte.class) {
-            field.set(o, new Byte((byte) n));
-        } else {
-            throw new RuntimeException("field is not a number class");
-        }
-    }
-
-    public static boolean isCollection(Class clazz) {
-        return Collection.class.isAssignableFrom(clazz);
-    }
-
-    public static boolean isArray(Class clazz) {
-        return clazz.isArray();
-    }
-
-    public static boolean isSerializable(Field field) {
-        Class<?>[] cls = field.getType().getInterfaces();
-        for (Class<?> c : cls) {
-            if (Serializable.class == c) { return true; }
-        }
-        return false;
     }
 
     public static Class<?> getComponentType(Field field) {
@@ -120,15 +84,151 @@ public class ReflectionUtils {
         return null;
     }
 
-    public static void set(Field field, Object obj, Object value) throws IllegalArgumentException,
-            IllegalAccessException {
-        field.setAccessible(true);
-        field.set(obj, value);
+    public static Class<?> getArrayType(Field f) {
+        return f.getType().getComponentType();
     }
 
-    public static Object get(Field field, Object obj) throws IllegalArgumentException,
-            IllegalAccessException {
-        field.setAccessible(true);
-        return field.get(obj);
+    public static Class<?> getFirstGenericType(Field f) {
+        return getGenericType(f, 0);
+    }
+
+    public static Class<?> getGenericType(Field f, int genericTypeIndex) {
+        Type type = f.getGenericType();
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            type = parameterizedType.getActualTypeArguments()[genericTypeIndex];
+            return (Class<?>) type;
+        }
+        if (type instanceof Class<?>) {
+            return (Class<?>) type;
+        }
+        return null;
+    }
+
+    public static void setNumber(Object obj, Field f, long n) {
+        f.setAccessible(true);
+        Class<?> fieldType = f.getType();
+        try {
+            if (fieldType == long.class) {
+                f.setLong(obj, n);
+            } else if (fieldType == int.class) {
+                f.setInt(obj, (int) n);
+            } else if (fieldType == short.class) {
+                f.setShort(obj, (short) n);
+            } else if (fieldType == byte.class) {
+                f.setByte(obj, (byte) n);
+            } else if (fieldType == Long.class) {
+                f.set(obj, new Long(n));
+            } else if (fieldType == Integer.class) {
+                f.set(obj, new Integer((int) n));
+            } else if (fieldType == Short.class) {
+                f.set(obj, new Short((short) n));
+            } else if (fieldType == Byte.class) {
+                f.set(obj, new Byte((byte) n));
+            } else {
+                throw new RuntimeException("Field is not a number class.");
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isNumber(Class<?> numberCls) {
+        return numberCls == long.class
+                || numberCls == Long.class
+                || numberCls == int.class
+                || numberCls == Integer.class
+                || numberCls == short.class
+                || numberCls == Short.class
+                || numberCls == byte.class
+                || numberCls == Byte.class;
+    }
+
+    public static Object getFieldValue(Field f, Object obj) {
+        f.setAccessible(true);
+        try {
+            return f.get(obj);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Object getStaticFieldValue(Field f) {
+        return getStaticFieldValue(f, null);
+    }
+
+    public static Object getStaticFieldValue(Field f, Class<?> fieldCls) {
+        f.setAccessible(true);
+        if (isStaticField(f)) {
+            try {
+                return f.get(fieldCls);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        throw new RuntimeException("Field is not static.");
+    }
+
+    public static void setFieldValue(Field f, Object obj, Object value) {
+        f.setAccessible(true);
+        try {
+            f.set(obj, value);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setStaticFieldValue(Field f, Object value) {
+        setStaticFieldValue(f, null, value);
+    }
+
+    public static void setStaticFieldValue(Field f, Class<?> fieldCls, Object value) {
+        f.setAccessible(true);
+        if (isStaticField(f)) {
+            try {
+                f.set(fieldCls, value);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean isSerializable(Field f) {
+        Class<?>[] classes = f.getType().getInterfaces();
+        for (Class<?> cls : classes) {
+            if (Serializable.class == cls) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isStaticField(Field f) {
+        return Modifier.isStatic(f.getModifiers());
+    }
+
+    public static boolean isFinalField(Field f) {
+        return Modifier.isFinal(f.getModifiers());
+    }
+
+    public static boolean isSynchronizedField(Field f) {
+        return Modifier.isSynchronized(f.getModifiers());
+    }
+
+    public static boolean isAbstract(Field f) {
+        return Modifier.isAbstract(f.getModifiers());
+    }
+
+    public static boolean isNative(Field f) {
+        return Modifier.isNative(f.getModifiers());
+    }
+
+    public static boolean isVolatile(Field f) {
+        return Modifier.isVolatile(f.getModifiers());
+    }
+
+    public static boolean isTransient(Field f) {
+        return Modifier.isTransient(f.getModifiers());
     }
 }

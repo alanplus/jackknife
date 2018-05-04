@@ -31,7 +31,7 @@ public class NetworkUtils {
     private NetworkUtils() {
     }
 
-    public boolean checkNetwork(Context context) {
+    public static boolean checkNetwork(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
