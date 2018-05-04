@@ -91,6 +91,8 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 > dao.selectOne();
 ##### （12）查询最满足条件的一条记录
 > dao.selectOne(QueryBuilder);
+| 方法 | 作用 |
+
 
 ### (三)基于MVP设计理念的开发（jackknife-mvp）
 #### 1、所需要依赖的类
