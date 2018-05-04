@@ -94,11 +94,15 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 
 | 名称 | 所在类 | 描述 | 
 | - | :-: | -: | 
-| insert(T bean) | OrmDao| 插入一条数据 | 
-| insert(T bean) | OrmDao| 插入一条数据 | 
-| delete | OrmDao | 删除数据 | 
-| select | OrmDao | 查询数据 |
-| update | OrmDao | 修改数据 |
+| insert(T bean) | OrmDao| 单条插入，插入一条数据 | 
+| insert(List&lt;T&rt; bean) | OrmDao| 多条插入，插入一些数据 | 
+| deleteAll() | OrmDao | 删除所有数据 | 
+| delete(WhereBuilder builder) | OrmDao | 按条件删除数据 |
+| update(WhereBuilder builder) | OrmDao | 按条件修改数据 |
+| selectOne() | OrmDao | 查询第一条数据 |
+| selectOne(QueryBuilder builder) | OrmDao | 查询最符合条件的一条数据 |
+| select(QueryBuilder builder) | OrmDao | 按条件查询数据 |
+| selectAll() | OrmDao | 查询所有数据 |
 
 ### (三)基于MVP设计理念的开发（jackknife-mvp）
 #### 1、所需要依赖的类
