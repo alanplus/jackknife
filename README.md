@@ -91,7 +91,20 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 > dao.selectOne();
 ##### （12）查询最满足条件的一条记录
 > dao.selectOne(QueryBuilder);
-| 方法 | 作用 |
+方法名 | 所在类 | 描述 
+- | :-: | -: 
+insert(T bean) | OrmDao| 插入一条数据
+insert(List<T> beans) | OrmDao | 插入一些数据
+deleteAll() | OrmDao | 删除所有数据
+delete(WhereBuilder where) | OrmDao| 按条件删除
+Hermione Granger | Gryffindor | 100 
+Draco Malfoy | Slytherin | 90
+Harry Potter | Gryffindor| 90 
+Hermione Granger | Gryffindor | 100 
+Draco Malfoy | Slytherin | 90
+Harry Potter | Gryffindor| 90 
+Hermione Granger | Gryffindor | 100 
+Draco Malfoy | Slytherin | 90
 
 
 ### (三)基于MVP设计理念的开发（jackknife-mvp）
