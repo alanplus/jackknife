@@ -92,7 +92,7 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 ##### （12）查询最满足条件的一条记录
 > dao.selectOne(QueryBuilder);
 
-| Name | Academy | score | 
+| 名称 | 所在类 | 描述 | 
 | - | :-: | -: | 
 | Harry Potter | Gryffindor| 90 | 
 | Hermione Granger | Gryffindor | 100 | 
