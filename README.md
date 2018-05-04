@@ -94,7 +94,8 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 
 | 名称 | 所在类 | 描述 | 
 | - | :-: | -: | 
-| insert | OrmDao| 插入数据 | 
+| insert(T bean) | OrmDao| 插入一条数据 | 
+| insert(T bean) | OrmDao| 插入一条数据 | 
 | delete | OrmDao | 删除数据 | 
 | select | OrmDao | 查询数据 |
 | update | OrmDao | 修改数据 |
