@@ -18,5 +18,12 @@ package com.lwh.jackknife.orm;
 
 public interface OrmTable {
 
-    boolean propertyValid();
+     /**
+      * Gets the unique identifier's value.
+      *
+      * @return The primary key or foreign key value.
+      */
+     <T> T getIdentifierValue();
+
+     boolean isUpgradeRecreated();
 }

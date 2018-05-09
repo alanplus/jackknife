@@ -29,6 +29,9 @@ public class Logger {
      */
     private static boolean DEBUG = false;
 
+    /**
+     * The default log output tag.
+     */
     private static final String TAG = Logger.class.getSimpleName().toLowerCase();
 
     public static void close() {

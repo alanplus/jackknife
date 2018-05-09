@@ -20,38 +20,44 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lwh.jackknife.ioc.ViewInjector;
+import com.lwh.jackknife.util.ReflectionUtils;
+
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    private List<Class<? extends OrmTable>> mTableClasses;
+    private Class<? extends OrmTable>[] mTables;
 
     public OrmSQLiteOpenHelper(Context context, String name, int version, Class<? extends OrmTable>[] tables) {
         super(context, name, null, version);
-        if (tables != null) {
-            mTableClasses = Arrays.asList(tables);
-        }
+        this.mTables = tables;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if (mTableClasses != null && !mTableClasses.isEmpty()) {
-            Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
-            while (iterator.hasNext()) {
-                TableManager.createTable(iterator.next());
+        if (mTables != null && mTables.length > 0) {
+            for (Class<? extends OrmTable> table:mTables) {
+                TableManager.getInstance()._createTable(table, db);
             }
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (newVersion > oldVersion) {
-            if (mTableClasses != null && !mTableClasses.isEmpty()) {
-                Iterator<Class<? extends OrmTable>> iterator = mTableClasses.iterator();
-                while (iterator.hasNext()) {
-                    TableManager.upgradeTable(iterator.next());
+        if (mTables != null && mTables.length > 0 && newVersion > oldVersion) {
+            for (int i=0;i<mTables.length;i++) {
+                Class<? extends OrmTable> table = mTables[i];
+                OrmTable ormTable = ReflectionUtils.newInstance(mTables[i]);
+                boolean isRecreated = ormTable.isUpgradeRecreated();
+                if (isRecreated) {
+                    TableManager.getInstance()._dropTable(table, db);
+                    TableManager.getInstance()._createTable(table, db);
+                } else {
+                    TableManager.getInstance()._upgradeTable(table, db);
                 }
             }
         }

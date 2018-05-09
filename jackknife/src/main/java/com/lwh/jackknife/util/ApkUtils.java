@@ -180,7 +180,7 @@ public class ApkUtils {
         return -1;
     }
 
-    public static File extractApk(Context context){
+    public static File extractApk(Context context) {
         ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
         String apkPath = applicationInfo.sourceDir;
         File apkFile = new File(apkPath);

@@ -22,12 +22,11 @@ public class OrmConfig {
 
     private String mDatabaseName;
     private int mVersionCode;
-    private Class<? extends OrmTable>[] mTableClasses;
+    private Class<? extends OrmTable>[] mTables;
 
     private OrmConfig(Builder builder) {
         mDatabaseName = builder.mDatabaseName;
         mVersionCode = builder.mVersionCode;
-        mTableClasses = builder.mTableClasses;
     }
 
     public String getDatabaseName() {
@@ -39,14 +38,14 @@ public class OrmConfig {
     }
 
     public Class<? extends OrmTable>[] getTables() {
-        return mTableClasses;
+        return mTables;
     }
 
     public static class Builder {
 
         private String mDatabaseName;
         private int mVersionCode = 1;
-        private Class<? extends OrmTable>[] mTableClasses;
+        private Class<? extends OrmTable>[] mTables;
 
         public Builder database(String name) {
             mDatabaseName = name;
@@ -58,10 +57,10 @@ public class OrmConfig {
             return this;
         }
 
-//        public Builder tables(Class<? extends OrmTable>[] tableClasses) {
-//            mTableClasses = tableClasses;
-//            return this;
-//        }
+        public Builder tables(Class<? extends OrmTable>... tables) {
+            mTables = tables;
+            return this;
+        }
 
         public OrmConfig build() {
             if (!TextUtils.isEmpty(mDatabaseName)) {

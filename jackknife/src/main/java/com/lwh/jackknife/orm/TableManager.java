@@ -41,6 +41,7 @@ import com.lwh.jackknife.orm.type.ShortType;
 import com.lwh.jackknife.orm.type.SqlType;
 import com.lwh.jackknife.orm.type.StringType;
 
+import java.awt.font.TextAttribute;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -60,6 +61,8 @@ public class TableManager {
     private final String CREATE_TABLE = "CREATE TABLE";
 
     private final String ALTER_TABLE = "ALTER TABLE";
+
+    private final String DROP_TABLE = "DROP TABLE";
 
     private final String IF_NOT_EXISTS = "IF NOT EXISTS";
 
@@ -177,7 +180,9 @@ public class TableManager {
     }
 
     public static <T extends OrmTable> void createTable(Class<T> tableClass) {
-        getInstance()._createTable(tableClass, Orm.getDatabase());
+        if (Orm.isPrepared()) {
+            getInstance()._createTable(tableClass, Orm.getDatabase());
+        }
     }
 
     /* package */ <T extends OrmTable> void _createTable(Class<T> tableClass, SQLiteDatabase db) {
@@ -256,7 +261,9 @@ public class TableManager {
     }
 
     public static <T extends OrmTable> void upgradeTable(Class<T> tableClass) {
-        getInstance()._upgradeTable(tableClass, Orm.getDatabase());
+        if (Orm.isPrepared()) {
+            getInstance()._upgradeTable(tableClass, Orm.getDatabase());
+        }
     }
 
     /* package */ <T extends OrmTable> void _upgradeTable(Class<T> tableClass, SQLiteDatabase db) {
@@ -323,6 +330,16 @@ public class TableManager {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    protected <T extends OrmTable> void _dropTable(Class<T> tableClass, SQLiteDatabase db) {
+        db.execSQL(DROP_TABLE+SPACE+getTableName(tableClass));
+    }
+
+    public static <T extends OrmTable> void dropTable(Class<T> tableClass) {
+        if (Orm.isPrepared()) {
+            getInstance()._dropTable(tableClass, Orm.getDatabase());
         }
     }
 }
