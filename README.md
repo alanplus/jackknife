@@ -65,7 +65,7 @@ dependencies {
 #### 3、创表
 > 以User为例，TableManager.createTable(User.class);//创建OrmTable的实现类的表
 > 如果在第一步中使用了OrmConfig的创表配置，即config.tables()，则不需要此步骤。
-#### 4、数据的增删改查
+#### 4、相关API
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 
