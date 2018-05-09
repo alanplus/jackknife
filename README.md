@@ -17,7 +17,7 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码。
 <blockquote>
 dependencies {
-  <b>compile 'com.github.JackWHLiu:jackknife:2.3.8'</b>
+  <b>compile 'com.github.JackWHLiu:jackknife:2.3.14'</b>
 }
 </blockquote>
 
@@ -64,6 +64,7 @@ dependencies {
 > 配置非空约束
 #### 3、创表
 > 以User为例，TableManager.createTable(User.class);//创建OrmTable的实现类的表
+> 如果在第一步中使用了OrmConfig的创表配置，即config.tables()，则不需要此步骤。
 #### 4、数据的增删改查
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
@@ -81,6 +82,9 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 | selectAll() | OrmDao | 查询所有数据 |
 | selectCount() | OrmDao | 查询数据的条数 |
 | selectCount(QueryBuilder builder) | OrmDao | 查询符合条件数据的条数 |
+| createTable(Class&lt;? extends OrmTable&gt; tableClass) | TableManager | 创建一张表 |
+| dropTable(Class&lt;? extends OrmTable&gt; tableClass) | TableManager | 删除一张表 |
+| upgradeTable(Class&lt;? extends OrmTable&gt; tableClass) | TableManager | 升级一张表 |
 
 ### (三)基于MVP设计理念的开发（jackknife-mvp）
 #### 1、所需要依赖的类
