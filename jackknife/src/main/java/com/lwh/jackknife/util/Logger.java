@@ -18,11 +18,26 @@ package com.lwh.jackknife.util;
 
 import android.util.Log;
 
+/**
+ * A system that controls log output globally. When flag is closed, you can't output logs anywhere.
+ * Instead, you can output logs anywhere.<note>The log system is closed by default.</note>
+ */
 public class Logger {
 
-    public static boolean DEBUG = true;
+    /**
+     * The flag that represents the log system is opened or closed, default is closed.
+     */
+    private static boolean DEBUG = false;
 
     private static final String TAG = Logger.class.getSimpleName().toLowerCase();
+
+    public static void close() {
+        DEBUG = false;
+    }
+
+    public static void open() {
+        DEBUG = true;
+    }
 
     public static void info(String msg) {
         info(TAG, msg);

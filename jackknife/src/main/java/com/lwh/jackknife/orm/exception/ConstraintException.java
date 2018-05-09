@@ -16,9 +16,9 @@
 
 package com.lwh.jackknife.orm.exception;
 
-public class ConstraintException extends RuntimeException{
+public class ConstraintException extends RuntimeException {
 
-    public ConstraintException(){
+    public ConstraintException() {
     }
 
     public ConstraintException(String message){

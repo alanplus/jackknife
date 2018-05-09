@@ -20,16 +20,38 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * A tool that can transform arrays and collections.
+ */
 public class AC {
+
+    private static AC sInstance;
 
     private AC() {
     }
 
-    public static List<?> toC(Object[] array) {
+    public static AC getInstance() {
+        if (sInstance == null) {
+            synchronized (AC.class) {
+                if (sInstance == null) {
+                    sInstance = new AC();
+                }
+            }
+        }
+        return sInstance;
+    }
+
+    /**
+     * Converts an array into a collection.
+     */
+    public <T> List<T> toC(T[] array) {
         return Arrays.asList(array);
     }
 
-    public static Object[] toA(Collection<?> collection) {
-        return collection.toArray();
+    /**
+     * Converts a collection into an array.
+     */
+    public <T> T[] toA(Collection<T> collection) {
+        return (T[]) collection.toArray();
     }
 }
