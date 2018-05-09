@@ -32,19 +32,12 @@ public class SystemUtils {
     private SystemUtils() {
     }
 
-    private static int[] getScreenWH(){
-        WindowManager wm = (WindowManager) Application.getInstance().getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        return new int[]{outMetrics.widthPixels,outMetrics.heightPixels};
+    public static int getScreenWidth(Context context) {
+        return ScreenUtils.getInstance(context).getScreenWidth();
     }
 
-    public static int getScreenWidth() {
-        return getScreenWH()[0];
-    }
-
-    public static int getScreenHeight() {
-        return getScreenWH()[1];
+    public static int getScreenHeight(Context context) {
+        return ScreenUtils.getInstance(context).getScreenHeight();
     }
 
     public static void openKeyboard(EditText editText, Context context) {

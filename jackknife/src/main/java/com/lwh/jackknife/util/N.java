@@ -16,6 +16,9 @@
 
 package com.lwh.jackknife.util;
 
+/**
+ * Enumeration of commonly used integers and fractions.
+ */
 public interface N {
 
     int ZERO = 0;

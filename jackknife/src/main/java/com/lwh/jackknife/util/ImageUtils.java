@@ -50,24 +50,20 @@ import java.io.IOException;
 
 public class ImageUtils {
 
-    public static int dp2px(Context context, float dpVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dpVal, context.getResources().getDisplayMetrics());
+    public static int dp2px(float dpVal, Context context) {
+        return DensityUtils.dp2px(dpVal, context);
     }
 
-    public static int sp2px(Context context, float spVal) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
-                spVal, context.getResources().getDisplayMetrics());
+    public static int sp2px(float spVal, Context context) {
+        return DensityUtils.sp2px(spVal, context);
     }
 
-    public static float px2dp(Context context, float pxVal) {
-        float scale = context.getResources().getDisplayMetrics().density;
-        return (pxVal / scale);
+    public static float px2dp(float pxVal, Context context) {
+        return DensityUtils.px2dp(pxVal, context);
     }
 
-    public static float px2sp(Context context, float pxVal) {
-        float scale = context.getResources().getDisplayMetrics().scaledDensity;
-        return pxVal / scale;
+    public static float px2sp(float pxVal, Context context) {
+        return DensityUtils.px2sp(pxVal, context);
     }
 
     public static void saveAsJpeg(Bitmap bitmap, String path, int quality) {
@@ -161,7 +157,7 @@ public class ImageUtils {
         view.getWindowVisibleDisplayFrame(rect);
         int statusBarHeight = rect.top;
         Bitmap outputBitmap = Bitmap.createBitmap(bitmap,0,statusBarHeight,
-                SystemUtils.getScreenWidth(), SystemUtils.getScreenHeight() - statusBarHeight);
+                SystemUtils.getScreenWidth(activity), SystemUtils.getScreenHeight(activity) - statusBarHeight);
         view.destroyDrawingCache();
         return outputBitmap;
     }
