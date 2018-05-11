@@ -42,6 +42,14 @@ public class Logger {
         DEBUG = true;
     }
 
+    public static boolean isOpened() {
+        return DEBUG;
+    }
+
+    public static boolean isClosed() {
+        return !DEBUG;
+    }
+
     public static void info(String msg) {
         info(TAG, msg);
     }

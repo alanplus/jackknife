@@ -19,15 +19,13 @@ package com.lwh.jackknife.orm.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
-import android.text.TextUtils;
 
 import com.lwh.jackknife.orm.AssignType;
 import com.lwh.jackknife.orm.Orm;
 import com.lwh.jackknife.orm.Transaction;
-import com.lwh.jackknife.orm.annotation.Column;
-import com.lwh.jackknife.orm.annotation.NonColumn;
-import com.lwh.jackknife.orm.annotation.PrimaryKey;
+import com.lwh.jackknife.orm.constraint.Column;
+import com.lwh.jackknife.orm.constraint.Ignore;
+import com.lwh.jackknife.orm.constraint.PrimaryKey;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
 import com.lwh.jackknife.orm.OrmTable;
@@ -95,10 +93,10 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields) {
             field.setAccessible(true);
-            NonColumn nonColumn = field.getAnnotation(NonColumn.class);
+            Ignore ignore = field.getAnnotation(Ignore.class);
             Column column = field.getAnnotation(Column.class);
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-            if (nonColumn != null) {
+            if (ignore != null) {
                 continue;
             }
             if (primaryKey != null && primaryKey.value() == AssignType.AUTO_INCREMENT) {
@@ -143,9 +141,9 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         Field[] fields = mBeanClass.getDeclaredFields();
         for (Field field:fields) {
             field.setAccessible(true);
-            NonColumn nonColumn = field.getAnnotation(NonColumn.class);
+            Ignore ignore = field.getAnnotation(Ignore.class);
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-            if (nonColumn == null && (primaryKey == null ||
+            if (ignore == null && (primaryKey == null ||
                     (primaryKey != null && primaryKey.value() == AssignType.BY_MYSELF))) {
                 String name = field.getName();
                 sb.append(name).append(",");

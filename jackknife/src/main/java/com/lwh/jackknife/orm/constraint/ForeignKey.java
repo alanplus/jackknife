@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.orm.annotation;
+package com.lwh.jackknife.orm.constraint;
+
+import com.lwh.jackknife.orm.OrmTable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Table {
+public @interface ForeignKey {
 
-    String value();
+    Class<? extends OrmTable> value();
 }

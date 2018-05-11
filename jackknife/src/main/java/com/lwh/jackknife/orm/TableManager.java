@@ -19,13 +19,13 @@ package com.lwh.jackknife.orm;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.lwh.jackknife.orm.annotation.Column;
-import com.lwh.jackknife.orm.annotation.ForeignKey;
-import com.lwh.jackknife.orm.annotation.NonColumn;
-import com.lwh.jackknife.orm.annotation.NotNull;
-import com.lwh.jackknife.orm.annotation.PrimaryKey;
-import com.lwh.jackknife.orm.annotation.Table;
-import com.lwh.jackknife.orm.annotation.Unique;
+import com.lwh.jackknife.orm.constraint.Column;
+import com.lwh.jackknife.orm.constraint.ForeignKey;
+import com.lwh.jackknife.orm.constraint.Ignore;
+import com.lwh.jackknife.orm.constraint.NotNull;
+import com.lwh.jackknife.orm.constraint.PrimaryKey;
+import com.lwh.jackknife.orm.constraint.Table;
+import com.lwh.jackknife.orm.constraint.Unique;
 import com.lwh.jackknife.orm.exception.ConstraintException;
 import com.lwh.jackknife.orm.type.BaseDataType;
 import com.lwh.jackknife.orm.type.BooleanType;
@@ -41,7 +41,6 @@ import com.lwh.jackknife.orm.type.ShortType;
 import com.lwh.jackknife.orm.type.SqlType;
 import com.lwh.jackknife.orm.type.StringType;
 
-import java.awt.font.TextAttribute;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -194,10 +193,10 @@ public class TableManager {
         for (Field field : fields) {
             field.setAccessible(true);
             StringBuilder fieldBuilder = new StringBuilder();
-            NonColumn nonColumn = field.getAnnotation(NonColumn.class);
+            Ignore ignore = field.getAnnotation(Ignore.class);
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
             ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
-            if (nonColumn != null) {
+            if (ignore != null) {
                 continue;
             }
             if (primaryKey != null) {
@@ -273,10 +272,10 @@ public class TableManager {
         for (Field field : fields) {
             field.setAccessible(true);
             StringBuilder sb = new StringBuilder();
-            NonColumn nonColumn = field.getAnnotation(NonColumn.class);
+            Ignore ignore = field.getAnnotation(Ignore.class);
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
             ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
-            if (nonColumn != null) {
+            if (ignore != null) {
                 continue;
             }
             if (primaryKey != null) {

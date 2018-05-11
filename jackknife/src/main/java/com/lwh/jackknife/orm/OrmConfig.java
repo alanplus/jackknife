@@ -27,6 +27,7 @@ public class OrmConfig {
     private OrmConfig(Builder builder) {
         mDatabaseName = builder.mDatabaseName;
         mVersionCode = builder.mVersionCode;
+        mTables = builder.mTables;
     }
 
     public String getDatabaseName() {
