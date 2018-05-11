@@ -16,14 +16,8 @@
 
 package com.lwh.jackknife.orm.constraint;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public enum AssignType {
 
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface PrimaryKey {
-
-    AssignType value();
+    BY_MYSELF,
+    AUTO_INCREMENT
 }

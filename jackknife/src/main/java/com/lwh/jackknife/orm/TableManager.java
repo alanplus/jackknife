@@ -19,14 +19,17 @@ package com.lwh.jackknife.orm;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.lwh.jackknife.orm.constraint.Column;
+import com.lwh.jackknife.orm.constraint.AssignType;
+import com.lwh.jackknife.orm.constraint.Check;
+import com.lwh.jackknife.orm.constraint.Default;
 import com.lwh.jackknife.orm.constraint.ForeignKey;
-import com.lwh.jackknife.orm.constraint.Ignore;
 import com.lwh.jackknife.orm.constraint.NotNull;
 import com.lwh.jackknife.orm.constraint.PrimaryKey;
-import com.lwh.jackknife.orm.constraint.Table;
 import com.lwh.jackknife.orm.constraint.Unique;
 import com.lwh.jackknife.orm.exception.ConstraintException;
+import com.lwh.jackknife.orm.table.Column;
+import com.lwh.jackknife.orm.table.Ignore;
+import com.lwh.jackknife.orm.table.Table;
 import com.lwh.jackknife.orm.type.BaseDataType;
 import com.lwh.jackknife.orm.type.BooleanType;
 import com.lwh.jackknife.orm.type.ByteArrayType;
@@ -73,7 +76,15 @@ public class TableManager {
 
     private final String DOT = ".";
 
+    private final String EQUAL_TO = "=";
+
+    private final String SINGLE_QUOTES = "\'";
+
     private final String UNIQUE = "UNIQUE";
+
+    private final String DEFAULT = "DEFAULT";
+
+    private final String CHECK = "CHECK";
 
     private final String NOT_NULL = "NOT NULL";
 
@@ -168,7 +179,7 @@ public class TableManager {
         return dataTypes;
     }
 
-    private BaseDataType matchDataType(Field field) {
+    private final BaseDataType matchDataType(Field field) {
         List<BaseDataType> dataTypes = getDeclaredDataTypes();
         for (BaseDataType dataType:dataTypes) {
             if (dataType.matches(field)) {
@@ -213,6 +224,18 @@ public class TableManager {
             Unique unique = field.getAnnotation(Unique.class);
             if (unique != null) {
                 fieldBuilder.append(SPACE).append(UNIQUE);
+            }
+            Default _default = field.getAnnotation(Default.class);
+            if (_default != null) {
+                String value = _default.value();
+                fieldBuilder.append(SPACE).append(DEFAULT)
+                .append(SPACE).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
+            }
+            Check check = field.getAnnotation(Check.class);
+            if (check != null) {
+                String value = check.value();
+                fieldBuilder.append(SPACE).append(CHECK).append(SPACE)
+                .append(columnName).append(EQUAL_TO).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
             }
             NotNull notNull = field.getAnnotation(NotNull.class);
             if (notNull != null) {
@@ -293,6 +316,18 @@ public class TableManager {
             if (unique != null) {
                 sb.append(SPACE).append(UNIQUE);
             }
+            Default _default = field.getAnnotation(Default.class);
+            if (_default != null) {
+                String value = _default.value();
+                sb.append(SPACE).append(DEFAULT)
+                        .append(SPACE).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
+            }
+            Check check = field.getAnnotation(Check.class);
+            if (check != null) {
+                String value = check.value();
+                sb.append(SPACE).append(CHECK).append(SPACE)
+                        .append(columnName).append(EQUAL_TO).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
+            }
             NotNull notNull = field.getAnnotation(NotNull.class);
             if (notNull != null) {
                 sb.append(SPACE).append(NOT_NULL);
@@ -332,7 +367,7 @@ public class TableManager {
         }
     }
 
-    protected <T extends OrmTable> void _dropTable(Class<T> tableClass, SQLiteDatabase db) {
+    /* package */ <T extends OrmTable> void _dropTable(Class<T> tableClass, SQLiteDatabase db) {
         db.execSQL(DROP_TABLE+SPACE+getTableName(tableClass));
     }
 

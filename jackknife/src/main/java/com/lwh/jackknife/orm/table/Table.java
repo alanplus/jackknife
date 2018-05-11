@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.orm.constraint;
+package com.lwh.jackknife.orm.table;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PrimaryKey {
+public @interface Table {
 
-    AssignType value();
+    String value();
 }

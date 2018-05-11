@@ -20,16 +20,16 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.lwh.jackknife.orm.AssignType;
 import com.lwh.jackknife.orm.Orm;
+import com.lwh.jackknife.orm.OrmTable;
+import com.lwh.jackknife.orm.TableManager;
 import com.lwh.jackknife.orm.Transaction;
-import com.lwh.jackknife.orm.constraint.Column;
-import com.lwh.jackknife.orm.constraint.Ignore;
+import com.lwh.jackknife.orm.constraint.AssignType;
 import com.lwh.jackknife.orm.constraint.PrimaryKey;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
-import com.lwh.jackknife.orm.OrmTable;
-import com.lwh.jackknife.orm.TableManager;
+import com.lwh.jackknife.orm.table.Column;
+import com.lwh.jackknife.orm.table.Ignore;
 import com.lwh.jackknife.util.ReflectionUtils;
 
 import java.lang.reflect.Field;

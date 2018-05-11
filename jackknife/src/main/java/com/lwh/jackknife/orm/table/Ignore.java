@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.orm;
+package com.lwh.jackknife.orm.table;
 
-public enum AssignType {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    BY_MYSELF,
-    AUTO_INCREMENT
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Ignore {
 }

@@ -20,13 +20,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.lwh.jackknife.ioc.ViewInjector;
 import com.lwh.jackknife.util.ReflectionUtils;
-
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 
 public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
 

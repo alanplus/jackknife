@@ -16,9 +16,9 @@
 
 package com.lwh.jackknife.orm.dao;
 
+import com.lwh.jackknife.orm.OrmTable;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
-import com.lwh.jackknife.orm.OrmTable;
 
 import java.util.List;
 
