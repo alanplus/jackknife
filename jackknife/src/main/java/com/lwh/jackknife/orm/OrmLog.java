@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.orm;
 
-import com.lwh.jackknife.util.Logger;
+import android.util.Log;
 
 public class OrmLog {
 
@@ -29,31 +29,31 @@ public class OrmLog {
 
     public static void i(String msg) {
         if (ORM_DEBUG) {
-            Logger.info(TAG, msg);
+            Log.i(TAG, msg);
         }
     }
 
     public static void w(String msg) {
         if (ORM_DEBUG) {
-            Logger.warn(TAG, msg);
+            Log.w(TAG, msg);
         }
     }
 
     public static void d(String msg) {
         if (ORM_DEBUG) {
-            Logger.debug(TAG, msg);
+            Log.d(TAG, msg);
         }
     }
 
     public static void e(String msg) {
         if (ORM_DEBUG) {
-            Logger.error(TAG, msg);
+            Log.e(TAG, msg);
         }
     }
 
     public static void v(String msg) {
         if (ORM_DEBUG) {
-            Logger.verbose(TAG, msg);
+            Log.v(TAG, msg);
         }
     }
 }

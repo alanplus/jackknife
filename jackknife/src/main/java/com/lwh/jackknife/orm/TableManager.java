@@ -22,7 +22,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.lwh.jackknife.orm.constraint.AssignType;
 import com.lwh.jackknife.orm.constraint.Check;
 import com.lwh.jackknife.orm.constraint.Default;
-import com.lwh.jackknife.orm.constraint.ForeignKey;
 import com.lwh.jackknife.orm.constraint.NotNull;
 import com.lwh.jackknife.orm.constraint.PrimaryKey;
 import com.lwh.jackknife.orm.constraint.Unique;
@@ -54,8 +53,6 @@ public class TableManager {
 
     private static TableManager sInstance;
 
-    private final String TAG = getClass().getSimpleName();
-
     private final char A = 'A';
 
     private final char Z = 'Z';
@@ -74,8 +71,6 @@ public class TableManager {
 
     private final String SPACE = " ";
 
-    private final String DOT = ".";
-
     private final String EQUAL_TO = "=";
 
     private final String SINGLE_QUOTES = "\'";
@@ -89,8 +84,6 @@ public class TableManager {
     private final String NOT_NULL = "NOT NULL";
 
     private final String PRIMARY_KEY = "PRIMARY KEY";
-
-    private final String REFERENCES = "REFERENCES";
 
     private final String LEFT_PARENTHESIS = "(";
 
@@ -195,87 +188,139 @@ public class TableManager {
         }
     }
 
+    private <A extends Annotation> boolean checkColumnConstraint(Field field, Class<A> annotationType) {
+        A annotation = field.getAnnotation(annotationType);
+        return annotation != null;
+    }
+
+    private <A extends Annotation, V> V getColumnConstraintValue(Field field, Class<A> annotationType,
+                                                                Class<V> valueType) {
+        V value = null;
+        A annotation = field.getAnnotation(annotationType);
+        if (Default.class.isAssignableFrom(annotationType)) {
+            value = (V) ((Default)annotation).value();
+        }
+        if (Check.class.isAssignableFrom(annotationType)) {
+            value = (V) ((Check)annotation).value();
+        }
+        if (PrimaryKey.class.isAssignableFrom(annotationType)) {
+            value = (V) ((PrimaryKey)annotation).value();
+        }
+        return value;
+    }
+
+    private class ColumnBuilder {
+
+        private StringBuilder mBuilder;
+        private Field mField;
+        boolean isPrimaryKey = false;
+
+        public ColumnBuilder(Field field) {
+            this.mField = field;
+            this.mBuilder = new StringBuilder();
+        }
+
+        public ColumnBuilder(String str, Field field) {
+            this.mField = field;
+            this.mBuilder = new StringBuilder(str);
+        }
+
+        private ColumnBuilder append(String str) {
+            this.mBuilder.append(str);
+            return this;
+        }
+
+        private ColumnBuilder buildUniqueColumn() {
+            if (checkColumnConstraint(mField, Unique.class)) {
+                mBuilder.append(SPACE).append(UNIQUE);
+            }
+            return this;
+        }
+
+        private ColumnBuilder buildDefaultColumn() {
+            if (checkColumnConstraint(mField, Default.class)) {
+                String value = getColumnConstraintValue(mField, Default.class, String.class);
+                mBuilder.append(SPACE).append(DEFAULT)
+                        .append(SPACE).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
+            }
+            return this;
+        }
+
+        private ColumnBuilder buildCheckColumn() {
+            if (checkColumnConstraint(mField, Check.class)) {
+                String value = getColumnConstraintValue(mField, Check.class, String.class);
+                mBuilder.append(SPACE).append(CHECK).append(SPACE)
+                        .append(getColumnName(mField)).append(EQUAL_TO).append(SINGLE_QUOTES)
+                        .append(value).append(SINGLE_QUOTES);
+            }
+            return this;
+        }
+
+        private ColumnBuilder buildNotNullColumn() {
+            if (checkColumnConstraint(mField, NotNull.class)) {
+                mBuilder.append(SPACE).append(NOT_NULL);
+            }
+            return this;
+        }
+
+        private ColumnBuilder buildPrimaryKeyColumn() {
+            if (checkColumnConstraint(mField, PrimaryKey.class)) {
+                isPrimaryKey = true;
+                mBuilder.append(SPACE).append(PRIMARY_KEY);
+                AssignType assignType = getColumnConstraintValue(mField, PrimaryKey.class,
+                        AssignType.class);
+                if (assignType.equals(AssignType.BY_MYSELF)) {
+                } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
+                    mBuilder.append(SPACE).append(AUTO_INCREMENT);
+                }
+            }
+            return this;
+        }
+
+        private String build() {
+            return mBuilder.toString();
+        }
+    }
+
+    private ColumnBuilder createColumnBuilder(Field field) {
+        BaseDataType dataType = matchDataType(field);
+        SqlType sqlType = dataType.getSqlType();
+        String columnType = sqlType.name();
+        String columnName = getColumnName(field);
+        ColumnBuilder fieldBuilder = new ColumnBuilder(columnName + SPACE + columnType, field);
+        fieldBuilder.buildUniqueColumn()
+                .buildDefaultColumn()
+                .buildCheckColumn()
+                .buildNotNullColumn()
+                .buildPrimaryKeyColumn();
+        return fieldBuilder;
+    }
+
     /* package */ <T extends OrmTable> void _createTable(Class<T> tableClass, SQLiteDatabase db) {
         String tableName = getTableName(tableClass);
         Field[] fields = tableClass.getDeclaredFields();
-        StringBuilder sb = new StringBuilder();
-        sb.append(CREATE_TABLE + SPACE + IF_NOT_EXISTS + SPACE + tableName + LEFT_PARENTHESIS);
-        List<Annotation> keys = new ArrayList<>();
+        StringBuilder sqlBuilder = new StringBuilder(CREATE_TABLE + SPACE + IF_NOT_EXISTS + SPACE
+                + tableName + LEFT_PARENTHESIS);//table header
+        boolean hasPrimaryKey = false;
         for (Field field : fields) {
             field.setAccessible(true);
-            StringBuilder fieldBuilder = new StringBuilder();
             Ignore ignore = field.getAnnotation(Ignore.class);
-            PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-            ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
             if (ignore != null) {
                 continue;
             }
-            if (primaryKey != null) {
-                keys.add(primaryKey);
+            ColumnBuilder fieldBuilder = createColumnBuilder(field);
+            if (fieldBuilder.isPrimaryKey) {
+                hasPrimaryKey = true;
             }
-            if (foreignKey != null) {
-                keys.add(foreignKey);
-            }
-            BaseDataType dataType = matchDataType(field);
-            SqlType sqlType = dataType.getSqlType();
-            String columnType = sqlType.name();
-            String columnName = getColumnName(field);
-            fieldBuilder.append(columnName + SPACE + columnType);
-            Unique unique = field.getAnnotation(Unique.class);
-            if (unique != null) {
-                fieldBuilder.append(SPACE).append(UNIQUE);
-            }
-            Default _default = field.getAnnotation(Default.class);
-            if (_default != null) {
-                String value = _default.value();
-                fieldBuilder.append(SPACE).append(DEFAULT)
-                .append(SPACE).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
-            }
-            Check check = field.getAnnotation(Check.class);
-            if (check != null) {
-                String value = check.value();
-                fieldBuilder.append(SPACE).append(CHECK).append(SPACE)
-                .append(columnName).append(EQUAL_TO).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
-            }
-            NotNull notNull = field.getAnnotation(NotNull.class);
-            if (notNull != null) {
-                fieldBuilder.append(SPACE).append(NOT_NULL);
-            }
-            if (primaryKey != null) {
-                fieldBuilder.append(SPACE).append(PRIMARY_KEY);
-                AssignType assignType = primaryKey.value();
-                if (assignType.equals(AssignType.BY_MYSELF)) {
-                } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
-                    fieldBuilder.append(SPACE).append(AUTO_INCREMENT);
-                }
-            }
-            if (foreignKey != null) {
-                Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
-                if (!foreignKeyTableClass.equals(tableClass)) {
-                    String foreignKeyTableName = getTableName(foreignKeyTableClass);
-                    fieldBuilder.append(SPACE).append(REFERENCES).append(SPACE)
-                            .append(foreignKeyTableName).append(LEFT_PARENTHESIS);
-                    Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();
-                    for (Field foreignKeyTableField : foreignKeyTableFields) {
-                        PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField
-                                .getAnnotation(PrimaryKey.class);
-                        if (foreignKeyTablePrimaryKey != null) {
-                            String foreignKeyTablePrimaryKeyName = getColumnName(foreignKeyTableField);
-                            fieldBuilder.append(foreignKeyTablePrimaryKeyName).append(COMMA);
-                        }
-                    }
-                    fieldBuilder.deleteCharAt(fieldBuilder.length() - 1).append(RIGHT_PARENTHESIS);
-                }
-            }
-            fieldBuilder.append(COMMA);
-            sb.append(fieldBuilder);
+            sqlBuilder.append(fieldBuilder.build()).append(COMMA);
         }
-        if (keys.size() == 0) {
-            throw new ConstraintException("Please specify at least one valid primary or foreign key.");
+        if (!hasPrimaryKey) {
+            throw new ConstraintException("Lack valid primary key.");
         }
         try {
-            String sql = sb.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS)
+            String sql = sqlBuilder.deleteCharAt(sqlBuilder.length() - 1).append(RIGHT_PARENTHESIS)
                     .append(SEMICOLON).toString();
+            OrmLog.d(sql);
             db.execSQL(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -291,76 +336,19 @@ public class TableManager {
     /* package */ <T extends OrmTable> void _upgradeTable(Class<T> tableClass, SQLiteDatabase db) {
         String tableName = getTableName(tableClass);
         Field[] fields = tableClass.getDeclaredFields();
-        List<Annotation> keys = new ArrayList<>();
         for (Field field : fields) {
             field.setAccessible(true);
-            StringBuilder sb = new StringBuilder();
             Ignore ignore = field.getAnnotation(Ignore.class);
-            PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-            ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
             if (ignore != null) {
                 continue;
             }
-            if (primaryKey != null) {
-                keys.add(primaryKey);
-            }
-            if (foreignKey != null) {
-                keys.add(foreignKey);
-            }
-            BaseDataType dataType = matchDataType(field);
-            SqlType sqlType = dataType.getSqlType();
-            String columnType = sqlType.name();
             String columnName = getColumnName(field);
-            sb.append(columnName + SPACE + columnType);
-            Unique unique = field.getAnnotation(Unique.class);
-            if (unique != null) {
-                sb.append(SPACE).append(UNIQUE);
-            }
-            Default _default = field.getAnnotation(Default.class);
-            if (_default != null) {
-                String value = _default.value();
-                sb.append(SPACE).append(DEFAULT)
-                        .append(SPACE).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
-            }
-            Check check = field.getAnnotation(Check.class);
-            if (check != null) {
-                String value = check.value();
-                sb.append(SPACE).append(CHECK).append(SPACE)
-                        .append(columnName).append(EQUAL_TO).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
-            }
-            NotNull notNull = field.getAnnotation(NotNull.class);
-            if (notNull != null) {
-                sb.append(SPACE).append(NOT_NULL);
-            }
-            if (primaryKey != null) {
-                sb.append(SPACE).append(PRIMARY_KEY);
-                AssignType assignType = primaryKey.value();
-                if (assignType.equals(AssignType.BY_MYSELF)) {
-                } else if (assignType.equals(AssignType.AUTO_INCREMENT)) {
-                    sb.append(SPACE).append(AUTO_INCREMENT);
-                }
-            }
-            if (foreignKey != null) {
-                Class<? extends OrmTable> foreignKeyTableClass = foreignKey.value();
-                if (!foreignKeyTableClass.equals(tableClass)) {
-                    String foreignKeyTableName = getTableName(foreignKeyTableClass);
-                    sb.append(SPACE).append(REFERENCES).append(SPACE)
-                            .append(foreignKeyTableName).append(LEFT_PARENTHESIS);
-                    Field[] foreignKeyTableFields = foreignKeyTableClass.getDeclaredFields();
-                    for (Field foreignKeyTableField : foreignKeyTableFields) {
-                        PrimaryKey foreignKeyTablePrimaryKey = foreignKeyTableField
-                                .getAnnotation(PrimaryKey.class);
-                        if (foreignKeyTablePrimaryKey != null) {
-                            String foreignKeyTablePrimaryKeyName = getColumnName(foreignKeyTableField);
-                            sb.append(foreignKeyTablePrimaryKeyName).append(COMMA);
-                        }
-                    }
-                    sb.deleteCharAt(sb.length() - 1).append(RIGHT_PARENTHESIS);
-                }
-            }
             try {
-                db.execSQL(ALTER_TABLE + SPACE + tableName + SPACE + IF_NOT_EXISTS + SPACE
-                        + columnName + SPACE + ADD_COLUMN + SPACE + sb.toString() + SEMICOLON);
+                String sql = ALTER_TABLE + SPACE + tableName + SPACE + IF_NOT_EXISTS + SPACE
+                        + columnName + SPACE + ADD_COLUMN + SPACE
+                        + createColumnBuilder(field).build() + SEMICOLON;
+                OrmLog.d(sql);
+                db.execSQL(sql);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
