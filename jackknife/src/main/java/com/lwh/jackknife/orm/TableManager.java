@@ -71,8 +71,6 @@ public class TableManager {
 
     private final String SPACE = " ";
 
-    private final String EQUAL_TO = "=";
-
     private final String SINGLE_QUOTES = "\'";
 
     private final String UNIQUE = "UNIQUE";
@@ -250,8 +248,7 @@ public class TableManager {
             if (checkColumnConstraint(mField, Check.class)) {
                 String value = getColumnConstraintValue(mField, Check.class, String.class);
                 mBuilder.append(SPACE).append(CHECK).append(SPACE)
-                        .append(getColumnName(mField)).append(EQUAL_TO).append(SINGLE_QUOTES)
-                        .append(value).append(SINGLE_QUOTES);
+                        .append(value);
             }
             return this;
         }

@@ -17,7 +17,7 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。gradle3.1.2以上使用api代替compile。
 <blockquote>
 dependencies {
-  <b>compile 'com.github.JackWHLiu:jackknife:2.3.14'</b>
+  <b>compile 'com.github.JackWHLiu:jackknife:2.3.18'</b>
 }
 </blockquote>
 
@@ -54,18 +54,22 @@ dependencies {
 > 配置你要映射的表名
 ##### （2）@Column
 > 配置你要映射的列名
-##### （3）@PrimaryKey
+##### （3）@Ignore
+> 配置你要跳过映射的列名
+##### （4）@PrimaryKey
 > 配置主键
-##### （4）@ForeignKey
-> 配置外键
-##### （5）@Unique
+##### （5）@Check
+> 配置检查条件
+##### （6）@Default
+> 配置默认值
+##### （7）@Unique
 > 配置唯一约束
-##### （6）@NotNull
+##### （8）@NotNull
 > 配置非空约束
 #### 3、创表
 > 以User为例，TableManager.createTable(User.class);//创建OrmTable的实现类的表
 > 如果在第一步中使用了OrmConfig的创表配置，即config.tables()，则不需要此步骤。
-#### 4、相关API
+#### 4、常用方法
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 
