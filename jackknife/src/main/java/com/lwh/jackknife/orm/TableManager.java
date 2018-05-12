@@ -228,39 +228,45 @@ public class TableManager {
             return this;
         }
 
-        private ColumnBuilder buildUniqueColumn() {
+        private ColumnBuilder buildColumnUnique() {
             if (checkColumnConstraint(mField, Unique.class)) {
                 mBuilder.append(SPACE).append(UNIQUE);
             }
             return this;
         }
 
-        private ColumnBuilder buildDefaultColumn() {
+        private ColumnBuilder buildColumnDefault() {
             if (checkColumnConstraint(mField, Default.class)) {
                 String value = getColumnConstraintValue(mField, Default.class, String.class);
-                mBuilder.append(SPACE).append(DEFAULT)
-                        .append(SPACE).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
+                try {
+                    long number = Long.parseLong(value);
+                    mBuilder.append(SPACE).append(DEFAULT)
+                            .append(SPACE).append(SINGLE_QUOTES).append(number).append(SINGLE_QUOTES);
+                } catch (NumberFormatException e) {
+                    mBuilder.append(SPACE).append(DEFAULT)
+                            .append(SPACE).append(SINGLE_QUOTES).append(value).append(SINGLE_QUOTES);
+                }
             }
             return this;
         }
 
-        private ColumnBuilder buildCheckColumn() {
+        private ColumnBuilder buildColumnCheck() {
             if (checkColumnConstraint(mField, Check.class)) {
                 String value = getColumnConstraintValue(mField, Check.class, String.class);
-                mBuilder.append(SPACE).append(CHECK).append(SPACE)
-                        .append(value);
+                mBuilder.append(SPACE).append(CHECK).append(LEFT_PARENTHESIS)
+                        .append(value).append(RIGHT_PARENTHESIS);
             }
             return this;
         }
 
-        private ColumnBuilder buildNotNullColumn() {
+        private ColumnBuilder buildColumnNotNull() {
             if (checkColumnConstraint(mField, NotNull.class)) {
                 mBuilder.append(SPACE).append(NOT_NULL);
             }
             return this;
         }
 
-        private ColumnBuilder buildPrimaryKeyColumn() {
+        private ColumnBuilder buildColumnPrimaryKey() {
             if (checkColumnConstraint(mField, PrimaryKey.class)) {
                 isPrimaryKey = true;
                 mBuilder.append(SPACE).append(PRIMARY_KEY);
@@ -285,11 +291,11 @@ public class TableManager {
         String columnType = sqlType.name();
         String columnName = getColumnName(field);
         ColumnBuilder fieldBuilder = new ColumnBuilder(columnName + SPACE + columnType, field);
-        fieldBuilder.buildUniqueColumn()
-                .buildDefaultColumn()
-                .buildCheckColumn()
-                .buildNotNullColumn()
-                .buildPrimaryKeyColumn();
+        fieldBuilder.buildColumnUnique()
+                .buildColumnDefault()
+                .buildColumnCheck()
+                .buildColumnNotNull()
+                .buildColumnPrimaryKey();
         return fieldBuilder;
     }
 
@@ -353,7 +359,9 @@ public class TableManager {
     }
 
     /* package */ <T extends OrmTable> void _dropTable(Class<T> tableClass, SQLiteDatabase db) {
-        db.execSQL(DROP_TABLE+SPACE+getTableName(tableClass));
+        String sql = DROP_TABLE+SPACE+getTableName(tableClass);
+        OrmLog.d(sql);
+        db.execSQL(sql);
     }
 
     public static <T extends OrmTable> void dropTable(Class<T> tableClass) {

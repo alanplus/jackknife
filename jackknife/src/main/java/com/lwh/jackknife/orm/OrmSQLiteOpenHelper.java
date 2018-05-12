@@ -26,7 +26,8 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private Class<? extends OrmTable>[] mTables;
 
-    public OrmSQLiteOpenHelper(Context context, String name, int version, Class<? extends OrmTable>[] tables) {
+    public OrmSQLiteOpenHelper(Context context, String name, int version,
+                               Class<? extends OrmTable>[] tables) {
         super(context, name, null, version);
         this.mTables = tables;
     }
