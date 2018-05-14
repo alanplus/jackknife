@@ -14,7 +14,7 @@ allprojects {
 }
 </blockquote>
 
-#### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。gradle3.1.2以上使用api代替compile。
+#### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。gradle3.4以上使用api代替compile。
 <blockquote>
 dependencies {
   <b>compile 'com.github.JackWHLiu:jackknife:2.3.18'</b>
