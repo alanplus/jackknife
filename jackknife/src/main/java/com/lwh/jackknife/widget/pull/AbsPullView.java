@@ -54,17 +54,17 @@ public abstract class AbsPullView extends RelativeLayout {
     private Pullable mPullableView;
     private View mFooterView;
 
-    protected AbsPullView(Context context) {
+    public AbsPullView(Context context) {
         super(context);
         initView();
     }
 
-    protected AbsPullView(Context context, AttributeSet attrs) {
+    public AbsPullView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
     }
 
-    protected AbsPullView(Context context, AttributeSet attrs, int defStyle) {
+    public AbsPullView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initView();
     }
