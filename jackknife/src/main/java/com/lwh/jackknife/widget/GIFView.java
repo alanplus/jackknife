@@ -33,6 +33,8 @@ public class GIFView extends SurfaceView implements SurfaceHolder.Callback {
     private Movie mMovie;
     private Handler mHandler = new Handler();
     private float zoom = 1.0f;
+    private String path;
+
     private Runnable r = new Runnable() {
         @Override
         public void run() {
@@ -47,7 +49,11 @@ public class GIFView extends SurfaceView implements SurfaceHolder.Callback {
         }
     };
 
-    private String path;
+    public GIFView(Context context,AttributeSet attrs) {
+        super(context,attrs);
+        mSurfaceHolder = getHolder();
+        mSurfaceHolder.addCallback(this);
+    }
 
     public void setPath(String path){
         this.path = path;
@@ -68,16 +74,11 @@ public class GIFView extends SurfaceView implements SurfaceHolder.Callback {
             width = mMovie.width();
             height = mMovie.height();
             mHandler.post(r);
-        }catch(IOException e){
+        } catch(IOException e) {
             e.printStackTrace();
         }
         setMeasuredDimension((int)(width*zoom),(int)(height*zoom));
     }
-
-    public GIFView(Context context,AttributeSet attrs) {
-       super(context,attrs);
-       mSurfaceHolder = getHolder();
-   }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
