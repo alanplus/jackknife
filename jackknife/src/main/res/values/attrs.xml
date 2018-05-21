@@ -140,6 +140,9 @@
         <attr name="progressbutton_ballSpacing" format="dimension|reference"/>
         <attr name="progressbutton_ballRadius" format="dimension|reference"/>
     </declare-styleable>
+    <declare-styleable name="CircularProgressBar">
+        <attr name="borderWidth" format="dimension" />
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
