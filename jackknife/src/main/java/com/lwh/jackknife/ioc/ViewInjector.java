@@ -152,7 +152,7 @@ public class ViewInjector {
             ContentView contentView = v.getClass().getAnnotation(ContentView.class);
             SupportActivity activity = getSupportActivity(v);
             Class<? extends SupportV> viewClass = v.getClass();
-            String packageName = v.getPackageName();
+            String packageName = activity.getPackageName();
             try {
                 Class<?> layoutClass = Class.forName(packageName + R_LAYOUT);
                 Field field = layoutClass.getDeclaredField(layoutName);
@@ -165,7 +165,7 @@ public class ViewInjector {
                     method.invoke(activity, layoutId);
                 } else if (viewType == ViewType.Fragment) {
                 }
-                LayoutInflater inflater = LayoutInflater.from((Context) v);
+                LayoutInflater inflater = LayoutInflater.from((Context) activity);
                 Class<? extends LayoutInflater> inflaterClass = LayoutInflater.class;
                 Method inflateMethod = inflaterClass.getDeclaredMethod(METHOD_INFLATE, int.class,
                         ViewGroup.class);

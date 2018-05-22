@@ -20,7 +20,5 @@ import android.view.View;
 
 public interface SupportV {
 
-    View findViewById(int id);
-
-    String getPackageName();
+    <VIEW extends View> VIEW findViewById(int id);
 }

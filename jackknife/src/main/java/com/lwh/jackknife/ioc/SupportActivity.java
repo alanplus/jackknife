@@ -18,5 +18,7 @@ package com.lwh.jackknife.ioc;
 
 public interface SupportActivity extends SupportV {
 
+    String getPackageName();
+
     void finish();
 }

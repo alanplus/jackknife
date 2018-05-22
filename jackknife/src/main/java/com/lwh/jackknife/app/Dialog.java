@@ -66,6 +66,11 @@ public abstract class Dialog extends android.app.Dialog implements SupportDialog
         throw new LackInterfaceException("The activity lacks the SupportActivity interface.");
     }
 
+    @Override
+    public View findViewById(int id) {
+        return super.findViewById(id);
+    }
+
     protected abstract View onCreateView();
 
     public abstract void onShow(DialogInterface dialog);

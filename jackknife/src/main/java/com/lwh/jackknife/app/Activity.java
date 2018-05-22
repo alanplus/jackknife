@@ -59,4 +59,9 @@ public abstract class Activity extends android.app.Activity implements SupportAc
 			Application.getInstance().popTask();
 		}
 	}
+
+	@Override
+	public View findViewById(int id) {
+		return super.findViewById(id);
+	}
 }

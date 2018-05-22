@@ -16,6 +16,10 @@
 
 package com.lwh.jackknife.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class NumberUtils implements N {
 
     private NumberUtils() {
@@ -99,5 +103,39 @@ public class NumberUtils implements N {
 
     public static float clamp(float value, float max, float min) {
         return Math.max(Math.min(value, max), min);
+    }
+
+    public int getRandom(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min + 1) + min;
+    }
+
+    public int[] getRandoms(int min, int max, int count) {
+        int[] randoms = new int[count];
+        if (max < min || count <= 0) {
+            return null;
+        } else {
+            for (int i=0;i<count;i++) {
+                randoms[i] = getRandom(min, max);
+            }
+            return randoms;
+        }
+    }
+
+    public int[] getUniqueRandoms(int min, int max, int count) {
+        int[] randoms = new int[count];
+        List<Integer> randomList = new ArrayList<>();
+        if ( count > ( max - min + 1 )) {
+            return null;
+        }
+        for (int i = min; i <= max; i++) {
+            randomList.add(i);
+        }
+        for (int i = 0; i < count; i++) {
+            int index = getRandom(0, randomList.size()-1);
+            randoms[i] = randomList.get(index);
+            randomList.remove(index);
+        }
+        return randoms;
     }
 }

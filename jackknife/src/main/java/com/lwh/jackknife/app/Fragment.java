@@ -32,13 +32,12 @@ import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 public abstract class Fragment extends android.app.Fragment implements SupportFragment {
 
 	@Override
-	public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return ViewInjector.injectLayout(this);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
 		ViewInjector.inject(this);
 	}
 
