@@ -149,17 +149,26 @@ public class ViewInjector {
         ViewType viewType = getViewType(v);
         if (isViewTypeAllowed(viewType)) {
             String layoutName = generateLayoutName(v);
-            ContentView contentView = v.getClass().getAnnotation(ContentView.class);
             SupportActivity activity = getSupportActivity(v);
             Class<? extends SupportV> viewClass = v.getClass();
             String packageName = activity.getPackageName();
+            int layoutId = View.NO_ID;
             try {
                 Class<?> layoutClass = Class.forName(packageName + R_LAYOUT);
                 Field field = layoutClass.getDeclaredField(layoutName);
-                int layoutId = field.getInt(v);
-                if (contentView != null) {
-                    layoutId = contentView.value();
-                }
+                layoutId = field.getInt(v);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+            ContentView contentView = v.getClass().getAnnotation(ContentView.class);
+            if (contentView != null) {
+                layoutId = contentView.value();
+            }
+            try {
                 if (viewType == ViewType.Activity || viewType == ViewType.Dialog) {
                     Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
                     method.invoke(activity, layoutId);
@@ -174,11 +183,7 @@ public class ViewInjector {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else throw new ViewTypeException(VIEW_TYPE_ERROR);
