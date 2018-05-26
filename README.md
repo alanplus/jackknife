@@ -109,6 +109,8 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 #### 2、一些思考
 > 关于mvp这个架构，市面上众说纷纭，有赞赏的，也有批评的。总之，这个架构既有优点，又有缺点。先说优点，解除模型数据和UI显示的耦合，界面显示和业务操作逻辑分离，易于创建副本，提高可维护性。缺点也是显而易见的，Presenter和View类爆炸的问题很严重，也就是说，如果你只需要写一个很小的项目，是完全没有必要使用mvp的。
 
+
 三、博客
+--------------------------------
 简书:https://www.jianshu.com/u/f408bdadacce
 CSDN:http://blog.csdn.net/yiranaini_/
