@@ -1,1 +1,1 @@
-include ':app', ':jackknife'
+include ':app', ':jackknife-ioc', ':jackknife-orm', ':jackknife-mvp', ':jackknife-widget', ':jackknife-util'

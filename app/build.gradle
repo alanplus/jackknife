@@ -19,5 +19,9 @@ android {
 }
 
 dependencies {
-    compile project(':jackknife')
+    compile project(':jackknife-ioc')
+    compile project(':jackknife-orm')
+    compile project(':jackknife-mvp')
+    compile project(':jackknife-widget')
+    compile project(':jackknife-util')
 }
