@@ -211,8 +211,8 @@ public class ViewInjector {
                     if (viewIgnore != null) {
                         continue;
                     }
-                    ViewId viewId = field.getAnnotation(ViewId.class);
-                    int id;
+                    ViewInject viewId = field.getAnnotation(ViewInject.class);
+                    int id = View.NO_ID;
                     try {
                         if (viewId != null) {
                             id = viewId.value();
@@ -228,8 +228,7 @@ public class ViewInjector {
                         if (view != null) {
                             field.set(v, view);
                         } else {
-                            throw new InjectException(
-                                    fieldType.getName()+" id("+id+") can\'t be injected.");
+                            throw new InjectException(fieldType.getName() + " " + field.getName() + " can\'t be injected, at id(0x"+Integer.toHexString(id)+").");
                         }
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
