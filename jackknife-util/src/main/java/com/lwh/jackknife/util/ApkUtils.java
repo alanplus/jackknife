@@ -33,6 +33,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApkUtils {
 
@@ -200,5 +202,33 @@ public class ApkUtils {
         intent.setDataAndType(Uri.fromFile(new File(apkPath)),
                 URI_INSTALL_PACKAGE);
         context.startActivity(intent);
+    }
+
+    public static String getAppName(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(
+                    context.getPackageName(), 0);
+            int labelRes = packageInfo.applicationInfo.labelRes;
+            return context.getResources().getString(labelRes);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public final static List<String> getAllPackageName(Context context) {
+        PackageManager packManager = context.getPackageManager();
+        List<PackageInfo> packInfos = packManager
+                .getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        if (packInfos == null || packInfos.size() == 0) {
+            return null;
+        }
+        List<String> pkList = new ArrayList<String>();
+        for (PackageInfo packInfo : packInfos) {
+            String packageName = packInfo.packageName;
+            pkList.add(packageName);
+        }
+        return pkList;
     }
 }

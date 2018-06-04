@@ -227,19 +227,10 @@ public class ViewInjector {
                         Object view = findViewByIdMethod.invoke(activity, id);
                         if (view != null) {
                             field.set(v, view);
-                        } else {
-                            throw new InjectException(fieldType.getName() + " " + field.getName() + " can\'t be injected, at id(0x"+Integer.toHexString(id)+").");
                         }
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        throw new InjectException(fieldType.getName() + " " + field.getName()
+                                + " can\'t be injected, at id(0x"+Integer.toHexString(id)+").");
                     }
                 }
             }

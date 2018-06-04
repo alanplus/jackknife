@@ -67,20 +67,23 @@ public class IoUtils {
     }
 
     public static String bs2H(byte[] src, String separator) {
-        StringBuffer buffer = new StringBuffer();
-        if (src != null && src.length > 0) {
-            for (int i=0;i<src.length;i++){
-                int value = src[i] & 0xFF;
-                String H = NumberUtils.D2H(value);
-                if (H.length() < 2){
-                    buffer.append(0);
-                }
-                buffer.append(H).append(separator);
-            }
-            return buffer.substring(0, buffer.length()-1);
-        }else {
+        if (src == null) {
             return null;
         }
+        StringBuilder buffer = new StringBuilder();
+        for (int i=0;i<src.length;i++){
+            int value = src[i] & 0xFF;
+            String H = NumberUtils.D2H(value);
+            if (H.length() < 2){
+                buffer.append(0);
+            }
+            buffer.append(H).append(separator);
+        }
+        return buffer.substring(0, buffer.length()-1);
+    }
+
+    public static String bs2H(byte[] src) {
+        return bs2H(src, "");
     }
 
     public static byte[] H2bs(String H, String separator) {
@@ -476,5 +479,10 @@ public class IoUtils {
             e.printStackTrace();
         }
         return baos.toByteArray();
+    }
+
+    public static String getFileName(String path) {
+        int start = path.lastIndexOf(File.separator) + 1;
+        return path.substring(start, path.length());
     }
 }
