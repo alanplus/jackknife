@@ -211,11 +211,11 @@ public class ViewInjector {
                     if (viewIgnore != null) {
                         continue;
                     }
-                    ViewInject viewId = field.getAnnotation(ViewInject.class);
+                    ViewInject viewInject = field.getAnnotation(ViewInject.class);
                     int id = View.NO_ID;
                     try {
-                        if (viewId != null) {
-                            id = viewId.value();
+                        if (viewInject != null) {
+                            id = viewInject.value();
                         } else {
                             String packageName = activity.getPackageName();
                             Class<?> idClass = Class.forName(packageName + R_ID);
@@ -230,7 +230,8 @@ public class ViewInjector {
                         }
                     } catch (Exception e) {
                         throw new InjectException(fieldType.getName() + " " + field.getName()
-                                + " can\'t be injected, at id(0x"+Integer.toHexString(id)+").");
+                                + " can\'t be injected, at layout("+generateLayoutName(v)+".xml), " +
+                                "id(0x"+Integer.toHexString(id)+").");
                     }
                 }
             }
