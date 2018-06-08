@@ -1,10 +1,12 @@
 buildscript {
+    def gradle_version = "2.3.1"
+    def gradle_plugin_version = "1.5"
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath "com.android.tools.build:gradle:${gradle_version}"
+        classpath "com.github.dcendents:android-maven-gradle-plugin:${gradle_plugin_version}"
     }
 }
 
@@ -13,6 +15,17 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
     }
+}
+
+ext {
+    android = [
+            compile_sdk : 27,
+            min_sdk : 11,
+            target_sdk : 27,
+            build_tools_version : "27.0.3",
+            release_version_code : 158,
+            release_version_name : "2.4.6"
+    ]
 }
 
 task clean(type: Delete) {

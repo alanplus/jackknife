@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.JackWHLiu'
-
 android {
     compileSdkVersion rootProject.ext.android.compile_sdk
     buildToolsVersion rootProject.ext.android.build_tools_version
@@ -34,4 +32,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+dependencies {
+    compile project(':jackknife-ioc')
+    compile project(':jackknife-widget')
 }

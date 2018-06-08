@@ -19,14 +19,14 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.JackWHLiu'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion rootProject.ext.android.compile_sdk
+    buildToolsVersion rootProject.ext.android.build_tools_version
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 27
-        versionCode 157
-        versionName "2.4.5"
+        minSdkVersion rootProject.ext.android.min_sdk
+        targetSdkVersion rootProject.ext.android.target_sdk
+        versionCode rootProject.ext.android.release_version_code
+        versionName rootProject.ext.android.release_version_name
     }
     buildTypes {
         release {

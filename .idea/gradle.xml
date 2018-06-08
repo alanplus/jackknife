@@ -8,6 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/jackknife-annotations-ioc" />
             <option value="$PROJECT_DIR$/jackknife-ioc" />
             <option value="$PROJECT_DIR$/jackknife-mvp" />
             <option value="$PROJECT_DIR$/jackknife-orm" />
