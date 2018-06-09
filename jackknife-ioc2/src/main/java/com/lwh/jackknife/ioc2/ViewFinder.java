@@ -17,10 +17,11 @@
 package com.lwh.jackknife.ioc2;
 
 import android.app.Activity;
+import android.view.View;
 
 public class ViewFinder {
 
-	public static void findViewById(Activity activity, int id) {
-		activity.findViewById(id);
+	public static <V extends View> V findViewById(Activity activity, int id) {
+		return (V) activity.findViewById(id);
 	}
 }

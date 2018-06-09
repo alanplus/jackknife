@@ -17,13 +17,11 @@
 package com.lwh.jackknife.ioc2.writer;
 
 import com.lwh.jackknife.ioc2.ViewInjector;
-import com.lwh.jackknife.ioc2.adapter.InjectAdapter;
 import com.lwh.jackknife.ioc2.annotation.ViewInject;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
