@@ -33,7 +33,7 @@ public class ViewInjector {
         adapter.inject(target);
     }
 
-    private static <T> InjectAdapter getViewAdapter(Class<?> viewClass) {
+    private static <T> InjectAdapter getViewAdapter(Class<T> viewClass) {
         InjectAdapter<T> adapter = (InjectAdapter<T>) mInjectCache.get(viewClass);
         if (adapter != null) {
             return adapter;
