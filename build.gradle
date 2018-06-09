@@ -19,6 +19,7 @@ buildscript {
     def apt_version = "1.8"
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${gradle_version}"
@@ -40,8 +41,8 @@ ext {
             min_sdk : 11,
             target_sdk : 27,
             build_tools_version : "27.0.3",
-            release_version_code : 163,
-            release_version_name : "2.4.11"
+            release_version_code : 164,
+            release_version_name : "2.4.12"
     ]
 }
 
