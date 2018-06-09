@@ -39,4 +39,5 @@ android {
 
 dependencies {
     annotationProcessor project(':jackknife-ioc2-compiler')
+    compile project(':jackknife-ioc2-compiler')
 }
