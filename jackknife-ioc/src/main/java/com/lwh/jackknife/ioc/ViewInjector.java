@@ -23,6 +23,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lwh.jackknife.ioc.annotation.ContentView;
+import com.lwh.jackknife.ioc.annotation.EventBase;
+import com.lwh.jackknife.ioc.annotation.ViewIgnore;
+import com.lwh.jackknife.ioc.annotation.ViewInject;
 import com.lwh.jackknife.ioc.exception.IllegalViewClassNameException;
 import com.lwh.jackknife.ioc.exception.InjectException;
 import com.lwh.jackknife.ioc.exception.ViewTypeException;

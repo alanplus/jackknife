@@ -1,1 +1,2 @@
-include ':jackknife-ioc', ':jackknife-orm', ':jackknife-mvp', ':jackknife-widget', ':jackknife-util', ':jackknife-annotations-ioc'
+include ':jackknife-ioc', ':jackknife-orm', ':jackknife-mvp', ':jackknife-widget', ':jackknife-ioc2-compiler', ':jackknife-ioc2',
+        ':jackknife-util', ':jackknife-annotations-ioc'
