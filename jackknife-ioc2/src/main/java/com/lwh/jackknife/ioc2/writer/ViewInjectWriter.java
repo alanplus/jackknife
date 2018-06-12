@@ -69,8 +69,7 @@ public class ViewInjectWriter implements AdapterWriter {
 				ViewInject viewInject = e.getAnnotation(ViewInject.class);
 				String fieldName = e.getSimpleName().toString();
 				int id = viewInject.value();
-				injectBuilder.addStatement("target."+fieldName+" =  $T.findViewById(target, "+id+");",
-						ClassName.bestGuess("com.lwh.jackknife.ioc2.ViewFinder"));
+				injectBuilder.addStatement("target."+fieldName+" =  target.findViewById("+id+");");
 			}
 			MethodSpec inject = injectBuilder.build();
 			TypeSpec injectAdapter = TypeSpec.classBuilder(info.newClassName)

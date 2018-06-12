@@ -14,15 +14,29 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.ioc2.annotation;
+package com.lwh.jackknife.widget;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.widget.TextView;
 
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-import static java.lang.annotation.ElementType.FIELD;
+public class MarqueTextView extends TextView {
 
-@Retention(SOURCE) @Target(FIELD)
-public @interface ViewInject {
-	int value();
+    public MarqueTextView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
+
+    public MarqueTextView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public MarqueTextView(Context context) {
+        super(context);
+    }
+
+    @Override
+
+    public boolean isFocused() {
+        return true;
+    }
 }

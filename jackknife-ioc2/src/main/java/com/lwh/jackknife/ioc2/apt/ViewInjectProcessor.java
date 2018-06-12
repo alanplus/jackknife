@@ -31,10 +31,15 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 @AutoService(Processor.class)
+@SupportedAnnotationTypes({"com.lwh.jackknife.ioc2.annotation.ViewInject"})
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class ViewInjectProcessor extends AbstractProcessor {
 	
 	List<AnnotationHandler> mHandlers = new ArrayList<>();
