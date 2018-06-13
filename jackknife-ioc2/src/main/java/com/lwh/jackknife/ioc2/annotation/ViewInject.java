@@ -19,10 +19,10 @@ package com.lwh.jackknife.ioc2.annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import static java.lang.annotation.RetentionPolicy.CLASS;
 import static java.lang.annotation.ElementType.FIELD;
 
-@Retention(SOURCE) @Target(FIELD)
+@Retention(CLASS) @Target(FIELD)
 public @interface ViewInject {
 	int value();
 }

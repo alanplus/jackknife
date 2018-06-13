@@ -41,7 +41,7 @@ import javax.lang.model.element.TypeElement;
 @SupportedAnnotationTypes({"com.lwh.jackknife.ioc2.annotation.ViewInject"})
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class ViewInjectProcessor extends AbstractProcessor {
-	
+
 	List<AnnotationHandler> mHandlers = new ArrayList<>();
 	ViewInjectWriter mWriter;
 	Map<String, List<Element>> map = new HashMap<>();
