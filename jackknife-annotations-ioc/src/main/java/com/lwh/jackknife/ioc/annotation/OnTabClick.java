@@ -27,9 +27,14 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnTabClickListener",
+@EventBase(
+        listenerSetter = "setOnTabClickListener",
         listenerType = HorizontalTabBar.OnTabClickListener.class,
-        callbackMethod = "onTabClick")
+        callbackMethod = "onTabClick",
+        parameters = {View.class, int.class},
+        parameterNames = {"view", "position"},
+        returns = boolean.class
+)
 public @interface OnTabClick {
     int[] value() default { View.NO_ID };
 }

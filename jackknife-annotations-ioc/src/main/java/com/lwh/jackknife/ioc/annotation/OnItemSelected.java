@@ -51,7 +51,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD) @Retention(RUNTIME)
 @EventBase(listenerSetter = "setOnItemSelectedListener",
         listenerType = AdapterView.OnItemSelectedListener.class,
-        callbackMethod = "onItemSelected")
+        callbackMethod = "onItemSelected",
+        parameters = {AdapterView.class, View.class, int.class, long.class},
+        parameterNames = {"parent", "view", "position", "id"},
+        returns = void.class
+)
 public @interface OnItemSelected {
     int[] value() default { View.NO_ID };
 }

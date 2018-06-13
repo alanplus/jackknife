@@ -21,10 +21,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lwh.jackknife.ioc.bind.BindLayout;
 import com.lwh.jackknife.ioc.SupportActivity;
 import com.lwh.jackknife.ioc.SupportFragment;
 import com.lwh.jackknife.ioc.ViewInjector;
 import com.lwh.jackknife.ioc.exception.LackInterfaceException;
+import com.lwh.jackknife.ioc.inject.FragmentHandler;
 
 /**
  * Automatically inject a layout, bind views, and register events for fragments.
@@ -33,7 +35,8 @@ public abstract class Fragment extends android.app.Fragment implements SupportFr
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return ViewInjector.injectLayout(this);
+		FragmentHandler handler = new FragmentHandler();
+		return handler.inflateLayout(new BindLayout(this));
 	}
 
 	@Override

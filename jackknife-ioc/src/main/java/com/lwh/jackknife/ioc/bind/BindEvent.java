@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The JackKnife Open Source Project
+ * Copyright (C) 2018 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.ioc.annotation;
+package com.lwh.jackknife.ioc.bind;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.lwh.jackknife.ioc.SupportV;
+import com.lwh.jackknife.ioc.inject.InjectHandler;
 
-@Target(ElementType.ANNOTATION_TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EventBase {
-    String listenerSetter();
-    Class<?> listenerType();
-    String callbackMethod();
-    Class<?>[] parameters();
-    String[] parameterNames();
-    Class<?> returns();
+public class BindEvent implements BindType {
+
+    private SupportV mTarget;
+
+    public BindEvent(SupportV v) {
+        this.mTarget = v;
+    }
+
+    public SupportV getTarget() {
+        return mTarget;
+    }
+
+    @Override
+    public void accept(InjectHandler handler) {
+        handler.performInject(this);
+    }
 }

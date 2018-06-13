@@ -48,7 +48,6 @@ public class ViewInjectWriter implements AdapterWriter {
 
 	@Override
 	public void generate(Map<String, List<Element>> map) {
-		System.out.print("Jack generate");
 		Iterator<Entry<String, List<Element>>> iterator = map.entrySet().iterator();
 		while(iterator.hasNext()) {
 			Entry<String, List<Element>> entry = iterator.next();

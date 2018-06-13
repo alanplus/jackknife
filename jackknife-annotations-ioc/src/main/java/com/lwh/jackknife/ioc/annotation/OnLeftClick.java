@@ -27,9 +27,14 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnLeftClickListener",
+@EventBase(
+        listenerSetter = "setOnLeftClickListener",
         listenerType = TitleBar.OnLeftClickListener.class,
-        callbackMethod = "onClick")
+        callbackMethod = "onClick",
+        parameters = View.class,
+        parameterNames = "view",
+        returns = void.class
+)
 public @interface OnLeftClick {
     int[] value() default { View.NO_ID };
 }

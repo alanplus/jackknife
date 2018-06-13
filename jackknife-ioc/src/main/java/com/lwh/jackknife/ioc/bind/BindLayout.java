@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The JackKnife Open Source Project
+ * Copyright (C) 2018 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,26 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.ioc.exception;
+package com.lwh.jackknife.ioc.bind;
 
-public class IllegalViewClassNameException extends RuntimeException {
 
-    public IllegalViewClassNameException() {
+import com.lwh.jackknife.ioc.SupportV;
+import com.lwh.jackknife.ioc.inject.InjectHandler;
+
+public class BindLayout implements BindType {
+
+    private SupportV mTarget;
+
+    public BindLayout(SupportV v) {
+        this.mTarget = v;
     }
 
-    public IllegalViewClassNameException(String detailMessage) {
-        super(detailMessage);
+    public SupportV getTarget() {
+        return mTarget;
+    }
+
+    @Override
+    public void accept(InjectHandler handler) {
+        handler.performInject(this);
     }
 }

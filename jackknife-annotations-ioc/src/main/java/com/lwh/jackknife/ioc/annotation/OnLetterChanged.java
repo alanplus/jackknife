@@ -27,9 +27,14 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnLetterChangeListener",
+@EventBase(
+        listenerSetter = "setOnLetterChangeListener",
         listenerType = LetterView.OnLetterChangeListener.class,
-        callbackMethod = "onChanged")
+        callbackMethod = "onChanged",
+        parameters = String.class,
+        parameterNames = "letter",
+        returns = void.class
+)
 public @interface OnLetterChanged {
     int[] value() default { View.NO_ID };
 }

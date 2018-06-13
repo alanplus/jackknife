@@ -27,9 +27,14 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnColorChangedListenner",
+@EventBase(
+        listenerSetter = "setOnColorChangedListenner",
         listenerType = ColorPickerView.OnColorChangedListener.class,
-        callbackMethod = "onColorChanged")
+        callbackMethod = "onColorChanged",
+        parameters = {int.class, int.class, float.class},
+        parameterNames = {"color", "originalColor", "saturation"},
+        returns = void.class
+)
 public @interface OnColorChanged {
     int[] value() default { View.NO_ID };
 }

@@ -29,7 +29,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD) @Retention(RUNTIME)
 @EventBase(listenerSetter = "setOnRightClickListener",
         listenerType = TitleBar.OnRightClickListener.class,
-        callbackMethod = "onClick")
+        callbackMethod = "onClick",
+        parameters = View.class,
+        parameterNames = "view",
+        returns = void.class
+)
 public @interface OnRightClick {
     int[] value() default { View.NO_ID };
 }

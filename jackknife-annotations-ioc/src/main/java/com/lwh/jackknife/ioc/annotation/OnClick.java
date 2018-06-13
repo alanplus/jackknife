@@ -40,7 +40,11 @@ import java.lang.annotation.Target;
 @Target(METHOD) @Retention(RUNTIME)
 @EventBase(listenerSetter = "setOnClickListener",
         listenerType = View.OnClickListener.class,
-        callbackMethod = "onClick")
+        callbackMethod = "onClick",
+        parameters = View.class,
+        parameterNames = "v",
+        returns = void.class
+)
 public @interface OnClick {
     int[] value() default { View.NO_ID };
 }

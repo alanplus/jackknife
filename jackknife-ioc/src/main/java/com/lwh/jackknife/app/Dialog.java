@@ -23,6 +23,7 @@ import android.view.View;
 
 import com.lwh.jackknife.ioc.SupportActivity;
 import com.lwh.jackknife.ioc.SupportDialog;
+import com.lwh.jackknife.ioc.SupportV;
 import com.lwh.jackknife.ioc.ViewInjector;
 import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 

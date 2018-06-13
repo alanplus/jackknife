@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.ioc.annotation;
+package com.lwh.jackknife.ioc.exception;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class IllegalXmlMappingException extends RuntimeException {
 
-@Target(ElementType.ANNOTATION_TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EventBase {
-    String listenerSetter();
-    Class<?> listenerType();
-    String callbackMethod();
-    Class<?>[] parameters();
-    String[] parameterNames();
-    Class<?> returns();
+    public IllegalXmlMappingException() {
+    }
+
+    public IllegalXmlMappingException(String detailMessage) {
+        super(detailMessage);
+    }
 }

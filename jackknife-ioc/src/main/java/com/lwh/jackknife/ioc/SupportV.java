@@ -21,4 +21,5 @@ import android.view.View;
 public interface SupportV {
 
     <VIEW extends View> VIEW findViewById(int id);
+
 }
