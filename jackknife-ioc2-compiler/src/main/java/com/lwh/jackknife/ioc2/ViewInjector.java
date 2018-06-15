@@ -24,17 +24,16 @@ import java.util.Map;
 
 public class ViewInjector {
 
-    static Map<Class<?>, InjectAdapter<?>> mInjectCache = new HashMap<>();
+    static Map<Class<?>, InjectAdapter> mInjectCache = new HashMap<>();
 
     public static String SUFFIX = "$InjectAdapter";
 
-    public static <T> void inject(T target) {
-        InjectAdapter<T> adapter = getViewAdapter(target.getClass());
-        adapter.inject(target);
+    public static void inject(Object target) {
+        getViewAdapter(target.getClass()).inject(target);
     }
 
-    private static <T> InjectAdapter getViewAdapter(Class<T> viewClass) {
-        InjectAdapter<T> adapter = (InjectAdapter<T>) mInjectCache.get(viewClass);
+    private static InjectAdapter getViewAdapter(Class<?> viewClass) {
+        InjectAdapter adapter = mInjectCache.get(viewClass);
         if (adapter != null) {
             return adapter;
         }

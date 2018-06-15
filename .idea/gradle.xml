@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/jackknife-annotations-ioc" />
             <option value="$PROJECT_DIR$/jackknife-ioc" />
             <option value="$PROJECT_DIR$/jackknife-ioc2" />
+            <option value="$PROJECT_DIR$/jackknife-ioc2-compiler" />
             <option value="$PROJECT_DIR$/jackknife-mvp" />
             <option value="$PROJECT_DIR$/jackknife-orm" />
             <option value="$PROJECT_DIR$/jackknife-util" />

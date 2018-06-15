@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.ioc2.adapter;
+package com.lwh.jackknife.ioc2;
 
-public interface InjectAdapter<T> {
+import android.app.Activity;
+import android.view.View;
 
-	void inject(T target);
+public class ViewFinder {
+
+    public static <VIEW extends View> VIEW findViewById(Activity activity, int id) {
+        return activity.findViewById(id);
+    }
 }

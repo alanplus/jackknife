@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.ioc2.adapter;
+apply plugin: 'java'
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.JackWHLiu'
 
-public class NullAdapter implements InjectAdapter {
-
-	@Override
-	public void inject(Object target) {
-	}
+dependencies {
+    compile 'com.google.auto.service:auto-service:1.0-rc2'
+    compile 'com.squareup:javapoet:1.9.0'
+    sourceCompatibility = "1.7"
+    targetCompatibility = "1.7"
 }
+

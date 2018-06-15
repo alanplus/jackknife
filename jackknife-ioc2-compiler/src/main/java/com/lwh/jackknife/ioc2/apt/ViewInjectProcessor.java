@@ -38,7 +38,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 @AutoService(Processor.class)
-@SupportedAnnotationTypes({"com.lwh.jackknife.ioc2.annotation.ViewInject"})
+@SupportedAnnotationTypes({"com.lwh.jackknife.ioc2.annotation.ViewInject",
+"com.lwh.jackknife.ioc2.annotation.ContentView"})
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class ViewInjectProcessor extends AbstractProcessor {
 

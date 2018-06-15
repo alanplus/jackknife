@@ -17,6 +17,7 @@
 package com.lwh.jackknife.ioc2.writer;
 
 import com.lwh.jackknife.ioc2.ViewInjector;
+import com.lwh.jackknife.ioc2.annotation.ContentView;
 import com.lwh.jackknife.ioc2.annotation.ViewInject;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
@@ -49,7 +50,7 @@ public class ViewInjectWriter implements AdapterWriter {
 	@Override
 	public void generate(Map<String, List<Element>> map) {
 		Iterator<Entry<String, List<Element>>> iterator = map.entrySet().iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			Entry<String, List<Element>> entry = iterator.next();
 			List<Element> cacheElements = entry.getValue();
 			if (cacheElements == null || cacheElements.size() == 0) {
@@ -58,22 +59,30 @@ public class ViewInjectWriter implements AdapterWriter {
 			Element element = cacheElements.get(0);
 			InjectInfo info = createInjectInfo(element);
 			ParameterSpec parameterSpec =
-					ParameterSpec.builder(ClassName.bestGuess(info.className), "target").build();
+					ParameterSpec.builder(ClassName.get(Object.class), "target").build();
+
+			ContentView contentView = element.getEnclosingElement().getAnnotation(ContentView.class);
+			int layoutId = -1;
+			if (contentView != null) {
+				layoutId = contentView.value();
+			}
 			MethodSpec.Builder injectBuilder = MethodSpec.methodBuilder("inject")
 					.addModifiers(Modifier.PUBLIC)
 					.returns(void.class)
-					.addParameter(parameterSpec);
+					.addParameter(parameterSpec)
+					.addStatement(info.className+" activity = ("+info.className+")target;")
+					.addStatement("activity.setContentView("+layoutId+")");
 			for (int i=0;i<cacheElements.size();i++) {
 				Element e = cacheElements.get(i);
 				info = createInjectInfo(e);
 				ViewInject viewInject = e.getAnnotation(ViewInject.class);
 				String fieldName = e.getSimpleName().toString();
 				int id = viewInject.value();
-				injectBuilder.addStatement("target."+fieldName+" =  target.findViewById("+id+");");
+				injectBuilder.addStatement("activity."+fieldName+" =  $T.findViewById(activity, "+id+");", ClassName.bestGuess("com.lwh.jackknife.ioc2.ViewFinder"));
 			}
 			MethodSpec inject = injectBuilder.build();
 			TypeSpec injectAdapter = TypeSpec.classBuilder(info.newClassName)
-					.addSuperinterface(ClassName.bestGuess("InjectAdapter<"+info.className+">"))
+					.addSuperinterface(ClassName.bestGuess("com.lwh.jackknife.ioc2.adapter.InjectAdapter"))
 					.addModifiers(Modifier.PUBLIC)
 					.addMethod(inject)
 					.build();
