@@ -38,7 +38,8 @@ import java.lang.annotation.Target;
  * @see OnClickListener
  */
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnClickListener",
+@EventBase(
+        listenerSetter = "setOnClickListener",
         listenerType = View.OnClickListener.class,
         callbackMethod = "onClick",
         parameters = View.class,

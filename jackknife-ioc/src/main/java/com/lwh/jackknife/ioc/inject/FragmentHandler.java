@@ -66,9 +66,9 @@ public class FragmentHandler extends InjectAdapter {
         return sb.toString();
     }
 
-    public View inflateLayout(BindLayout type) {
+    public View inflateLayout(BindLayout bindLayout) {
         View view = null;
-        SupportFragment v = (SupportFragment) type.getTarget();
+        SupportFragment v = (SupportFragment) bindLayout.getTarget();
         String layoutName = generateLayoutName(v);
         SupportActivity activity = v.getFragmentActivity();
         String packageName = activity.getPackageName();
@@ -105,8 +105,8 @@ public class FragmentHandler extends InjectAdapter {
     }
 
     @Override
-    public void performInject(BindView type) {
-        SupportFragment v = (SupportFragment) type.getTarget();
+    public void performInject(BindView bindView) {
+        SupportFragment v = (SupportFragment) bindView.getTarget();
         Class<?> viewClass = v.getClass();
         Field[] viewFields = viewClass.getDeclaredFields();
         SupportActivity activity = v.getFragmentActivity();
@@ -146,8 +146,8 @@ public class FragmentHandler extends InjectAdapter {
     }
 
     @Override
-    public void performInject(BindEvent type) {
-        SupportFragment v = (SupportFragment) type.getTarget();
+    public void performInject(BindEvent bindEvent) {
+        SupportFragment v = (SupportFragment) bindEvent.getTarget();
         Class<?> viewClass = v.getClass();
         Method[] methods = viewClass.getDeclaredMethods();
         SupportActivity activity = v.getFragmentActivity();

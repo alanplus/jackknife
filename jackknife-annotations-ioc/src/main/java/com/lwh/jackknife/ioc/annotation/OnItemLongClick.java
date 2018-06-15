@@ -46,8 +46,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         listenerSetter = "setOnItemLongClickListener",
         listenerType = AdapterView.OnItemLongClickListener.class,
         callbackMethod = "onItemLongClick",
-        parameters = {AdapterView.class, View.class, int.class, long.class},
-        parameterNames = {"parent", "view", "position", "id"},
+        parameters = {
+                AdapterView.class, View.class, int.class, long.class
+        },
+        parameterNames = {
+                "parent", "view", "position", "id"
+        },
         returns = boolean.class
 )
 public @interface OnItemLongClick {

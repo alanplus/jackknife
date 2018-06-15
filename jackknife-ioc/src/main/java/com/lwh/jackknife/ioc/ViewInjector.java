@@ -60,11 +60,13 @@ public class ViewInjector {
     }
 
     protected void dispatchHandler(BindType type, SupportV v) {
-        if (v instanceof SupportActivity) {
+        if (v instanceof SupportActivity) { //Don't need else
             type.accept(new ActivityHandler());
-        } else if (v instanceof SupportFragment) {
+        }
+        if (v instanceof SupportFragment) {
             type.accept(new FragmentHandler());
-        } else if (v instanceof SupportDialog) {
+        }
+        if (v instanceof SupportDialog) {
             type.accept(new DialogHandler());
         }
     }

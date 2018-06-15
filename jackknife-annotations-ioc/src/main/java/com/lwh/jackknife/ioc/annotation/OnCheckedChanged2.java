@@ -31,8 +31,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         listenerSetter = "setOnCheckedChangeListener",
         listenerType = MultiRadioGroup.OnCheckedChangeListener.class,
         callbackMethod = "onCheckedChanged",
-        parameters = {MultiRadioGroup.class, int.class},
-        parameterNames = {"group", "checkedId"},
+        parameters = {
+                MultiRadioGroup.class, int.class
+        },
+        parameterNames = {
+                "group", "checkedId"
+        },
         returns = void.class
 )
 public @interface OnCheckedChanged2 {

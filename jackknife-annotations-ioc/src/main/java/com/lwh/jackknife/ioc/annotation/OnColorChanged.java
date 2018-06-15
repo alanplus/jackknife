@@ -31,8 +31,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         listenerSetter = "setOnColorChangedListenner",
         listenerType = ColorPickerView.OnColorChangedListener.class,
         callbackMethod = "onColorChanged",
-        parameters = {int.class, int.class, float.class},
-        parameterNames = {"color", "originalColor", "saturation"},
+        parameters = {
+                int.class, int.class, float.class
+        },
+        parameterNames = {
+                "color", "originalColor", "saturation"
+        },
         returns = void.class
 )
 public @interface OnColorChanged {

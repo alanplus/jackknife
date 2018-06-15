@@ -66,8 +66,8 @@ public class ActivityHandler implements InjectHandler {
     }
 
     @Override
-    public void performInject(BindLayout type) {
-        SupportActivity v = (SupportActivity) type.getTarget();
+    public void performInject(BindLayout bindLayout) {
+        SupportActivity v = (SupportActivity) bindLayout.getTarget();
         String layoutName = generateLayoutName(v);
         Class<? extends SupportV> viewClass = v.getClass();
         String packageName = v.getPackageName();
@@ -105,8 +105,8 @@ public class ActivityHandler implements InjectHandler {
     }
 
     @Override
-    public void performInject(BindView type) {
-        SupportActivity v = (SupportActivity) type.getTarget();
+    public void performInject(BindView bindView) {
+        SupportActivity v = (SupportActivity) bindView.getTarget();
         Class<?> viewClass = v.getClass();
         Field[] viewFields = viewClass.getDeclaredFields();
         Class<? extends SupportActivity> activityClass = v.getClass();
@@ -145,8 +145,8 @@ public class ActivityHandler implements InjectHandler {
     }
 
     @Override
-    public void performInject(BindEvent type) {
-        SupportActivity v = (SupportActivity) type.getTarget();
+    public void performInject(BindEvent bindEvent) {
+        SupportActivity v = (SupportActivity) bindEvent.getTarget();
         Class<?> viewClass = v.getClass();
         Method[] methods = viewClass.getDeclaredMethods();
         for (Method method : methods) {

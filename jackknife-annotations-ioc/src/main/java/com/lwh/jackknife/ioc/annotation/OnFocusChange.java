@@ -43,8 +43,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         listenerSetter = "setOnFocusChangeListener",
         listenerType = View.OnFocusChangeListener.class,
         callbackMethod = "onFocusChange",
-        parameters = {View.class, boolean.class},
-        parameterNames = {"v", "hasFocus"},
+        parameters = {
+                View.class, boolean.class
+        },
+        parameterNames = {
+                "v", "hasFocus"
+        },
         returns = void.class
 )
 public @interface OnFocusChange {

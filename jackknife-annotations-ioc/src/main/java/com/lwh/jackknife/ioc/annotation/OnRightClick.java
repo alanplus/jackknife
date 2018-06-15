@@ -27,7 +27,8 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnRightClickListener",
+@EventBase(
+        listenerSetter = "setOnRightClickListener",
         listenerType = TitleBar.OnRightClickListener.class,
         callbackMethod = "onClick",
         parameters = View.class,

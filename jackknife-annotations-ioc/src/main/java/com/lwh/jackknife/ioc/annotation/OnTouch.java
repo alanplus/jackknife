@@ -41,11 +41,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @see OnTouchListener
  */
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnTouchListener",
+@EventBase(
+        listenerSetter = "setOnTouchListener",
         listenerType = View.OnTouchListener.class,
         callbackMethod = "onTouch",
         parameters = {
-             View.class, MotionEvent.class
+                View.class, MotionEvent.class
         },
         parameterNames = {
                 "v", "event"

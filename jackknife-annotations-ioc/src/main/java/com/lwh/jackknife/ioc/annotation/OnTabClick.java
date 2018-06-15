@@ -31,8 +31,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         listenerSetter = "setOnTabClickListener",
         listenerType = HorizontalTabBar.OnTabClickListener.class,
         callbackMethod = "onTabClick",
-        parameters = {View.class, int.class},
-        parameterNames = {"view", "position"},
+        parameters = {
+                View.class, int.class
+        },
+        parameterNames = {
+                "view", "position"
+        },
         returns = boolean.class
 )
 public @interface OnTabClick {

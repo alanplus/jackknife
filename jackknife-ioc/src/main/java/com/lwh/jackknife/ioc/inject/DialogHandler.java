@@ -67,8 +67,8 @@ public class DialogHandler implements InjectHandler {
     }
 
     @Override
-    public void performInject(BindLayout type) {
-        SupportDialog v = (SupportDialog) type.getTarget();
+    public void performInject(BindLayout bindLayout) {
+        SupportDialog v = (SupportDialog) bindLayout.getTarget();
         String layoutName = generateLayoutName(v);
         SupportActivity activity = v.getDialogActivity();
         Class<? extends SupportV> viewClass = v.getClass();
@@ -107,8 +107,8 @@ public class DialogHandler implements InjectHandler {
     }
 
     @Override
-    public void performInject(BindView type) {
-        SupportDialog v = (SupportDialog) type.getTarget();
+    public void performInject(BindView bindView) {
+        SupportDialog v = (SupportDialog) bindView.getTarget();
         Class<?> viewClass = v.getClass();
         Field[] viewFields = viewClass.getDeclaredFields();
         SupportActivity activity = v.getDialogActivity();
@@ -148,8 +148,8 @@ public class DialogHandler implements InjectHandler {
     }
 
     @Override
-    public void performInject(BindEvent type) {
-        SupportDialog v = (SupportDialog) type.getTarget();
+    public void performInject(BindEvent bindEvent) {
+        SupportDialog v = (SupportDialog) bindEvent.getTarget();
         Class<?> viewClass = v.getClass();
         Method[] methods = viewClass.getDeclaredMethods();
         SupportActivity activity = v.getDialogActivity();

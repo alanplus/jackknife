@@ -49,11 +49,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @see OnItemSelectedListener
  */
 @Target(METHOD) @Retention(RUNTIME)
-@EventBase(listenerSetter = "setOnItemSelectedListener",
+@EventBase(
+        listenerSetter = "setOnItemSelectedListener",
         listenerType = AdapterView.OnItemSelectedListener.class,
         callbackMethod = "onItemSelected",
-        parameters = {AdapterView.class, View.class, int.class, long.class},
-        parameterNames = {"parent", "view", "position", "id"},
+        parameters = {
+                AdapterView.class, View.class, int.class, long.class
+        },
+        parameterNames = {
+                "parent", "view", "position", "id"
+        },
         returns = void.class
 )
 public @interface OnItemSelected {
