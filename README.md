@@ -9,7 +9,7 @@ JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
 allprojects {
   repositories {
     jcenter()
-    <b>maven { url "https://jitpack.io" }</b>
+    <h3>maven { url "https://jitpack.io" }</h3>
   }
 }
 </blockquote>
@@ -17,12 +17,13 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。gradle3.4以上使用api代替compile。
 <blockquote>
 dependencies {
-    <b>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:2.4.15'</b>
-    <b>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:2.4.15'</b>
-    <b>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:2.4.15'</b>
-    <b>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:2.4.15'</b>
-    <b>compile 'com.github.JackWHLiu.jackknife:jackknife-util:2.4.15'</b>
-    <b>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:2.4.15'</b>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:2.5.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:2.5.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:2.5.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:2.5.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:2.5.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:2.5.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:2.5.2'</h3>
 }
 </blockquote>
 
