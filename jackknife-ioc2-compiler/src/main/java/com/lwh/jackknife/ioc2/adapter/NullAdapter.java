@@ -20,6 +20,5 @@ public class NullAdapter implements InjectAdapter {
 
 	@Override
 	public void inject(Object target) {
-
 	}
 }

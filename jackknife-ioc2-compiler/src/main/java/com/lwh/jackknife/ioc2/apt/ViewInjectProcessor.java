@@ -19,7 +19,7 @@ package com.lwh.jackknife.ioc2.apt;
 import com.google.auto.service.AutoService;
 import com.lwh.jackknife.ioc2.annotation.handler.AnnotationHandler;
 import com.lwh.jackknife.ioc2.annotation.handler.ViewInjectHandler;
-import com.lwh.jackknife.ioc2.writer.ViewInjectWriter;
+import com.lwh.jackknife.ioc2.writer.InjectAdapterWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,20 +38,23 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
 @AutoService(Processor.class)
-@SupportedAnnotationTypes({"com.lwh.jackknife.ioc2.annotation.ViewInject",
-"com.lwh.jackknife.ioc2.annotation.ContentView"})
+@SupportedAnnotationTypes(
+		{
+				"com.lwh.jackknife.ioc2.annotation.ViewInject",
+				"com.lwh.jackknife.ioc2.annotation.ContentView"
+		})
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class ViewInjectProcessor extends AbstractProcessor {
 
 	List<AnnotationHandler> mHandlers = new ArrayList<>();
-	ViewInjectWriter mWriter;
+	InjectAdapterWriter mWriter;
 	Map<String, List<Element>> map = new HashMap<>();
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
 		super.init(processingEnv);
 		registerHandler(new ViewInjectHandler());
-		mWriter = new ViewInjectWriter(processingEnv);
+		mWriter = new InjectAdapterWriter(processingEnv);
 	}
 
 	protected void registerHandler(AnnotationHandler handler){
