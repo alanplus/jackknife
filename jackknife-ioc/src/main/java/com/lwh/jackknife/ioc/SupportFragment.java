@@ -16,7 +16,15 @@
 
 package com.lwh.jackknife.ioc;
 
+import android.app.Fragment;
+
+/**
+ * Let a fragment implements it, for example, {@link android.app.Fragment} and so on.
+ */
 public interface SupportFragment extends SupportV {
 
+    /**
+     * @see Fragment#getActivity()
+     */
     SupportActivity getFragmentActivity();
 }

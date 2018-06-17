@@ -16,10 +16,12 @@
 
 package com.lwh.jackknife.ioc.bind;
 
-
 import com.lwh.jackknife.ioc.SupportV;
 import com.lwh.jackknife.ioc.inject.InjectHandler;
 
+/**
+ * A element of IOC injection.
+ */
 public class BindLayout implements BindType {
 
     private SupportV mTarget;
@@ -28,6 +30,7 @@ public class BindLayout implements BindType {
         this.mTarget = v;
     }
 
+    @Override
     public SupportV getTarget() {
         return mTarget;
     }

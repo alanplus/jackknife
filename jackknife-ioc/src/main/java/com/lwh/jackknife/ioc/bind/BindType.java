@@ -19,9 +19,18 @@ package com.lwh.jackknife.ioc.bind;
 import com.lwh.jackknife.ioc.SupportV;
 import com.lwh.jackknife.ioc.inject.InjectHandler;
 
+/**
+ * Abstraction of all IOC injection functions.
+ */
 public interface BindType {
 
-    void accept(InjectHandler seizer);
+    /**
+     * Accepts a visitor.
+     */
+    void accept(InjectHandler handler);
 
+    /**
+     * Gets IOC environment.
+     */
     SupportV getTarget();
 }

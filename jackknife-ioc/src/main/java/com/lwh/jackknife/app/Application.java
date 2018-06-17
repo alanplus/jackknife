@@ -46,6 +46,9 @@ public class Application extends android.app.Application {
         sApp = this;
     }
 
+    /**
+     * Get a unique instance.
+     */
     public static Application getInstance(){
         return sApp;
     }
@@ -91,6 +94,11 @@ public class Application extends android.app.Application {
         }
     }
 
+    /**
+     * Destroy all of the activities, and then kill processes.
+     *
+     * @see Application#close()
+     */
     public void forceClose() {
         close();
         android.os.Process.killProcess(android.os.Process.myPid());

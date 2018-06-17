@@ -27,6 +27,9 @@ import com.lwh.jackknife.ioc.bind.BindView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * High-level API for injecting something.
+ */
 public class ViewInjector {
 
     private static ViewInjector sInstance;
@@ -34,6 +37,9 @@ public class ViewInjector {
     private ViewInjector() {
     }
 
+    /**
+     * Get unique instance.
+     */
     private static ViewInjector getInstance() {
         if (sInstance == null) {
             synchronized (ViewInjector.class) {
@@ -45,11 +51,14 @@ public class ViewInjector {
         return sInstance;
     }
 
-    public static void inject(SupportV v) {
+    public final static void inject(SupportV v) {
         getInstance()._inject(v);
     }
 
-    private void _inject(SupportV v) {
+    /**
+     * Default inject layout,views and events.
+     */
+    protected void _inject(SupportV v) {
         List<BindType> types = new ArrayList<>();
         types.add(new BindLayout(v));
         types.add(new BindView(v));
@@ -59,6 +68,9 @@ public class ViewInjector {
         }
     }
 
+    /**
+     * Dispatch handlers for process different bind operations.
+     */
     protected void dispatchHandler(BindType type, SupportV v) {
         if (v instanceof SupportActivity) { //Don't need else
             type.accept(new ActivityHandler());

@@ -43,8 +43,17 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Provides some default implementations for IOC methods, such as injecting layout, views
+ * and events.
+ *
+ * @see com.lwh.jackknife.ioc.bind.BindType
+ */
 public abstract class AbstractHandler implements InjectHandler {
 
+    /**
+     * Determine the suffix name of the file based on the different types.
+     */
     protected abstract String getClassNameSuffix();
 
     @Override
@@ -144,7 +153,7 @@ public abstract class AbstractHandler implements InjectHandler {
                 } catch (Exception e) {
                     throw new InjectException(fieldType.getName() + " " + field.getName()
                             + " can\'t be injected, at layout("+generateLayoutName(v)+".xml), " +
-                            "id(0x"+Integer.toHexString(id)+").");
+                            "id("+(id == View.NO_ID ? id:"0x"+Integer.toHexString(id))+").");
                 }
             }
         }

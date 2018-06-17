@@ -23,7 +23,6 @@ import android.view.View;
 
 import com.lwh.jackknife.ioc.SupportActivity;
 import com.lwh.jackknife.ioc.SupportDialog;
-import com.lwh.jackknife.ioc.SupportV;
 import com.lwh.jackknife.ioc.ViewInjector;
 import com.lwh.jackknife.ioc.exception.LackInterfaceException;
 
@@ -72,9 +71,18 @@ public abstract class Dialog extends android.app.Dialog implements SupportDialog
         return super.findViewById(id);
     }
 
+    /**
+     * Seize activity's layout.
+     */
     protected abstract View onCreateView();
 
+    /**
+     * Called when the dialog is displayed.
+     */
     public abstract void onShow(DialogInterface dialog);
 
+    /**
+     * Called when the dialog is hidden.
+     */
     public abstract void onDismiss(DialogInterface dialog);
 }

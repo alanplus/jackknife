@@ -16,9 +16,20 @@
 
 package com.lwh.jackknife.ioc;
 
+import android.app.Activity;
+
+/**
+ * Let an activity implements it, for example, {@link android.app.Activity} and so on.
+ */
 public interface SupportActivity extends SupportV {
 
+    /**
+     * {@link Activity#getPackageName()}
+     */
     String getPackageName();
 
+    /**
+     * {@link Activity#finish()}
+     */
     void finish();
 }

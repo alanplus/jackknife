@@ -21,6 +21,9 @@ import com.lwh.jackknife.ioc.bind.BindEvent;
 import com.lwh.jackknife.ioc.bind.BindLayout;
 import com.lwh.jackknife.ioc.bind.BindView;
 
+/**
+ * The default implementation to decrease code.
+ */
 public abstract class InjectAdapter implements InjectHandler {
 
     @Override
