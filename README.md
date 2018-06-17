@@ -118,4 +118,5 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 CSDN:http://blog.csdn.net/yiranaini_/
 
 四、Demo安装
+--------------------------------
 http://www.jackwhliu.cn/jackknife/apks/JackKnifeDemo-v.2.5.4.apk
