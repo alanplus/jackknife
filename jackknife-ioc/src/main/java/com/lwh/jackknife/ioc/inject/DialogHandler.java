@@ -90,13 +90,13 @@ public class DialogHandler implements InjectHandler {
             layoutId = contentView.value();
         }
         try {
-            Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
-            method.invoke(activity, layoutId);
             LayoutInflater inflater = LayoutInflater.from((Context) activity);
             Class<? extends LayoutInflater> inflaterClass = LayoutInflater.class;
             Method inflateMethod = inflaterClass.getDeclaredMethod(METHOD_INFLATE, int.class,
                     ViewGroup.class);
             inflateMethod.invoke(inflater, layoutId, null);
+            Method method = viewClass.getMethod(METHOD_SET_CONTENT_VIEW, int.class);
+            method.invoke(v, layoutId);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
