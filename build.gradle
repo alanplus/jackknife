@@ -37,12 +37,12 @@ allprojects {
 
 ext {
     android = [
-            compile_sdk : 27,
+            compile_sdk : 25,
             min_sdk : 11,
-            target_sdk : 27,
+            target_sdk : 25,
             build_tools_version : "27.0.3",
-            release_version_code : 174,
-            release_version_name : "2.5.6"
+            release_version_code : 175,
+            release_version_name : "2.5.7"
     ]
 }
 

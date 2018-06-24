@@ -17,25 +17,20 @@
 package com.lwh.jackknife.ioc.annotation;
 
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static android.widget.CompoundButton.OnCheckedChangeListener;
+import static android.widget.RadioGroup.OnCheckedChangeListener;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Bind a method to an {@link OnCheckedChangeListener OnCheckedChangeListener} on the view for
  * each ID specified.
- * <pre><code>
- * {@literal @}OnCheckedChanged(R.id.example) void onChecked(boolean checked) {
- *   Toast.makeText(this, checked ? "Checked!" : "Unchecked!", Toast.LENGTH_SHORT).show();
- * }
- * </code></pre>
  * Any number of parameters from
- * {@link OnCheckedChangeListener#onCheckedChanged(android.widget.CompoundButton, boolean)
+ * {@link OnCheckedChangeListener#onCheckedChanged(RadioGroup, int)
  * onCheckedChanged} may be used on the method.
  *
  * @see OnCheckedChangeListener
@@ -43,13 +38,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD) @Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnCheckedChangeListener",
-        listenerType = CompoundButton.OnCheckedChangeListener.class,
+        listenerType = RadioGroup.OnCheckedChangeListener.class,
         callbackMethod = "onCheckedChanged",
         parameters = {
-                CompoundButton.class, boolean.class
+                RadioGroup.class, int.class
         },
         parameterNames = {
-                "buttonView", "isChecked"
+                "group", "checkedId"
         },
         returns = void.class
 )

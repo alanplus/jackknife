@@ -32,7 +32,7 @@ public class Application extends android.app.Application {
     /**
      * Only a mirror used to record the activity created.
      */
-    private Stack<WeakReference<SupportActivity>> mActivityStacks;
+    private Stack<WeakReference<? extends SupportActivity>> mActivityStacks;
 
     /**
      * There is only one instance of the program.
@@ -72,7 +72,7 @@ public class Application extends android.app.Application {
      * Destroy and remove activity from the top of the task stack.
      */
     public void popTask() {
-        WeakReference<SupportActivity> ref = mActivityStacks.pop();
+        WeakReference<? extends SupportActivity> ref = mActivityStacks.pop();
         if (ref != null) {
             SupportActivity activity = ref.get();
             if (activity != null) {
@@ -86,7 +86,7 @@ public class Application extends android.app.Application {
      * Destroy and remove all activities in the task stack.
      */
     public void close() {
-        for (WeakReference<SupportActivity> ref:mActivityStacks) {
+        for (WeakReference<? extends SupportActivity> ref:mActivityStacks) {
             SupportActivity activity = ref.get();
             if (activity != null) {
                 activity.finish();

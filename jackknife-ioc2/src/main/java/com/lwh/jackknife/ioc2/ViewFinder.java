@@ -22,6 +22,6 @@ import android.view.View;
 public class ViewFinder {
 
     public static <VIEW extends View> VIEW findViewById(Activity activity, int id) {
-        return activity.findViewById(id);
+        return (VIEW) activity.findViewById(id);
     }
 }
