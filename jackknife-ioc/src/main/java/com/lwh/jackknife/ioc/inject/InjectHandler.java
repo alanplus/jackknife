@@ -24,7 +24,7 @@ import com.lwh.jackknife.ioc.bind.BindView;
 import com.lwh.jackknife.ioc.SupportV;
 
 /**
- * Abstract visitors to deal with some injection-related functionality。
+ * Abstract visitors to deal with some injection-related functionality.
  */
 public interface InjectHandler {
 
