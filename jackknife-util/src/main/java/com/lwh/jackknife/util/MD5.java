@@ -32,8 +32,8 @@ public class MD5 {
     private MD5() {
     }
 
-    public static String MD5(String inStr) {
-        MessageDigest md5 = null;
+    public static String getMD5(String inStr) {
+        MessageDigest md5;
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class MD5 {
         return hexValue.toString();
     }
 
-    public final static String getMessageDigest(byte[] buffer) {
+    public static String getMessageDigest(byte[] buffer) {
         try {
             MessageDigest mdTemp = MessageDigest.getInstance("MD5");
             mdTemp.update(buffer);
@@ -122,7 +122,7 @@ public class MD5 {
         return messageDigest;
     }
 
-    public final static String digest32(String src) {
+    public static String digest32(String src) {
         if (src == null) {
             return null;
         }
@@ -137,7 +137,7 @@ public class MD5 {
         return ret == null ? null : IoUtils.bs2H(ret);
     }
 
-    public final static String digest32(String src, String charset) {
+    public static String digest32(String src, String charset) {
         if (src == null) {
             return null;
         }
@@ -152,7 +152,7 @@ public class MD5 {
         return ret == null ? null : IoUtils.bs2H(ret);
     }
 
-    public final static String digest32(File src) throws IOException {
+    public static String digest32(File src) throws IOException {
         if (src == null) {
             return null;
         }
@@ -163,9 +163,7 @@ public class MD5 {
             fis = new FileInputStream(src);
             dis = new DigestInputStream(fis, messageDigest);
             byte[] buffer = new byte[2048];
-            while (dis.read(buffer) > 0) {
-                ;
-            }
+            while (dis.read(buffer) > 0);
             messageDigest = dis.getMessageDigest();
         } finally {
             if (fis != null) {
@@ -178,7 +176,7 @@ public class MD5 {
         return IoUtils.bs2H(messageDigest.digest());
     }
 
-    public final static String digest32(byte[] src) {
+    public static String digest32(byte[] src) {
         if (src == null) {
             return null;
         }
@@ -187,22 +185,22 @@ public class MD5 {
         return ret == null ? null : IoUtils.bs2H(ret);
     }
 
-    public final static String digest16(String src) {
+    public static String digest16(String src) {
         String encrypt = digest32(src);
         return encrypt == null ? null : encrypt.substring(8, 24);
     }
 
-    public final static String digest16(String src, String charset) {
+    public static String digest16(String src, String charset) {
         String encrypt = digest32(src, charset);
         return encrypt == null ? null : encrypt.substring(8, 24);
     }
 
-    public final static String digest16(File src) throws IOException {
+    public static String digest16(File src) throws IOException {
         String encrypt = digest32(src);
         return encrypt == null ? null : encrypt.substring(8, 24);
     }
 
-    public final static String digest16(byte[] src) {
+    public static String digest16(byte[] src) {
         String encrypt = digest32(src);
         return encrypt == null ? null : encrypt.substring(8, 24);
     }

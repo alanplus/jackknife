@@ -25,6 +25,7 @@ import android.net.wifi.WifiManager;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.Locale;
 
 public class NetworkUtils {
 
@@ -44,11 +45,7 @@ public class NetworkUtils {
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             if (networkInfo != null) {
-                if (networkInfo.isAvailable()) {
-                    return networkInfo.isConnected();
-                } else {
-                    return false;
-                }
+                return networkInfo.isAvailable() && networkInfo.isConnected();
             }
         }
         return false;
@@ -60,11 +57,7 @@ public class NetworkUtils {
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mMobileNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             if (mMobileNetworkInfo != null) {
-                if (mMobileNetworkInfo.isAvailable()) {
-                    return mMobileNetworkInfo.isConnected();
-                } else {
-                    return false;
-                }
+                return mMobileNetworkInfo.isAvailable() && mMobileNetworkInfo.isConnected();
             }
         }
         return false;
@@ -85,6 +78,7 @@ public class NetworkUtils {
     public static String getCurrentWifiSSID(Context context) {
         String ssid = "";
         if (context != null) {
+            context = context.getApplicationContext();
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             ssid = wifiInfo.getSSID();
@@ -115,7 +109,7 @@ public class NetworkUtils {
     }
 
     public static String getHostAddress(int ip) {
-        return String.format("%d.%d.%d.%d", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF,
+        return String.format(Locale.ENGLISH, "%d.%d.%d.%d", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF,
                 (ip >> 24) & 0xFF);
     }
 }

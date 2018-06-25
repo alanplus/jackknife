@@ -169,10 +169,7 @@ public class IoUtils {
     }
 
     private static boolean deleteFile(File file) {
-        if (!file.isFile()) {
-            return false;
-        }
-        return file.delete();
+        return file.isFile() && file.delete();
     }
 
     private static boolean deleteFolder(File file) {
@@ -210,15 +207,8 @@ public class IoUtils {
 
     private static boolean cutFolder(File file, String target) {
         File targetFile = new File(target);
-        if (!file.isDirectory() || !targetFile.exists() || !targetFile.isDirectory()) {
-            return false;
-        } else {
-            if (copyFolder(file, target)) {
-                return deleteFolder(file);
-            } else {
-                return false;
-            }
-        }
+        return !(!file.isDirectory()) || !targetFile.exists() || !targetFile.isDirectory()
+                && copyFolder(file, target) && deleteFolder(file);
     }
 
     public static boolean cut(File file, String target) {
@@ -229,11 +219,7 @@ public class IoUtils {
         if (file.isFile()) {
             return cutFile(file, target);
         } else {
-            if (copy(file, target)) {
-                return delete(file);
-            } else {
-                return false;
-            }
+            return copyFolder(file, target) && delete(file);
         }
     }
 
@@ -346,7 +332,7 @@ public class IoUtils {
                     editor.putInt(entry.getKey(), (Integer) entry.getValue());
                 }
             }
-            editor.commit();
+            editor.apply();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -392,16 +378,17 @@ public class IoUtils {
                 outputStream.write(buffer, 0, lenght);
             }
             outputStream.flush();
-            return mFile;
         } catch (IOException e) {
-            throw e;
+            e.printStackTrace();
         } finally {
             try {
                 inputStream.close();
                 outputStream.close();
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+        return mFile;
     }
 
     public String toASCII(String str) throws UnsupportedEncodingException {

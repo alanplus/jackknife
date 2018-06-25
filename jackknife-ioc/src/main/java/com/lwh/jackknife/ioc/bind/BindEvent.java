@@ -20,7 +20,7 @@ import com.lwh.jackknife.ioc.SupportV;
 import com.lwh.jackknife.ioc.inject.InjectHandler;
 
 /**
- * A element of IOC injection.
+ * An element of IOC injection.
  */
 public class BindEvent implements BindType {
 

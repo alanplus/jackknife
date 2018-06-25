@@ -309,6 +309,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         if (cursor != null) {
             cursor.moveToFirst();
             count = cursor.getLong(0);
+            cursor.close();
         }
         return count;
     }
@@ -324,6 +325,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         if (cursor != null) {
             cursor.moveToFirst();
             count = cursor.getLong(0);
+            cursor.close();
         }
         return count;
     }
@@ -345,7 +347,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
         return result;
     }
 
-    private  <T> T newOrmTableInstance(Class<T> clazz) {
+    private <T extends OrmTable> T newOrmTableInstance(Class<T> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         for (Constructor<?> c : constructors) {
             c.setAccessible(true);

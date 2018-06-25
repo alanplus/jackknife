@@ -158,11 +158,8 @@ public class MultiRadioGroup extends LinearLayout {
      * Upon empty selection, the returned value is -1.</p>
      *
      * @return the unique id of the selected radio button in this group
-     *
      * @see #check(int)
      * @see #clearCheck()
-     *
-     * @attr ref android.R.styleable#MyRadioGroup_checkedButton
      */
     public int getCheckedRadioButtonId() {
         return mCheckedId;

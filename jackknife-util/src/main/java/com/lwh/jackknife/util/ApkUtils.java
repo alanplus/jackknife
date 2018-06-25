@@ -137,7 +137,7 @@ public class ApkUtils {
             return null;
         }
         ApplicationInfo applicationInfo = packageInfo.applicationInfo;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             applicationInfo.sourceDir = apkPath;
             applicationInfo.publicSourceDir = apkPath;
         }
@@ -151,7 +151,7 @@ public class ApkUtils {
             return null;
         }
         ApplicationInfo applicationInfo = packageInfo.applicationInfo;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             applicationInfo.sourceDir = apkPath;
             applicationInfo.publicSourceDir = apkPath;
         }
@@ -217,14 +217,14 @@ public class ApkUtils {
         return null;
     }
 
-    public final static List<String> getAllPackageName(Context context) {
+    public static List<String> getAllPackageName(Context context) {
         PackageManager packManager = context.getPackageManager();
         List<PackageInfo> packInfos = packManager
                 .getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
         if (packInfos == null || packInfos.size() == 0) {
             return null;
         }
-        List<String> pkList = new ArrayList<String>();
+        List<String> pkList = new ArrayList<>();
         for (PackageInfo packInfo : packInfos) {
             String packageName = packInfo.packageName;
             pkList.add(packageName);

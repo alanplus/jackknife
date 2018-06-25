@@ -170,7 +170,7 @@ public class ActivityHandler implements InjectHandler {
                         }
                         Method setListenerMethod = view.getClass().getMethod(listenerSetter,
                                 listenerType);
-                        HashMap<String, Method> map = new HashMap();
+                        HashMap<String, Method> map = new HashMap<>();
                         map.put(callbackMethod, method);
                         EventInvocationHandler handler = new EventInvocationHandler(map, v);
                         Object proxy = Proxy.newProxyInstance(listenerType.getClassLoader(),

@@ -34,7 +34,7 @@ public interface InjectHandler {
     int A_INDEX = 'A';
 
     /**
-     * ASCII code index of character 'A', it is 90.
+     * ASCII code index of character 'Z', it is 90.
      */
     int Z_INDEX = 'Z';
 

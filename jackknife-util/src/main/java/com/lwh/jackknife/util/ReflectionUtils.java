@@ -118,13 +118,13 @@ public class ReflectionUtils {
             } else if (fieldType == byte.class) {
                 f.setByte(obj, (byte) n);
             } else if (fieldType == Long.class) {
-                f.set(obj, new Long(n));
+                f.set(obj, Long.valueOf(n));
             } else if (fieldType == Integer.class) {
-                f.set(obj, new Integer((int) n));
+                f.set(obj, Integer.valueOf((int) n));
             } else if (fieldType == Short.class) {
                 f.set(obj, new Short((short) n));
             } else if (fieldType == Byte.class) {
-                f.set(obj, new Byte((byte) n));
+                f.set(obj, Byte.valueOf((byte) n));
             } else {
                 throw new RuntimeException("Field is not a number class.");
             }

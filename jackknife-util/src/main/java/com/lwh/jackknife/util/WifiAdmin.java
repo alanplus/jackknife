@@ -47,17 +47,11 @@ public class WifiAdmin {
     }
 
     public boolean openWifi() {
-        if(!mWifiManager.isWifiEnabled()) {
-            return mWifiManager.setWifiEnabled(true);
-        }
-        return false;
+        return !mWifiManager.isWifiEnabled() && mWifiManager.setWifiEnabled(true);
     }  
 
     public boolean closeWifi() {
-        if (!mWifiManager.isWifiEnabled()) {
-            return mWifiManager.setWifiEnabled(false);
-        }
-        return false;
+        return !mWifiManager.isWifiEnabled() && mWifiManager.setWifiEnabled(false);
     }
 
     public WifiInfo getCurrentWifiInfo() {
@@ -226,10 +220,7 @@ public class WifiAdmin {
             mWifiManager.removeNetwork(tempConfig.networkId);
         }
         int networkId = addNetwork(currentConfig);
-        if (networkId != -1) {
-            return mWifiManager.reconnect();
-        }
-        return false;
+        return networkId != -1 && mWifiManager.reconnect();
     }
 
     public int addNetwork(WifiConfiguration config) {

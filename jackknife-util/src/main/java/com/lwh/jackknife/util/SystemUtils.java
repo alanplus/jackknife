@@ -16,7 +16,6 @@
 
 package com.lwh.jackknife.util;
 
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -24,13 +23,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.StatFs;
-import android.text.*;
 import android.text.TextUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import java.io.File;
 import java.util.List;
 
 public class SystemUtils {
@@ -134,7 +130,7 @@ public class SystemUtils {
         return false;
     }
 
-    public final static boolean openBrowser(Context context, String url) {
+    public static boolean openBrowser(Context context, String url) {
         if (TextUtils.isEmpty(url)) {
             throw new NullPointerException("url can not be null or empty when open browser");
         }
@@ -147,14 +143,6 @@ public class SystemUtils {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public static boolean beginFroyo() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
-    }
-
-    public static boolean beginGingerbread() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
     }
 
     public static boolean beginHoneycomb() {

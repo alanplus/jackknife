@@ -20,5 +20,8 @@ import android.view.View;
 
 public interface SupportV {
 
+    /**
+     * {@link android.app.Activity#findViewById(int)}
+     */
     <VIEW extends View> VIEW findViewById(int id);
 }

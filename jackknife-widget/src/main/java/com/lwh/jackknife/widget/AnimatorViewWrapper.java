@@ -136,9 +136,6 @@ public class AnimatorViewWrapper extends FrameLayout implements AnimatorDragger 
     }
 
     private boolean isTranslationFrom(int translationMask) {
-        if (mTranslation == -1) {
-            return false;
-        }
-        return (mTranslation & translationMask) == translationMask;
+        return mTranslation != -1 && (mTranslation & translationMask) == translationMask;
     }
 }

@@ -59,12 +59,7 @@ public class CacheUtils {
             }
 
         }
-        if (dir == null) {
-            return true;
-        } else {
-
-            return dir.delete();
-        }
+        return dir == null || dir.delete();
     }
 
     public static long getFolderSize(File file) throws Exception {

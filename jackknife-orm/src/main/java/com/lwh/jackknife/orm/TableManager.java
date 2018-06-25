@@ -170,7 +170,7 @@ public class TableManager {
         return dataTypes;
     }
 
-    private final BaseDataType matchDataType(Field field) {
+    private BaseDataType matchDataType(Field field) {
         List<BaseDataType> dataTypes = getDeclaredDataTypes();
         for (BaseDataType dataType:dataTypes) {
             if (dataType.matches(field)) {

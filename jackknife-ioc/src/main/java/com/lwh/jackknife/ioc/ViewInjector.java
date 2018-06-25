@@ -51,7 +51,7 @@ public class ViewInjector {
         return sInstance;
     }
 
-    public final static void inject(SupportV v) {
+    public static void inject(SupportV v) {
         getInstance()._inject(v);
     }
 

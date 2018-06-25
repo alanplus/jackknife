@@ -57,6 +57,7 @@ public class HighlightTextView extends TextView {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HighlightTextView, defStyleAttr, 0);
         mDefaultColor = a.getColor(R.styleable.HighlightTextView_highlighttextview_defaultColor, mDefaultColor);
         mHighlightColor = a.getColor(R.styleable.HighlightTextView_highlighttextview_highlightColor, mHighlightColor);
+        a.recycle();
     }
 
     @Override

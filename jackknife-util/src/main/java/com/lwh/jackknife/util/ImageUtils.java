@@ -249,7 +249,7 @@ public class ImageUtils {
     }
 
     public static Bitmap composeWatermark(Bitmap dstBitmap, Bitmap markBitmap) {
-        return composeWatermark(dstBitmap, markBitmap, Gravity.RIGHT|Gravity.BOTTOM, 0, 0);
+        return composeWatermark(dstBitmap, markBitmap, Gravity.END|Gravity.BOTTOM, 0, 0);
     }
 
     public static Bitmap zoomBitmap(Bitmap bitmap, int requiredWidth, int requiredHeight) {
