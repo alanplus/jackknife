@@ -105,12 +105,12 @@ public class NumberUtils implements N {
         return Math.max(Math.min(value, max), min);
     }
 
-    public int getRandom(int min, int max) {
+    public static int getRandom(int min, int max) {
         Random random = new Random();
         return random.nextInt(max - min + 1) + min;
     }
 
-    public int[] getRandoms(int min, int max, int count) {
+    public static int[] getRandoms(int min, int max, int count) {
         int[] randoms = new int[count];
         if (max < min || count <= 0) {
             return null;
@@ -122,7 +122,7 @@ public class NumberUtils implements N {
         }
     }
 
-    public int[] getUniqueRandoms(int min, int max, int count) {
+    public static int[] getUniqueRandoms(int min, int max, int count) {
         int[] randoms = new int[count];
         List<Integer> randomList = new ArrayList<>();
         if ( count > ( max - min + 1 )) {

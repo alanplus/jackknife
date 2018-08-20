@@ -112,11 +112,4 @@ public class AC {
         }
         return collection;
     }
-
-    /**
-     * Converts a collection into an array.
-     */
-    public <T> T[] toA(Collection<T> collection) {
-        return (T[]) collection.toArray();
-    }
 }

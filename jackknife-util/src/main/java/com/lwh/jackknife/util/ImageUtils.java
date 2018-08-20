@@ -49,11 +49,11 @@ import java.io.IOException;
 
 public class ImageUtils {
 
-    public static int dp2px(float dpVal, Context context) {
+    public static float dp2px(float dpVal, Context context) {
         return DensityUtils.dp2px(dpVal, context);
     }
 
-    public static int sp2px(float spVal, Context context) {
+    public static float sp2px(float spVal, Context context) {
         return DensityUtils.sp2px(spVal, context);
     }
 

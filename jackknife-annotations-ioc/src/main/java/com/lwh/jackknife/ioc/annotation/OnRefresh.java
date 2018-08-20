@@ -29,7 +29,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD) @Retention(RUNTIME)
 @EventBase(
-        listenerSetter = "setOnRefreshListenner",
+        listenerSetter = "setOnRefreshListener",
         listenerType = SwipeLayout.OnRefreshListener.class,
         callbackMethod = "onRefresh",
         parameters = SwipeLayout.class,

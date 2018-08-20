@@ -203,11 +203,11 @@ public abstract class BaseModel<BEAN>{
         return 0;
     }
 
-    protected <ELEMENT> List<ELEMENT> extractElement(String elementName) {
-        return extractElement(null, elementName);
+    protected <ELEMENT> List<ELEMENT> extractElement(String elementName, Class<ELEMENT> elementClass) {
+        return extractElement(null, elementName, elementClass);
     }
 
-    protected <ELEMENT> List<ELEMENT> extractElement(Selector selector, String elementName) {
+    protected <ELEMENT> List<ELEMENT> extractElement(Selector selector, String elementName, Class<ELEMENT> elementClass) {
         List<ELEMENT> elements = new ArrayList<>();
         List<BEAN> datas = findObjects(selector);
         if (datas.size() > 0) {

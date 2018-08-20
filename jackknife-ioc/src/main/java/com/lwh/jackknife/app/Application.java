@@ -32,7 +32,7 @@ public class Application extends android.app.Application {
     /**
      * Only a mirror used to record the activity created.
      */
-    private Stack<WeakReference<? extends SupportActivity>> mActivityStacks;
+    protected Stack<WeakReference<? extends SupportActivity>> mActivityStacks;
 
     /**
      * There is only one instance of the program.
@@ -87,6 +87,16 @@ public class Application extends android.app.Application {
      */
     public void close() {
         for (WeakReference<? extends SupportActivity> ref:mActivityStacks) {
+            SupportActivity activity = ref.get();
+            if (activity != null) {
+                activity.finish();
+            }
+        }
+    }
+
+    public void closeRetainBottom() {
+        for (int i=0;i<mActivityStacks.size() - 1;i++) {
+            WeakReference<? extends SupportActivity> ref = mActivityStacks.get(i);
             SupportActivity activity = ref.get();
             if (activity != null) {
                 activity.finish();

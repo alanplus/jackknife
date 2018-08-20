@@ -53,6 +53,8 @@ public class TimeUtils {
 
     public final static String FORMAT_DATE_2 = FORMAT_YEAR_MONTH_2 + "." + FORMAT_DAY;
 
+    public final static String FORMAT_DATE_3 = FORMAT_YEAR + "-" + FORMAT_MONTH + "-" + FORMAT_DAY;
+
     public final static String FORMAT_HOUR_MINUTE = FORMAT_HOUR + FORMAT_MINUTE;
 
     public final static String FORMAT_HOUR_MINUTE_2 = FORMAT_HOUR + ":" + FORMAT_MINUTE;
@@ -64,6 +66,8 @@ public class TimeUtils {
     public final static String FORMAT_DATE_TIME = FORMAT_DATE + FORMAT_TIME;
 
     public final static String FORMAT_DATE_TIME_2 = FORMAT_DATE_2 + " " + FORMAT_TIME_2;
+
+    public final static String FORMAT_DATE_TIME_3 = FORMAT_DATE_3 + " " + FORMAT_TIME_2;
 
     public static final int SECONDS_IN_MINUTE = 60;
 
