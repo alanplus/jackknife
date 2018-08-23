@@ -17,13 +17,13 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。gradle3.4以上使用api代替compile。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:2.5.2'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:2.5.2'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:2.5.2'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:2.5.2'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:2.5.2'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:2.5.2'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:2.5.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:2.5.12'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:2.5.12'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:2.5.12'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:2.5.12'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:2.5.12'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:2.5.12'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:2.5.12'</h3>
 }
 </blockquote>
 
@@ -104,12 +104,12 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 > 在继承这个接口的接口中提供与界面显示相关的操作，比如显示某某数据，或获取从控件中获取用户输入的结果。建议继承这个
 接口的接口也以I开头命名，避免与自定义View混淆。
 ##### （3）BasePresenter（P层）
-> 在presenter中持有view和model的引用，它的职责是处理业务层的操作，如把model中的数据加载到view上显示、文件下载等。耗时操作务必在presenter中完成，此mvp框架可以有效防止activity的内存泄漏的。
+> 在presenter中持有view和model的引用，它的职责是处理业务层的操作，如把model中的数据加载到view上显示、文件下载等。耗时操作务必在presenter中完成，jackknife-mvp可以有效防止activity的内存泄漏。
 ##### （4）BaseActivity或BaseFragment（V层）
 > 比如public class MainActivity extends BaseActivity<IMainView, MainPresenter> implements
 IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，也可以参考它自己来实现。
 #### 2、一些思考
-> 关于mvp这个架构，市面上众说纷纭，有赞赏的，也有批评的。总之，这个架构既有优点，又有缺点。先说优点，解除模型数据和UI显示的耦合，界面显示和业务操作逻辑分离，易于创建副本，提高可维护性。缺点也是显而易见的，Presenter和View类爆炸的问题很严重，也就是说，如果你只需要写一个很小的项目，是完全没有必要使用mvp的。
+> 关于mvp这个架构，市面上众说纷纭，有推崇的，也有反对的。总之，这个架构既有优点，又有缺点。先说优点，解除模型数据和UI显示的耦合，界面显示和业务操作逻辑分离，易于创建副本，提高可维护性。缺点也是显而易见的，Presenter和View类爆炸的问题很严重，也就是说，如果你只需要写一个很小的项目，是完全没有必要使用mvp的。
 
 
 三、博客
