@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/jackknife-annotations-ioc" />
+            <option value="$PROJECT_DIR$/jackknife-aop" />
             <option value="$PROJECT_DIR$/jackknife-ioc" />
             <option value="$PROJECT_DIR$/jackknife-ioc2" />
             <option value="$PROJECT_DIR$/jackknife-ioc2-compiler" />
