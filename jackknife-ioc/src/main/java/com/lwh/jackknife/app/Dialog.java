@@ -47,15 +47,12 @@ public abstract class Dialog extends android.app.Dialog implements SupportDialog
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(onCreateView());
         ViewInjector.inject(this);
+        initData(this);
         setOnShowListener(this);
         setOnDismissListener(this);
-    }
-
-    @Override
-    public final void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
     }
 
     @Override
@@ -65,6 +62,8 @@ public abstract class Dialog extends android.app.Dialog implements SupportDialog
         }
         throw new LackInterfaceException("The activity lacks the SupportActivity interface.");
     }
+
+    protected abstract void initData(Dialog dialog);
 
     @Override
     public View findViewById(int id) {

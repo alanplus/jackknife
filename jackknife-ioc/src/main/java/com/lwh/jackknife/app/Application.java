@@ -72,13 +72,9 @@ public class Application extends android.app.Application {
      * Destroy and remove activity from the top of the task stack.
      */
     public void popTask() {
-        WeakReference<? extends SupportActivity> ref = mActivityStacks.pop();
+        WeakReference<? extends SupportActivity> ref = mActivityStacks.peek();
         if (ref != null) {
-            SupportActivity activity = ref.get();
-            if (activity != null) {
-                activity.finish();
-                mActivityStacks.remove(ref);
-            }
+            mActivityStacks.pop();
         }
     }
 
@@ -87,19 +83,24 @@ public class Application extends android.app.Application {
      */
     public void close() {
         for (WeakReference<? extends SupportActivity> ref:mActivityStacks) {
-            SupportActivity activity = ref.get();
-            if (activity != null) {
-                activity.finish();
+            if (ref != null) {
+                SupportActivity activity = ref.get();
+                if (activity != null) {
+                    activity.finish();
+                }
             }
         }
     }
 
     public void closeRetainBottom() {
-        for (int i=0;i<mActivityStacks.size() - 1;i++) {
+        int size = mActivityStacks.size();
+        for (int i=size-1;i > 0;i--) {
             WeakReference<? extends SupportActivity> ref = mActivityStacks.get(i);
-            SupportActivity activity = ref.get();
-            if (activity != null) {
-                activity.finish();
+            if (ref != null) {
+                SupportActivity activity = ref.get();
+                if (activity != null) {
+                    activity.finish();
+                }
             }
         }
     }

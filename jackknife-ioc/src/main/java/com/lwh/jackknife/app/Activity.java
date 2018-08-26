@@ -36,8 +36,8 @@ public abstract class Activity extends android.app.Activity implements SupportAc
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		pop();
+		super.onDestroy();
 	}
 
 	/**
