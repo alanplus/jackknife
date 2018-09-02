@@ -17,13 +17,14 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。gradle3.4以上使用api代替compile。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:2.5.12'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:2.5.12'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:2.5.12'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:2.5.12'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:2.5.12'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:2.5.12'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:2.5.12'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:2.5.14'</h3>
 }
 </blockquote>
 
@@ -119,4 +120,4 @@ CSDN:http://blog.csdn.net/yiranaini_/
 
 四、Demo安装
 --------------------------------
-http://www.jackwhliu.cn/jackknife/apks/JackKnifeDemo-v.2.5.4.apk
+http://www.jackwhliu.cn/jackknife/apks/JackKnifeDemo-v2.5.4.apk
