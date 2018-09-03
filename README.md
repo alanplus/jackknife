@@ -48,7 +48,7 @@ dependencies {
 > 优先级比不加注解高，简单的说，加上这个注解就不会使用默认的使用成员属性名来对应xml的控件id的方式，而是使用该注解指定的id与xml的控件id绑定。
 ##### （3）使用@ViewIgnore
 > 优先级最高，加上该注解，jackknife会直接跳过该控件的自动注入。一般使用在使用Java代码new出来的控件提取到全局的情况。
-#### 3、自动注册事件(Inject Events)
+#### 3、自动注册事件（Inject Events）
 >  ）创建一个自定义的事件注解，在这个注解上配置@EventBase，并使用在你要实际回调的方法上，<b>注意保持参数列表跟原接口的某个回调方法的参数列表保持一致</b>。在jackknife-annotations-ioc中也提供了常用的事件的注解，比如@OnClick。
 
 ### (二)数据库ORM模块（jackknife-orm）
