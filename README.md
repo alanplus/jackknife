@@ -1,8 +1,8 @@
 JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)  [![API](https://img.shields.io/badge/API-11%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=11)
 ================================
-![avatar](http://jackwhliu.cn/images/banner2.jpg)
+![avatar](http://jackwhliu.cn/images/banner3.jpg)
 
-一、关于如何配置环境
+一、Get Started
 --------------------------------
 如果要依赖jackknife的库，需要对号入座的加上以下两个配置。
 #### //指定仓库的地址，在project的build.gradle加入加粗的代码。
@@ -29,7 +29,7 @@ dependencies {
 }
 </blockquote>
 
-二、关于如何使用(参考https://github.com/JackWHLiu/JackKnifeDemo)
+二、How to use?(参考https://github.com/JackWHLiu/JackKnifeDemo)
 --------------------------------
 ### (一)基于IOC的自动注入视图、绑定控件和注册事件（jackknife-ioc）
 #### 1、自动注入视图
