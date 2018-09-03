@@ -5,7 +5,7 @@ JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)  [
 一、环境配置
 --------------------------------
 在gradle中配置环境。
-#### //指定仓库的地址，在project的build.gradle加入加粗的代码。
+#### //指定仓库的地址，在project的build.gradle加入粗体字的代码。
 <blockquote>
 allprojects {
   repositories {
