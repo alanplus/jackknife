@@ -50,6 +50,12 @@ public abstract class BaseDialog<V extends IBaseView, P extends BasePresenter<V>
     }
 
     @Override
+    public void onAttachedToWindow() {
+        Log.i(TAG, "onAttachedToWindow()");
+        super.onAttachedToWindow();
+    }
+
+    @Override
     public void onDetachedFromWindow() {
         Log.i(TAG, "onDetachedFromWindow()");
         super.onDetachedFromWindow();

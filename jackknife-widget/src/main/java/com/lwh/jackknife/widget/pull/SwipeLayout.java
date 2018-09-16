@@ -166,9 +166,9 @@ public class SwipeLayout extends RelativeLayout {
         }
         mTimer = new RefreshTimer(mUpdateHandler);//循环UI检查
         mRotateAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
-                context, R.anim.reverse);
+                context, R.anim.jknf_reverse);
         mRefreshingAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
-                context, R.anim.rotating);
+                context, R.anim.jknf_rotating);
         LinearInterpolator lir = new LinearInterpolator();
         mRotateAnimation.setInterpolator(lir);
         mRefreshingAnimation.setInterpolator(lir);

@@ -26,8 +26,8 @@ public abstract class BasePresenter<V extends IBaseView> {
         mViewRef = new WeakReference<>(view);
     }
 
-    public void detachView(){
-        if (mViewRef != null){
+    public void detachView() {
+        if (mViewRef != null) {
             mViewRef.clear();
             mViewRef = null;
         }
