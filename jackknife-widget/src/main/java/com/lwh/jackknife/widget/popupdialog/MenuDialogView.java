@@ -29,7 +29,7 @@ import com.lwh.jackknife.widget.R;
 
 import java.util.List;
 
-public class MenuDialogView extends DialogView {
+class MenuDialogView extends DialogView {
 
     private MenuAdapter mMenuAdapter;
     private List<String> mMenuItems;
@@ -44,6 +44,7 @@ public class MenuDialogView extends DialogView {
 
     public MenuDialogView() {
         super(R.layout.jknf_menu_popup_dialog);
+        initShadow(0x80FFFFFF);
     }
 
     public interface OnMenuClickListener {
@@ -84,7 +85,6 @@ public class MenuDialogView extends DialogView {
 
     @Override
     protected void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup viewRoot) {
-        initShadow(0x80FFFFFF);
         super.addContent(inflater, parent, viewRoot);
         mMenuAdapter = new MenuAdapter(inflater, mMenuItems);
         mMenuAdapter.setMenuItemTextSize(mMenuItemTextSize);

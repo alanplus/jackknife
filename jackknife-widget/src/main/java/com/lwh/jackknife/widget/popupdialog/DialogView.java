@@ -16,7 +16,6 @@
 
 package com.lwh.jackknife.widget.popupdialog;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,12 +26,6 @@ public class DialogView extends AbstractDialogView {
 
     private int mViewResId = View.NO_ID;
     private View mContentView;
-    private boolean mNeedShadowView;
-    private int mShadowColor = 0xFFFFFFFF;
-    private final FrameLayout.LayoutParams mShadowLayoutParams = new FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-    );
-    private FrameLayout shadowViewOutsideDismiss;
 
     public DialogView(int layoutResId) {
         this.mViewResId = layoutResId;
@@ -42,27 +35,14 @@ public class DialogView extends AbstractDialogView {
         this.mContentView = view;
     }
 
-    public DialogView(int layoutResId, int shadowColor) {
+     DialogView(int layoutResId, int shadowColor) {
         this(layoutResId);
         initShadow(shadowColor);
     }
 
-    public DialogView(View view, int shadowColor) {
+     DialogView(View view, int shadowColor) {
         this(view);
         initShadow(shadowColor);
-    }
-
-    protected void initShadow(int shadowColor) {
-        this.mNeedShadowView = true;
-        this.mShadowColor = shadowColor;
-    }
-
-    public void setNeedShadowView(boolean needShadowView) {
-        this.mNeedShadowView = needShadowView;
-    }
-
-    public void setShadowColor(int color) {
-        this.mShadowColor = color;
     }
 
     public boolean isNeedShadowView() {
@@ -77,26 +57,43 @@ public class DialogView extends AbstractDialogView {
         this.mContentView = contentView;
     }
 
-    public View getContentView() {
+    @Override
+    protected View getContentView() {
         return mContentView;
     }
 
     @Override
     protected void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup viewRoot) {
-        if (mViewResId != View.NO_ID) {
-            mContentView = inflater.inflate(mViewResId, parent, false); //inflate layout
+        if (mNeedShadowView) {
+            if (mViewResId != View.NO_ID) {
+                //add to dialog view root
+                mContentView = inflater.inflate(mViewResId, null); //inflate layout
+            }
+        } else {
+            if (mViewResId != View.NO_ID) {
+                //add to dialog view root
+                mContentView = inflater.inflate(mViewResId, parent, false); //inflate layout
+            }
         }
-        mContentView.setFocusable(true);
-        mContentView.setFocusableInTouchMode(true);
         if (mNeedShadowView) {
             FrameLayout shadowView = new FrameLayout(viewRoot.getContext());
             shadowView.setBackgroundColor(mShadowColor);
-            setShadowViewOutsideCanDismiss(shadowView, true);
-            viewRoot.addView(shadowView, mShadowLayoutParams);
+//            setShadowViewOutsideCanDismiss(shadowView, true);
             shadowView.addView(mContentView, mLayoutParams);
+            shadowView.setFocusable(true);
+            shadowView.setFocusableInTouchMode(true);
+            viewRoot.addView(shadowView, mShadowLayoutParams);
         } else {
+            mContentView.setFocusable(true);
+            mContentView.setFocusableInTouchMode(true);
             viewRoot.addView(mContentView);
         }
+    }
+
+    @Override
+    protected void initShadow(int shadowColor) {
+        this.mNeedShadowView = true;
+        this.mShadowColor = shadowColor;
     }
 
     protected void setShadowViewOutsideCanDismiss(View shadeView, boolean canDismiss) {

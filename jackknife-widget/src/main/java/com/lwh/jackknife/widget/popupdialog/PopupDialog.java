@@ -16,10 +16,11 @@
 
 package com.lwh.jackknife.widget.popupdialog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
@@ -30,17 +31,28 @@ public class PopupDialog {
 
     protected AbstractDialogView mDialogView;
     protected FrameLayout mDecorView;
-    protected ViewGroup mContentView;
+    protected View mContentView;
     private Animation mPushOutAnim;
     private Animation mPushInAnim;
     private boolean mDismissing;
+    private Activity mOwnActivity;
 
-    public PopupDialog() {
+    protected PopupDialog(DialogView dialogView) {
+        this.mDialogView = dialogView;
     }
 
-    public PopupDialog(Builder builder) {
+    public Activity getOwnActivity() {
+        return mOwnActivity;
+    }
+
+    protected PopupDialog(Builder builder) {
+        this.mOwnActivity = (Activity) builder.getContext();
+        LayoutInflater inflater = LayoutInflater.from(builder.getContext());
+        this.mDecorView = (FrameLayout) mOwnActivity.getWindow().getDecorView()
+                .findViewById(android.R.id.content);applyAnimation(builder);
         this.mDialogView = builder.dialogView;
-        applyAnimation(builder);
+        this.mContentView = mDialogView.performInflateView(inflater, mDecorView);
+        this.mContentView.setLayoutParams(mDialogView.getLayoutParams());
     }
 
     protected void applyAnimation(Builder builder) {
@@ -81,7 +93,7 @@ public class PopupDialog {
         mDismissing = true;
     }
 
-    private void onAttached(ViewGroup viewRoot) {
+    private void onAttached(View viewRoot) {
         mDecorView.addView(viewRoot);
         mContentView.startAnimation(mPushInAnim);
         mContentView.requestFocus();
@@ -113,12 +125,17 @@ public class PopupDialog {
 
         protected static final int INVALID = -1;
         protected static final int INVALID_COLOR = 0;
+        /* @hide */
         private Animation pushInAnim;
+        /* @hide */
         private Animation pushOutAnim;
         private Context context;
-        private AbstractDialogView dialogView;
+        protected AbstractDialogView dialogView;
 
         public Builder(Context context) {
+            if (!Activity.class.isAssignableFrom(context.getClass())) {
+                throw new IllegalArgumentException("need activity context");
+            }
             this.context = context;
         }
 
@@ -160,9 +177,14 @@ public class PopupDialog {
             return this;
         }
 
+        /** @hide */
         public Builder setDialogView(DialogView dialogView) {
             this.dialogView = dialogView;
             return this;
+        }
+
+        public PopupDialog create() {
+            return new PopupDialog(this);
         }
     }
 }

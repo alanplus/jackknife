@@ -24,17 +24,25 @@ import android.widget.FrameLayout;
 
 import com.lwh.jackknife.widget.R;
 
+/**
+ * Add to decor view.
+ */
 public abstract class AbstractDialogView {
 
     protected static final int INVALID = -1;
     protected static final int INVALID_COLOR = 0;
     protected OnCancelListener mOnCancelListener;
     protected View.OnKeyListener mOnBackListener;
-    protected FrameLayout.LayoutParams mLayoutParams = new FrameLayout.LayoutParams(
+    protected final FrameLayout.LayoutParams mLayoutParams = new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             Gravity.BOTTOM
     );
+    protected final FrameLayout.LayoutParams mShadowLayoutParams = new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+    );
+    protected boolean mNeedShadowView;
+    protected int mShadowColor = 0xFFFFFFFF;
 
     public interface OnCancelListener {
         void onCancel();
@@ -44,7 +52,7 @@ public abstract class AbstractDialogView {
         return mLayoutParams;
     }
 
-    public View getView(LayoutInflater inflater, ViewGroup parent) {
+    public View performInflateView(LayoutInflater inflater, ViewGroup parent) {
         View dialogView = inflater.inflate(R.layout.jknf_dialog_view, parent, false);
         FrameLayout dialogViewRoot = (FrameLayout) dialogView.findViewById(R.id
                 .jknf_dialog_view_content);
@@ -52,7 +60,11 @@ public abstract class AbstractDialogView {
         return dialogView;
     }
 
+    protected abstract View getContentView();
+
     protected abstract void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup viewRoot);
+
+    protected abstract void initShadow(int shadowColor);
 
     public void setOnCancelListener(OnCancelListener listener) {
         this.mOnCancelListener = listener;

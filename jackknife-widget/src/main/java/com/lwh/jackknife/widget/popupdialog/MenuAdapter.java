@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.lwh.jackknife.widget.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 

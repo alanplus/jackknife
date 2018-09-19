@@ -16,34 +16,24 @@
 
 package com.lwh.jackknife.widget.popupdialog;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import java.util.List;
 
-public class MenuPopupDialog extends PopupDialog {
+class MenuPopupDialog extends PopupDialog {
 
-    private MenuPopupDialog(MenuBuilder builder) {
-        Activity activity = (Activity) builder.getContext();
-        mDialogView = builder.getDialogView();
-        LayoutInflater inflater = LayoutInflater.from(builder.getContext());
-        mDecorView = (FrameLayout) activity.getWindow().getDecorView()
-                .findViewById(android.R.id.content);
-        mContentView = (ViewGroup) mDialogView.getView(inflater, mDecorView);
-        mContentView.setLayoutParams(mDialogView.getLayoutParams());
-        applyAnimation(builder);
-        mContentView.addView(createView(builder, inflater));
+    private MenuPopupDialog(Builder builder) {
+        super(builder);
+        LayoutInflater inflater = LayoutInflater.from(getOwnActivity());
+        ViewGroup contentView = (ViewGroup) mDialogView.performInflateView(inflater, mDecorView);
+        contentView.setLayoutParams(mDialogView.getLayoutParams());
+        contentView.addView(createView(builder, inflater));
     }
 
-    public static MenuBuilder newMenuBuilder(Context context) {
-        return new MenuBuilder(context);
-    }
-
-    private View createView(MenuBuilder builder, LayoutInflater inflater) {
+    private View createView(Builder builder, LayoutInflater inflater) {
         if (mDialogView instanceof MenuDialogView) {
             MenuDialogView menuDialogView = (MenuDialogView) mDialogView;
             menuDialogView.setOnMenuClickListener(builder.getOnMenuClickListener());
@@ -54,15 +44,15 @@ public class MenuPopupDialog extends PopupDialog {
             menuDialogView.setMenuTextSize(builder.getMenuItemTextSize());
             menuDialogView.setMenuItemBackground(builder.getMenuItemBackground());
             menuDialogView.setCancelMenuBackground(builder.getCancelBackground());
+            mDialogView = menuDialogView;
         }
-        return mDialogView.getView(inflater, mDecorView);
+        return mDialogView.performInflateView(inflater, mDecorView);
     }
 
-    public static class MenuBuilder extends PopupDialog.Builder {
+    static class Builder extends PopupDialog.Builder {
 
         private List<String> menuItems;
         private MenuDialogView.OnMenuClickListener mListener;
-        private MenuDialogView mMenuDialogView;
         private int cancelBackground = INVALID_COLOR;
         private boolean isShowCancel = true;
         private String cancelText;
@@ -70,24 +60,16 @@ public class MenuPopupDialog extends PopupDialog {
         private int menuItemTextColor = INVALID_COLOR;
         private int menuItemBackground = INVALID_COLOR;
 
-        public MenuBuilder(Context context) {
+        public Builder(Context context) {
             super(context);
-        }
-
-        public MenuBuilder setMenuDialogView(MenuDialogView view) {
-            this.mMenuDialogView = view;
-            return this;
-        }
-
-        public MenuDialogView getMenuDialogView() {
-            return mMenuDialogView;
+            dialogView = new MenuDialogView();
         }
 
         public List<String> getMenuItems() {
             return menuItems;
         }
 
-        public MenuBuilder setMenuItems(List<String> itemNames) {
+        public Builder setMenuItems(List<String> itemNames) {
             this.menuItems = itemNames;
             return this;
         }
@@ -96,27 +78,26 @@ public class MenuPopupDialog extends PopupDialog {
             return mListener;
         }
 
-        public MenuBuilder setOnMenuClickListener(MenuDialogView.OnMenuClickListener
-                                                          listener) {
+        public Builder setOnMenuClickListener(MenuDialogView.OnMenuClickListener
+                                                      listener) {
             this.mListener = listener;
             return this;
         }
-
 
         public int getCancelBackground() {
             return cancelBackground;
         }
 
-        public PopupDialog.Builder setCancelBackground(int cancelBackground) {
+        public Builder setCancelBackground(int cancelBackground) {
             this.cancelBackground = cancelBackground;
             return this;
         }
 
-        public PopupDialog create() {
-            if (mMenuDialogView == null) {
+        public MenuPopupDialog create() {
+            if (dialogView == null) {
                 throw new IllegalArgumentException("lack dialog view.");
             }
-            return new PopupDialog(this);
+            return new MenuPopupDialog(this);
         }
 
         public boolean isShowCancel() {
