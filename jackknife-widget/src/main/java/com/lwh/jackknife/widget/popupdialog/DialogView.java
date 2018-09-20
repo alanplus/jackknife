@@ -16,16 +16,19 @@
 
 package com.lwh.jackknife.widget.popupdialog;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 public class DialogView extends AbstractDialogView {
 
     private int mViewResId = View.NO_ID;
     private View mContentView;
+    private boolean mCanTouchOutside;
+    private OnInflateListener mOnInflateListener;
 
     public DialogView(int layoutResId) {
         this.mViewResId = layoutResId;
@@ -35,14 +38,29 @@ public class DialogView extends AbstractDialogView {
         this.mContentView = view;
     }
 
-     DialogView(int layoutResId, int shadowColor) {
+    public DialogView(int layoutResId, int shadowColor) {
         this(layoutResId);
         initShadow(shadowColor);
     }
 
-     DialogView(View view, int shadowColor) {
+    public DialogView(View view, int shadowColor) {
         this(view);
         initShadow(shadowColor);
+    }
+
+    public interface OnInflateListener {
+        void onInflateFinish(View contentView);
+    }
+
+    public void setOnInflateListener(OnInflateListener listener) {
+        this.mOnInflateListener = listener;
+    }
+
+    /**
+     * Only valid if the shadow background is set.
+     */
+    public void setCanTouchOutside(boolean canTouchOutside) {
+        this.mCanTouchOutside = canTouchOutside;
     }
 
     public boolean isNeedShadowView() {
@@ -57,54 +75,66 @@ public class DialogView extends AbstractDialogView {
         this.mContentView = contentView;
     }
 
+    /**
+     * Must invoke after {@link OnInflateListener#onInflateFinish(View)}.
+     */
+    public View findViewById(int resId) {
+        return mContentView.findViewById(resId);
+    }
+
     @Override
     protected View getContentView() {
         return mContentView;
     }
 
     @Override
-    protected void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup viewRoot) {
+    protected void addContent(LayoutInflater inflater, ViewGroup parent, LinearLayout viewRoot) {
         if (mNeedShadowView) {
-            if (mViewResId != View.NO_ID) {
-                //add to dialog view root
-                mContentView = inflater.inflate(mViewResId, null); //inflate layout
-            }
-        } else {
-            if (mViewResId != View.NO_ID) {
-                //add to dialog view root
-                mContentView = inflater.inflate(mViewResId, parent, false); //inflate layout
-            }
+            viewRoot.setBackgroundColor(mShadowColor);
+            setShadowViewOutsideCanDismiss(viewRoot, true);
         }
-        if (mNeedShadowView) {
-            FrameLayout shadowView = new FrameLayout(viewRoot.getContext());
-            shadowView.setBackgroundColor(mShadowColor);
-//            setShadowViewOutsideCanDismiss(shadowView, true);
-            shadowView.addView(mContentView, mLayoutParams);
-            shadowView.setFocusable(true);
-            shadowView.setFocusableInTouchMode(true);
-            viewRoot.addView(shadowView, mShadowLayoutParams);
-        } else {
-            mContentView.setFocusable(true);
-            mContentView.setFocusableInTouchMode(true);
-            viewRoot.addView(mContentView);
+        if (mViewResId != View.NO_ID) {
+            mContentView = inflater.inflate(mViewResId, viewRoot, false); //inflate layout
         }
+        if (mOnInflateListener != null) {
+            mOnInflateListener.onInflateFinish(mContentView);
+        }
+        mContentView.setFocusable(true);
+        mContentView.setFocusableInTouchMode(true);
+        mContentView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (mOnBackListener != null) {
+                    mOnBackListener.onKey(v, keyCode, event);
+                }
+                return true;
+            }
+        });
+        mContentView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        viewRoot.addView(mContentView);
+    }
+
+    @Override
+    protected void setShadowViewOutsideCanDismiss(View shadeView, final boolean canDismiss) {
+        shadeView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (canDismiss) {
+                    mOnCancelListener.onCancel();
+                }
+                return !mCanTouchOutside;
+            }
+        });
     }
 
     @Override
     protected void initShadow(int shadowColor) {
         this.mNeedShadowView = true;
         this.mShadowColor = shadowColor;
-    }
-
-    protected void setShadowViewOutsideCanDismiss(View shadeView, boolean canDismiss) {
-        if (canDismiss) {
-            shadeView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    mOnCancelListener.onCancel();
-                    return false;
-                }
-            });
-        }
     }
 }

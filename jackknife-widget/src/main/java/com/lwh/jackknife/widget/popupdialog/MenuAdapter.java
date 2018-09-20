@@ -25,11 +25,9 @@ import android.widget.TextView;
 
 import com.lwh.jackknife.widget.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-
-public class MenuAdapter extends BaseAdapter {
+class MenuAdapter extends BaseAdapter {
 
     private static final int INVALID = -1;
     private static final int INVALID_COLOR = 0;

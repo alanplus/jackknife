@@ -31,11 +31,17 @@ public class PopupDialog {
 
     protected AbstractDialogView mDialogView;
     protected FrameLayout mDecorView;
-    protected View mContentView;
+    protected FrameLayout mContentView;
+    protected View mDialogRoot;
+    protected View mDialogContent;
     private Animation mPushOutAnim;
     private Animation mPushInAnim;
     private boolean mDismissing;
     private Activity mOwnActivity;
+    private LayoutInflater mInflater;
+    private boolean mHasShown;
+    private OnAttachListener mOnAttachListener;
+    private OnDismissListener mOnDismissListener;
 
     protected PopupDialog(DialogView dialogView) {
         this.mDialogView = dialogView;
@@ -47,12 +53,22 @@ public class PopupDialog {
 
     protected PopupDialog(Builder builder) {
         this.mOwnActivity = (Activity) builder.getContext();
-        LayoutInflater inflater = LayoutInflater.from(builder.getContext());
-        this.mDecorView = (FrameLayout) mOwnActivity.getWindow().getDecorView()
-                .findViewById(android.R.id.content);applyAnimation(builder);
+        this.mInflater = LayoutInflater.from(mOwnActivity);
+        this.mDecorView = (FrameLayout) mOwnActivity.getWindow().getDecorView();
+        this.mContentView = (FrameLayout) mDecorView.findViewById(android.R.id.content);
+        applyAnimation(builder);
         this.mDialogView = builder.dialogView;
-        this.mContentView = mDialogView.performInflateView(inflater, mDecorView);
-        this.mContentView.setLayoutParams(mDialogView.getLayoutParams());
+        this.mDialogRoot = mDialogView.performInflateView(mInflater, mDecorView);
+        this.mDialogRoot.setLayoutParams(mDialogView.getShadowLayoutParams());
+        this.mDialogContent = mDialogView.getContentView();
+    }
+
+    public interface OnAttachListener {
+        void onAttached(View root);
+    }
+
+    public interface OnDismissListener {
+        void onDismiss();
     }
 
     protected void applyAnimation(Builder builder) {
@@ -61,7 +77,20 @@ public class PopupDialog {
     }
 
     public void show() {
-        onAttached(mContentView);
+        onAttached(mDialogRoot);
+        mHasShown = true;
+    }
+
+    public boolean isShown() {
+        return mHasShown;
+    }
+
+    public void toggle() {
+        if (isShown()) {
+            dismiss();
+        } else {
+            show();
+        }
     }
 
     public void dismiss() {
@@ -79,8 +108,12 @@ public class PopupDialog {
                 mDecorView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mDecorView.removeView(mContentView);
+                        mDecorView.removeView(mDialogRoot);
                         mDismissing = false;
+                        mHasShown = false;
+                        if (mOnDismissListener != null) {
+                            mOnDismissListener.onDismiss();
+                        }
                     }
                 });
             }
@@ -89,14 +122,14 @@ public class PopupDialog {
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        mContentView.startAnimation(mPushOutAnim);
+        mDialogContent.startAnimation(mPushOutAnim);
         mDismissing = true;
     }
 
     private void onAttached(View viewRoot) {
         mDecorView.addView(viewRoot);
-        mContentView.startAnimation(mPushInAnim);
-        mContentView.requestFocus();
+        mDialogContent.startAnimation(mPushInAnim);
+        viewRoot.requestFocus();
         mDialogView.setOnBackListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -119,6 +152,9 @@ public class PopupDialog {
                 dismiss();
             }
         });
+        if (mOnAttachListener != null) {
+            mOnAttachListener.onAttached(mDialogRoot);
+        }
     }
 
     public static class Builder {
@@ -143,11 +179,7 @@ public class PopupDialog {
             return context;
         }
 
-        public AbstractDialogView getDialogView() {
-            return dialogView;
-        }
-
-        public Animation getPushInAnimation() {
+        private Animation getPushInAnimation() {
             return (pushInAnim == null) ? AnimationUtils.loadAnimation(context,
                     R.anim.jknf_push_in) : pushInAnim;
         }
@@ -177,7 +209,6 @@ public class PopupDialog {
             return this;
         }
 
-        /** @hide */
         public Builder setDialogView(DialogView dialogView) {
             this.dialogView = dialogView;
             return this;
@@ -186,6 +217,18 @@ public class PopupDialog {
         public PopupDialog create() {
             return new PopupDialog(this);
         }
+    }
+
+    public void setOnAttachListener(OnAttachListener l) {
+        this.mOnAttachListener = l;
+    }
+
+    public void setOnDismissListener(OnDismissListener l) {
+        this.mOnDismissListener = l;
+    }
+
+    public LayoutInflater getLayoutInflater() {
+        return mInflater;
     }
 }
 

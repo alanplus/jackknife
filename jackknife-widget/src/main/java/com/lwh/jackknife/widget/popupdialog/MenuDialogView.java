@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lwh.jackknife.widget.NestedScrollingListView;
@@ -44,7 +46,7 @@ class MenuDialogView extends DialogView {
 
     public MenuDialogView() {
         super(R.layout.jknf_menu_popup_dialog);
-        initShadow(0x80FFFFFF);
+        initShadow(DEFAULT_SHADOW_COLOR);
     }
 
     public interface OnMenuClickListener {
@@ -84,7 +86,7 @@ class MenuDialogView extends DialogView {
     }
 
     @Override
-    protected void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup viewRoot) {
+    protected void addContent(LayoutInflater inflater, ViewGroup parent, LinearLayout viewRoot) {
         super.addContent(inflater, parent, viewRoot);
         mMenuAdapter = new MenuAdapter(inflater, mMenuItems);
         mMenuAdapter.setMenuItemTextSize(mMenuItemTextSize);

@@ -17,10 +17,12 @@
 package com.lwh.jackknife.widget.popupdialog;
 
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.lwh.jackknife.widget.R;
 
@@ -31,18 +33,19 @@ public abstract class AbstractDialogView {
 
     protected static final int INVALID = -1;
     protected static final int INVALID_COLOR = 0;
+    public static final int DEFAULT_SHADOW_COLOR = 0x60000000;
     protected OnCancelListener mOnCancelListener;
     protected View.OnKeyListener mOnBackListener;
     protected final FrameLayout.LayoutParams mLayoutParams = new FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
             Gravity.BOTTOM
     );
     protected final FrameLayout.LayoutParams mShadowLayoutParams = new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
     );
-    protected boolean mNeedShadowView;
-    protected int mShadowColor = 0xFFFFFFFF;
+    protected boolean mNeedShadowView = false;
+    protected int mShadowColor = INVALID_COLOR;
 
     public interface OnCancelListener {
         void onCancel();
@@ -52,19 +55,41 @@ public abstract class AbstractDialogView {
         return mLayoutParams;
     }
 
-    public View performInflateView(LayoutInflater inflater, ViewGroup parent) {
+    public FrameLayout.LayoutParams getShadowLayoutParams() {
+        return mShadowLayoutParams;
+    }
+
+    /**
+     * Add content view to decor view.
+     *
+     * @param inflater
+     * @param parent decor view
+     * @return content view
+     */
+    protected View performInflateView(LayoutInflater inflater, FrameLayout parent) {
         View dialogView = inflater.inflate(R.layout.jknf_dialog_view, parent, false);
-        FrameLayout dialogViewRoot = (FrameLayout) dialogView.findViewById(R.id
+        LinearLayout dialogViewRoot = (LinearLayout) dialogView.findViewById(R.id
                 .jknf_dialog_view_content);
+        dialogViewRoot.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (mOnBackListener != null) {
+                    mOnBackListener.onKey(v, keyCode, event);
+                }
+                return false;
+            }
+        });
         addContent(inflater, parent, dialogViewRoot);
         return dialogView;
     }
 
     protected abstract View getContentView();
 
-    protected abstract void addContent(LayoutInflater inflater, ViewGroup parent, ViewGroup viewRoot);
+    protected abstract void addContent(LayoutInflater inflater, ViewGroup parent, LinearLayout viewRoot);
 
     protected abstract void initShadow(int shadowColor);
+
+    protected abstract void setShadowViewOutsideCanDismiss(View shadeView, boolean canDismiss);
 
     public void setOnCancelListener(OnCancelListener listener) {
         this.mOnCancelListener = listener;
