@@ -117,7 +117,7 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 
 三、博客（绿色通道）
 --------------------------------
-简书 : https://www.jianshu.com/u/f408bdadacce
+简书 : https://www.jianshu.com/u/8f43e6fd56db, https://www.jianshu.com/u/f408bdadacce
 CSDN : http://blog.csdn.net/yiranaini_/
 
 四、Demo安装
