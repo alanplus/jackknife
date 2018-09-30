@@ -123,3 +123,7 @@ CSDN : http://blog.csdn.net/yiranaini_/
 四、Demo安装
 --------------------------------
 http://www.jackwhliu.cn/apks/JackKnifeDemo-v2.5.4.apk
+
+五、官方直播APP
+--------------------------------
+http://www.jackwhliu.cn/apks/jkplayer.apk
