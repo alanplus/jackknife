@@ -99,6 +99,15 @@ public class IoUtils {
         throw new IllegalArgumentException("Separator can\'t be null.");
     }
 
+    public static byte[] intToBytes(int number) {
+        byte[] bs = new byte[4];
+        for (int i = 3; i >= 0; i--) {
+            bs[i] = (byte) (number % 256);
+            number >>= 8;
+        }
+        return bs;
+    }
+
     public static boolean checkMediaMounted() {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             return true;
@@ -297,8 +306,22 @@ public class IoUtils {
         throw new NullPointerException("File can\'t be null.");
     }
 
-    public static String read(String fileName) throws IOException {
-        FileInputStream is = new FileInputStream(fileName);
+    public static byte[] read(File file) throws IOException {
+        byte[] buffers = new byte[1024];
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        FileInputStream is = new FileInputStream(file);
+        int len;
+        while ((len = is.read(buffers)) > 0) {
+            baos.write(buffers, 0, len);
+        }
+        byte[] fileBytes = baos.toByteArray();
+        baos.close();
+        is.close();
+        return fileBytes;
+    }
+
+    public static String readText(String filePath) throws IOException {
+        FileInputStream is = new FileInputStream(filePath);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024 * 4];
         int len;
