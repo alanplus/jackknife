@@ -164,7 +164,7 @@ public class ActivityHandler implements InjectHandler {
                     Method valueMethod = annotationType.getDeclaredMethod(METHOD_VALUE);
                     int[] viewIds = (int[]) valueMethod.invoke(annotation);
                     for (int viewId : viewIds) {
-                        View view = v.findViewById(viewId);
+                        View view = v.getView(viewId);
                         if (view == null) {
                             continue;
                         }

@@ -23,5 +23,5 @@ public interface SupportV {
     /**
      * {@link android.app.Activity#findViewById(int)}
      */
-    <VIEW extends View> VIEW findViewById(int id);
+    <VIEW extends View> VIEW getView(int id);
 }

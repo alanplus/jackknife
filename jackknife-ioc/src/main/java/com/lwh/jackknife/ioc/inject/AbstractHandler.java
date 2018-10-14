@@ -180,7 +180,7 @@ public abstract class AbstractHandler implements InjectHandler {
                     Method valueMethod = annotationType.getDeclaredMethod(METHOD_VALUE);
                     int[] viewIds = (int[]) valueMethod.invoke(annotation);
                     for (int viewId : viewIds) {
-                        View view = activity.findViewById(viewId);
+                        View view = activity.getView(viewId);
                         if (view == null) {
                             continue;
                         }
