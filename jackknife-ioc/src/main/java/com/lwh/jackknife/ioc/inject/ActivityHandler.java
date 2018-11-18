@@ -70,7 +70,7 @@ public class ActivityHandler implements InjectHandler {
         SupportActivity v = (SupportActivity) bindLayout.getTarget();
         String layoutName = generateLayoutName(v);
         Class<? extends SupportV> viewClass = v.getClass();
-        String packageName = v.getPackageName();
+        String packageName = v.getReflectionPackageName();
         int layoutId = View.NO_ID;
         try {
             Class<?> layoutClass = Class.forName(packageName + R_LAYOUT);
@@ -124,7 +124,7 @@ public class ActivityHandler implements InjectHandler {
                     if (viewInject != null) {
                         id = viewInject.value();
                     } else {
-                        String packageName = v.getPackageName();
+                        String packageName = v.getReflectionPackageName();
                         Class<?> idClass = Class.forName(packageName + R_ID);
                         Field idField = idClass.getDeclaredField(field.getName());
                         id = idField.getInt(idField);

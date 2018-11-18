@@ -26,7 +26,7 @@ public interface SupportActivity extends SupportV {
     /**
      * {@link Activity#getPackageName()}
      */
-    String getPackageName();
+    String getReflectionPackageName();
 
     /**
      * {@link Activity#finish()}

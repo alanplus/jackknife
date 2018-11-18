@@ -64,4 +64,9 @@ public abstract class Activity extends android.app.Activity implements SupportAc
 	public View findViewById(int id) {
 		return super.findViewById(id);
 	}
+
+	@Override
+	public String getReflectionPackageName() {
+		return getPackageName();
+	}
 }

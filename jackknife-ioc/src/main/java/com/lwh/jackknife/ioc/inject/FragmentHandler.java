@@ -71,7 +71,7 @@ public class FragmentHandler extends InjectAdapter {
         SupportFragment v = (SupportFragment) bindLayout.getTarget();
         String layoutName = generateLayoutName(v);
         SupportActivity activity = v.getFragmentActivity();
-        String packageName = activity.getPackageName();
+        String packageName = activity.getReflectionPackageName();
         int layoutId = View.NO_ID;
         try {
             Class<?> layoutClass = Class.forName(packageName + R_LAYOUT);
@@ -125,7 +125,7 @@ public class FragmentHandler extends InjectAdapter {
                     if (viewInject != null) {
                         id = viewInject.value();
                     } else {
-                        String packageName = activity.getPackageName();
+                        String packageName = activity.getReflectionPackageName();
                         Class<?> idClass = Class.forName(packageName + R_ID);
                         Field idField = idClass.getDeclaredField(field.getName());
                         id = idField.getInt(idField);

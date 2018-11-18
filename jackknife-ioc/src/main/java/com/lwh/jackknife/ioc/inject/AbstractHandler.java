@@ -84,7 +84,7 @@ public abstract class AbstractHandler implements InjectHandler {
         String layoutName = generateLayoutName(v);
         Class<? extends SupportV> viewClass = v.getClass();
         SupportActivity activity = getSupportActivity();
-        String packageName = activity.getPackageName();
+        String packageName = activity.getReflectionPackageName();
         int layoutId = View.NO_ID;
         try {
             Class<?> layoutClass = Class.forName(packageName + R_LAYOUT);
@@ -139,7 +139,7 @@ public abstract class AbstractHandler implements InjectHandler {
                     if (viewInject != null) {
                         id = viewInject.value();
                     } else {
-                        String packageName = activity.getPackageName();
+                        String packageName = activity.getReflectionPackageName();
                         Class<?> idClass = Class.forName(packageName + R_ID);
                         Field idField = idClass.getDeclaredField(field.getName());
                         id = idField.getInt(idField);
