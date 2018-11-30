@@ -14,15 +14,31 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.xhttp;
+package com.lwh.jackknife.xskin.attr;
 
-public interface XHttpService {
+import android.view.View;
 
-    void setUrl(String url);
+import java.util.List;
 
-    void execute();
+/**
+ * 要换肤的控件。
+ */
+public class SkinView {
 
-    void setHttpCallback(XHttpListener httpListener);
+    //    SoftReference<View> viewRef;
+    View view;
+    List<SkinAttr> attrs;
 
-    void setRequestData(byte[] requestData);
+    public SkinView(View view, List<SkinAttr> skinAttrs) {
+        this.view = view;
+        this.attrs = skinAttrs;
+    }
+
+    public void apply() {
+        // View view = viewRef.get();
+        if (view == null) return;
+        for (SkinAttr attr : attrs) {
+            attr.apply(view);
+        }
+    }
 }

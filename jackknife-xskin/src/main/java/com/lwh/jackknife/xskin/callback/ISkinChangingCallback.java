@@ -14,15 +14,30 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.xhttp;
+package com.lwh.jackknife.xskin.callback;
 
-public interface XHttpService {
+public interface ISkinChangingCallback {
 
-    void setUrl(String url);
+    void onStart();
 
-    void execute();
+    void onError(Exception e);
 
-    void setHttpCallback(XHttpListener httpListener);
+    void onComplete();
 
-    void setRequestData(byte[] requestData);
+    DefaultSkinChangingCallback DEFAULT_SKIN_CHANGING_CALLBACK = new DefaultSkinChangingCallback();
+
+    class DefaultSkinChangingCallback implements ISkinChangingCallback {
+
+        @Override
+        public void onStart() {
+        }
+
+        @Override
+        public void onError(Exception e) {
+        }
+
+        @Override
+        public void onComplete() {
+        }
+    }
 }

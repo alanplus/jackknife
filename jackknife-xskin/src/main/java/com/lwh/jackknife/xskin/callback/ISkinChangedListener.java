@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.xhttp;
+package com.lwh.jackknife.xskin.callback;
 
-public interface XHttpService {
-
-    void setUrl(String url);
-
-    void execute();
-
-    void setHttpCallback(XHttpListener httpListener);
-
-    void setRequestData(byte[] requestData);
+public interface ISkinChangedListener {
+    void onSkinChanged();
 }

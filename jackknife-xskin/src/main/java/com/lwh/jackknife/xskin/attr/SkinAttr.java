@@ -14,15 +14,34 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.xhttp;
+package com.lwh.jackknife.xskin.attr;
 
-public interface XHttpService {
+import android.view.View;
 
-    void setUrl(String url);
+/**
+ * 皮肤属性。
+ */
+public class SkinAttr {
 
-    void execute();
+    /**
+     * 资源名。
+     */
+    String resName;
 
-    void setHttpCallback(XHttpListener httpListener);
+    /**
+     * 属性类型。
+     */
+    SkinAttrType attrType;
 
-    void setRequestData(byte[] requestData);
+    public SkinAttr(SkinAttrType attrType, String resName) {
+        this.resName = resName;
+        this.attrType = attrType;
+    }
+
+    /**
+     * 把皮肤的属性应用到View上。
+     */
+    public void apply(View view) {
+        attrType.apply(view, resName);
+    }
 }
