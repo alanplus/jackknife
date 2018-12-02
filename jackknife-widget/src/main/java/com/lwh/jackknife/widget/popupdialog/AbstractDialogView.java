@@ -36,11 +36,12 @@ public abstract class AbstractDialogView {
     public static final int DEFAULT_SHADOW_COLOR = 0x60000000;
     protected OnCancelListener mOnCancelListener;
     protected View.OnKeyListener mOnBackListener;
-    protected final FrameLayout.LayoutParams mLayoutParams = new FrameLayout.LayoutParams(
+    protected FrameLayout.LayoutParams mGravityLayoutParams = new FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.WRAP_CONTENT,
             Gravity.BOTTOM
     );
+    protected int mGravity = Gravity.NO_GRAVITY;
     protected final FrameLayout.LayoutParams mShadowLayoutParams = new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
     );
@@ -51,25 +52,40 @@ public abstract class AbstractDialogView {
         void onCancel();
     }
 
-    public FrameLayout.LayoutParams getLayoutParams() {
-        return mLayoutParams;
+    public void setGravityLayoutParams(FrameLayout.LayoutParams flp) {
+        this.mGravityLayoutParams = flp;
+    }
+
+    public FrameLayout.LayoutParams getGravityLayoutParams() {
+        return mGravityLayoutParams;
     }
 
     public FrameLayout.LayoutParams getShadowLayoutParams() {
         return mShadowLayoutParams;
     }
 
+    public void setGravity(int gravity) {
+        this.mGravity = gravity;
+    }
+
+    public int getGravity() {
+        return mGravity;
+    }
+
     /**
      * Add content view to decor view.
      *
      * @param inflater
-     * @param parent decor view
+     * @param parent   decor view
      * @return content view
      */
     protected View performInflateView(LayoutInflater inflater, FrameLayout parent) {
         View dialogView = inflater.inflate(R.layout.jknf_dialog_view, parent, false);
         LinearLayout dialogViewRoot = (LinearLayout) dialogView.findViewById(R.id
                 .jknf_dialog_view_content);
+        if (mGravity != Gravity.NO_GRAVITY) {
+            dialogViewRoot.setGravity(mGravity);
+        }
         dialogViewRoot.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {

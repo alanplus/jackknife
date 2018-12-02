@@ -58,6 +58,7 @@ public class PopupDialog {
         this.mContentView = (FrameLayout) mDecorView.findViewById(android.R.id.content);
         applyAnimation(builder);
         this.mDialogView = builder.dialogView;
+        this.mDialogView.setGravity(builder.gravity);
         this.mDialogRoot = mDialogView.performInflateView(mInflater, mDecorView);
         this.mDialogRoot.setLayoutParams(mDialogView.getShadowLayoutParams());
         this.mDialogContent = mDialogView.getContentView();
@@ -166,6 +167,7 @@ public class PopupDialog {
         /* @hide */
         private Animation pushOutAnim;
         private Context context;
+        private int gravity;
         protected AbstractDialogView dialogView;
 
         public Builder(Context context) {
@@ -181,7 +183,7 @@ public class PopupDialog {
 
         private Animation getPushInAnimation() {
             return (pushInAnim == null) ? AnimationUtils.loadAnimation(context,
-                    R.anim.jknf_push_in) : pushInAnim;
+                    R.anim.jknf_bottom_in) : pushInAnim;
         }
 
         public Builder setPushInAnimation(int animResId) {
@@ -196,7 +198,7 @@ public class PopupDialog {
 
         private Animation getPushOutAnimation() {
             return (pushOutAnim == null) ? AnimationUtils.loadAnimation(context,
-                    R.anim.jknf_push_out) : pushOutAnim;
+                    R.anim.jknf_bottom_out) : pushOutAnim;
         }
 
         public Builder setPushOutAnimation(int animResId) {
@@ -211,6 +213,11 @@ public class PopupDialog {
 
         public Builder setDialogView(DialogView dialogView) {
             this.dialogView = dialogView;
+            return this;
+        }
+
+        public Builder gravity(int gravity) {
+            this.gravity = gravity;
             return this;
         }
 

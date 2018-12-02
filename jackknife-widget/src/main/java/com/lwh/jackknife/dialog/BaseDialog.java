@@ -23,10 +23,8 @@ import android.os.Bundle;
 import android.text.TextUtils.TruncateAt;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
@@ -160,10 +158,10 @@ public abstract class BaseDialog extends Dialog {
 		bottomLayout.setOrientation(LinearLayout.HORIZONTAL);
 		mPositiveButton = new Button(context);
 		mPositiveButton.setLayoutParams(new LayoutParams(0,LayoutParams.MATCH_PARENT,1));
-		mPositiveButton.setBackgroundResource(R.drawable.selector_base_dialog_bottom_button);
+		mPositiveButton.setBackgroundResource(R.drawable.jknf_base_dialog_bottom_button);
 		mNegativeButton = new Button(context);
 		mNegativeButton.setLayoutParams(new LayoutParams(0,LayoutParams.MATCH_PARENT,1));
-		mNegativeButton.setBackgroundResource(R.drawable.selector_base_dialog_bottom_button);
+		mNegativeButton.setBackgroundResource(R.drawable.jknf_base_dialog_bottom_button);
 		if (mPositiveLabel != null && mPositiveLabel.length() > 0) {
 			mPositiveButton.setText(mPositiveLabel);
 			mPositiveButton.setTextColor(0xFF00CB7E);

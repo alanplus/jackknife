@@ -26,9 +26,12 @@ import android.widget.LinearLayout;
 public class DialogView extends AbstractDialogView {
 
     private int mViewResId = View.NO_ID;
-    private View mContentView;
+    protected View mContentView;
     private boolean mCanTouchOutside;
     private OnInflateListener mOnInflateListener;
+
+    protected DialogView() {
+    }
 
     public DialogView(int layoutResId) {
         this.mViewResId = layoutResId;

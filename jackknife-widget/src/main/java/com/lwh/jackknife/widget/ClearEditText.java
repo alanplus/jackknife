@@ -44,10 +44,10 @@ public class ClearEditText extends EditText implements OnFocusChangeListener, Te
 	}
 
 	private void init() {
-		setBackgroundResource(R.drawable.shape_edit_text_border);
+		setBackgroundResource(R.drawable.jknf_edit_text_border);
 		mClearDrawable = getCompoundDrawables()[2];
 		if (mClearDrawable == null) {
-			mClearDrawable = getResources().getDrawable(R.drawable.icon_clear_edit_text_clear);
+			mClearDrawable = getResources().getDrawable(R.drawable.jknf_clear_edit_text_clear);
 		}
 		mClearDrawable.setBounds(5, 5, mClearDrawable.getIntrinsicWidth()-10,
 				mClearDrawable.getIntrinsicHeight()-10);

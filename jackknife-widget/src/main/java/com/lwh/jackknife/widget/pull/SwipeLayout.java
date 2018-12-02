@@ -183,12 +183,12 @@ public class SwipeLayout extends RelativeLayout {
         switch (refreshResult) {
             case SUCCEED:
                 mRefreshStateTextView.setText(R.string.refresh_succeed);
-                mRefreshStateImageView.setImageResource(R.drawable.icon_swipe_layout_refresh_succeed);
+                mRefreshStateImageView.setImageResource(R.drawable.jknf_swipe_layout_refresh_succeed);
                 break;
             case FAIL:
             default:
                 mRefreshStateTextView.setText(R.string.refresh_fail);
-                mRefreshStateImageView.setImageResource(R.drawable.icon_swipe_layout_refresh_failed);
+                mRefreshStateImageView.setImageResource(R.drawable.jknf_swipe_layout_refresh_failed);
                 break;
         }
         if (mPullDownY > 0) {
@@ -210,12 +210,12 @@ public class SwipeLayout extends RelativeLayout {
         switch (refreshResult) {
             case SUCCEED:
                 mLoadStateTextView.setText(R.string.load_succeed);
-                mLoadStateImageView.setImageResource(R.drawable.icon_swipe_layout_load_succeed);
+                mLoadStateImageView.setImageResource(R.drawable.jknf_swipe_layout_load_succeed);
                 break;
             case FAIL:
             default:
                 mLoadStateTextView.setText(R.string.load_fail);
-                mLoadStateImageView.setImageResource(R.drawable.icon_swipe_layout_load_failed);
+                mLoadStateImageView.setImageResource(R.drawable.jknf_swipe_layout_load_failed);
                 break;
         }
         if (mPullUpY < 0) {
@@ -236,9 +236,9 @@ public class SwipeLayout extends RelativeLayout {
         mState = to;
         switch (mState) {
             case INIT:
-                mRefreshStateImageView.setImageResource(R.drawable.icon_swipe_layout_logo);
+                mRefreshStateImageView.setImageResource(R.drawable.jknf_swipe_layout_logo);
                 mRefreshStateTextView.setText(R.string.pull_to_refresh);
-                mLoadStateImageView.setImageResource(R.drawable.icon_swipe_layout_logo);
+                mLoadStateImageView.setImageResource(R.drawable.jknf_swipe_layout_logo);
                 mLoadStateTextView.setText(R.string.pullup_to_load);
                 break;
             case RELEASE_TO_REFRESH:
@@ -246,7 +246,7 @@ public class SwipeLayout extends RelativeLayout {
                 break;
             case REFRESHING:
                 mRefreshStateTextView.setText(R.string.refreshing);
-                mRefreshStateImageView.setImageResource(R.drawable.icon_swipe_layout_refreshing);
+                mRefreshStateImageView.setImageResource(R.drawable.jknf_swipe_layout_refreshing);
                 mRefreshStateImageView.startAnimation(mRefreshingAnimation);
                 break;
             case RELEASE_TO_LOAD:
@@ -254,7 +254,7 @@ public class SwipeLayout extends RelativeLayout {
                 break;
             case LOADING:
                 mLoadStateTextView.setText(R.string.loading);
-                mLoadStateImageView.setImageResource(R.drawable.icon_swipe_layout_loading);
+                mLoadStateImageView.setImageResource(R.drawable.jknf_swipe_layout_loading);
                 mLoadStateImageView.startAnimation(mRefreshingAnimation);
                 break;
             case DONE:

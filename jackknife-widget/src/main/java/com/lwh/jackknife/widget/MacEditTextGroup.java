@@ -95,6 +95,6 @@ public class MacEditTextGroup extends AutoEditTextGroup<MacEditText> {
 
     @Override
     public void applyEditTextTheme(AutoEditText autoEditText) {
-        autoEditText.setBackgroundResource(R.drawable.shape_edit_text_border);
+        autoEditText.setBackgroundResource(R.drawable.jknf_edit_text_border);
     }
 }
