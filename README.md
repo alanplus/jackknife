@@ -1,6 +1,6 @@
 JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)  [![API](https://img.shields.io/badge/API-11%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=11)
 ================================
-![avatar](http://jackwhliu.cn/static/images/banner3.jpg)
+![avatar](http://jknf.org/static/images/banner.jpg)
 
 一、环境配置
 --------------------------------
@@ -18,14 +18,16 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:2.5.14'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:2.5.14'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:2.5.14'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:2.5.14'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:2.5.14'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:2.5.14'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:2.5.14'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:2.5.14'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xhttp:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:3.0.3'</h3>
 }
 </blockquote>
 
@@ -119,11 +121,3 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 --------------------------------
 简书 : https://www.jianshu.com/u/8f43e6fd56db, https://www.jianshu.com/u/f408bdadacce
 CSDN : http://blog.csdn.net/yiranaini_/
-
-四、Demo安装
---------------------------------
-http://www.jackwhliu.cn/apks/JackKnifeDemo-v2.5.4.apk
-
-五、官方直播APP
---------------------------------
-http://www.jackwhliu.cn/apks/jkplayer.apk
