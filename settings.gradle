@@ -1,4 +1,4 @@
-include ':jackknife-ioc', ':jackknife-xskin',
+include ':jackknife-ioc', ':jackknife-xskin', ':jackknife-ffmpeg',
 ':jackknife-orm',
 ':jackknife-mvp',
 ':jackknife-widget',

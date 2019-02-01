@@ -156,4 +156,8 @@ public class SystemUtils {
     public static boolean beginJellyBean() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
     }
+
+    public static String getIMEI() {
+        return String.valueOf(Build.TIME);
+    }
 }

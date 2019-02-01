@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife.iml" filepath="$PROJECT_DIR$/jackknife.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-annotations-ioc/jackknife-annotations-ioc.iml" filepath="$PROJECT_DIR$/jackknife-annotations-ioc/jackknife-annotations-ioc.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-aop/jackknife-aop.iml" filepath="$PROJECT_DIR$/jackknife-aop/jackknife-aop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackknife-ffmpeg/jackknife-ffmpeg.iml" filepath="$PROJECT_DIR$/jackknife-ffmpeg/jackknife-ffmpeg.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-ioc/jackknife-ioc.iml" filepath="$PROJECT_DIR$/jackknife-ioc/jackknife-ioc.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-ioc2/jackknife-ioc2.iml" filepath="$PROJECT_DIR$/jackknife-ioc2/jackknife-ioc2.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-ioc2-compiler/jackknife-ioc2-compiler.iml" filepath="$PROJECT_DIR$/jackknife-ioc2-compiler/jackknife-ioc2-compiler.iml" />
