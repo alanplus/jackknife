@@ -26,6 +26,17 @@ android {
         targetSdkVersion rootProject.ext.android.target_sdk
         versionCode rootProject.ext.android.release_version_code
         versionName rootProject.ext.android.release_version_name
+        externalNativeBuild {
+            cmake {
+                cppFlags "-frtti -fexceptions"
+                abiFilters 'armeabi', 'armeabi-v7a'
+            }
+        }
+        sourceSets{
+            main {
+                jniLibs.srcDirs=['libs']
+            }
+        }
     }
     buildTypes {
         release {
@@ -33,4 +44,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+//    externalNativeBuild {
+//        cmake {
+//            path 'CMakeLists.txt'
+//        }
+//    }
 }
