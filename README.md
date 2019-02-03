@@ -116,8 +116,3 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 
 ### (四)高可扩展性的面向切面编程AOP（jackknife-aop）
 > 如果你需要在一组相似的业务需求前后添加相同的业务流程处理，比如百度云盘上传文件的一系列流程，有校验MD5值，如果之前已经被记录了，就可以秒传。以及识别一些非法的文件等。而这些业务可能会在以后发生变化，但是你上传文件的地方太多了，导致牵一发而动全身，到处都要改，这是很不好的。最好的编程体验就是高内聚、低耦合，要改，也是在少数的一两个类上面改。
-
-三、博客（绿色通道）
---------------------------------
-简书 : https://www.jianshu.com/u/8f43e6fd56db, https://www.jianshu.com/u/f408bdadacce
-CSDN : http://blog.csdn.net/yiranaini_/
