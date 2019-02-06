@@ -32,11 +32,11 @@ android {
                 abiFilters 'armeabi'
             }
         }
-        sourceSets{
-            main {
-                jniLibs.srcDirs=['libs']
-            }
-        }
+//        sourceSets{
+//            main {
+//                jniLibs.srcDirs=['libs']
+//            }
+//        }
     }
     buildTypes {
         release {
@@ -45,9 +45,9 @@ android {
         }
     }
 
-//    externalNativeBuild {
-//        cmake {
-//            path 'CMakeLists.txt'
-//        }
-//    }
+    externalNativeBuild {
+        cmake {
+            path 'CMakeLists.txt'
+        }
+    }
 }
