@@ -18,6 +18,7 @@ public class JKPlayer {
         System.loadLibrary("postproc-54");
         System.loadLibrary("avfilter-6");
         System.loadLibrary("avdevice-57");
+        System.loadLibrary("yuv");
         System.loadLibrary("jknfmpeg");
     }
 }
