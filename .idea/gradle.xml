@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/jackknife-annotations-ioc" />
             <option value="$PROJECT_DIR$/jackknife-aop" />
+            <option value="$PROJECT_DIR$/jackknife-av" />
             <option value="$PROJECT_DIR$/jackknife-ffmpeg" />
             <option value="$PROJECT_DIR$/jackknife-ioc" />
             <option value="$PROJECT_DIR$/jackknife-ioc2" />
