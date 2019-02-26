@@ -17,25 +17,9 @@ import java.util.HashMap;
 
 public class MusicUtils {
 
-    private static String[] proj_music = new String[]{
-            MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID,
-            MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ARTIST_ID,
-            MediaStore.Audio.Media.DURATION};
-    private static String[] proj_album = new String[]{MediaStore.Audio.Albums.ALBUM,
-            MediaStore.Audio.Albums.NUMBER_OF_SONGS, MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART};
-
-    private static String[] proj_artist = new String[]{
-            MediaStore.Audio.Artists.ARTIST,
-            MediaStore.Audio.Artists.NUMBER_OF_TRACKS};
-
-    private static String[] proj_folder = new String[]{MediaStore.Files.FileColumns.DATA};
-
-    public static final int FILTER_SIZE = 1 * 1024 * 1024;// 1MB
-    public static final int FILTER_DURATION = 1 * 60 * 1000;// 1分钟
     private static final BitmapFactory.Options sBitmapOptionsCache = new BitmapFactory.Options();
     private static final BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
-    private static final HashMap<Long, Bitmap> sArtCache = new HashMap<Long, Bitmap>();
+    private static final HashMap<Long, Bitmap> sArtCache = new HashMap<>();
     private static final Uri sArtworkUri = Uri
             .parse("content://media/external/audio/albumart");
 
