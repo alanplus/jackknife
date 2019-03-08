@@ -17,25 +17,31 @@
 package com.lwh.jackknife.widget;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class MarqueTextView extends TextView {
+public class MarqueeTextView extends TextView {
 
-    public MarqueTextView(Context context, AttributeSet attrs, int defStyle) {
+    public MarqueeTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
     }
 
-    public MarqueTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public MarqueeTextView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public MarqueTextView(Context context) {
-        super(context);
+    public MarqueeTextView(Context context) {
+        this(context, null);
+    }
+
+    private void init() {
+        setSingleLine();
+        setEllipsize(TextUtils.TruncateAt.MARQUEE);
     }
 
     @Override
-
     public boolean isFocused() {
         return true;
     }
