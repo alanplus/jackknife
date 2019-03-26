@@ -40,6 +40,7 @@ public class MultiProxy {
                         return (D) (o == null ? module : o);
                     }
                 }
+                return (D) o;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
