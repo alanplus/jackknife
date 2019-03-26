@@ -35,7 +35,8 @@ public class MultiProxy {
                     synchronized (moduleClazz) {
                         if (o == null) {
                             DecoratorFactory factory = FactoryProducer.getFactory(moduleClazz);
-                            field.set(module, factory.newDecorator((D) module, differenceClazz));
+                            o = factory.newDecorator((D) module, differenceClazz);
+                            field.set(module, o);
                         }
                         return (D) (o == null ? module : o);
                     }
