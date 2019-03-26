@@ -1,4 +1,4 @@
-package com.lwh.jackknife.multiproxy.util;
+package com.lwh.jackknife.multiproxy;
 
 import com.lwh.jackknife.multiproxy.annotation.Autowired;
 import com.lwh.jackknife.multiproxy.interfaces.DecoratorFactory;
@@ -10,18 +10,18 @@ import java.lang.reflect.Field;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 
-public class DecoratorUtils {
+public class MultiProxy {
 
-    private DecoratorUtils() {
+    private MultiProxy() {
     }
 
     public static String getPackageName(ProcessingEnvironment env, Element element) {
         return env.getElementUtils().getPackageOf(element).getQualifiedName().toString();
     }
 
-    public static <D extends IDifference, M extends IDifference> D getDecorator(
-            M module, Class<M> moduleClazz,
-                                                  Class<D> differenceClazz) {
+    public static <M extends IDifference, D extends IDifference> D
+        getDecorator(M module, Class<D> differenceClazz) {
+        Class<? extends IDifference> moduleClazz = module.getClass();
         Field[] fields = moduleClazz.getDeclaredFields();
         for (Field field : fields) {
             Autowired autowired = field.getAnnotation(Autowired.class);
@@ -30,13 +30,14 @@ public class DecoratorUtils {
             }
             try {
                 field.setAccessible(true);
-                if (field.get(module) == null) {
+                Object o = field.get(module);
+                if (o == null) {
                     synchronized (moduleClazz) {
-                        if (field.get(module) == null) {
+                        if (o == null) {
                             DecoratorFactory factory = FactoryProducer.getFactory(moduleClazz);
                             field.set(module, factory.newDecorator((D) module, differenceClazz));
                         }
-                        return (D) (field.get(module) == null ? module : field.get(module));
+                        return (D) (o == null ? module : o);
                     }
                 }
             } catch (IllegalAccessException e) {

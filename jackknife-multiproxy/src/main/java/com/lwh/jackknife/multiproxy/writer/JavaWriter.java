@@ -6,7 +6,7 @@ import com.lwh.jackknife.multiproxy.annotation.Proxy;
 import com.lwh.jackknife.multiproxy.annotation.Wrapper;
 import com.lwh.jackknife.multiproxy.interfaces.DecoratorFactory;
 import com.lwh.jackknife.multiproxy.interfaces.IDifference;
-import com.lwh.jackknife.multiproxy.util.DecoratorUtils;
+import com.lwh.jackknife.multiproxy.MultiProxy;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -109,7 +109,7 @@ public class JavaWriter implements AbstractWriter {
         }
         newDecoratorMtdBuilder.addStatement("return null");
         newDecoratorMtdBuilder.returns(d);
-        String packageName = DecoratorUtils.getPackageName(mProcessingEnv, element);
+        String packageName = MultiProxy.getPackageName(mProcessingEnv, element);
         String className = typeElement.getSimpleName().toString();
         className += "$Factory";
         TypeSpec typeSpec = TypeSpec.classBuilder(className)
