@@ -1,4 +1,7 @@
-include ':jackknife-ioc', ':jackknife-xskin', ':jackknife-ffmpeg',
+include ':jackknife-ioc',
+':jackknife-xskin',
+        ':jackknife-ffmpeg',
+        ':jackknife-multiproxy',
         ':jackknife-av',
 ':jackknife-orm',
 ':jackknife-mvp',
