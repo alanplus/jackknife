@@ -3,9 +3,6 @@ package com.lwh.jackknife.multiproxy;
 import com.lwh.jackknife.multiproxy.interfaces.DecoratorFactory;
 import com.lwh.jackknife.multiproxy.interfaces.IDifference;
 
-/**
- * 空对象模式。
- */
 public class DefaultDecoratorFactory implements DecoratorFactory {
 
     @Override

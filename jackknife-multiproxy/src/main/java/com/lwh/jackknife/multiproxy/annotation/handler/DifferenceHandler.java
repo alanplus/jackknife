@@ -13,9 +13,6 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-/**
- * 专门用来处理{@link Difference}的处理器。
- */
 public class DifferenceHandler implements AnnotationHandler {
 
     private ProcessingEnvironment processingEnv;

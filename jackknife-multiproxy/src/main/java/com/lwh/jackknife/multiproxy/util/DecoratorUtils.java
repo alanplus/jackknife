@@ -19,7 +19,7 @@ public class DecoratorUtils {
         return env.getElementUtils().getPackageOf(element).getQualifiedName().toString();
     }
 
-    public <D extends IDifference, M extends IDifference> D getDecorator(
+    public static <D extends IDifference, M extends IDifference> D getDecorator(
             M module, Class<M> moduleClazz,
                                                   Class<D> differenceClazz) {
         Field[] fields = moduleClazz.getDeclaredFields();
@@ -31,7 +31,7 @@ public class DecoratorUtils {
             try {
                 field.setAccessible(true);
                 if (field.get(module) == null) {
-                    synchronized (this) {
+                    synchronized (moduleClazz) {
                         if (field.get(module) == null) {
                             DecoratorFactory factory = FactoryProducer.getFactory(moduleClazz);
                             field.set(module, factory.newDecorator((D) module, differenceClazz));

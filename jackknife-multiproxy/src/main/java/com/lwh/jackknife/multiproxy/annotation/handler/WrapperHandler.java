@@ -13,9 +13,6 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
-/**
- * 专门用来处理{@link Wrapper}的处理器。
- */
 public class WrapperHandler implements AnnotationHandler {
 
     private ProcessingEnvironment processingEnv;
