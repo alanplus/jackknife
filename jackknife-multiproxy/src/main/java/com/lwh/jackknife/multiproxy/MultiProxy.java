@@ -58,6 +58,10 @@ public class MultiProxy {
         Class<? extends IDifference> moduleClazz = module.getClass();
         DecoratorFactory factory = FactoryProducer.getFactory(moduleClazz);
         D decorator = factory.newDecorator((D) module, differenceClazz);
-        return (D) getHolder().addDecorator(decorator);
+        if (decorator != null) {
+            return (D) getHolder().addDecorator(decorator);
+        } else {
+            return (D) module;
+        }
     }
 }
