@@ -32,10 +32,13 @@ public class MultiProxy {
             return mDecoratorMap.containsKey(name);
         }
 
-        public void addDecorator(IDifference difference) {
+        public IDifference addDecorator(IDifference difference) {
             String name = difference.getClass().getName();
             if (!checkDecorator(name)) {
                 mDecoratorMap.put(name, difference);
+                return difference;
+            } else {
+                return mDecoratorMap.get(name);
             }
         }
     }
@@ -51,12 +54,10 @@ public class MultiProxy {
         return sDecoratorHolder;
     }
 
-    public static <M extends IDifference, D extends IDifference> D
-        getDecorator(M module, Class<D> differenceClazz) {
+    public static <M extends IDifference, D extends IDifference> D getDecorator(M module, Class<D> differenceClazz) {
         Class<? extends IDifference> moduleClazz = module.getClass();
         DecoratorFactory factory = FactoryProducer.getFactory(moduleClazz);
         D decorator = factory.newDecorator((D) module, differenceClazz);
-        getHolder().addDecorator(decorator);
-        return decorator;
+        return (D) getHolder().addDecorator(decorator);
     }
 }
