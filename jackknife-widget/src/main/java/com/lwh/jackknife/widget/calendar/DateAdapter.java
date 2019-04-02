@@ -23,43 +23,26 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
-        implements DateView.OnDateClickListener {
+        implements CalendarView.OnDateClickListener {
 
     private final int MONTH_IN_YEAR = 12;
     private final int INVALID = -1;
     private final Context mContext;
+    private final CalendarDay mStartDay;
+    private final CalendarDay mEndDay;
     private DatePickerController mController;
-    private final Calendar mCalendar;
     private final SelectedDays<CalendarDay> mSelectedDays;
-    private final String mStartMonth;
-    private final String mEndMonth;
-    private final int startYear;
-    private final int startMonth;
-    private final int endYear;
-    private final int endMonth;
     private boolean mCurrentDaySelected;
 
-    public DateAdapter(Context context, long startTimeMillis, long endTimeMillis) {
-        this(context, new SimpleDateFormat("yyyyMM").format(new Date(startTimeMillis)),
-                new SimpleDateFormat("yyyyMM").format(new Date(endTimeMillis)));
-    }
-
-    public DateAdapter(Context context, String startMonth, String endMonth) {
-        this.mStartMonth = startMonth;
-        this.mEndMonth = endMonth;
-        this.startYear = Integer.valueOf(mStartMonth.substring(0, 4));
-        this.startMonth = Integer.valueOf(mStartMonth.substring(4));
-        this.endYear = Integer.valueOf(mEndMonth.substring(0, 4));
-        this.endMonth = Integer.valueOf(mEndMonth.substring(4));
-        mCalendar = Calendar.getInstance();
-        mSelectedDays = new SelectedDays<>();
-        mContext = context;
+    public DateAdapter(Context context, CalendarDay startDay, CalendarDay endDay) {
+        this.mContext = context;
+        this.mStartDay = startDay;
+        this.mEndDay = endDay;
+        this.mSelectedDays = new SelectedDays<>();
         init();
     }
 
@@ -69,29 +52,27 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup group, int position) {
-        DateView dateView = new DateView(mContext, mStartMonth, mEndMonth);
-        return new ViewHolder(dateView, this);
+        CalendarView calendarView = new CalendarView(mContext);
+        return new ViewHolder(calendarView, this);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        DateView dateView = holder.dateView;
-        dateView.setCurrentDayTextColor(0xff999999);
-        dateView.setMonthTextColor(0xff999999);
-        dateView.setDateTextColor(0xff999999);
-        dateView.setDateNumColor(0xff999999);
-        dateView.setPreviousDateColor(0xff999999);
-        dateView.setSelectedDaysColor(0xffe75f49);
-        dateView.setMonthTitleTextColor(0xff000000);
-        dateView.setDrawRect(false);
-        if (position == 0) {
-            dateView.setNeedMonthDayLabels(true);
-        }
+        CalendarView calendarView = holder.calendarView;
+        calendarView.setCurrentDayTextColor(0xff999999);
+        calendarView.setMonthTextColor(0xff999999);
+        calendarView.setDateTextColor(0xff999999);
+        calendarView.setDateNumColor(0xff000000);
+        calendarView.setPreviousDateColor(0xff999999);
+        calendarView.setSelectedDaysColor(0xffe75f49);
+        calendarView.setMonthTitleTextColor(0xffffffff);
+        calendarView.setDrawRect(false);
+        calendarView.setNeedMonthDayLabels(true);
         HashMap<String, Integer> drawingParams = new HashMap<>();
         int month;
         int year;
-        month = (startMonth + (position % MONTH_IN_YEAR)) % MONTH_IN_YEAR;
-        year = position / MONTH_IN_YEAR + mCalendar.get(Calendar.YEAR) + ((startMonth +
+        month = (mStartDay.month + (position % MONTH_IN_YEAR)) % MONTH_IN_YEAR;
+        year = position / MONTH_IN_YEAR + mStartDay.year + ((mStartDay.month +
                 (position % MONTH_IN_YEAR)) / MONTH_IN_YEAR);
 
         int selectedFirstDay = INVALID;
@@ -113,19 +94,19 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
             selectedLastYear = mSelectedDays.getLast().year;
         }
 
-        dateView.reuse();
+        calendarView.reuse();
 
-        drawingParams.put(DateView.VIEW_PARAMS_SELECTED_BEGIN_YEAR, selectedFirstYear);
-        drawingParams.put(DateView.VIEW_PARAMS_SELECTED_LAST_YEAR, selectedLastYear);
-        drawingParams.put(DateView.VIEW_PARAMS_SELECTED_BEGIN_MONTH, selectedFirstMonth);
-        drawingParams.put(DateView.VIEW_PARAMS_SELECTED_LAST_MONTH, selectedLastMonth);
-        drawingParams.put(DateView.VIEW_PARAMS_SELECTED_BEGIN_DAY, selectedFirstDay);
-        drawingParams.put(DateView.VIEW_PARAMS_SELECTED_LAST_DAY, selectedLastDay);
-        drawingParams.put(DateView.VIEW_PARAMS_YEAR, year);
-        drawingParams.put(DateView.VIEW_PARAMS_MONTH, month);
-        drawingParams.put(DateView.VIEW_PARAMS_WEEK_START, mCalendar.getFirstDayOfWeek());
-        dateView.setMonthParams(drawingParams);
-        dateView.invalidate();
+        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_BEGIN_YEAR, selectedFirstYear);
+        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_LAST_YEAR, selectedLastYear);
+        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_BEGIN_MONTH, selectedFirstMonth);
+        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_LAST_MONTH, selectedLastMonth);
+        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_BEGIN_DAY, selectedFirstDay);
+        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_LAST_DAY, selectedLastDay);
+        drawingParams.put(CalendarView.VIEW_PARAMS_YEAR, year);
+        drawingParams.put(CalendarView.VIEW_PARAMS_MONTH, month);
+        drawingParams.put(CalendarView.VIEW_PARAMS_WEEK_START, Calendar.getInstance().getFirstDayOfWeek());
+        calendarView.setMonthParams(drawingParams);
+        calendarView.invalidate();
     }
 
     public long getItemId(int position) {
@@ -134,20 +115,20 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return (endYear - startYear) * 12 + (endMonth - startMonth);
+        return (mEndDay.year - mStartDay.year) * 12 + (mEndDay.month - mStartDay.month);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        DateView dateView;
+        CalendarView calendarView;
 
-        public ViewHolder(View itemView, DateView.OnDateClickListener listener) {
+        public ViewHolder(View itemView, CalendarView.OnDateClickListener listener) {
             super(itemView);
-            dateView = (DateView) itemView;
-            dateView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT,
+            calendarView = (CalendarView) itemView;
+            calendarView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT));
-            dateView.setClickable(true);
-            dateView.setOnDateClickListener(listener);
+            calendarView.setClickable(true);
+            calendarView.setOnDateClickListener(listener);
         }
     }
 
@@ -157,20 +138,22 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
 
     protected void init() {
         if (mCurrentDaySelected) {
-            onDateTapped(new CalendarDay(System.currentTimeMillis()));
+            onDateSelected(new CalendarDay(System.currentTimeMillis()));
         }
     }
 
     @Override
-    public void onDateClick(DateView dateView, CalendarDay calendarDay) {
+    public void onDateClick(CalendarView dateView, CalendarDay calendarDay) {
         if (calendarDay != null) {
-            onDateTapped(calendarDay);
+            onDateSelected(calendarDay);
         }
     }
 
-    protected void onDateTapped(CalendarDay calendarDay) {
-        mController.onDateSelected(calendarDay.year, calendarDay.month, calendarDay.day);
-        setSelectedDay(calendarDay);
+    protected void onDateSelected(CalendarDay calendarDay) {
+        if (mController != null) {
+            mController.onDateSelected(calendarDay.year, calendarDay.month, calendarDay.day);
+            setSelectedDay(calendarDay);
+        }
     }
 
     public void setSelectedDay(CalendarDay calendarDay) {
@@ -189,7 +172,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
             mSelectedDays.setLast(null);
         } else
             mSelectedDays.setFirst(calendarDay);
-
         notifyDataSetChanged();
     }
 
