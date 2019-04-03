@@ -26,7 +26,7 @@ import android.widget.AbsListView;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
+public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
         implements CalendarView.OnDateClickListener {
 
     private final int MONTH_IN_YEAR = 12;

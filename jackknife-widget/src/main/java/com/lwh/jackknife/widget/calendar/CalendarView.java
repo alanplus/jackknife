@@ -58,9 +58,8 @@ class CalendarView extends View {
     public static final String VIEW_PARAMS_SELECTED_BEGIN_YEAR = "selected_begin_year";
     public static final String VIEW_PARAMS_SELECTED_LAST_YEAR = "selected_last_year";
     public static final String VIEW_PARAMS_WEEK_START = "week_start";
-
-    private static final int SELECTED_CIRCLE_ALPHA = 128;
     protected static final int ROW_NUMS = 6;
+    private static final int SELECTED_CIRCLE_ALPHA = 128;
     protected static int DAY_SELECTED_CIRCLE_SIZE;
     protected static int DAY_SEPARATOR_WIDTH = 1;
     protected static int MINI_DAY_NUMBER_TEXT_SIZE;
@@ -68,13 +67,8 @@ class CalendarView extends View {
     protected static int MONTH_DAY_LABEL_TEXT_SIZE;
     protected static int MONTH_HEADER_SIZE;
     protected static int MONTH_LABEL_TEXT_SIZE;
-    private DisplayMetrics mDisplayMetrics;
-
+    private final int INVALID = -1;
     protected int mPadding = 0;
-
-    private String mDayOfWeekTypeface;
-    private String mMonthHeaderTypeface;
-
     protected TextPaint mMonthDayLabelPaint;
     protected TextPaint mMonthDatePaint;
     protected Paint mMonthHeaderBgPaint;
@@ -89,12 +83,8 @@ class CalendarView extends View {
     protected int mMonthTitleBgColor = 0xfff2f2f2;
     protected int mPreviousDateColor;
     protected int mSelectedDaysColor;
-
-    private StringBuilder mStringBuilder;
-
     protected boolean mHasToday = false;
     protected boolean mIsPrev = false;
-    private final int INVALID = -1;
     protected int mSelectedBeginDay = INVALID;
     protected int mSelectedLastDay = INVALID;
     protected int mSelectedBeginMonth = INVALID;
@@ -102,18 +92,20 @@ class CalendarView extends View {
     protected int mSelectedBeginYear = INVALID;
     protected int mSelectedLastYear = INVALID;
     protected int mToday = INVALID;
-
     protected int mWeekStart = 1;
     protected int ROW_DAYS = 7;
     protected int mDateNums = ROW_DAYS;
-    private int mDayOfWeekStart = 0;
     protected int mMonth;
     protected Boolean mDrawRect;
     protected int mRowHeight;
     protected int mWidth;
     protected int mYear;
     Time mTime;
-
+    private DisplayMetrics mDisplayMetrics;
+    private String mDayOfWeekTypeface;
+    private String mMonthHeaderTypeface;
+    private StringBuilder mStringBuilder;
+    private int mDayOfWeekStart = 0;
     private Calendar mCalendar;
     private Calendar mDayLabelCalendar;
     private Boolean isPrevDayEnabled;
@@ -309,6 +301,10 @@ class CalendarView extends View {
                 mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             }
 
+            if (dayOffset % ROW_DAYS == 0 || dayOffset % ROW_DAYS == 6) {
+                // 设置周六和周日的字体颜色
+                mMonthDatePaint.setColor(0xfff4250a);
+            }
             // 起点或终点
             if (calendarDay.compareTo(selectedBeginDay) == 0 ||
                     calendarDay.compareTo(selectedLastDay) == 0) {
@@ -336,7 +332,7 @@ class CalendarView extends View {
                             (mSelectedBeginMonth > mSelectedLastMonth && mMonth ==
                                     mSelectedLastMonth && day > mSelectedLastDay)))) {
                 //选择的两个点之间的
-                mMonthDatePaint.setColor(Color.WHITE);
+//                mMonthDatePaint.setColor(Color.WHITE);
             }
             if ((selectedBeginDay.isValid() && selectedLastDay.isValid()
                     && mSelectedBeginYear != mSelectedLastYear
@@ -351,7 +347,7 @@ class CalendarView extends View {
                                     (mSelectedBeginMonth > mSelectedLastMonth && mMonth ==
                                             mSelectedLastMonth && day < mSelectedLastDay))))) {
                 //跨年的边缘日期
-                mMonthDatePaint.setColor(Color.WHITE);
+//                mMonthDatePaint.setColor(Color.WHITE);
             }
 
             if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear
@@ -361,7 +357,7 @@ class CalendarView extends View {
                             (mMonth < mSelectedBeginMonth && mMonth > mSelectedLastMonth
                                     && mSelectedBeginMonth > mSelectedLastMonth))) {
                 //不跨年的中间月
-                mMonthDatePaint.setColor(Color.WHITE);
+//                mMonthDatePaint.setColor(Color.WHITE);
             }
 
             if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear != mSelectedLastYear) &&
@@ -372,7 +368,7 @@ class CalendarView extends View {
                                     && mYear == mSelectedBeginYear) || (mMonth > mSelectedLastMonth
                                     && mYear == mSelectedLastYear))))) {
                 //跨年的中间月
-                mMonthDatePaint.setColor(Color.WHITE);
+//                mMonthDatePaint.setColor(Color.WHITE);
             }
 
             if (!isPrevDayEnabled && checkPrevDay(day, mTime) && mTime.month == mMonth && mTime.year == mYear) {
@@ -380,10 +376,6 @@ class CalendarView extends View {
                 mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
             }
 
-            if (dayOffset % ROW_DAYS == 0 || dayOffset % ROW_DAYS == 6) {
-                // 设置周六和周日的字体颜色
-                mMonthDatePaint.setColor(0xfff4250a);
-            }
             if (isDateOutOfRange(calendarDay)) {
                 // 屏蔽不可选择的日期
                 mMonthDatePaint.setAlpha(128);
@@ -513,7 +505,7 @@ class CalendarView extends View {
         }
         if ((new CalendarDay(mYear, mMonth, day).compareMonth(selectedBeginDay) > 0 &&
                 new CalendarDay(mYear, mMonth, day).compareMonth(selectedLastDay) < 0
-                && selectedBeginDay.isValid() && selectedBeginDay.compareTo(selectedLastDay) < 0) ) {
+                && selectedBeginDay.isValid() && selectedBeginDay.compareTo(selectedLastDay) < 0)) {
             //中间月
             points.add(firstPoint);
             points.add(lastPoint);
@@ -533,21 +525,24 @@ class CalendarView extends View {
     }
 
     private void drawTextEdgeInternal(PointF startPoint, PointF endPoint, Canvas canvas) {
+        mDateFormatSymbols = new DateFormatSymbols();
+        int dayWidthHalf = (mWidth - mPadding * 2) / (ROW_DAYS * 2);
+        int startX = dayWidthHalf + mPadding;
+        int stopX = mWidth - dayWidthHalf + mPadding;
         if (endPoint.y > startPoint.y) {
             int row = ((int) Math.abs(endPoint.y - startPoint.y) / mRowHeight + 1);
             if (row > 2) {
-                canvas.drawLine(startPoint.x, startPoint.y - 9, 660.0f, startPoint.y - 9, mDateEdgePaint);
-                canvas.drawLine(50, endPoint.y - 9, endPoint.x, endPoint.y - 9, mDateEdgePaint);
+                canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
                 for (int i = 1; i < row - 1; i++) {
-                    canvas.drawLine(50, startPoint.y - 9 + mRowHeight * i, 660.0f,
-                            startPoint.y - 9 + mRowHeight * i, mDateEdgePaint);
+                    canvas.drawLine(startX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3 + mRowHeight * i, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3 + mRowHeight * i, mDateEdgePaint);
                 }
             } else if (row == 2) {
-                canvas.drawLine(startPoint.x, startPoint.y - 9, 660.0f, startPoint.y - 9, mDateEdgePaint);
-                canvas.drawLine(50, endPoint.y - 9, endPoint.x, endPoint.y - 9, mDateEdgePaint);
+                canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
             }
         } else {
-            canvas.drawLine(startPoint.x, startPoint.y - 9, endPoint.x, endPoint.y - 9, mDateEdgePaint);
+            canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
         }
     }
 
@@ -634,7 +629,7 @@ class CalendarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        drawMonthDayLabels(canvas);
+//        drawMonthDayLabels(canvas);
         drawMonthHeader(canvas);
         drawDateEdge(canvas);
         drawMonthDate(canvas);
@@ -643,7 +638,7 @@ class CalendarView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
-                mRowHeight * mRowNums + MONTH_HEADER_SIZE);
+                mRowHeight * mRowNums + MONTH_HEADER_SIZE + MINI_DAY_NUMBER_TEXT_SIZE / 2);
     }
 
     @Override
