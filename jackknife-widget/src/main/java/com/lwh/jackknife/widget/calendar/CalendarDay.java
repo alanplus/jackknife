@@ -86,6 +86,14 @@ public class CalendarDay implements Serializable, Comparable<CalendarDay> {
         return year+"."+(month+1)+"."+day;
     }
 
+    public int distanceMonth(CalendarDay o) {
+        return (year - o.year) * 12 + month - o.month;
+    }
+
+    public int compareMonth(CalendarDay o) {
+        return (year * 10000 + month * 100) - (o.year * 10000 + o.month * 100);
+    }
+
     @Override
     public int compareTo(@NonNull CalendarDay o) {
         return (year * 10000 + month * 100 + day) - (o.year * 10000 + o.month * 100 + o.day);
