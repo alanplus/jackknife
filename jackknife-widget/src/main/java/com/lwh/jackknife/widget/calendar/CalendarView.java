@@ -31,6 +31,7 @@ import android.text.TextPaint;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -118,6 +119,9 @@ class CalendarView extends View {
     private Calendar mDayLabelCalendar;
     private Boolean isPrevDayEnabled;
 
+    private CalendarDay mStartDay;
+    private CalendarDay mEndDay;
+
     /**
      * 行数。
      */
@@ -155,6 +159,14 @@ class CalendarView extends View {
         mRowHeight = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 270, mDisplayMetrics) - MONTH_HEADER_SIZE) / 6;
         isPrevDayEnabled = true;
         initPaints();
+    }
+
+    public void setStartDay(CalendarDay startDay) {
+        this.mStartDay = startDay;
+    }
+
+    public void setEndDay(CalendarDay endDay) {
+        this.mEndDay = endDay;
     }
 
     public void setDrawRect(Boolean isDrawRect) {
@@ -255,7 +267,7 @@ class CalendarView extends View {
         int y = MONTH_HEADER_SIZE / 2;
         Paint.FontMetrics fontMetrics = mMonthHeaderTextPaint.getFontMetrics();
         //文本绘制基线，水平穿过文字中央
-        float baselineY = y + (fontMetrics.bottom-fontMetrics.top)/2-fontMetrics.bottom;
+        float baselineY = y + (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
         StringBuilder sb = new StringBuilder(getMonthAndYearString().toLowerCase());
         sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
         canvas.drawText(new SimpleDateFormat("yyyy年MM月").format(mCalendar.getTime()), x, baselineY, mMonthHeaderTextPaint);
@@ -269,6 +281,7 @@ class CalendarView extends View {
         int day = 1;
         while (day <= mDateNums) {
             int x = paddingDay * (1 + dayOffset * 2) + mPadding;
+            // 选择的两个点
             if ((mMonth == mSelectedBeginMonth && mSelectedBeginDay == day
                     && mSelectedBeginYear == mYear) || (mMonth == mSelectedLastMonth
                     && mSelectedLastDay == day && mSelectedLastYear == mYear)) {
@@ -285,46 +298,50 @@ class CalendarView extends View {
                 }
             }
             if (mHasToday && (mToday == day)) {
-                mMonthDatePaint.setColor(mCurrentDayTextColor);
-                mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                mMonthDatePaint.setColor(Color.BLACK);
+//                mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
                 mMonthDatePaint.setColor(mDateNumColor);
                 mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             }
 
-
+            // 起点或终点
             if ((mMonth == mSelectedBeginMonth && mSelectedBeginDay == day
                     && mSelectedBeginYear == mYear) || (mMonth == mSelectedLastMonth
-                    && mSelectedLastDay == day && mSelectedLastYear == mYear))
+                    && mSelectedLastDay == day && mSelectedLastYear == mYear)) {
                 mMonthDatePaint.setColor(mMonthTitleTextColor);
-
+            }
             if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear
                     == mSelectedLastYear &&
                     mSelectedBeginMonth == mSelectedLastMonth &&
                     mSelectedBeginDay == mSelectedLastDay &&
                     day == mSelectedBeginDay &&
                     mMonth == mSelectedBeginMonth &&
-                    mYear == mSelectedBeginYear))
+                    mYear == mSelectedBeginYear)) {
                 mMonthDatePaint.setColor(mSelectedDaysColor);
-
-            if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear ==
-                    mSelectedLastYear && mSelectedBeginYear == mYear) &&
-                    (((mMonth == mSelectedBeginMonth && mSelectedLastMonth ==
-                            mSelectedBeginMonth) && ((mSelectedBeginDay < mSelectedLastDay && day >
-                            mSelectedBeginDay && day < mSelectedLastDay) || (mSelectedBeginDay >
-                            mSelectedLastDay && day < mSelectedBeginDay && day > mSelectedLastDay))) ||
-                            ((mSelectedBeginMonth < mSelectedLastMonth && mMonth ==
-                                    mSelectedBeginMonth && day > mSelectedBeginDay)
-                                    || (mSelectedBeginMonth < mSelectedLastMonth &&
-                                    mMonth == mSelectedLastMonth && day < mSelectedLastDay)) ||
-                            ((mSelectedBeginMonth > mSelectedLastMonth && mMonth ==
-                                    mSelectedBeginMonth && day < mSelectedBeginDay) ||
-                                    (mSelectedBeginMonth > mSelectedLastMonth && mMonth ==
-                                            mSelectedLastMonth && day > mSelectedLastDay)))) {
+            }
+            if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1
+                    // 年份相同
+                    && mSelectedBeginYear == mSelectedLastYear && mSelectedBeginYear == mYear)
+                    && (((mMonth == mSelectedBeginMonth && mSelectedLastMonth ==
+                    mSelectedBeginMonth)
+                    && ((mSelectedBeginDay < mSelectedLastDay && day >
+                    mSelectedBeginDay && day < mSelectedLastDay) || (mSelectedBeginDay >
+                    mSelectedLastDay && day < mSelectedBeginDay && day > mSelectedLastDay))) ||
+                    ((mSelectedBeginMonth < mSelectedLastMonth && mMonth ==
+                            mSelectedBeginMonth && day > mSelectedBeginDay)
+                            || (mSelectedBeginMonth < mSelectedLastMonth &&
+                            mMonth == mSelectedLastMonth && day < mSelectedLastDay)) ||
+                    ((mSelectedBeginMonth > mSelectedLastMonth && mMonth ==
+                            mSelectedBeginMonth && day < mSelectedBeginDay) ||
+                            (mSelectedBeginMonth > mSelectedLastMonth && mMonth ==
+                                    mSelectedLastMonth && day > mSelectedLastDay)))) {
+                //选择的两个点之间的
                 mMonthDatePaint.setColor(Color.WHITE);
             }
-            if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear
-                    != mSelectedLastYear && ((mSelectedBeginYear == mYear &&
+            if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1
+                    && mSelectedBeginYear != mSelectedLastYear
+                    && ((mSelectedBeginYear == mYear &&
                     mMonth == mSelectedBeginMonth) || (mSelectedLastYear == mYear
                     && mMonth == mSelectedLastMonth)) &&
                     (((mSelectedBeginMonth < mSelectedLastMonth && mMonth == mSelectedBeginMonth
@@ -334,17 +351,18 @@ class CalendarView extends View {
                                     == mSelectedBeginMonth && day > mSelectedBeginDay) ||
                                     (mSelectedBeginMonth > mSelectedLastMonth && mMonth ==
                                             mSelectedLastMonth && day < mSelectedLastDay))))) {
-                mMonthDatePaint.setColor(mSelectedDaysColor);
+                //跨年的边缘日期
+                mMonthDatePaint.setColor(Color.WHITE);
             }
 
-            if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear
-                    == mSelectedLastYear && mYear == mSelectedBeginYear) &&
-                    ((mMonth > mSelectedBeginMonth && mMonth < mSelectedLastMonth
-                            && mSelectedBeginMonth < mSelectedLastMonth) ||
-                            (mMonth < mSelectedBeginMonth && mMonth > mSelectedLastMonth
-                                    && mSelectedBeginMonth > mSelectedLastMonth))) {
-                mMonthDatePaint.setColor(mSelectedDaysColor);
-            }
+//            if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear
+//                    == mSelectedLastYear && mYear == mSelectedBeginYear) &&
+//                    ((mMonth > mSelectedBeginMonth && mMonth < mSelectedLastMonth
+//                            && mSelectedBeginMonth < mSelectedLastMonth) ||
+//                            (mMonth < mSelectedBeginMonth && mMonth > mSelectedLastMonth
+//                                    && mSelectedBeginMonth > mSelectedLastMonth))) {
+//                mMonthDatePaint.setColor(mSelectedDaysColor);
+//            }
 
             if ((mSelectedBeginDay != -1 && mSelectedLastDay != -1 && mSelectedBeginYear != mSelectedLastYear) &&
                     ((mSelectedBeginYear < mSelectedLastYear && ((mMonth > mSelectedBeginMonth
@@ -353,7 +371,8 @@ class CalendarView extends View {
                             (mSelectedBeginYear > mSelectedLastYear && ((mMonth < mSelectedBeginMonth
                                     && mYear == mSelectedBeginYear) || (mMonth > mSelectedLastMonth
                                     && mYear == mSelectedLastYear))))) {
-                mMonthDatePaint.setColor(mSelectedDaysColor);
+                //跨年的中间月
+                mMonthDatePaint.setColor(Color.WHITE);
             }
 
             if (!isPrevDayEnabled && checkPrevDay(day, mTime) && mTime.month == mMonth && mTime.year == mYear) {
@@ -369,6 +388,7 @@ class CalendarView extends View {
                     mSelectedBeginMonth && mMonth < mSelectedLastMonth) ||
                     (mMonth < mSelectedBeginMonth && mMonth > mSelectedLastMonth
                             && mSelectedLastMonth != -1)) {
+
                 //这种情况将覆盖之前的所有情况
                 if (dayOffset % ROW_DAYS == 0 || dayOffset % ROW_DAYS == 6) {
                     mMonthDatePaint.setColor(0xfff4250a);
@@ -376,7 +396,11 @@ class CalendarView extends View {
                     mMonthDatePaint.setColor(Color.WHITE);
                 }
             }
-
+            CalendarDay calendarDay = new CalendarDay(mYear, mMonth, day);
+            if (isDateOutOfRange(calendarDay)) {
+                Log.e("calendarDay", calendarDay.toString());
+                mMonthDatePaint.setAlpha(128);
+            }
             canvas.drawText(String.format("%d", day), x, y, mMonthDatePaint);
 
             dayOffset++;
@@ -386,6 +410,10 @@ class CalendarView extends View {
             }
             day++;
         }
+    }
+
+    private boolean isInSameYear() {
+        return mSelectedBeginYear == mSelectedLastYear;
     }
 
     private void drawDateEdge(Canvas canvas) {
@@ -408,19 +436,20 @@ class CalendarView extends View {
             if (day == mDateNums) {
                 lastPoint = new PointF(x, y);
             }
+            // 不跨年的情况开始
             if (mMonth == mSelectedBeginMonth
                     && mSelectedBeginDay == day
                     && mSelectedBeginYear == mYear) {
                 startPoint = new PointF(x, y);
                 points.add(startPoint);
-                if (mSelectedLastMonth - mSelectedBeginMonth >= 1) {
+                if ((mSelectedLastYear == mSelectedBeginYear) && mSelectedLastMonth - mSelectedBeginMonth >= 1) {
                     needLastPoint = true;
                 }
-                if (mSelectedLastMonth != -1 && mSelectedBeginMonth - mSelectedLastMonth >= 1) {
+                if ((mSelectedLastYear == mSelectedBeginYear) && mSelectedLastMonth != -1 && mSelectedBeginMonth - mSelectedLastMonth >= 1) {
                     needFirstPoint = true;
                 }
             }
-            if (mMonth == mSelectedLastMonth
+            if ((mSelectedLastYear == mSelectedBeginYear) && mMonth == mSelectedLastMonth
                     && mSelectedLastDay == day
                     && mSelectedLastYear == mYear) {
                 if (mSelectedLastMonth != -1 && mSelectedBeginMonth - mSelectedLastMonth >= 1) {
@@ -434,7 +463,7 @@ class CalendarView extends View {
                 }
                 points.add(endPoint);
             }
-
+            // 不跨年的情况结束
             dayOffset++;
             if (dayOffset == ROW_DAYS) {
                 dayOffset = 0;
@@ -448,10 +477,11 @@ class CalendarView extends View {
         if (needFirstPoint && firstPoint != null) {
             points.add(0, firstPoint);
         }
-        if ((mYear == mSelectedBeginYear && mYear == mSelectedLastYear)
+        if ((mSelectedBeginYear == mSelectedLastYear)
                 && (mMonth > mSelectedBeginMonth && mMonth < mSelectedLastMonth) ||
                 (mMonth < mSelectedBeginMonth && mMonth > mSelectedLastMonth
                         && mSelectedLastMonth != -1)) {
+            //不跨年中间月的考虑
             points.add(firstPoint);
             points.add(lastPoint);
         }
@@ -506,6 +536,10 @@ class CalendarView extends View {
         return new CalendarDay(mYear, mMonth, day);
     }
 
+    public boolean isDateOutOfRange(CalendarDay calendarDay) {
+        return calendarDay.compareTo(mStartDay) < 0 || calendarDay.compareTo(mEndDay) > 0;
+    }
+
     protected void initPaints() {
 
         mMonthHeaderBgPaint = new Paint();
@@ -538,7 +572,7 @@ class CalendarView extends View {
         mDateEdgePaint.setStrokeCap(Paint.Cap.ROUND);
         mDateEdgePaint.setAlpha(SELECTED_CIRCLE_ALPHA);
 
-        mDateEdgePaint.setStrokeWidth(50);
+        mDateEdgePaint.setStrokeWidth(MINI_DAY_NUMBER_TEXT_SIZE * 2);
         mDateEdgePaint.setColor(mEdgeColor);
 
         mMonthDayLabelPaint = new TextPaint();
@@ -581,7 +615,7 @@ class CalendarView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             CalendarDay calendarDay = getDayFromTouchPoint(event.getX(), event.getY());
-            if (calendarDay != null) {
+            if (calendarDay != null && !isDateOutOfRange(calendarDay)) {
                 onDateClick(calendarDay);
             }
         }

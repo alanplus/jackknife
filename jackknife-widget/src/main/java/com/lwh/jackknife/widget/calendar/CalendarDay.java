@@ -16,11 +16,13 @@
 
 package com.lwh.jackknife.widget.calendar;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CalendarDay implements Serializable {
+public class CalendarDay implements Serializable, Comparable<CalendarDay> {
 
     private Calendar calendar;
     int day;
@@ -67,6 +69,10 @@ public class CalendarDay implements Serializable {
         this.day = day;
     }
 
+    public boolean isValid() {
+        return year != -1 && month != -1 && day != -1;
+    }
+
     public Date getDate() {
         if (calendar == null) {
             calendar = Calendar.getInstance();
@@ -77,6 +83,11 @@ public class CalendarDay implements Serializable {
 
     @Override
     public String toString() {
-        return year+"."+month+"."+day;
+        return year+"."+(month+1)+"."+day;
+    }
+
+    @Override
+    public int compareTo(@NonNull CalendarDay o) {
+        return (year * 10000 + month * 100 + day) - (o.year * 10000 + o.month * 100 + o.day);
     }
 }

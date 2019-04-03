@@ -68,6 +68,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
         calendarView.setMonthTitleTextColor(0xffffffff);
         calendarView.setDrawRect(false);
         calendarView.setNeedMonthDayLabels(true);
+        calendarView.setStartDay(mStartDay);
+        calendarView.setEndDay(mEndDay);
         HashMap<String, Integer> drawingParams = new HashMap<>();
         int month;
         int year;
@@ -115,7 +117,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
 
     @Override
     public int getItemCount() {
-        return (mEndDay.year - mStartDay.year) * 12 + (mEndDay.month - mStartDay.month);
+        return (mEndDay.year - mStartDay.year) * 12 + (mEndDay.month - mStartDay.month) + 1;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -143,7 +145,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
     }
 
     @Override
-    public void onDateClick(CalendarView dateView, CalendarDay calendarDay) {
+    public void onDateClick(CalendarView calendarView, CalendarDay calendarDay) {
         if (calendarDay != null) {
             onDateSelected(calendarDay);
         }
