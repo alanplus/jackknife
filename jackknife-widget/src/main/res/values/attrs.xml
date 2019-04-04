@@ -159,7 +159,7 @@
         <attr name="un_select_color" format="color" />
         <attr name="selected_color" format="color" />
     </declare-styleable>
-    <!--<declare-styleable name="DatePickerView">-->
+    <declare-styleable name="DatePickerView">
         <!--<attr name="colorCurrentDay" format="color"/>-->
         <!--<attr name="colorSelectedDayBackground" format="color"/>-->
         <!--<attr name="colorSelectedDayText" format="color"/>-->
@@ -176,7 +176,7 @@
         <!--<attr name="enablePreviousDay" format="boolean" />-->
         <!--<attr name="currentDaySelected" format="boolean" />-->
         <!--<attr name="drawRoundRect" format="boolean" />-->
-    <!--</declare-styleable>-->
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
