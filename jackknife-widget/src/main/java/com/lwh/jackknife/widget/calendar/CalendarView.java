@@ -527,22 +527,52 @@ class CalendarView extends View {
     private void drawTextEdgeInternal(PointF startPoint, PointF endPoint, Canvas canvas) {
         mDateFormatSymbols = new DateFormatSymbols();
         int dayWidthHalf = (mWidth - mPadding * 2) / (ROW_DAYS * 2);
-        int startX = dayWidthHalf + mPadding;
+        int startX = dayWidthHalf +  mPadding;
         int stopX = mWidth - dayWidthHalf + mPadding;
         if (endPoint.y > startPoint.y) {
             int row = ((int) Math.abs(endPoint.y - startPoint.y) / mRowHeight + 1);
             if (row > 2) {
-                canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
-                canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                if (startPoint.x == stopX) {
+                    mSelectedMarkerPaint.setColor(mEdgeColor);
+                    canvas.drawCircle(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                } else {
+                    canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                }
+                if (endPoint.x == startX) {
+                    mSelectedMarkerPaint.setColor(mEdgeColor);
+                    canvas.drawCircle(endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                } else {
+                    canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                }
                 for (int i = 1; i < row - 1; i++) {
                     canvas.drawLine(startX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3 + mRowHeight * i, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3 + mRowHeight * i, mDateEdgePaint);
                 }
             } else if (row == 2) {
-                canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
-                canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                if (startPoint.x == stopX) {
+                    mSelectedMarkerPaint.setColor(mEdgeColor);
+                    canvas.drawCircle(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                } else {
+                    canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                }
+                if (endPoint.x == startX) {
+                    mSelectedMarkerPaint.setColor(mEdgeColor);
+                    canvas.drawCircle(endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                } else {
+                    canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                }
             }
         } else {
-            canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+            if (startPoint.x == endPoint.x) {
+                mSelectedMarkerPaint.setColor(mEdgeColor);
+                canvas.drawCircle(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                        DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+            } else {
+                canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+            }
         }
     }
 
