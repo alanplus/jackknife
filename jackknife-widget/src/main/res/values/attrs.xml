@@ -177,6 +177,18 @@
         <!--<attr name="currentDaySelected" format="boolean" />-->
         <!--<attr name="drawRoundRect" format="boolean" />-->
     </declare-styleable>
+    <declare-styleable name="WheelView">
+        <attr name="wv_gravity">
+            <enum name="center" value="17"/>
+            <enum name="left" value="3"/>
+            <enum name="right" value="5"/>
+        </attr>
+        <attr name="wv_textSize" format="dimension"/>
+        <attr name="wv_textColorOut" format="color"/>
+        <attr name="wv_textColorCenter" format="color"/>
+        <attr name="wv_dividerColor" format="color"/>
+        <attr name="wv_lineSpacingMultiplier" format="float"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>

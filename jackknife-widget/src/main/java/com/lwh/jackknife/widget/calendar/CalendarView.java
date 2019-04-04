@@ -295,7 +295,7 @@ class CalendarView extends View {
             // 今天
             if (mHasToday && (mToday == day)) {
                 mMonthDatePaint.setColor(Color.BLACK);
-//                mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+//                mMonthDatePaint.setmTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
                 mMonthDatePaint.setColor(mDateNumColor);
                 mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
@@ -519,16 +519,15 @@ class CalendarView extends View {
         }
         if (points.size() > 1 && points.size() % 2 == 0) {
             for (int i = 0; i < points.size(); i += 2) {
-                drawTextEdgeInternal(points.get(i), points.get(i + 1), canvas);
+                drawDateEdgeInternal(points.get(i), points.get(i + 1), canvas);
             }
         }
     }
 
-    private void drawTextEdgeInternal(PointF startPoint, PointF endPoint, Canvas canvas) {
-        mDateFormatSymbols = new DateFormatSymbols();
+    private void drawDateEdgeInternal(PointF startPoint, PointF endPoint, Canvas canvas) {
         int dayWidthHalf = (mWidth - mPadding * 2) / (ROW_DAYS * 2);
         int startX = dayWidthHalf +  mPadding;
-        int stopX = mWidth - dayWidthHalf + mPadding;
+        int stopX = mWidth - dayWidthHalf - mPadding;
         if (endPoint.y > startPoint.y) {
             int row = ((int) Math.abs(endPoint.y - startPoint.y) / mRowHeight + 1);
             if (row > 2) {

@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="wheelview_topbar_height">44dp</dimen>
+    <dimen name="wheelview_topbar_padding">20dp</dimen>
+    <dimen name="wheelview_topbar_btn_textsize">17sp</dimen>
+    <dimen name="wheelview_topbar_title_textsize">18sp</dimen>
+    <dimen name="wheelview_textsize">20sp</dimen>
+</resources>

@@ -27,7 +27,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Bind a method to an {@link OnItemSelectedListener OnItemSelectedListener} on the view for each
+ * Bind a method to an {@link OnItemSelectedListener OnItemSelectListener} on the view for each
  * ID specified.
  * <pre><code>
  * {@literal @}OnItemSelected(R.id.example_list) void onItemSelected(int position) {
@@ -50,7 +50,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target(METHOD) @Retention(RUNTIME)
 @EventBase(
-        listenerSetter = "setOnItemSelectedListener",
+        listenerSetter = "setmOnItemSelectListener",
         listenerType = AdapterView.OnItemSelectedListener.class,
         callbackMethod = "onItemSelected",
         parameters = {
