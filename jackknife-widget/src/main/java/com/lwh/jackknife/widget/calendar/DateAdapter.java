@@ -54,8 +54,10 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
     private int mHeaderTextColor;
     private float mHeaderTextSize;
     private int mEdgeColor;
-    private int mRowSpace;
+    private float mDisabledDateAlphaRate;
     private int mDisabledDateAlpha;
+    private int mDisabledDateTextColor;
+    private boolean mUseCustomDisabledDateTextColor;
 
     public DateAdapter(Context context, CalendarDay startDay, CalendarDay endDay) {
         this.mContext = context;
@@ -106,6 +108,11 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
         mSundayTextColor = a.getColor(R.styleable.DatePickerView_dpv_sundayTextColor, INVALID_COLOR);
         mMarkerColor = a.getColor(R.styleable.DatePickerView_dpv_markerColor, INVALID_COLOR);
         mEdgeColor = a.getColor(R.styleable.DatePickerView_dpv_edgeColor, INVALID_COLOR);
+        mUseCustomDisabledDateTextColor = a.getBoolean(R.styleable.DatePickerView_dpv_useCustomDisabledDateTextColor, false);
+        mDisabledDateAlphaRate = a.getFraction(R.styleable.DatePickerView_dpv_disabledDateAlphaRate,
+                255, 1, 0.5f);
+        mDisabledDateAlpha = (int) (mDisabledDateAlphaRate * 255);
+        mDisabledDateTextColor = a.getColor(R.styleable.DatePickerView_dpv_disabledDateTextColor, INVALID_COLOR);
         a.recycle();
     }
 
@@ -131,6 +138,9 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
         cv.setMarkerColor(mMarkerColor);
         cv.setMarkerRadius(mMarkerRadius);
         cv.setEdgeColor(mEdgeColor);
+        cv.setDisabledDateAlpha(mDisabledDateAlpha);
+        cv.setDisabledDateTextColor(mDisabledDateTextColor);
+        cv.setUseCustomDisabledDateTextColor(mUseCustomDisabledDateTextColor);
         HashMap<String, Integer> drawingParams = new HashMap<>();
         int month;
         int year;

@@ -116,6 +116,9 @@ class CalendarView extends View {
 
     private OnDateClickListener mOnDateClickListener;
     private Resources mResources;
+    private int mDisabledDateAlpha = 127;
+    private int mDisabledDateTextColor;
+    private boolean mUseCustomDisabledDateTextColor;
 
     public CalendarView(Context context) {
         super(context);
@@ -384,7 +387,11 @@ class CalendarView extends View {
 
             if (isDateOutOfRange(calendarDay)) {
                 // 屏蔽不可选择的日期
-                mMonthDatePaint.setAlpha(128);
+                if (mUseCustomDisabledDateTextColor) {
+                    mMonthDatePaint.setColor(mDisabledDateTextColor);
+                } else {
+                    mMonthDatePaint.setAlpha(mDisabledDateAlpha);
+                }
             }
             canvas.drawText(String.format("%d", day), x, y, mMonthDatePaint);
 
@@ -821,6 +828,18 @@ class CalendarView extends View {
 
     public void setHeaderTextSize(float textSize) {
         this.mHeaderTextSize = textSize;
+    }
+
+    public void setDisabledDateAlpha(int alpha) {
+        this.mDisabledDateAlpha = alpha;
+    }
+
+    public void setDisabledDateTextColor(int color) {
+        this.mDisabledDateTextColor = color;
+    }
+
+    public void setUseCustomDisabledDateTextColor(boolean useCustomDisabledDateTextColor) {
+        this.mUseCustomDisabledDateTextColor = useCustomDisabledDateTextColor;
     }
 
     /**
