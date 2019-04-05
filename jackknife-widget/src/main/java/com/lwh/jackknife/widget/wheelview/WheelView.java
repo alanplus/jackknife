@@ -679,8 +679,8 @@ public class WheelView extends View {
         return mAdapter != null ? mAdapter.getItemCount() : 0;
     }
 
-    public void setUnitLabel(String mUnitLabel) {
-        this.mUnitLabel = mUnitLabel;
+    public void setUnitLabel(String unitLabel) {
+        this.mUnitLabel = unitLabel;
     }
 
     public void isCenterLabel(boolean isCenterLabel) {
