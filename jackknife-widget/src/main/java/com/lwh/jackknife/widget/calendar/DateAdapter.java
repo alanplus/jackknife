@@ -17,14 +17,18 @@
 package com.lwh.jackknife.widget.calendar;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AbsListView;
 
+import com.lwh.jackknife.widget.R;
+
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder>
         implements CalendarView.OnDateClickListener {
@@ -32,11 +36,26 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
     private final int MONTH_IN_YEAR = 12;
     private final int INVALID = -1;
     private final Context mContext;
-    private final CalendarDay mStartDay;
-    private final CalendarDay mEndDay;
+    private CalendarDay mStartDay;
+    private CalendarDay mEndDay;
     private DatePickerController mController;
     private final SelectedDays<CalendarDay> mSelectedDays;
-    private boolean mCurrentDaySelected;
+    private boolean mTodaySelected;
+    private final int INVALID_COLOR = 0;
+    private float mMarkerRadius;
+    private int mMarkerColor;
+    private int mMarkerTextColor;
+    private int mWeekdayTextColor;
+    private int mSaturdayTextColor;
+    private int mSundayTextColor;
+    private int mHeaderHeight;
+    private int mHeaderBackgroundColor;
+    private int mContentBackgroundColor;
+    private int mHeaderTextColor;
+    private float mHeaderTextSize;
+    private int mEdgeColor;
+    private int mRowSpace;
+    private int mDisabledDateAlpha;
 
     public DateAdapter(Context context, CalendarDay startDay, CalendarDay endDay) {
         this.mContext = context;
@@ -44,6 +63,10 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
         this.mEndDay = endDay;
         this.mSelectedDays = new SelectedDays<>();
         init();
+    }
+
+    public void setDatePickerViewAttrs(TypedArray ta) {
+        parseAttrs(ta);
     }
 
     public void setDatePickerController(DatePickerController controller) {
@@ -56,20 +79,58 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
         return new ViewHolder(calendarView, this);
     }
 
+    private void parseAttrs(TypedArray a) {
+        String startDate = a.getString(R.styleable.DatePickerView_dpv_startDate);
+        if (isDateValid(startDate)) {
+            int startYear = Integer.valueOf(startDate.substring(0, 4));
+            int startMonth = Integer.valueOf(startDate.substring(4, 6));
+            int startDay = Integer.valueOf(startDate.substring(6));
+            mStartDay = new CalendarDay(startYear, startMonth - 1, startDay);
+        }
+        String endDate = a.getString(R.styleable.DatePickerView_dpv_endDate);
+        if (isDateValid(endDate)) {
+            int endYear = Integer.valueOf(endDate.substring(0, 4));
+            int endMonth = Integer.valueOf(endDate.substring(4, 6));
+            int endDay = Integer.valueOf(endDate.substring(6));
+            mEndDay = new CalendarDay(endYear, endMonth - 1, endDay);
+        }
+        mMarkerRadius = a.getDimension(R.styleable.DatePickerView_dpv_markerRadius, 25);
+        mMarkerTextColor = a.getColor(R.styleable.DatePickerView_dpv_markerTextColor, INVALID_COLOR);
+        mHeaderTextColor = a.getColor(R.styleable.DatePickerView_dpv_headerTextColor, INVALID_COLOR);
+        mHeaderTextSize = a.getDimension(R.styleable.DatePickerView_dpv_headerTextSize, 20);
+        mHeaderHeight = a.getDimensionPixelSize(R.styleable.DatePickerView_dpv_headerHeight, 75);
+        mHeaderBackgroundColor = a.getColor(R.styleable.DatePickerView_dpv_headerBackgroundColor, INVALID_COLOR);
+        mContentBackgroundColor = a.getColor(R.styleable.DatePickerView_dpv_contentBackgroundColor, INVALID_COLOR);
+        mWeekdayTextColor = a.getColor(R.styleable.DatePickerView_dpv_weekdayTextColor, INVALID_COLOR);
+        mSaturdayTextColor = a.getColor(R.styleable.DatePickerView_dpv_saturdayTextColor, INVALID_COLOR);
+        mSundayTextColor = a.getColor(R.styleable.DatePickerView_dpv_sundayTextColor, INVALID_COLOR);
+        mMarkerColor = a.getColor(R.styleable.DatePickerView_dpv_markerColor, INVALID_COLOR);
+        mEdgeColor = a.getColor(R.styleable.DatePickerView_dpv_edgeColor, INVALID_COLOR);
+        a.recycle();
+    }
+
+    private boolean isDateValid(String date) {
+        return date != null && Pattern.matches("^\\d{8}$", date);
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CalendarView calendarView = holder.calendarView;
-        calendarView.setCurrentDayTextColor(0xff999999);
-        calendarView.setMonthTextColor(0xff999999);
-        calendarView.setDateTextColor(0xff999999);
-        calendarView.setDateNumColor(0xff000000);
-        calendarView.setPreviousDateColor(0xff999999);
-        calendarView.setSelectedDaysColor(0xffe75f49);
-        calendarView.setMonthTitleTextColor(0xffffffff);
-        calendarView.setDrawRect(false);
-        calendarView.setNeedMonthDayLabels(true);
-        calendarView.setStartDay(mStartDay);
-        calendarView.setEndDay(mEndDay);
+        CalendarView cv = holder.calendarView;
+        cv.setStartDay(mStartDay);
+        cv.setEndDay(mEndDay);
+        cv.setMarkerTextColor(mMarkerTextColor);
+        cv.setHeaderHeight(mHeaderHeight);
+        cv.setHeaderTextColor(mHeaderTextColor);
+        cv.setHeaderTextSize(mHeaderTextSize);
+        cv.setHeaderBackgroundColor(mHeaderBackgroundColor);
+        cv.setWeekdayTextColor(mWeekdayTextColor);
+        cv.setSaturdayTextColor(mSaturdayTextColor);
+        cv.setSundayTextColor(mSundayTextColor);
+        cv.setHeaderBackgroundColor(mHeaderBackgroundColor);
+        cv.setContentBackgroundColor(mContentBackgroundColor);
+        cv.setMarkerColor(mMarkerColor);
+        cv.setMarkerRadius(mMarkerRadius);
+        cv.setEdgeColor(mEdgeColor);
         HashMap<String, Integer> drawingParams = new HashMap<>();
         int month;
         int year;
@@ -96,19 +157,19 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
             selectedLastYear = mSelectedDays.getLast().year;
         }
 
-        calendarView.reuse();
+        cv.reuse();
 
-        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_BEGIN_YEAR, selectedFirstYear);
-        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_LAST_YEAR, selectedLastYear);
-        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_BEGIN_MONTH, selectedFirstMonth);
-        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_LAST_MONTH, selectedLastMonth);
-        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_BEGIN_DAY, selectedFirstDay);
-        drawingParams.put(CalendarView.VIEW_PARAMS_SELECTED_LAST_DAY, selectedLastDay);
-        drawingParams.put(CalendarView.VIEW_PARAMS_YEAR, year);
-        drawingParams.put(CalendarView.VIEW_PARAMS_MONTH, month);
-        drawingParams.put(CalendarView.VIEW_PARAMS_WEEK_START, Calendar.getInstance().getFirstDayOfWeek());
-        calendarView.setMonthParams(drawingParams);
-        calendarView.invalidate();
+        drawingParams.put(CalendarView.DRAWING_PARAMS_SELECTED_BEGIN_YEAR, selectedFirstYear);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_SELECTED_LAST_YEAR, selectedLastYear);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_SELECTED_BEGIN_MONTH, selectedFirstMonth);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_SELECTED_LAST_MONTH, selectedLastMonth);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_SELECTED_BEGIN_DAY, selectedFirstDay);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_SELECTED_LAST_DAY, selectedLastDay);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_YEAR, year);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_MONTH, month);
+        drawingParams.put(CalendarView.DRAWING_PARAMS_WEEK_START, Calendar.getInstance().getFirstDayOfWeek());
+        cv.setDrawingParams(drawingParams);
+        cv.invalidate();
     }
 
     public long getItemId(int position) {
@@ -134,12 +195,12 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
         }
     }
 
-    public void setCurrentDaySelected(boolean isCurrentDaySelected) {
-        this.mCurrentDaySelected = isCurrentDaySelected;
+    public void setTodaySelected(boolean isTodaySelected) {
+        this.mTodaySelected = isTodaySelected;
     }
 
     protected void init() {
-        if (mCurrentDaySelected) {
+        if (mTodaySelected) {
             onDateSelected(new CalendarDay(System.currentTimeMillis()));
         }
     }

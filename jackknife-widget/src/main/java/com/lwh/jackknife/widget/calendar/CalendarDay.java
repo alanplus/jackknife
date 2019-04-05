@@ -26,6 +26,9 @@ public class CalendarDay implements Serializable, Comparable<CalendarDay> {
 
     private Calendar calendar;
     int day;
+    /**
+     * 月份，0代表一月。
+     */
     int month;
     int year;
 
@@ -69,6 +72,11 @@ public class CalendarDay implements Serializable, Comparable<CalendarDay> {
         this.day = day;
     }
 
+    /**
+     * 是否有效。
+     *
+     * @return true代表有效，false反之
+     */
     public boolean isValid() {
         return year != -1 && month != -1 && day != -1;
     }

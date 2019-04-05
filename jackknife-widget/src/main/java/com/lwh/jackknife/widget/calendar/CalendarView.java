@@ -28,9 +28,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.text.TextPaint;
-import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,53 +38,53 @@ import android.view.View;
 import com.lwh.jackknife.widget.R;
 
 import java.security.InvalidParameterException;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 class CalendarView extends View {
 
-    public static final String VIEW_PARAMS_HEIGHT = "height";
-    public static final String VIEW_PARAMS_MONTH = "month";
-    public static final String VIEW_PARAMS_YEAR = "year";
-    public static final String VIEW_PARAMS_SELECTED_BEGIN_DAY = "selected_begin_day";
-    public static final String VIEW_PARAMS_SELECTED_LAST_DAY = "selected_last_day";
-    public static final String VIEW_PARAMS_SELECTED_BEGIN_MONTH = "selected_begin_month";
-    public static final String VIEW_PARAMS_SELECTED_LAST_MONTH = "selected_last_month";
-    public static final String VIEW_PARAMS_SELECTED_BEGIN_YEAR = "selected_begin_year";
-    public static final String VIEW_PARAMS_SELECTED_LAST_YEAR = "selected_last_year";
-    public static final String VIEW_PARAMS_WEEK_START = "week_start";
+    public static final String DRAWING_PARAMS_MONTH = "month";
+    public static final String DRAWING_PARAMS_YEAR = "year";
+    public static final String DRAWING_PARAMS_SELECTED_BEGIN_DAY = "selected_begin_day";
+    public static final String DRAWING_PARAMS_SELECTED_LAST_DAY = "selected_last_day";
+    public static final String DRAWING_PARAMS_SELECTED_BEGIN_MONTH = "selected_begin_month";
+    public static final String DRAWING_PARAMS_SELECTED_LAST_MONTH = "selected_last_month";
+    public static final String DRAWING_PARAMS_SELECTED_BEGIN_YEAR = "selected_begin_year";
+    public static final String DRAWING_PARAMS_SELECTED_LAST_YEAR = "selected_last_year";
+    public static final String DRAWING_PARAMS_WEEK_START = "week_start";
+    public static final String DRAWING_PARAMS_HEIGHT = "height";
     protected static final int ROW_NUMS = 6;
-    private static final int SELECTED_CIRCLE_ALPHA = 128;
-    protected static int DAY_SELECTED_CIRCLE_SIZE;
+    protected static int DEFAULT_MARKER_RADIUS;
     protected static int DAY_SEPARATOR_WIDTH = 1;
     protected static int MINI_DAY_NUMBER_TEXT_SIZE;
-    protected static int MIN_HEIGHT = 10;
+    protected static int DATE_MIN_HEIGHT = 10;
     protected static int MONTH_DAY_LABEL_TEXT_SIZE;
-    protected static int MONTH_HEADER_SIZE;
-    protected static int MONTH_LABEL_TEXT_SIZE;
+    protected static int MONTH_HEADER_HEIGHT;
+    protected static int MONTH_HEADER_TEXT_SIZE;
     private final int INVALID = -1;
     protected int mPadding = 0;
-    protected TextPaint mMonthDayLabelPaint;
     protected TextPaint mMonthDatePaint;
     protected Paint mMonthHeaderBgPaint;
     protected TextPaint mMonthHeaderTextPaint;
     protected Paint mSelectedMarkerPaint;
     protected Paint mDateEdgePaint;
-    protected int mCurrentDayTextColor;
-    protected int mMonthTextColor = 0xff000000;
-    protected int mDateTextColor;
-    protected int mDateNumColor;
-    protected int mMonthTitleTextColor;
-    protected int mMonthTitleBgColor = 0xfff2f2f2;
-    protected int mPreviousDateColor;
-    protected int mSelectedDaysColor;
+    private int mHeaderHeight;
+    protected int mHeaderTextColor = Color.BLACK;
+    private float mHeaderTextSize;
+    protected int mHeaderBackgroundColor = Color.LTGRAY;
+    protected int mWeekdayTextColor = Color.BLACK;
+    protected int mContentBackgroundColor = Color.WHITE;
+    protected int mMarkerColor;
+    private int mMarkerTextColor = Color.WHITE;
+    protected float mMarkerRadius;
+    private int mSaturdayTextColor = Color.BLUE;
+    private int mSundayTextColor = Color.RED;
+    private int mEdgeColor = Color.BLACK;
     protected boolean mHasToday = false;
-    protected boolean mIsPrev = false;
+    protected boolean mPrev = false;
     protected int mSelectedBeginDay = INVALID;
     protected int mSelectedLastDay = INVALID;
     protected int mSelectedBeginMonth = INVALID;
@@ -96,35 +96,26 @@ class CalendarView extends View {
     protected int ROW_DAYS = 7;
     protected int mDateNums = ROW_DAYS;
     protected int mMonth;
-    protected Boolean mDrawRect;
-    protected int mRowHeight;
-    protected int mWidth;
-    protected int mYear;
-    Time mTime;
-    private DisplayMetrics mDisplayMetrics;
-    private String mDayOfWeekTypeface;
-    private String mMonthHeaderTypeface;
-    private StringBuilder mStringBuilder;
-    private int mDayOfWeekStart = 0;
-    private Calendar mCalendar;
-    private Calendar mDayLabelCalendar;
-    private Boolean isPrevDayEnabled;
-
-    private CalendarDay mStartDay;
-    private CalendarDay mEndDay;
-
     /**
      * 行数。
      */
     private int mRowNums = ROW_NUMS;
+    protected boolean mDrawRect;
+    protected int mRowHeight;
+    protected int mWidth;
+    protected int mYear;
+    private Time mTime;
+    private DisplayMetrics mDisplayMetrics;
+    private String mMonthHeaderTypeface;
+    private int mDayOfWeekStart = 0;
+    private Calendar mCalendar;
+    private Boolean mPrevDayEnabled;
 
-    private DateFormatSymbols mDateFormatSymbols;
+    private CalendarDay mStartDay;
+    private CalendarDay mEndDay;
 
     private OnDateClickListener mOnDateClickListener;
     private Resources mResources;
-    private int mEdgeColor = 0xffa6c6fd;
-
-    private boolean mNeedMonthDayLabels = true;
 
     public CalendarView(Context context) {
         super(context);
@@ -132,23 +123,24 @@ class CalendarView extends View {
     }
 
     private void init(Context context) {
+        setBackgroundColor(mContentBackgroundColor);
         mResources = context.getResources();
-        mDayLabelCalendar = Calendar.getInstance();
         mCalendar = Calendar.getInstance();
         mTime = new Time(Time.getCurrentTimezone());
         mTime.setToNow();
-        mDayOfWeekTypeface = mResources.getString(R.string.sans_serif);
         mMonthHeaderTypeface = mResources.getString(R.string.sans_serif);
 
-        mStringBuilder = new StringBuilder(50);
         mDisplayMetrics = mResources.getDisplayMetrics();
         MINI_DAY_NUMBER_TEXT_SIZE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, mDisplayMetrics);
-        MONTH_LABEL_TEXT_SIZE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, mDisplayMetrics);
         MONTH_DAY_LABEL_TEXT_SIZE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 15, mDisplayMetrics);
-        MONTH_HEADER_SIZE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, mDisplayMetrics);
-        DAY_SELECTED_CIRCLE_SIZE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, mDisplayMetrics);
-        mRowHeight = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 270, mDisplayMetrics) - MONTH_HEADER_SIZE) / 6;
-        isPrevDayEnabled = true;
+        MONTH_HEADER_HEIGHT = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, mDisplayMetrics);
+        MONTH_HEADER_TEXT_SIZE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, mDisplayMetrics);
+        DEFAULT_MARKER_RADIUS = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, mDisplayMetrics);
+        mMarkerRadius = DEFAULT_MARKER_RADIUS;
+        mRowHeight = (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 270, mDisplayMetrics) - MONTH_HEADER_HEIGHT) / 6;
+        mHeaderHeight = MONTH_HEADER_HEIGHT;
+        mHeaderTextSize = MONTH_HEADER_TEXT_SIZE;
+        mPrevDayEnabled = true;
         initPaints();
     }
 
@@ -164,34 +156,63 @@ class CalendarView extends View {
         this.mDrawRect = isDrawRect;
     }
 
-    public void setDateTextColor(int color) {
-        this.mDateTextColor = color;
+    public void setMarkerRadius(float radius) {
+        this.mMarkerRadius = radius;
     }
 
-    public void setDateNumColor(int color) {
-        this.mDateNumColor = color;
+    /**
+     * 设置存放日期的容器面板的背景颜色。
+     */
+    public void setContentBackgroundColor(int color) {
+        this.mContentBackgroundColor = color;
     }
 
-    public void setPreviousDateColor(int color) {
-        this.mPreviousDateColor = color;
+    /**
+     * 设置日期周一到周五的日期的颜色。
+     *
+     * @param color 周一到周五的日期的颜色
+     */
+    public void setWeekdayTextColor(int color) {
+        this.mWeekdayTextColor = color;
     }
 
-    public void setSelectedDaysColor(int color) {
-        this.mSelectedDaysColor = color;
+    public void setMarkerColor(int color) {
+        this.mMarkerColor = color;
     }
 
-    public void setMonthTitleTextColor(int color) {
-        this.mMonthTitleTextColor = color;
+    public void setHeaderTextColor(int color) {
+        this.mHeaderTextColor = color;
     }
 
-    public void setCurrentDayTextColor(int color) {
-        this.mCurrentDayTextColor = color;
+    public void setHeaderBackgroundColor(int color) {
+        this.mHeaderBackgroundColor = color;
     }
 
-    public void setMonthTextColor(int color) {
-        this.mMonthTextColor = color;
+    public void setSaturdayTextColor(int color) {
+        this.mSaturdayTextColor = color;
     }
 
+    public void setSundayTextColor(int color) {
+        this.mSundayTextColor = color;
+    }
+
+    public void setEdgeColor(int color) {
+        this.mEdgeColor = color;
+    }
+
+    public void setMarkerTextColor(int color) {
+        this.mMarkerTextColor = color;
+    }
+
+    public void setHeaderHeight(int height) {
+        this.mHeaderHeight = height;
+    }
+
+    /**
+     * 计算需要绘制几行。
+     *
+     * @return 4~6行
+     */
     private int calculateRowNums() {
         int offset = calculateDayOffset();
         int dividend = (offset + mDateNums) / ROW_DAYS;
@@ -199,24 +220,21 @@ class CalendarView extends View {
         return (dividend + (remainder > 0 ? 1 : 0));
     }
 
-    public void setNeedMonthDayLabels(boolean isNeedMonthDayLabels) {
-        this.mNeedMonthDayLabels = isNeedMonthDayLabels;
-    }
-
+    /**
+     * 计算日期偏离每行第一个条目的位置偏移量。
+     *
+     * @return
+     */
     private int calculateDayOffset() {
         return (mDayOfWeekStart < mWeekStart ? (mDayOfWeekStart + ROW_DAYS) : mDayOfWeekStart)
                 - mWeekStart;
     }
 
-    private String getMonthAndYearString() {
-        int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NO_MONTH_DAY;
-        mStringBuilder.setLength(0);
-        long millis = mCalendar.getTimeInMillis();
-        return DateUtils.formatDateRange(getContext(), millis, millis, flags);
-    }
-
-    private void onDateClick(CalendarDay calendarDay) {
-        if (mOnDateClickListener != null && (isPrevDayEnabled || !((calendarDay.month == mTime.month)
+    /**
+     * 回调日期被点击事件。
+     */
+    protected void onDateClick(CalendarDay calendarDay) {
+        if (mOnDateClickListener != null && (mPrevDayEnabled || !((calendarDay.month == mTime.month)
                 && (calendarDay.year == mTime.year) && calendarDay.day < mTime.monthDay))) {
             mOnDateClickListener.onDateClick(this, calendarDay);
         }
@@ -231,41 +249,32 @@ class CalendarView extends View {
                 (mMonth == time.month && monthDay < time.monthDay);
     }
 
-    private void drawMonthDayLabels(Canvas canvas) {
-        if (mNeedMonthDayLabels) {
-            int dayWidthHalf = (mWidth - mPadding * 2) / (ROW_DAYS * 2);
-            int y = (MONTH_HEADER_SIZE - MONTH_DAY_LABEL_TEXT_SIZE) / 2 + (MONTH_LABEL_TEXT_SIZE / 3);
-            mDateFormatSymbols = new DateFormatSymbols();
-            for (int i = 0; i < ROW_DAYS; i++) {
-                int calendarDay = (i + mWeekStart) % ROW_DAYS;
-                int x = (2 * i + 1) * dayWidthHalf + mPadding;
-                mDayLabelCalendar.set(Calendar.DAY_OF_WEEK, calendarDay);
-                if (i == 0 || i == 6) {
-                    mMonthDayLabelPaint.setColor(0xfff4250a);
-                } else {
-                    mMonthDayLabelPaint.setColor(mDateTextColor);
-                }
-                canvas.drawText(mDateFormatSymbols.getShortWeekdays()[mDayLabelCalendar
-                        .get(Calendar.DAY_OF_WEEK)].toUpperCase(Locale.getDefault())
-                        .replace("周", ""), x, y, mMonthDayLabelPaint);
-            }
-        }
-    }
-
+    /**
+     * 绘制月份的标题头，如2019年2月。
+     *
+     * @param canvas 画布
+     */
     private void drawMonthHeader(Canvas canvas) {
-        canvas.drawRect(new Rect(0, 0, mWidth, MONTH_HEADER_SIZE), mMonthHeaderBgPaint);
-        int x = (mWidth + 2 * mPadding) / 2;
-        int y = MONTH_HEADER_SIZE / 2;
+        mMonthHeaderBgPaint.setColor(mHeaderBackgroundColor);
+        canvas.drawRect(new Rect(0, 0, mWidth, mHeaderHeight), mMonthHeaderBgPaint);
+        int x = (mWidth - mPadding) / 2;
+        int y = mHeaderHeight / 2;
+        mMonthHeaderTextPaint.setColor(mHeaderTextColor);
+        mMonthHeaderTextPaint.setTextSize(mHeaderTextSize);
         Paint.FontMetrics fontMetrics = mMonthHeaderTextPaint.getFontMetrics();
         //文本绘制基线，水平穿过文字中央
         float baselineY = y + (fontMetrics.bottom - fontMetrics.top) / 2 - fontMetrics.bottom;
-        StringBuilder sb = new StringBuilder(getMonthAndYearString().toLowerCase());
-        sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-        canvas.drawText(new SimpleDateFormat("yyyy年MM月").format(mCalendar.getTime()), x, baselineY, mMonthHeaderTextPaint);
+        canvas.drawText(new SimpleDateFormat("yyyy年MM月").format(mCalendar.getTime()),
+                x, baselineY, mMonthHeaderTextPaint);
     }
 
+    /**
+     * 绘制月份的日期数字。
+     *
+     * @param canvas 画布
+     */
     protected void drawMonthDate(Canvas canvas) {
-        int y = (mRowHeight + MINI_DAY_NUMBER_TEXT_SIZE) / 2 - DAY_SEPARATOR_WIDTH + MONTH_HEADER_SIZE;
+        int y = (mRowHeight + MINI_DAY_NUMBER_TEXT_SIZE) / 2 - DAY_SEPARATOR_WIDTH + mHeaderHeight;
         //paddingDay，item宽度的一半
         int paddingDay = (mWidth - 2 * mPadding) / (2 * ROW_DAYS);
         int dayOffset = calculateDayOffset();
@@ -280,40 +289,42 @@ class CalendarView extends View {
             // 选择的两个点
             if (calendarDay.compareTo(selectedBeginDay) == 0 ||
                     calendarDay.compareTo(selectedLastDay) == 0) {
-                mSelectedMarkerPaint.setColor(0xff4f8ffc);
+                mSelectedMarkerPaint.setColor(mMarkerColor);
                 if (mDrawRect) {
-                    RectF rectF = new RectF(x - DAY_SELECTED_CIRCLE_SIZE,
-                            (y - MINI_DAY_NUMBER_TEXT_SIZE / 3) - DAY_SELECTED_CIRCLE_SIZE,
-                            x + DAY_SELECTED_CIRCLE_SIZE, (y - MINI_DAY_NUMBER_TEXT_SIZE / 3)
-                            + DAY_SELECTED_CIRCLE_SIZE);
+                    RectF rectF = new RectF(x - mMarkerRadius,
+                            (y - MINI_DAY_NUMBER_TEXT_SIZE / 3) - mMarkerRadius,
+                            x + mMarkerRadius, (y - MINI_DAY_NUMBER_TEXT_SIZE / 3)
+                            + mMarkerRadius);
                     canvas.drawRoundRect(rectF, rectF.centerX(), rectF.centerY(), mSelectedMarkerPaint);
                 } else {
                     canvas.drawCircle(x, y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
-                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                            mMarkerRadius, mSelectedMarkerPaint);
                 }
             }
             // 今天
             if (mHasToday && (mToday == day)) {
                 mMonthDatePaint.setColor(Color.BLACK);
-//                mMonthDatePaint.setmTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+//                mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             } else {
-                mMonthDatePaint.setColor(mDateNumColor);
+                mMonthDatePaint.setColor(mWeekdayTextColor);
                 mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
             }
-
-            if (dayOffset % ROW_DAYS == 0 || dayOffset % ROW_DAYS == 6) {
-                // 设置周六和周日的字体颜色
-                mMonthDatePaint.setColor(0xfff4250a);
+            // 设置周日和周六的字体颜色
+            if (dayOffset % ROW_DAYS == 0) {
+                mMonthDatePaint.setColor(mSundayTextColor);
+            }
+            if (dayOffset % ROW_DAYS == 6) {
+                mMonthDatePaint.setColor(mSaturdayTextColor);
             }
             // 起点或终点
             if (calendarDay.compareTo(selectedBeginDay) == 0 ||
                     calendarDay.compareTo(selectedLastDay) == 0) {
-                mMonthDatePaint.setColor(mMonthTitleTextColor);
+                mMonthDatePaint.setColor(mMarkerTextColor);
             }
             // 起点和终点重叠
             if (calendarDay.compareTo(selectedBeginDay) == 0 &&
                     calendarDay.compareTo(selectedLastDay) == 0) {
-                mMonthDatePaint.setColor(Color.WHITE);
+                mMonthDatePaint.setColor(mMarkerTextColor);
             }
             if ((selectedBeginDay.isValid() && selectedLastDay.isValid()
                     // 年份相同
@@ -369,11 +380,6 @@ class CalendarView extends View {
                                     && mYear == mSelectedLastYear))))) {
                 //跨年的中间月
 //                mMonthDatePaint.setColor(Color.WHITE);
-            }
-
-            if (!isPrevDayEnabled && checkPrevDay(day, mTime) && mTime.month == mMonth && mTime.year == mYear) {
-                mMonthDatePaint.setColor(mPreviousDateColor);
-                mMonthDatePaint.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
             }
 
             if (isDateOutOfRange(calendarDay)) {
@@ -442,7 +448,7 @@ class CalendarView extends View {
     }
 
     private void drawDateEdge(Canvas canvas) {
-        int y = (mRowHeight + MINI_DAY_NUMBER_TEXT_SIZE) / 2 - DAY_SEPARATOR_WIDTH + MONTH_HEADER_SIZE;
+        int y = (mRowHeight + MINI_DAY_NUMBER_TEXT_SIZE) / 2 - DAY_SEPARATOR_WIDTH + mHeaderHeight;
         int paddingDay = (mWidth - 2 * mPadding) / (2 * ROW_DAYS);
         int dayOffset = calculateDayOffset();
         int day = 1;
@@ -503,16 +509,12 @@ class CalendarView extends View {
         if (needFirstPoint && firstPoint != null) {
             points.add(0, firstPoint);
         }
-        if ((new CalendarDay(mYear, mMonth, day).compareMonth(selectedBeginDay) > 0 &&
+        if (((new CalendarDay(mYear, mMonth, day).compareMonth(selectedBeginDay) > 0 &&
                 new CalendarDay(mYear, mMonth, day).compareMonth(selectedLastDay) < 0
-                && selectedBeginDay.isValid() && selectedBeginDay.compareTo(selectedLastDay) < 0)) {
-            //中间月
-            points.add(firstPoint);
-            points.add(lastPoint);
-        }
-        if ((new CalendarDay(mYear, mMonth, day).compareMonth(selectedBeginDay) < 0 &&
-                new CalendarDay(mYear, mMonth, day).compareMonth(selectedLastDay) > 0)
-                && selectedLastDay.isValid() && selectedBeginDay.compareTo(selectedLastDay) > 0) {
+                && selectedBeginDay.isValid() && selectedBeginDay.compareTo(selectedLastDay) < 0)) ||
+                ((new CalendarDay(mYear, mMonth, day).compareMonth(selectedBeginDay) < 0 &&
+                        new CalendarDay(mYear, mMonth, day).compareMonth(selectedLastDay) > 0)
+                        && selectedLastDay.isValid() && selectedBeginDay.compareTo(selectedLastDay) > 0)) {
             //中间月
             points.add(firstPoint);
             points.add(lastPoint);
@@ -524,53 +526,69 @@ class CalendarView extends View {
         }
     }
 
-    private void drawDateEdgeInternal(PointF startPoint, PointF endPoint, Canvas canvas) {
+    /**
+     * 绘制日期边缘。
+     *
+     * @param startPoint 开始点
+     * @param endPoint 结束点
+     * @param canvas 画布
+     */
+    void drawDateEdgeInternal(PointF startPoint, PointF endPoint, Canvas canvas) {
+        mDateEdgePaint.setStrokeWidth(mMarkerRadius * 2);
+        mDateEdgePaint.setColor(mEdgeColor);
         int dayWidthHalf = (mWidth - mPadding * 2) / (ROW_DAYS * 2);
-        int startX = dayWidthHalf +  mPadding;
-        int stopX = mWidth - dayWidthHalf - mPadding;
+        int startX = dayWidthHalf + mPadding;
+        int stopX = mWidth - dayWidthHalf - (ROW_DAYS - 1) - mPadding;
         if (endPoint.y > startPoint.y) {
             int row = ((int) Math.abs(endPoint.y - startPoint.y) / mRowHeight + 1);
             if (row > 2) {
                 if (startPoint.x == stopX) {
                     mSelectedMarkerPaint.setColor(mEdgeColor);
                     canvas.drawCircle(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
-                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                            mMarkerRadius, mSelectedMarkerPaint);
                 } else {
-                    canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                    canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                            stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
                 }
                 if (endPoint.x == startX) {
                     mSelectedMarkerPaint.setColor(mEdgeColor);
                     canvas.drawCircle(endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
-                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                            mMarkerRadius, mSelectedMarkerPaint);
                 } else {
-                    canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                    canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x,
+                            endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
                 }
                 for (int i = 1; i < row - 1; i++) {
-                    canvas.drawLine(startX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3 + mRowHeight * i, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3 + mRowHeight * i, mDateEdgePaint);
+                    canvas.drawLine(startX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3
+                            + mRowHeight * i, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE
+                            / 3 + mRowHeight * i, mDateEdgePaint);
                 }
             } else if (row == 2) {
                 if (startPoint.x == stopX) {
                     mSelectedMarkerPaint.setColor(mEdgeColor);
                     canvas.drawCircle(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
-                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                            mMarkerRadius, mSelectedMarkerPaint);
                 } else {
-                    canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                    canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                            stopX, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
                 }
                 if (endPoint.x == startX) {
                     mSelectedMarkerPaint.setColor(mEdgeColor);
                     canvas.drawCircle(endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
-                            DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                            mMarkerRadius, mSelectedMarkerPaint);
                 } else {
-                    canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                    canvas.drawLine(startX, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                            endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
                 }
             }
         } else {
             if (startPoint.x == endPoint.x) {
                 mSelectedMarkerPaint.setColor(mEdgeColor);
                 canvas.drawCircle(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
-                        DAY_SELECTED_CIRCLE_SIZE, mSelectedMarkerPaint);
+                        mMarkerRadius, mSelectedMarkerPaint);
             } else {
-                canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
+                canvas.drawLine(startPoint.x, startPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3,
+                        endPoint.x, endPoint.y - MINI_DAY_NUMBER_TEXT_SIZE / 3, mDateEdgePaint);
             }
         }
     }
@@ -578,20 +596,20 @@ class CalendarView extends View {
     /**
      * 获取点击的位置为哪一天。
      */
-    public CalendarDay getDayFromTouchPoint(PointF point) {
+    protected CalendarDay getDayFromTouchPoint(PointF point) {
         return getDayFromTouchPoint(point.x, point.y);
     }
 
     /**
      * 获取点击的位置为哪一天。
      */
-    public CalendarDay getDayFromTouchPoint(float x, float y) {
+    protected CalendarDay getDayFromTouchPoint(float x, float y) {
         int padding = mPadding;
         if ((x < padding) || (x > mWidth - mPadding)) {
             return null;
         }
         //yIndex，第几行的日期，0为第1行
-        int yIndex = (int) (y - MONTH_HEADER_SIZE) / mRowHeight;
+        int yIndex = (int) (y - mHeaderHeight) / mRowHeight;
         int day = 1 + ((int) ((x - padding) * ROW_DAYS / (mWidth - padding - mPadding))
                 - calculateDayOffset()) + yIndex * ROW_DAYS;
         if (mMonth > 11 || mMonth < 0 || getDaysOfMonth(mYear, mMonth + 1) < day || day < 1) {
@@ -600,6 +618,9 @@ class CalendarView extends View {
         return new CalendarDay(mYear, mMonth, day);
     }
 
+    /**
+     * 检测指定日期是否不可点击。
+     */
     public boolean isDateOutOfRange(CalendarDay calendarDay) {
         return calendarDay.compareTo(mStartDay) < 0 || calendarDay.compareTo(mEndDay) > 0;
     }
@@ -609,46 +630,34 @@ class CalendarView extends View {
         mMonthHeaderBgPaint = new Paint();
         mMonthHeaderBgPaint.setAntiAlias(true);
         mMonthHeaderBgPaint.setStyle(Style.FILL);
-        mMonthHeaderBgPaint.setColor(mMonthTitleBgColor);
+        mMonthHeaderBgPaint.setColor(mHeaderBackgroundColor);
 
         mMonthHeaderTextPaint = new TextPaint();
         mMonthHeaderTextPaint.setAntiAlias(true);
-        mMonthHeaderTextPaint.setTextSize(MONTH_LABEL_TEXT_SIZE);
         mMonthHeaderTextPaint.setTypeface(Typeface.create(mMonthHeaderTypeface, Typeface.BOLD));
-        mMonthHeaderTextPaint.setColor(mMonthTextColor);
+        mMonthHeaderTextPaint.setColor(mHeaderTextColor);
+        mMonthHeaderTextPaint.setTextSize(mHeaderTextSize);
         mMonthHeaderTextPaint.setTextAlign(Align.CENTER);
         mMonthHeaderTextPaint.setStyle(Style.FILL);
 
         mSelectedMarkerPaint = new Paint();
         mSelectedMarkerPaint.setFakeBoldText(true);
         mSelectedMarkerPaint.setAntiAlias(true);
-        mSelectedMarkerPaint.setColor(mSelectedDaysColor);
+        mSelectedMarkerPaint.setColor(mMarkerColor);
         mSelectedMarkerPaint.setTextAlign(Align.CENTER);
-        mSelectedMarkerPaint.setStyle(Style.FILL);
-        mSelectedMarkerPaint.setStrokeCap(Paint.Cap.ROUND);
-        mSelectedMarkerPaint.setAlpha(SELECTED_CIRCLE_ALPHA);
+        mSelectedMarkerPaint.setStyle(Style.FILL_AND_STROKE);
 
         mDateEdgePaint = new Paint();
         mDateEdgePaint.setFakeBoldText(true);
         mDateEdgePaint.setAntiAlias(true);
+        mDateEdgePaint.setColor(mEdgeColor);
         mDateEdgePaint.setTextAlign(Align.CENTER);
         mDateEdgePaint.setStyle(Style.FILL_AND_STROKE);
         mDateEdgePaint.setStrokeCap(Paint.Cap.ROUND);
-        mDateEdgePaint.setAlpha(SELECTED_CIRCLE_ALPHA);
-
         mDateEdgePaint.setStrokeWidth(MINI_DAY_NUMBER_TEXT_SIZE * 2);
-        mDateEdgePaint.setColor(mEdgeColor);
-
-        mMonthDayLabelPaint = new TextPaint();
-        mMonthDayLabelPaint.setAntiAlias(true);
-        mMonthDayLabelPaint.setTextSize(MONTH_DAY_LABEL_TEXT_SIZE);
-        mMonthDayLabelPaint.setColor(mDateTextColor);
-        mMonthDayLabelPaint.setTypeface(Typeface.create(mDayOfWeekTypeface, Typeface.NORMAL));
-        mMonthDayLabelPaint.setStyle(Style.FILL);
-        mMonthDayLabelPaint.setTextAlign(Align.CENTER);
-        mMonthDayLabelPaint.setFakeBoldText(true);
 
         mMonthDatePaint = new TextPaint();
+        mMonthDatePaint.setColor(mWeekdayTextColor);
         mMonthDatePaint.setAntiAlias(true);
         mMonthDatePaint.setTextSize(MINI_DAY_NUMBER_TEXT_SIZE);
         mMonthDatePaint.setStyle(Style.FILL);
@@ -658,7 +667,7 @@ class CalendarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-//        drawMonthDayLabels(canvas);
+        setBackgroundColor(mContentBackgroundColor);
         drawMonthHeader(canvas);
         drawDateEdge(canvas);
         drawMonthDate(canvas);
@@ -666,8 +675,10 @@ class CalendarView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
-                mRowHeight * mRowNums + MONTH_HEADER_SIZE + MINI_DAY_NUMBER_TEXT_SIZE / 2);
+        int measuredWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int measuredHeight = (int) (mRowHeight * mRowNums + mHeaderHeight + MINI_DAY_NUMBER_TEXT_SIZE / 3);
+        Log.d("onMeasure", "width = " + measuredWidth+" , height = "+ measuredHeight);
+        setMeasuredDimension(measuredWidth, measuredHeight);
     }
 
     @Override
@@ -686,59 +697,61 @@ class CalendarView extends View {
         return true;
     }
 
-    public void reuse() {
+    /**
+     * 恢复默认的行数。
+     */
+    void reuse() {
         mRowNums = ROW_NUMS;
         requestLayout();
     }
 
-    public void setMonthParams(HashMap<String, Integer> params) {
-        if (!params.containsKey(VIEW_PARAMS_MONTH) && !params.containsKey(VIEW_PARAMS_YEAR)) {
+    /**
+     * 设置绘制时需要用到的参数。
+     *
+     * @param drawingParams 绘制参数。
+     */
+    void setDrawingParams(HashMap<String, Integer> drawingParams) {
+        if (!drawingParams.containsKey(DRAWING_PARAMS_MONTH) && !drawingParams.containsKey(DRAWING_PARAMS_YEAR)) {
             throw new InvalidParameterException("You must specify month and year for this view");
         }
-        setTag(params);
-
-        if (params.containsKey(VIEW_PARAMS_HEIGHT)) {
-            mRowHeight = params.get(VIEW_PARAMS_HEIGHT);
-            if (mRowHeight < MIN_HEIGHT) {
-                mRowHeight = MIN_HEIGHT;
+        setTag(drawingParams);
+        if (drawingParams.containsKey(DRAWING_PARAMS_HEIGHT)) {
+            mRowHeight = drawingParams.get(DRAWING_PARAMS_HEIGHT);
+            if (mRowHeight < DATE_MIN_HEIGHT) {
+                mRowHeight = DATE_MIN_HEIGHT;
             }
         }
-        if (params.containsKey(VIEW_PARAMS_SELECTED_BEGIN_DAY)) {
-            mSelectedBeginDay = params.get(VIEW_PARAMS_SELECTED_BEGIN_DAY);
+        if (drawingParams.containsKey(DRAWING_PARAMS_SELECTED_BEGIN_DAY)) {
+            mSelectedBeginDay = drawingParams.get(DRAWING_PARAMS_SELECTED_BEGIN_DAY);
         }
-        if (params.containsKey(VIEW_PARAMS_SELECTED_LAST_DAY)) {
-            mSelectedLastDay = params.get(VIEW_PARAMS_SELECTED_LAST_DAY);
+        if (drawingParams.containsKey(DRAWING_PARAMS_SELECTED_LAST_DAY)) {
+            mSelectedLastDay = drawingParams.get(DRAWING_PARAMS_SELECTED_LAST_DAY);
         }
-        if (params.containsKey(VIEW_PARAMS_SELECTED_BEGIN_MONTH)) {
-            mSelectedBeginMonth = params.get(VIEW_PARAMS_SELECTED_BEGIN_MONTH);
+        if (drawingParams.containsKey(DRAWING_PARAMS_SELECTED_BEGIN_MONTH)) {
+            mSelectedBeginMonth = drawingParams.get(DRAWING_PARAMS_SELECTED_BEGIN_MONTH);
         }
-        if (params.containsKey(VIEW_PARAMS_SELECTED_LAST_MONTH)) {
-            mSelectedLastMonth = params.get(VIEW_PARAMS_SELECTED_LAST_MONTH);
+        if (drawingParams.containsKey(DRAWING_PARAMS_SELECTED_LAST_MONTH)) {
+            mSelectedLastMonth = drawingParams.get(DRAWING_PARAMS_SELECTED_LAST_MONTH);
         }
-        if (params.containsKey(VIEW_PARAMS_SELECTED_BEGIN_YEAR)) {
-            mSelectedBeginYear = params.get(VIEW_PARAMS_SELECTED_BEGIN_YEAR);
+        if (drawingParams.containsKey(DRAWING_PARAMS_SELECTED_BEGIN_YEAR)) {
+            mSelectedBeginYear = drawingParams.get(DRAWING_PARAMS_SELECTED_BEGIN_YEAR);
         }
-        if (params.containsKey(VIEW_PARAMS_SELECTED_LAST_YEAR)) {
-            mSelectedLastYear = params.get(VIEW_PARAMS_SELECTED_LAST_YEAR);
+        if (drawingParams.containsKey(DRAWING_PARAMS_SELECTED_LAST_YEAR)) {
+            mSelectedLastYear = drawingParams.get(DRAWING_PARAMS_SELECTED_LAST_YEAR);
         }
-
-        mMonth = params.get(VIEW_PARAMS_MONTH);
-        mYear = params.get(VIEW_PARAMS_YEAR);
-
+        mMonth = drawingParams.get(DRAWING_PARAMS_MONTH);
+        mYear = drawingParams.get(DRAWING_PARAMS_YEAR);
         mHasToday = false;
         mToday = -1;
-
         mCalendar.set(Calendar.MONTH, mMonth);
         mCalendar.set(Calendar.YEAR, mYear);
         mCalendar.set(Calendar.DAY_OF_MONTH, 1);
         mDayOfWeekStart = mCalendar.get(Calendar.DAY_OF_WEEK);
-
-        if (params.containsKey(VIEW_PARAMS_WEEK_START)) {
-            mWeekStart = params.get(VIEW_PARAMS_WEEK_START);
+        if (drawingParams.containsKey(DRAWING_PARAMS_WEEK_START)) {
+            mWeekStart = drawingParams.get(DRAWING_PARAMS_WEEK_START);
         } else {
             mWeekStart = mCalendar.getFirstDayOfWeek();
         }
-
         mDateNums = getDaysOfMonth(mYear, mMonth + 1);
         for (int i = 0; i < mDateNums; i++) {
             final int day = i + 1;
@@ -746,10 +759,8 @@ class CalendarView extends View {
                 mHasToday = true;
                 mToday = day;
             }
-
-            mIsPrev = checkPrevDay(day, mTime);
+            mPrev = checkPrevDay(day, mTime);
         }
-
         mRowNums = calculateRowNums();
     }
 
@@ -773,22 +784,22 @@ class CalendarView extends View {
     private int getDaysOfMonth(int year, int month) {
         int result;
         switch (month) {
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 8:
-            case 10:
-            case 12:
+            case 1://1月
+            case 3://3月
+            case 5://5月
+            case 7://7月
+            case 8://8月
+            case 10://10月
+            case 12://12月
                 result = 31;
                 break;
-            case 4:
-            case 6:
-            case 9:
-            case 11:
+            case 4://4月
+            case 6://6月
+            case 9://9月
+            case 11://11月
                 result = 30;
                 break;
-            default:
+            default://2月
                 if (isLeapYear(year)) {
                     result = 29;
                 } else {
@@ -799,8 +810,17 @@ class CalendarView extends View {
         return result;
     }
 
+    /**
+     * 设置日期点击监听器。
+     *
+     * @param l 日期点击监听器
+     */
     public void setOnDateClickListener(OnDateClickListener l) {
         mOnDateClickListener = l;
+    }
+
+    public void setHeaderTextSize(float textSize) {
+        this.mHeaderTextSize = textSize;
     }
 
     /**

@@ -160,22 +160,23 @@
         <attr name="selected_color" format="color" />
     </declare-styleable>
     <declare-styleable name="DatePickerView">
-        <!--<attr name="colorCurrentDay" format="color"/>-->
-        <!--<attr name="colorSelectedDayBackground" format="color"/>-->
-        <!--<attr name="colorSelectedDayText" format="color"/>-->
-        <!--<attr name="colorPreviousDay" format="color"/>-->
-        <!--<attr name="colorNormalDay" format="color" />-->
-        <!--<attr name="colorMonthName" format="color" />-->
-        <!--<attr name="colorDayName" format="color" />-->
-        <!--<attr name="textSizeDay" format="dimension"/>-->
-        <!--<attr name="textSizeMonth" format="dimension" />-->
-        <!--<attr name="textSizeDayName" format="dimension" />-->
-        <!--<attr name="headerMonthHeight" format="dimension" />-->
-        <!--<attr name="selectedDayRadius" format="dimension" />-->
-        <!--<attr name="calendarHeight" format="dimension" />-->
-        <!--<attr name="enablePreviousDay" format="boolean" />-->
-        <!--<attr name="currentDaySelected" format="boolean" />-->
-        <!--<attr name="drawRoundRect" format="boolean" />-->
+        <attr name="dpv_startDate" format="string|reference"/>
+        <attr name="dpv_endDate" format="string|reference"/>
+        <attr name="dpv_markerRadius" format="dimension|reference"/>
+        <attr name="dpv_markerColor" format="color|reference" />
+        <attr name="dpv_markerTextColor" format="color|reference" />
+        <attr name="dpv_weekdayTextColor" format="color|reference"/>
+        <attr name="dpv_saturdayTextColor" format="color|reference"/>
+        <attr name="dpv_sundayTextColor" format="color|reference" />
+        <attr name="dpv_headerHeight" format="dimension|reference"/>
+        <attr name="dpv_headerBackgroundColor" format="color|reference" />
+        <attr name="dpv_contentBackgroundColor" format="color|reference" />
+        <attr name="dpv_headerTextColor" format="color|reference" />
+        <attr name="dpv_headerTextSize" format="dimension|reference" />
+        <attr name="dpv_edgeColor" format="color|reference" />
+        <attr name="dpv_useCustomDisabledDateTextColor" format="boolean"/>
+        <attr name="dpv_disabledDateTextColor" format="color|reference"/>
+        <attr name="dpv_disabledDateAlphaRate" format="fraction" />
     </declare-styleable>
     <declare-styleable name="WheelView">
         <attr name="wv_gravity">

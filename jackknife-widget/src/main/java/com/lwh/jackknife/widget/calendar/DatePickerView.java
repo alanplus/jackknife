@@ -29,6 +29,7 @@ public class DatePickerView extends RecyclerView {
     protected Context mContext;
     protected DateAdapter mAdapter;
     private DatePickerController mController;
+    private TypedArray mTypedArray;
 
     public DatePickerView(Context context) {
         this(context, null);
@@ -41,10 +42,9 @@ public class DatePickerView extends RecyclerView {
     public DatePickerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.mContext = context;
+        this.mTypedArray = context.obtainStyledAttributes(attrs, R.styleable.DatePickerView);
         if (!isInEditMode()) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DatePickerView);
-            a.recycle();
-            setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+            setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             init();
         }
     }
@@ -61,8 +61,9 @@ public class DatePickerView extends RecyclerView {
 
     public void setDateAdapter(DateAdapter adapter) {
         this.mAdapter = adapter;
+        adapter.setDatePickerViewAttrs(mTypedArray);
         setAdapter(adapter);
-        mAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     public SelectedDays<CalendarDay> getSelectedDays() {
