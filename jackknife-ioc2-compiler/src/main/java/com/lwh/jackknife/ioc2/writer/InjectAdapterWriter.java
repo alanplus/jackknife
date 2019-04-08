@@ -17,13 +17,16 @@
 package com.lwh.jackknife.ioc2.writer;
 
 import com.lwh.jackknife.ioc2.ViewInjector;
+import com.lwh.jackknife.ioc2.adapter.InjectAdapter;
 import com.lwh.jackknife.ioc2.annotation.ContentView;
 import com.lwh.jackknife.ioc2.annotation.ViewInject;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -36,6 +39,8 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Types;
 
 public class InjectAdapterWriter implements AdapterWriter {
 	
@@ -45,6 +50,13 @@ public class InjectAdapterWriter implements AdapterWriter {
 	public InjectAdapterWriter(ProcessingEnvironment mProcessingEnv) {
 		this.mProcessingEnv = mProcessingEnv;
 		this.mFiler = mProcessingEnv.getFiler();
+	}
+
+	public MethodSpec methodBindView() {
+		MethodSpec methodSpec = MethodSpec.methodBuilder("bindView")
+				.addModifiers(Modifier.PUBLIC)
+				.build();
+		return methodSpec;
 	}
 
 	@Override
@@ -58,8 +70,9 @@ public class InjectAdapterWriter implements AdapterWriter {
 			}
 			Element element = cacheElements.get(0);
 			InjectInfo info = createInjectInfo(element);
+			TypeVariableName t = TypeVariableName.get("T", InjectAdapter.class);
 			ParameterSpec parameterSpec =
-					ParameterSpec.builder(ClassName.get(Object.class), "target").build();
+					ParameterSpec.builder(t, "target").build();
 			ContentView contentView = element.getEnclosingElement().getAnnotation(ContentView.class);
 			int layoutId = -1;
 			if (contentView != null) {
@@ -67,22 +80,37 @@ public class InjectAdapterWriter implements AdapterWriter {
 			}
 			MethodSpec.Builder injectBuilder = MethodSpec.methodBuilder("inject")
 					.addModifiers(Modifier.PUBLIC)
-					.returns(void.class)
+					.returns(ClassName.bestGuess("android.view.View"))
 					.addParameter(parameterSpec)
-					.addStatement(info.className+" activity = ("+info.className+")target;")
-					.addStatement("activity.setContentView("+layoutId+")");
+					.addStatement("$T view = null", ClassName.bestGuess("android.view.View"))
+					.addCode("if (target instanceof $T) {\n", ClassName.bestGuess("android.app.Activity"))
+					.addStatement("  "+info.className+" activity = ("+info.className+") target")
+					.addStatement("  $T inflater = activity.getLayoutInflater()", ClassName.bestGuess("android.view.LayoutInflater"))
+					.addStatement("  view = inflater.inflate("+layoutId+", null)")
+					.addStatement("  activity.setContentView(view)");
+			Types typeUtils = mProcessingEnv.getTypeUtils();
 			for (int i=0;i<cacheElements.size();i++) {
 				Element e = cacheElements.get(i);
 				info = createInjectInfo(e);
 				ViewInject viewInject = e.getAnnotation(ViewInject.class);
-				String fieldName = e.getSimpleName().toString();
-				int id = viewInject.value();
-				injectBuilder.addStatement("activity."+fieldName+" =  $T.findViewById(activity, "+id+");", ClassName.bestGuess("com.lwh.jackknife.ioc2.ViewFinder"));
+				if (viewInject != null) {
+					int id = viewInject.value();
+					TypeMirror typeMirror = e.asType();
+					TypeElement te = (TypeElement) typeUtils.asElement(typeMirror);
+					injectBuilder.addCode("  activity." + e + " = ($T) activity.findViewById(" + id + ");\n", te);
+				}
 			}
+			injectBuilder.addCode("} else if (target instanceof $T) {\n", ClassName.bestGuess("android.support.v4.app.Fragment"));
+			injectBuilder.addStatement("  "+info.className+" fragment = ("+info.className+") target");
+			injectBuilder.addStatement("  $T activity = fragment.getActivity()", ClassName.bestGuess("android.app.Activity"));
+			injectBuilder.addCode("}\n");
+			injectBuilder.addStatement("return view");
 			MethodSpec inject = injectBuilder.build();
 			TypeSpec injectAdapter = TypeSpec.classBuilder(info.newClassName)
-					.addSuperinterface(ClassName.bestGuess("com.lwh.jackknife.ioc2.adapter.InjectAdapter"))
+					.addTypeVariable(TypeVariableName.get("T"))
+					.addSuperinterface(ParameterizedTypeName.get(ClassName.get(InjectAdapter.class), t))
 					.addModifiers(Modifier.PUBLIC)
+					.addMethod(methodBindView())
 					.addMethod(inject)
 					.build();
 			try {
@@ -96,12 +124,12 @@ public class InjectAdapterWriter implements AdapterWriter {
 		}
 	}
 
-	private String getPackageName(ProcessingEnvironment env,Element element) {
+	private String getPackageName(ProcessingEnvironment env, Element element) {
 		return env.getElementUtils().getPackageOf(element).getQualifiedName().toString();
 	}
 
 	private InjectInfo createInjectInfo(Element element) {
-		TypeElement typeElement = (TypeElement)element.getEnclosingElement();
+		TypeElement typeElement = (TypeElement) element.getEnclosingElement();
 		String packageName = getPackageName(mProcessingEnv, element);
 		String className = typeElement.getSimpleName().toString();
 		return new InjectInfo(packageName, className);

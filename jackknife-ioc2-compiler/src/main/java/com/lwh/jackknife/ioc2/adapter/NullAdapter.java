@@ -19,6 +19,7 @@ package com.lwh.jackknife.ioc2.adapter;
 public class NullAdapter implements InjectAdapter {
 
 	@Override
-	public void inject(Object target) {
+	public Object inject(Object target) {
+		return null;
 	}
 }

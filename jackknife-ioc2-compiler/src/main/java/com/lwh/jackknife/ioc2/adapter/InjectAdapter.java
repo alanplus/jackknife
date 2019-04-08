@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.ioc2.adapter;
 
-public interface InjectAdapter {
+public interface InjectAdapter<T> {
 
-	void inject(Object target);
+	Object inject(T target);
 }
