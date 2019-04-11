@@ -72,7 +72,7 @@ public class AnimatorHorizontalScrollView extends HorizontalScrollView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         int scrollViewWidth = getWidth();
-        for (int i=0;i<mContentRecycler.getChildCount();i++) {
+        for (int i = 0; i < mContentRecycler.getChildCount(); i++) {
             View child = mContentRecycler.getChildAt(i);
             if (!(child instanceof AnimatorDragger)) {
                 continue;
@@ -83,7 +83,7 @@ public class AnimatorHorizontalScrollView extends HorizontalScrollView {
             int wrapperAbsoluteLeft = wrapperLeft - l;
             if (wrapperAbsoluteLeft <= scrollViewWidth) {
                 int visibleGap = wrapperWidth - wrapperAbsoluteLeft;
-                dragger.onDrag(clamp(visibleGap/(float)wrapperWidth, 1.0f, 0.0f));
+                dragger.onDrag(clamp(visibleGap / (float) wrapperWidth, 1.0f, 0.0f));
             } else {
                 dragger.onReset();
             }

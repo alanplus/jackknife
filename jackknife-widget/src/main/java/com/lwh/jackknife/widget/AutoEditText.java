@@ -37,7 +37,7 @@ public abstract class AutoEditText extends EditText {
         setMaxLength();
     }
 
-    protected void setMaxLength(){
+    protected void setMaxLength() {
         setFilters(new InputFilter[]{new InputFilter.LengthFilter(getMaxLength())});
     }
 

@@ -113,7 +113,7 @@ public class GradientTextView extends TextView {
             valueAnimator = ValueAnimator.ofFloat(0, 1);
             forward = false;
         } else {
-            valueAnimator = ValueAnimator.ofFloat(1,0);
+            valueAnimator = ValueAnimator.ofFloat(1, 0);
             forward = true;
         }
         valueAnimator.setDuration(animationTime);

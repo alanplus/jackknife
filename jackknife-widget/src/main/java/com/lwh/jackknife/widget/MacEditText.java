@@ -37,6 +37,6 @@ public class MacEditText extends AutoEditText {
 
     @Override
     public boolean checkInputValue() {
-        return getText().length()==2?true:false;
+        return getText().length() == 2 ? true : false;
     }
 }

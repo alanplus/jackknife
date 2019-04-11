@@ -41,7 +41,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see OnItemLongClickListener
  */
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnItemLongClickListener",
         listenerType = AdapterView.OnItemLongClickListener.class,
@@ -55,5 +56,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         returns = boolean.class
 )
 public @interface OnItemLongClick {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

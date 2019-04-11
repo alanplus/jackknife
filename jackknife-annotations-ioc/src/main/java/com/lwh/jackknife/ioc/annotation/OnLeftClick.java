@@ -26,7 +26,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnLeftClickListener",
         listenerType = TitleBar.OnLeftClickListener.class,
@@ -36,5 +37,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         returns = void.class
 )
 public @interface OnLeftClick {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

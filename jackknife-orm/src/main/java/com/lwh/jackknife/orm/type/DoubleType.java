@@ -20,16 +20,16 @@ public class DoubleType extends BaseDataType {
 
     private static final DoubleType mInstance = new DoubleType();
 
-    public DoubleType(){
+    public DoubleType() {
         super(SqlType.REAL);
     }
 
-    public static DoubleType getInstance(){
+    public static DoubleType getInstance() {
         return mInstance;
     }
 
     @Override
     public Class<?>[] getTypes() {
-        return new Class<?>[] { double.class, Double.class };
+        return new Class<?>[]{double.class, Double.class};
     }
 }

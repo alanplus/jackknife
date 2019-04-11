@@ -192,8 +192,7 @@ public class LrcUtils {
     /**
      * 把如00:00.00这样的字符串转化成 毫秒数的时间，比如 01:10.34就是一分钟加上10秒再加上340毫秒 也就是返回70340毫秒
      *
-     * @param time
-     *            字符串的时间
+     * @param time 字符串的时间
      * @return 此时间表示的毫秒
      */
     private long parseTime(String time) {

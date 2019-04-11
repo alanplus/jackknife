@@ -116,9 +116,9 @@ public class SwipeLayout extends RelativeLayout {
                     mTimer.cancel();
                 }
             }
-            if (mPullDownY > 0){
+            if (mPullDownY > 0) {
                 mPullDownY -= MOVE_SPEED;
-            }else if (mPullUpY < 0){
+            } else if (mPullUpY < 0) {
                 mPullUpY += MOVE_SPEED;
             }
             if (mPullDownY < 0) {
@@ -311,16 +311,16 @@ public class SwipeLayout extends RelativeLayout {
                         if (mState == LOADING) {
                             mTouch = true;
                         }
-                    } else{
+                    } else {
                         releasePull();
                     }
-                } else{
+                } else {
                     mEvents = 0;
                 }
                 mLastY = ev.getY();
                 mRatio = (float) (2 + 2 * Math.tan(Math.PI / 2 / getMeasuredHeight()
                         * (mPullDownY + Math.abs(mPullUpY))));
-                if (mPullDownY > 0 || mPullUpY < 0){
+                if (mPullDownY > 0 || mPullUpY < 0) {
                     requestLayout();
                 }
                 if (mPullDownY > 0) {

@@ -100,7 +100,7 @@ public class TimeUtils {
         return new SimpleDateFormat(formatType, Locale.ENGLISH).format(data);
     }
 
-    public static String long2str(long currentTime,String formatType) {
+    public static String long2str(long currentTime, String formatType) {
         Date date = long2date(currentTime, formatType);
         return date2str(date, formatType);
     }
@@ -151,7 +151,7 @@ public class TimeUtils {
             default:
                 if (isLeapYear(year)) {
                     result = 29;
-                }else{
+                } else {
                     result = 28;
                 }
                 break;

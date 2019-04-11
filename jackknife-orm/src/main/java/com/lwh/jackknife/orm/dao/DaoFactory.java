@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DaoFactory {
 
-    private static Map<Class<? extends OrmTable>,OrmDao> sDaoMap = new ConcurrentHashMap<>();
+    private static Map<Class<? extends OrmTable>, OrmDao> sDaoMap = new ConcurrentHashMap<>();
 
     public synchronized static <T extends OrmTable> OrmDao<T> getDao(Class<T> beanClass) {
         if (sDaoMap.containsKey(beanClass)) {

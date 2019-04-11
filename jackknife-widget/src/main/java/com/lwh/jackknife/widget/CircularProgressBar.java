@@ -137,6 +137,7 @@ public class CircularProgressBar extends View {
         stop();
         super.onDetachedFromWindow();
     }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);

@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 public interface AnimatorRecycler<LP extends ViewGroup.LayoutParams> {
 
     View getChildAt(int position);
+
     int getChildCount();
+
     boolean applyAnimation(LP layoutParams);
 }

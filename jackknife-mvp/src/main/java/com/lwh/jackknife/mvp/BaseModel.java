@@ -27,14 +27,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class BaseModel<BEAN>{
+public abstract class BaseModel<BEAN> {
 
     protected List<BEAN> mDatas;
 
     protected Class<BEAN> mDataClass;
 
     private Comparator<BEAN> mComparator;
-    public static String[] mPinyinKey = new String[] {"a", "ai", "an", "ang", "ao", "ba", "bai",
+    public static String[] mPinyinKey = new String[]{"a", "ai", "an", "ang", "ao", "ba", "bai",
             "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian", "biao", "bie", "bin", "bing",
             "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "ceng", "cha", "chai", "chan",
             "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chuai",
@@ -69,7 +69,7 @@ public abstract class BaseModel<BEAN>{
             "zhao", "zhe", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan",
             "zhuang", "zhui", "zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"};
 
-    private static int[] mPinyinValue = new int[] {-20319, -20317, -20304, -20295, -20292, -20283,
+    private static int[] mPinyinValue = new int[]{-20319, -20317, -20304, -20295, -20292, -20283,
             -20265, -20257, -20242, -20230, -20051, -20036, -20032, -20026, -20002, -19990, -19986,
             -19982, -19976, -19805, -19784, -19775, -19774, -19763, -19756, -19751, -19746, -19741,
             -19739, -19728, -19725, -19715, -19540, -19531, -19525, -19515, -19500, -19484, -19479,
@@ -107,7 +107,7 @@ public abstract class BaseModel<BEAN>{
             -10519, -10331, -10329, -10328, -10322, -10315, -10309, -10307, -10296, -10281, -10274,
             -10270, -10262, -10260, -10256, -10254};
 
-    public BaseModel(Class<BEAN> dataClass){
+    public BaseModel(Class<BEAN> dataClass) {
         if (dataClass == null) {
             throw new IllegalArgumentException("Unknown bean type.");
         }
@@ -119,17 +119,17 @@ public abstract class BaseModel<BEAN>{
         ASC, DESC
     }
 
-    public BaseModel add(BEAN datas){
+    public BaseModel add(BEAN datas) {
         mDatas.add(datas);
         return this;
     }
 
-    public BaseModel add(List<BEAN> datas){
+    public BaseModel add(List<BEAN> datas) {
         mDatas.addAll(datas);
         return this;
     }
 
-    public BaseModel clear(){
+    public BaseModel clear() {
         mDatas.clear();
         return this;
     }
@@ -178,7 +178,7 @@ public abstract class BaseModel<BEAN>{
         void onLoad(List<BEAN> beans);
     }
 
-    public interface OnExtractListener<ELEMENT>{
+    public interface OnExtractListener<ELEMENT> {
         void onExtract(String elementName, List<ELEMENT> elements);
     }
 
@@ -186,7 +186,7 @@ public abstract class BaseModel<BEAN>{
         return mDatas;
     }
 
-    public int getCount(){
+    public int getCount() {
         if (mDatas != null) {
             return mDatas.size();
         }
@@ -233,17 +233,17 @@ public abstract class BaseModel<BEAN>{
     }
 
     protected List<BEAN> findObjects(Selector selector) {
-        if (selector == null){
+        if (selector == null) {
             return mDatas;
         }
         List<BEAN> result = new ArrayList<>();
         Map<String, Object> map = selector.getConditionMap();
         Set<String> keys = map.keySet();
-        for (int i=0;i<mDatas.size();i++) {
+        for (int i = 0; i < mDatas.size(); i++) {
             int matchesCount = 0;
             BEAN bean = mDatas.get(i);
             Iterator<String> iterator = keys.iterator();
-            while (iterator.hasNext()){
+            while (iterator.hasNext()) {
                 String key = iterator.next();
                 String[] keyPart = key.split(Selector.SPACE);
                 String elementName = keyPart[0];
@@ -262,14 +262,14 @@ public abstract class BaseModel<BEAN>{
                     e.printStackTrace();
                 }
             }
-            if (matchesCount == keys.size()){
+            if (matchesCount == keys.size()) {
                 result.add(bean);
             }
         }
         return result;
     }
 
-    private boolean isAssignableFromByte(Class<?> fieldType){
+    private boolean isAssignableFromByte(Class<?> fieldType) {
         return byte.class.isAssignableFrom(fieldType) || Byte.class.isAssignableFrom(fieldType);
     }
 
@@ -282,27 +282,27 @@ public abstract class BaseModel<BEAN>{
                 isAssignableFromDouble(fieldType);
     }
 
-    private boolean isAssignableFromShort(Class<?> fieldType){
+    private boolean isAssignableFromShort(Class<?> fieldType) {
         return short.class.isAssignableFrom(fieldType) || Short.class.isAssignableFrom(fieldType);
     }
 
-    private boolean isAssignableFromInteger(Class<?> fieldType){
+    private boolean isAssignableFromInteger(Class<?> fieldType) {
         return int.class.isAssignableFrom(fieldType) || Integer.class.isAssignableFrom(fieldType);
     }
 
-    private boolean isAssignableFromLong(Class<?> fieldType){
+    private boolean isAssignableFromLong(Class<?> fieldType) {
         return long.class.isAssignableFrom(fieldType) || Long.class.isAssignableFrom(fieldType);
     }
 
-    private boolean isAssignableFromFloat(Class<?> fieldType){
+    private boolean isAssignableFromFloat(Class<?> fieldType) {
         return float.class.isAssignableFrom(fieldType) || Float.class.isAssignableFrom(fieldType);
     }
 
-    private boolean isAssignableFromDouble(Class<?> fieldType){
+    private boolean isAssignableFromDouble(Class<?> fieldType) {
         return double.class.isAssignableFrom(fieldType) || Double.class.isAssignableFrom(fieldType);
     }
 
-    private boolean isAssinableFromCharSequence(Class<?> fieldType){
+    private boolean isAssinableFromCharSequence(Class<?> fieldType) {
         return CharSequence.class.isAssignableFrom(fieldType);
     }
 
@@ -358,19 +358,19 @@ public abstract class BaseModel<BEAN>{
         }
         if (condition.equals(Selector.GREATOR_THAN_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchGreatorThan((Number)requiredValue, (Number)actualValue);
+            return matchGreatorThan((Number) requiredValue, (Number) actualValue);
         }
         if (condition.equals(Selector.LESS_THAN_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchLessThan((Number)requiredValue, (Number)actualValue);
+            return matchLessThan((Number) requiredValue, (Number) actualValue);
         }
         if (condition.equals(Selector.GREATOR_THAN_OR_EQUAL_TO_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchGreatorThanOrEqualTo((Number)requiredValue, (Number)actualValue);
+            return matchGreatorThanOrEqualTo((Number) requiredValue, (Number) actualValue);
         }
         if (condition.equals(Selector.LESS_THAN_OR_EQUAL_TO_HOLDER)
                 && isAssignableFromNumber(fieldType)) {
-            return matchLessThanOrEqualTo((Number)requiredValue, (Number)actualValue);
+            return matchLessThanOrEqualTo((Number) requiredValue, (Number) actualValue);
         }
         if (condition.equals(Selector.CONTAINS_HOLDER)
                 && isAssinableFromCharSequence(fieldType)) {
@@ -396,7 +396,7 @@ public abstract class BaseModel<BEAN>{
         }
     }
 
-    public static class Selector{
+    public static class Selector {
 
         private Map<String, Object> mConditionMap;
 
@@ -420,7 +420,7 @@ public abstract class BaseModel<BEAN>{
 
         private static final String ENDS_WITH_HOLDER = "endswith?";
 
-        private Selector(){
+        private Selector() {
             mConditionMap = new ConcurrentHashMap<>();
         }
 
@@ -432,55 +432,55 @@ public abstract class BaseModel<BEAN>{
             return mConditionMap;
         }
 
-        public Selector addWhereEqualTo(String elementName, Object value){
+        public Selector addWhereEqualTo(String elementName, Object value) {
             String key = elementName + SPACE + EQUAL_TO_HOLDER;
             mConditionMap.put(key, value);
             return this;
         }
 
-        public Selector addWhereNotEqualTo(String elementName, Object value){
+        public Selector addWhereNotEqualTo(String elementName, Object value) {
             String key = elementName + SPACE + NOT_EQUAL_TO_HOLDER;
             mConditionMap.put(key, value);
             return this;
         }
 
-        public Selector addWhereGreatorThan(String elementName, Number value){
+        public Selector addWhereGreatorThan(String elementName, Number value) {
             String key = elementName + SPACE + GREATOR_THAN_HOLDER;
             mConditionMap.put(key, value);
             return this;
         }
 
-        public Selector addWhereLessThan(String elementName, Number value){
+        public Selector addWhereLessThan(String elementName, Number value) {
             String key = elementName + SPACE + LESS_THAN_HOLDER;
             mConditionMap.put(key, value);
             return this;
         }
 
-        public Selector addWhereGreatorThanOrEqualTo(String elementName, Number value){
+        public Selector addWhereGreatorThanOrEqualTo(String elementName, Number value) {
             String key = elementName + SPACE + GREATOR_THAN_OR_EQUAL_TO_HOLDER;
             mConditionMap.put(key, value);
             return this;
         }
 
-        public Selector addWhereLessThanOrEqualTo(String elementName, Number value){
+        public Selector addWhereLessThanOrEqualTo(String elementName, Number value) {
             String key = elementName + SPACE + LESS_THAN_OR_EQUAL_TO_HOLDER;
             mConditionMap.put(key, value);
             return this;
         }
 
-        public Selector addWhereContains(String elementName, String value){
+        public Selector addWhereContains(String elementName, String value) {
             String key = elementName + SPACE + CONTAINS_HOLDER;
             mConditionMap.put(key, value);
             return this;
         }
 
-        public Selector addWhereStartsWith(String elementName, String prefix){
+        public Selector addWhereStartsWith(String elementName, String prefix) {
             String key = elementName + SPACE + STARTS_WITH_HOLDER;
             mConditionMap.put(key, prefix);
             return this;
         }
 
-        public Selector addWhereEndsWith(String elementName, String suffix){
+        public Selector addWhereEndsWith(String elementName, String suffix) {
             String key = elementName + SPACE + ENDS_WITH_HOLDER;
             mConditionMap.put(key, suffix);
             return this;

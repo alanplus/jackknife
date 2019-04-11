@@ -72,18 +72,18 @@ public class AnimatorScrollView extends ScrollView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         int scrollViewHeight = getHeight();
-        for (int i=0;i<mContentRecycler.getChildCount();i++) {
+        for (int i = 0; i < mContentRecycler.getChildCount(); i++) {
             View child = mContentRecycler.getChildAt(i);
             if (!(child instanceof AnimatorDragger)) {
                 continue;
             }
-            AnimatorDragger dragger =  (AnimatorDragger) child;
+            AnimatorDragger dragger = (AnimatorDragger) child;
             int wrapperTop = child.getTop();
             int wrapperHeight = child.getHeight();
             int wrapperAbsoluteTop = wrapperTop - t;
             if (wrapperAbsoluteTop <= scrollViewHeight) {
                 int visibleGap = scrollViewHeight - wrapperAbsoluteTop;
-                dragger.onDrag(clamp(visibleGap/(float)wrapperHeight, 1.0f, 0.0f));
+                dragger.onDrag(clamp(visibleGap / (float) wrapperHeight, 1.0f, 0.0f));
             } else {
                 dragger.onReset();
             }

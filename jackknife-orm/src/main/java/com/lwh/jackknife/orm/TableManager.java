@@ -172,7 +172,7 @@ public class TableManager {
 
     private BaseDataType matchDataType(Field field) {
         List<BaseDataType> dataTypes = getDeclaredDataTypes();
-        for (BaseDataType dataType:dataTypes) {
+        for (BaseDataType dataType : dataTypes) {
             if (dataType.matches(field)) {
                 return dataType;
             }
@@ -192,17 +192,17 @@ public class TableManager {
     }
 
     private <A extends Annotation, V> V getColumnConstraintValue(Field field, Class<A> annotationType,
-                                                                Class<V> valueType) {
+                                                                 Class<V> valueType) {
         V value = null;
         A annotation = field.getAnnotation(annotationType);
         if (Default.class.isAssignableFrom(annotationType)) {
-            value = (V) ((Default)annotation).value();
+            value = (V) ((Default) annotation).value();
         }
         if (Check.class.isAssignableFrom(annotationType)) {
-            value = (V) ((Check)annotation).value();
+            value = (V) ((Check) annotation).value();
         }
         if (PrimaryKey.class.isAssignableFrom(annotationType)) {
-            value = (V) ((PrimaryKey)annotation).value();
+            value = (V) ((PrimaryKey) annotation).value();
         }
         return value;
     }
@@ -359,7 +359,7 @@ public class TableManager {
     }
 
     /* package */ <T extends OrmTable> void _dropTable(Class<T> tableClass, SQLiteDatabase db) {
-        String sql = DROP_TABLE+SPACE+getTableName(tableClass);
+        String sql = DROP_TABLE + SPACE + getTableName(tableClass);
         OrmLog.d(sql);
         db.execSQL(sql);
     }

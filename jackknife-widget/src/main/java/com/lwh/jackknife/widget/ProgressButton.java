@@ -171,6 +171,7 @@ public class ProgressButton extends Button {
 
     /**
      * The state of the button.
+     *
      * @see #STATE_NORMAL
      * @see #STATE_PENDING
      * @see #STATE_PAUSE
@@ -187,7 +188,7 @@ public class ProgressButton extends Button {
 
     public static final float SCALE = 1.0f;
 
-    private float[] mScales = new float[]{ SCALE, SCALE, SCALE };
+    private float[] mScales = new float[]{SCALE, SCALE, SCALE};
 
     private float[] mTranslateYs = new float[3];
 
@@ -319,7 +320,7 @@ public class ProgressButton extends Button {
     }
 
     private void drawText(Canvas canvas) {
-        float y = canvas.getHeight()/2 - ((mTextPaint.descent()) / 2 + mTextPaint.ascent() / 2);
+        float y = canvas.getHeight() / 2 - ((mTextPaint.descent()) / 2 + mTextPaint.ascent() / 2);
         int measuredWidth = getMeasuredWidth();
         if (mText == null) {
             mText = "";
@@ -345,8 +346,8 @@ public class ProgressButton extends Button {
                     mTextPaint.setColor(mTextColor);
                 } else if (startIndicator < hoverWidth && hoverWidth <= endIndicator) {
                     mTextGradient = new LinearGradient((measuredWidth - textWidth) / 2, 0,
-                            (measuredWidth + textWidth) / 2, 0, new int[] { mHoverTextColor,
-                            mTextColor }, new float[] { textProgress, textProgress + 0.001f },
+                            (measuredWidth + textWidth) / 2, 0, new int[]{mHoverTextColor,
+                            mTextColor}, new float[]{textProgress, textProgress + 0.001f},
                             Shader.TileMode.CLAMP);
                     mTextPaint.setColor(mTextColor);
                     mTextPaint.setShader(mTextGradient);
@@ -399,7 +400,7 @@ public class ProgressButton extends Button {
 
     public ArrayList<ValueAnimator> createBallPulseAnimators() {
         ArrayList<ValueAnimator> animators = new ArrayList<>();
-        int[] delays = new int[]{ 120, 240, 360 };
+        int[] delays = new int[]{120, 240, 360};
         for (int i = 0; i < 3; i++) {
             final int index = i;
             ValueAnimator scaleAnim = ValueAnimator.ofFloat(1, 0.3f, 1);

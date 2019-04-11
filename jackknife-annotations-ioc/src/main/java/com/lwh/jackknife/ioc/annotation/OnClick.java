@@ -21,6 +21,7 @@ import android.view.View;
 import static android.view.View.OnClickListener;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -37,7 +38,8 @@ import java.lang.annotation.Target;
  *
  * @see OnClickListener
  */
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnClickListener",
         listenerType = View.OnClickListener.class,
@@ -47,5 +49,5 @@ import java.lang.annotation.Target;
         returns = void.class
 )
 public @interface OnClick {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

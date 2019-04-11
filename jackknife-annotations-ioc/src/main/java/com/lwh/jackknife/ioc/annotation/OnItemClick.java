@@ -39,7 +39,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see OnItemClickListener
  */
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnItemClickListener",
         listenerType = AdapterView.OnItemClickListener.class,
@@ -53,5 +54,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         returns = void.class
 )
 public @interface OnItemClick {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

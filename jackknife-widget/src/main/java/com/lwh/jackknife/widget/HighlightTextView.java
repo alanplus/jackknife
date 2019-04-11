@@ -66,9 +66,9 @@ public class HighlightTextView extends TextView {
         mTextPaint = getPaint();
         String text = getText().toString();
         float textWidth = mTextPaint.measureText(text);
-        int GradientSize =(int) (3*textWidth/text.length());
+        int GradientSize = (int) (3 * textWidth / text.length());
         mGradient = new LinearGradient(-GradientSize, 0, 0, 0,
-                new int[]{mDefaultColor, mHighlightColor, mDefaultColor}, new float[]{ 0, 0.5f, 1},
+                new int[]{mDefaultColor, mHighlightColor, mDefaultColor}, new float[]{0, 0.5f, 1},
                 Shader.TileMode.CLAMP);
         mTextPaint.setShader(mGradient);
         mMatrix = new Matrix();
@@ -79,7 +79,7 @@ public class HighlightTextView extends TextView {
         super.onDraw(canvas);
         float textWidth = getPaint().measureText(getText().toString());
         mTransX += mDeltaX;
-        if(mTransX > textWidth + 1|| mTransX < 1){
+        if (mTransX > textWidth + 1 || mTransX < 1) {
             mDeltaX = -mDeltaX;
         }
         mMatrix.setTranslate(mTransX, 0);

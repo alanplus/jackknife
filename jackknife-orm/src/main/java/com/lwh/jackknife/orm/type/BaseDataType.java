@@ -24,7 +24,7 @@ public abstract class BaseDataType implements DataMatcher {
 
     private final SqlType mSqlType;
 
-    public BaseDataType(SqlType sqlType){
+    public BaseDataType(SqlType sqlType) {
         this.mSqlType = sqlType;
     }
 
@@ -34,8 +34,8 @@ public abstract class BaseDataType implements DataMatcher {
 
     public boolean matches(Field field) {
         Class<?>[] types = getTypes();
-        for (Class<?> type:types) {
-            if (type.isAssignableFrom(field.getType())){
+        for (Class<?> type : types) {
+            if (type.isAssignableFrom(field.getType())) {
                 return true;
             }
         }

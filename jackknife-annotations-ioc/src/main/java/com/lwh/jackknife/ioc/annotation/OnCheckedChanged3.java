@@ -26,7 +26,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnCheckedChangeListener",
         listenerType = MultiRadioGroup.OnCheckedChangeListener.class,
@@ -40,5 +41,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         returns = void.class
 )
 public @interface OnCheckedChanged3 {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

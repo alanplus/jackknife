@@ -28,76 +28,76 @@ import android.widget.EditText;
 
 public class ClearEditText extends EditText implements OnFocusChangeListener, TextWatcher {
 
-	private Drawable mClearDrawable;
+    private Drawable mClearDrawable;
 
-	public ClearEditText(Context context) {
-		this(context, null);
-	}
+    public ClearEditText(Context context) {
+        this(context, null);
+    }
 
-	public ClearEditText(Context context, AttributeSet attrs) {
-		this(context, attrs, android.R.attr.editTextStyle);
-	}
+    public ClearEditText(Context context, AttributeSet attrs) {
+        this(context, attrs, android.R.attr.editTextStyle);
+    }
 
-	public ClearEditText(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		init();
-	}
+    public ClearEditText(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+    }
 
-	private void init() {
-		setBackgroundResource(R.drawable.jknf_edit_text_border);
-		mClearDrawable = getCompoundDrawables()[2];
-		if (mClearDrawable == null) {
-			mClearDrawable = getResources().getDrawable(R.drawable.jknf_clear_edit_text_clear);
-		}
-		mClearDrawable.setBounds(5, 5, mClearDrawable.getIntrinsicWidth()-10,
-				mClearDrawable.getIntrinsicHeight()-10);
-		setClearIconVisible(false);
-		setOnFocusChangeListener(this);
-		addTextChangedListener(this);
-	}
+    private void init() {
+        setBackgroundResource(R.drawable.jknf_edit_text_border);
+        mClearDrawable = getCompoundDrawables()[2];
+        if (mClearDrawable == null) {
+            mClearDrawable = getResources().getDrawable(R.drawable.jknf_clear_edit_text_clear);
+        }
+        mClearDrawable.setBounds(5, 5, mClearDrawable.getIntrinsicWidth() - 10,
+                mClearDrawable.getIntrinsicHeight() - 10);
+        setClearIconVisible(false);
+        setOnFocusChangeListener(this);
+        addTextChangedListener(this);
+    }
 
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent event) {
-		if (getCompoundDrawables()[2] != null) {
-			if (event.getAction() == MotionEvent.ACTION_UP) {
-				boolean touchable = event.getX() > (getWidth() - getPaddingRight() -
-						mClearDrawable.getIntrinsicWidth())
-						&& (event.getX() < ((getWidth() - getPaddingRight())));
-				if (touchable) {
-					this.setText("");
-				}
-			}
-		}
-		return super.onTouchEvent(event);
-	}
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (getCompoundDrawables()[2] != null) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                boolean touchable = event.getX() > (getWidth() - getPaddingRight() -
+                        mClearDrawable.getIntrinsicWidth())
+                        && (event.getX() < ((getWidth() - getPaddingRight())));
+                if (touchable) {
+                    this.setText("");
+                }
+            }
+        }
+        return super.onTouchEvent(event);
+    }
 
-	@Override
-	public void onFocusChange(View v, boolean hasFocus) {
-		if (hasFocus) {
-			setClearIconVisible(getText().length() > 0);
-		} else {
-			setClearIconVisible(false);
-		}
-	}
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            setClearIconVisible(getText().length() > 0);
+        } else {
+            setClearIconVisible(false);
+        }
+    }
 
-	protected void setClearIconVisible(boolean visible) {
-		Drawable left = getCompoundDrawables()[0];
-		Drawable top = getCompoundDrawables()[1];
-		Drawable right = visible ? mClearDrawable : null;
-		Drawable bottom = getCompoundDrawables()[3];
-		setCompoundDrawables(left, top, right, bottom);
-	}
+    protected void setClearIconVisible(boolean visible) {
+        Drawable left = getCompoundDrawables()[0];
+        Drawable top = getCompoundDrawables()[1];
+        Drawable right = visible ? mClearDrawable : null;
+        Drawable bottom = getCompoundDrawables()[3];
+        setCompoundDrawables(left, top, right, bottom);
+    }
 
-	@Override
-	public void onTextChanged(CharSequence s, int start, int count, int after) {
-		setClearIconVisible(s.length() > 0);
-	}
+    @Override
+    public void onTextChanged(CharSequence s, int start, int count, int after) {
+        setClearIconVisible(s.length() > 0);
+    }
 
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-	}
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
-	@Override
-	public void afterTextChanged(Editable s) {
-	}
+    @Override
+    public void afterTextChanged(Editable s) {
+    }
 }

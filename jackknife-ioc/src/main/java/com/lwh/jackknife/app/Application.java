@@ -49,7 +49,7 @@ public class Application extends android.app.Application {
     /**
      * Get a unique instance.
      */
-    public static Application getInstance(){
+    public static Application getInstance() {
         return sApp;
     }
 
@@ -57,12 +57,12 @@ public class Application extends android.app.Application {
      * Add the activity to the task stack.
      *
      * @param activity An activity is a single, focused thing that the user can do.  Almost all
-     * activities interact with the user, so the Activity class takes care of
-     * creating a window for you in which you can place your UI with
-     * {@link android.app.Activity#setContentView}.  While activities are often presented to the user
-     * as full-screen windows, they can also be used in other ways: as floating
-     * windows (via a theme with {@link android.R.attr#windowIsFloating} set)
-     * or embedded inside of another activity (using {@link ActivityGroup}).
+     *                 activities interact with the user, so the Activity class takes care of
+     *                 creating a window for you in which you can place your UI with
+     *                 {@link android.app.Activity#setContentView}.  While activities are often presented to the user
+     *                 as full-screen windows, they can also be used in other ways: as floating
+     *                 windows (via a theme with {@link android.R.attr#windowIsFloating} set)
+     *                 or embedded inside of another activity (using {@link ActivityGroup}).
      */
     public void pushTask(SupportActivity activity) {
         mActivityStacks.add(new WeakReference<>(activity));
@@ -82,7 +82,7 @@ public class Application extends android.app.Application {
      * Destroy and remove all activities in the task stack.
      */
     public void close() {
-        for (WeakReference<? extends SupportActivity> ref:mActivityStacks) {
+        for (WeakReference<? extends SupportActivity> ref : mActivityStacks) {
             if (ref != null) {
                 SupportActivity activity = ref.get();
                 if (activity != null) {
@@ -94,7 +94,7 @@ public class Application extends android.app.Application {
 
     public void closeRetainBottom() {
         int size = mActivityStacks.size();
-        for (int i=size-1;i > 0;i--) {
+        for (int i = size - 1; i > 0; i--) {
             WeakReference<? extends SupportActivity> ref = mActivityStacks.get(i);
             if (ref != null) {
                 SupportActivity activity = ref.get();

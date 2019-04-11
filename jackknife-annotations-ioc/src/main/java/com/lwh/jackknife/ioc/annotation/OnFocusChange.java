@@ -38,7 +38,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see OnFocusChangeListener
  */
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnFocusChangeListener",
         listenerType = View.OnFocusChangeListener.class,
@@ -52,5 +53,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         returns = void.class
 )
 public @interface OnFocusChange {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

@@ -32,7 +32,7 @@ public class ScreenUtils {
         if (sInstance == null) {
             synchronized (ScreenUtils.class) {
                 if (sInstance == null) {
-                    sInstance = new ScreenUtils(  );
+                    sInstance = new ScreenUtils();
                     sMetrics = _getScreenWH(context);
                 }
             }

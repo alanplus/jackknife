@@ -34,5 +34,6 @@ public class VideoUtils {
     public static final int AVMEDIA_TYPE_NB = 5;
 
     public native static void reduceVideoQuality(int bitrate);
+
     public native static void adjustVideoSize(String inputPath, int widthPixels, int heightPixels);
 }

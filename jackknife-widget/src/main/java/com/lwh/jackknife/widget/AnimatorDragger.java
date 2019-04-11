@@ -19,5 +19,6 @@ package com.lwh.jackknife.widget;
 public interface AnimatorDragger {
 
     void onDrag(float ratio);
+
     void onReset();
 }

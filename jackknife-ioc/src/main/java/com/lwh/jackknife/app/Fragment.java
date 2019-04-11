@@ -33,22 +33,22 @@ import com.lwh.jackknife.ioc.inject.FragmentHandler;
  */
 public abstract class Fragment extends android.app.Fragment implements SupportFragment {
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		FragmentHandler handler = new FragmentHandler();
-		return handler.inflateLayout(new BindLayout(this));
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FragmentHandler handler = new FragmentHandler();
+        return handler.inflateLayout(new BindLayout(this));
+    }
 
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		ViewInjector.inject(this);
-	}
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        ViewInjector.inject(this);
+    }
 
-	@Override
-	public SupportActivity getFragmentActivity() {
-		if (getActivity() instanceof SupportActivity) {
-			return (SupportActivity) getActivity();
-		}
-		throw new LackInterfaceException("The activity lacks the SupportActivity interface.");
-	}
+    @Override
+    public SupportActivity getFragmentActivity() {
+        if (getActivity() instanceof SupportActivity) {
+            return (SupportActivity) getActivity();
+        }
+        throw new LackInterfaceException("The activity lacks the SupportActivity interface.");
+    }
 }

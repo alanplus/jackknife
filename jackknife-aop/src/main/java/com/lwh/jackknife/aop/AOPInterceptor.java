@@ -19,5 +19,6 @@ package com.lwh.jackknife.aop;
 public interface AOPInterceptor {
 
     void beforeAction();
+
     void afterAction();
 }

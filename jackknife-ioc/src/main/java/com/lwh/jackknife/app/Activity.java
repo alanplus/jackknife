@@ -27,46 +27,46 @@ import com.lwh.jackknife.ioc.ViewInjector;
  */
 public abstract class Activity extends android.app.Activity implements SupportActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		ViewInjector.inject(this);
-		push();
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ViewInjector.inject(this);
+        push();
+    }
 
-	@Override
-	protected void onDestroy() {
-		pop();
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        pop();
+        super.onDestroy();
+    }
 
-	/**
-	 * If you are using {@link Application}, it is automatically gonna be added to the Application's
-	 * task stack when creating the Activity.
-	 */
-	private void push() {
-		if (getApplication() instanceof Application) {
-			Application.getInstance().pushTask(this);
-		}
-	}
+    /**
+     * If you are using {@link Application}, it is automatically gonna be added to the Application's
+     * task stack when creating the Activity.
+     */
+    private void push() {
+        if (getApplication() instanceof Application) {
+            Application.getInstance().pushTask(this);
+        }
+    }
 
-	/**
-	 * Equivalent to {@link android.app.Activity#finish()}, the difference is that it is gonna be
-	 * removed from the Application's task stack when the activity is destroyed.
-	 */
-	private void pop() {
-		if (getApplication() instanceof Application) {
-			Application.getInstance().popTask();
-		}
-	}
+    /**
+     * Equivalent to {@link android.app.Activity#finish()}, the difference is that it is gonna be
+     * removed from the Application's task stack when the activity is destroyed.
+     */
+    private void pop() {
+        if (getApplication() instanceof Application) {
+            Application.getInstance().popTask();
+        }
+    }
 
-	@Override
-	public View findViewById(int id) {
-		return super.findViewById(id);
-	}
+    @Override
+    public View findViewById(int id) {
+        return super.findViewById(id);
+    }
 
-	@Override
-	public String getReflectionPackageName() {
-		return getPackageName();
-	}
+    @Override
+    public String getReflectionPackageName() {
+        return getPackageName();
+    }
 }

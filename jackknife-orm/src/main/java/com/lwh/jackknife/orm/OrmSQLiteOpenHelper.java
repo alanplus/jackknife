@@ -38,13 +38,13 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         if (mTables != null && mTables.length > 0) {
-            for (Class<? extends OrmTable> table:mTables) {
+            for (Class<? extends OrmTable> table : mTables) {
                 TableManager.getInstance()._createTable(table, db);
             }
         }
     }
 
-    private  <T> T newOrmTableInstance(Class<T> clazz) {
+    private <T> T newOrmTableInstance(Class<T> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         for (Constructor<?> c : constructors) {
             c.setAccessible(true);
@@ -88,7 +88,7 @@ public class OrmSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (mTables != null && mTables.length > 0 && newVersion > oldVersion) {
-            for (int i=0;i<mTables.length;i++) {
+            for (int i = 0; i < mTables.length; i++) {
                 Class<? extends OrmTable> table = mTables[i];
                 OrmTable ormTable = newOrmTableInstance(mTables[i]);
                 boolean isRecreated = ormTable.isUpgradeRecreated();

@@ -238,7 +238,7 @@ public class MusicUtils {
     }
 
 
-    public static int getDuration(String filePath){
+    public static int getDuration(String filePath) {
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(filePath);
         return Integer.valueOf(mmr.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION));

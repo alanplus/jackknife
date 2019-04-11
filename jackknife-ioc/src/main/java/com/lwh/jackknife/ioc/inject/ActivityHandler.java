@@ -137,8 +137,8 @@ public class ActivityHandler implements InjectHandler {
                     }
                 } catch (Exception e) {
                     throw new InjectException(fieldType.getName() + " " + field.getName()
-                            + " can\'t be injected, at layout("+generateLayoutName(v)+".xml), " +
-                            "id("+(id == View.NO_ID ? id:"0x"+Integer.toHexString(id))+").");
+                            + " can\'t be injected, at layout(" + generateLayoutName(v) + ".xml), " +
+                            "id(" + (id == View.NO_ID ? id : "0x" + Integer.toHexString(id)) + ").");
                 }
             }
         }

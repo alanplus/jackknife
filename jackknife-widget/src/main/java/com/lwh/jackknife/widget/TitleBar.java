@@ -73,21 +73,21 @@ public class TitleBar extends RelativeLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        if (mLeftView != null){
+        if (mLeftView != null) {
             mLeftView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mOnLeftClickListener != null){
+                    if (mOnLeftClickListener != null) {
                         mOnLeftClickListener.onClick(v);
                     }
                 }
             });
         }
-        if (mRightView != null){
+        if (mRightView != null) {
             mRightView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mOnRightClickListener != null){
+                    if (mOnRightClickListener != null) {
                         mOnRightClickListener.onClick(v);
                     }
                 }
@@ -119,31 +119,31 @@ public class TitleBar extends RelativeLayout {
     }
 
     private int measureWidth(int widthMeasureSpec) {
-        if (MeasureSpec.getMode(widthMeasureSpec)==MeasureSpec.EXACTLY){
+        if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY) {
             return MeasureSpec.getSize(widthMeasureSpec);
-        }else{
+        } else {
             return getMeasuredWidth();
         }
     }
 
     private int measureHeight(int heightMeasureSpec) {
-        if (MeasureSpec.getMode(heightMeasureSpec)==MeasureSpec.EXACTLY){
+        if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
             return MeasureSpec.getSize(heightMeasureSpec);
-        }else{
+        } else {
             return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
         }
     }
 
-    private void initViews(){
-        if (mLeftDrawable != null){
+    private void initViews() {
+        if (mLeftDrawable != null) {
             mLeftView = new ImageView(getContext());
-            LayoutParams leftLp = new LayoutParams(mLeftDrawableSize,mLeftDrawableSize);
+            LayoutParams leftLp = new LayoutParams(mLeftDrawableSize, mLeftDrawableSize);
             leftLp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             leftLp.addRule(RelativeLayout.CENTER_VERTICAL);
-            mLeftView.setImageBitmap(((BitmapDrawable)mLeftDrawable).getBitmap());
+            mLeftView.setImageBitmap(((BitmapDrawable) mLeftDrawable).getBitmap());
             addView(mLeftView, leftLp);
         }
-        if (mTitle != null){
+        if (mTitle != null) {
             mTitleView = new TextView(getContext());
             mTitleView.setText(mTitle);
             mTitleView.setTextColor(mTitleTextColor);
@@ -154,10 +154,10 @@ public class TitleBar extends RelativeLayout {
         }
         if (mRightDrawable != null) {
             mRightView = new ImageView(getContext());
-            LayoutParams rightLp = new LayoutParams(mRightDrawableSize,mRightDrawableSize);
+            LayoutParams rightLp = new LayoutParams(mRightDrawableSize, mRightDrawableSize);
             rightLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             rightLp.addRule(RelativeLayout.CENTER_VERTICAL);
-            mRightView.setImageBitmap(((BitmapDrawable)mRightDrawable).getBitmap());
+            mRightView.setImageBitmap(((BitmapDrawable) mRightDrawable).getBitmap());
             addView(mRightView, rightLp);
         }
     }
@@ -194,25 +194,25 @@ public class TitleBar extends RelativeLayout {
         return mRightView;
     }
 
-    public void setOnLeftClickListener(OnLeftClickListener l){
-        if (mLeftView == null){
+    public void setOnLeftClickListener(OnLeftClickListener l) {
+        if (mLeftView == null) {
             throw new RuntimeException("The left-hand-side view is not specified.");
         }
         this.mOnLeftClickListener = l;
     }
 
-    public void setOnRightClickListener(OnRightClickListener l){
-        if (mRightView == null){
+    public void setOnRightClickListener(OnRightClickListener l) {
+        if (mRightView == null) {
             throw new RuntimeException("The right-hand-side view is not specified.");
         }
         this.mOnRightClickListener = l;
     }
 
-    public interface OnLeftClickListener{
+    public interface OnLeftClickListener {
         void onClick(View view);
     }
 
-    public interface OnRightClickListener{
+    public interface OnRightClickListener {
         void onClick(View view);
     }
 }

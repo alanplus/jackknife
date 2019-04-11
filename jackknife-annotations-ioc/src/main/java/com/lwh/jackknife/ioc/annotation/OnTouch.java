@@ -40,7 +40,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see OnTouchListener
  */
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnTouchListener",
         listenerType = View.OnTouchListener.class,
@@ -53,5 +54,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         },
         returns = boolean.class)
 public @interface OnTouch {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

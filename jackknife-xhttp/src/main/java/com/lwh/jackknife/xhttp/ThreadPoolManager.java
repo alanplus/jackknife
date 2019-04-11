@@ -36,8 +36,8 @@ public class ThreadPoolManager {
     private LinkedBlockingQueue<Future<?>> mService = new LinkedBlockingQueue<>();
 
     private ThreadPoolManager() {
-        mThreadPoolExecutor=new ThreadPoolExecutor(4,10,10, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(4),handler);
+        mThreadPoolExecutor = new ThreadPoolExecutor(4, 10, 10, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<Runnable>(4), handler);
         mThreadPoolExecutor.execute(runnable);
     }
 
@@ -49,9 +49,9 @@ public class ThreadPoolManager {
                 try {
                     futureTask = (FutureTask) mService.take();
                 } catch (Exception e) {
-                if (futureTask != null) {
-                    e.printStackTrace();
-                }
+                    if (futureTask != null) {
+                        e.printStackTrace();
+                    }
                     mThreadPoolExecutor.execute(futureTask);
                 }
             }
@@ -59,20 +59,20 @@ public class ThreadPoolManager {
     };
 
     public <T> void execute(FutureTask<T> futureTask) {
-          if (futureTask != null) {
-              try {
-                  mService.put(futureTask);
-              } catch (InterruptedException e) {
-                  e.printStackTrace();
-              }
-          }
+        if (futureTask != null) {
+            try {
+                mService.put(futureTask);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private RejectedExecutionHandler handler = new RejectedExecutionHandler() {
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             try {
-                mService.put(new FutureTask<>(r,null));
+                mService.put(new FutureTask<>(r, null));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

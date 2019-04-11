@@ -40,7 +40,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see OnCheckedChangeListener
  */
-@Target(METHOD) @Retention(RUNTIME)
+@Target(METHOD)
+@Retention(RUNTIME)
 @EventBase(
         listenerSetter = "setOnCheckedChangeListener",
         listenerType = CompoundButton.OnCheckedChangeListener.class,
@@ -54,5 +55,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
         returns = void.class
 )
 public @interface OnCheckedChanged2 {
-    int[] value() default { View.NO_ID };
+    int[] value() default {View.NO_ID};
 }

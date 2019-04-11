@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom">
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="bottom">
 
     <com.lwh.jackknife.widget.NestedScrollingListView
-        android:id="@+id/lv_dialogmenu_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:divider="#60000000"
-        android:dividerHeight="1px"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+            android:id="@+id/lv_dialogmenu_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:divider="#60000000"
+            android:dividerHeight="1px"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
     <TextView
-        android:id="@+id/tv_dialogmenu_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/jknf_bottom_menu_bg"
-        android:textSize="16sp"
-        android:textColor="@android:color/holo_blue_light"
-        android:gravity="center"
-        android:text="取消" />
+            android:id="@+id/tv_dialogmenu_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/jknf_bottom_menu_bg"
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_blue_light"
+            android:gravity="center"
+            android:text="取消"/>
 </LinearLayout>

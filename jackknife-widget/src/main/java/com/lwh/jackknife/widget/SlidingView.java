@@ -44,7 +44,7 @@ public class SlidingView extends SlidingDrawer {
     }
 
     public interface OnSlidingViewClickListener {
-        void onClick(View view) ;
+        void onClick(View view);
     }
 
     /*

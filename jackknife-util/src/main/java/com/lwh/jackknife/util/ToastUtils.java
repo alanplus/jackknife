@@ -25,81 +25,81 @@ import java.lang.ref.WeakReference;
 
 public class ToastUtils {
 
-	private static WeakReference<Toast> sToastRef;
-	private static Handler sHandler = new Handler(Looper.getMainLooper());
+    private static WeakReference<Toast> sToastRef;
+    private static Handler sHandler = new Handler(Looper.getMainLooper());
 
-	private ToastUtils() {
-	}
+    private ToastUtils() {
+    }
 
-	public static void showShort(Context context, String text) {
-		showToast(context, text, Toast.LENGTH_SHORT);
-	}
+    public static void showShort(Context context, String text) {
+        showToast(context, text, Toast.LENGTH_SHORT);
+    }
 
-	public static void showLong(Context context, String text) {
-		showToast(context, text, Toast.LENGTH_LONG);
-	}
+    public static void showLong(Context context, String text) {
+        showToast(context, text, Toast.LENGTH_LONG);
+    }
 
-	public static void showShort(Context context, int resId) {
-		showToast(context, resId, Toast.LENGTH_SHORT);
-	}
+    public static void showShort(Context context, int resId) {
+        showToast(context, resId, Toast.LENGTH_SHORT);
+    }
 
-	public static void showLong(Context context, int resId) {
-		showToast(context, resId, Toast.LENGTH_LONG);
-	}
+    public static void showLong(Context context, int resId) {
+        showToast(context, resId, Toast.LENGTH_LONG);
+    }
 
-	private static void showToast(final Context context, final int resId, final int duration) {
-		if (Looper.myLooper() != Looper.getMainLooper()) {
-			sHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					showToastInternal(context, resId, duration);
-				}
-			});
-		} else {
-			showToastInternal(context, resId, duration);
-		}
-	}
+    private static void showToast(final Context context, final int resId, final int duration) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            sHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    showToastInternal(context, resId, duration);
+                }
+            });
+        } else {
+            showToastInternal(context, resId, duration);
+        }
+    }
 
-	private static void showToast(final Context context, final String text, final int duration) {
-		if (Looper.myLooper() != Looper.getMainLooper()) {
-			sHandler.post(new Runnable() {
-				@Override
-				public void run() {
-					showToastInternal(context, text, duration);
-				}
-			});
-		} else {
-			showToastInternal(context, text, duration);
-		}
-	}
+    private static void showToast(final Context context, final String text, final int duration) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            sHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    showToastInternal(context, text, duration);
+                }
+            });
+        } else {
+            showToastInternal(context, text, duration);
+        }
+    }
 
-	private static void showToastInternal(Context context, String text, int duration) {
-		Toast toast;
-		if (sToastRef == null || sToastRef.get() == null) {
-			toast = Toast.makeText(context, text, duration);
-			sToastRef = new WeakReference<>(toast);
-		} else {
-			toast = sToastRef.get();
-			if (toast != null) {
-				toast.setDuration(duration);
-				toast.setText(text);
-			} else return;
-		}
-		toast.show();
-	}
+    private static void showToastInternal(Context context, String text, int duration) {
+        Toast toast;
+        if (sToastRef == null || sToastRef.get() == null) {
+            toast = Toast.makeText(context, text, duration);
+            sToastRef = new WeakReference<>(toast);
+        } else {
+            toast = sToastRef.get();
+            if (toast != null) {
+                toast.setDuration(duration);
+                toast.setText(text);
+            } else return;
+        }
+        toast.show();
+    }
 
-	private static void showToastInternal(Context context, int resId, int duration) {
-		Toast toast;
-		if (sToastRef == null || sToastRef.get() == null) {
-			toast = Toast.makeText(context, resId, duration);
-			sToastRef = new WeakReference<>(toast);
-		} else {
-			toast = sToastRef.get();
-			if (toast != null) {
-				toast.setDuration(duration);
-				toast.setText(resId);
-			} else return;
-		}
-		toast.show();
-	}
+    private static void showToastInternal(Context context, int resId, int duration) {
+        Toast toast;
+        if (sToastRef == null || sToastRef.get() == null) {
+            toast = Toast.makeText(context, resId, duration);
+            sToastRef = new WeakReference<>(toast);
+        } else {
+            toast = sToastRef.get();
+            if (toast != null) {
+                toast.setDuration(duration);
+                toast.setText(resId);
+            } else return;
+        }
+        toast.show();
+    }
 }

@@ -32,9 +32,9 @@ android {
                 abiFilters 'armeabi'
             }
         }
-        sourceSets{
+        sourceSets {
             main {
-                jniLibs.srcDirs=['libs']
+                jniLibs.srcDirs = ['libs']
             }
         }
     }

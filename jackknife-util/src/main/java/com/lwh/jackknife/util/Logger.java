@@ -90,7 +90,7 @@ public class Logger {
         }
     }
 
-    public static void verbose(String msg){
+    public static void verbose(String msg) {
         verbose(TAG, msg);
     }
 

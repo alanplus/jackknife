@@ -37,7 +37,7 @@ public final class Transaction {
                 db.setTransactionSuccessful();
             }
             return isOk;
-        } catch(SQLiteException e) {
+        } catch (SQLiteException e) {
             e.printStackTrace();
         } finally {
             db.endTransaction();

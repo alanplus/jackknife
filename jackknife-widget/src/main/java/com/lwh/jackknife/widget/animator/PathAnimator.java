@@ -74,26 +74,26 @@ public class PathAnimator<PA extends PathAction> extends ActionWrapper<PA> {
             }
             float ratio = 1 - fraction;
             if (endValue instanceof QuadTo) {
-                x = ((float)Math.pow(ratio, 2)) * startValue.getX() + 2 * fraction * ratio
-                        * ((QuadTo) endValue).getInflectionX() + ((float)Math.pow(endValue.getX(), 2))
+                x = ((float) Math.pow(ratio, 2)) * startValue.getX() + 2 * fraction * ratio
+                        * ((QuadTo) endValue).getInflectionX() + ((float) Math.pow(endValue.getX(), 2))
                         * ((float) Math.pow(fraction, 2));
-                y = ((float)Math.pow(ratio, 2)) * startValue.getY() + 2 * fraction * ratio
-                        * ((QuadTo) endValue).getInflectionY() + ((float)Math.pow(endValue.getY(), 2))
+                y = ((float) Math.pow(ratio, 2)) * startValue.getY() + 2 * fraction * ratio
+                        * ((QuadTo) endValue).getInflectionY() + ((float) Math.pow(endValue.getY(), 2))
                         * ((float) Math.pow(fraction, 2));
             }
             if (endValue instanceof CubicTo) {
                 x = ((float) (Math.pow(ratio, 3))) * startValue.getX()
-                        + 3 * ((float)Math.pow(ratio, 2)) * fraction
+                        + 3 * ((float) Math.pow(ratio, 2)) * fraction
                         * ((CubicTo) endValue).getInflectionX1() + 3 * ratio *
-                        ((float)Math.pow(fraction, 2))
+                        ((float) Math.pow(fraction, 2))
                         * ((CubicTo) endValue).getInflectionX2() +
-                        ((float)Math.pow(fraction, 3)) * endValue.getX();
+                        ((float) Math.pow(fraction, 3)) * endValue.getX();
                 y = ((float) (Math.pow(ratio, 3))) * startValue.getY()
-                        + 3 * ((float)Math.pow(ratio, 2)) * fraction
+                        + 3 * ((float) Math.pow(ratio, 2)) * fraction
                         * ((CubicTo) endValue).getInflectionY1() + 3 * ratio *
-                        ((float)Math.pow(fraction, 2))
+                        ((float) Math.pow(fraction, 2))
                         * ((CubicTo) endValue).getInflectionY2() +
-                        ((float)Math.pow(fraction, 3)) * endValue.getY();
+                        ((float) Math.pow(fraction, 3)) * endValue.getY();
             }
             return (PA) new MoveTo(x, y);
         }

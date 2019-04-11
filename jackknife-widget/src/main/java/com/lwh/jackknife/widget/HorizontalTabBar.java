@@ -261,7 +261,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
      */
     private Locale mLocale;
 
-    public HorizontalTabBar(Context context){
+    public HorizontalTabBar(Context context) {
         this(context, null);
     }
 
@@ -270,7 +270,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     }
 
     public HorizontalTabBar(Context context, AttributeSet attrs,
-                             int defStyleAttr) {
+                            int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs, defStyleAttr);
     }
@@ -285,7 +285,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
                 LinearLayout.LayoutParams.MATCH_PARENT);
         mMetrics = getResources().getDisplayMetrics();
         mLocale = getResources().getConfiguration().locale;
-        initAttrs(context,attrs, defStyleAttr);
+        initAttrs(context, attrs, defStyleAttr);
         initRects();
         initPaints();
         initTabContainer();
@@ -387,7 +387,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
      */
     private void drawUnderline(int height, Canvas canvas) {
         mRectPaint.setColor(mUnderlineColor);
-        mUnderlineRect.set(0, height-mUnderlineHeight, getTabContainerWidth(), height);
+        mUnderlineRect.set(0, height - mUnderlineHeight, getTabContainerWidth(), height);
         canvas.drawRect(mUnderlineRect, mRectPaint);
     }
 
@@ -399,21 +399,21 @@ public class HorizontalTabBar extends HorizontalScrollView {
         View currentTab = mTabContainer.getChildAt(mPosition);
         float lineLeft = currentTab.getLeft();
         float lineRight = currentTab.getRight();
-        if (mPositionOffset > 0.0f && mPosition < mTabCount -1) {
+        if (mPositionOffset > 0.0f && mPosition < mTabCount - 1) {
             View nextTab = mTabContainer.getChildAt(mPosition + 1);
             float nextTabLeft = nextTab.getLeft();
             float nextTabRight = nextTab.getRight();
             lineLeft = (mPositionOffset * nextTabLeft + (1.0f - mPositionOffset) * lineLeft);
             lineRight = (mPositionOffset * nextTabRight + (1.0f - mPositionOffset) * lineRight);
         }
-        mIndicatorRect.set(lineLeft, height-mIndicatorHeight, lineRight, height);
+        mIndicatorRect.set(lineLeft, height - mIndicatorHeight, lineRight, height);
         canvas.drawRect(mIndicatorRect, mRectPaint);
     }
 
     /**
      * Initializes the Tab title, if you not invoke the method, there are no display on layout.
      */
-    public void setTitles(String[] titles){
+    public void setTitles(String[] titles) {
         if (mTabTitles == null) {
             mTabTitles = new ArrayList<>();
         }
@@ -426,7 +426,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Gets all titles of all tabs.
      */
-    public String[] getTitles(){
+    public String[] getTitles() {
         if (mTabTitles != null && mTabTitles.size() > 0) {
             return (String[]) mTabTitles.toArray();
         }
@@ -444,7 +444,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Gets the Tab title of the specified location.
      */
-    public String getTabTilte(int position){
+    public String getTabTilte(int position) {
         if (isInScope(position)) {
             return mTabTitles.get(position);
         }
@@ -557,7 +557,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * You can invoke the method in a scrollable container{@literal '}s callback method.
      */
-    public void setPositionOffset(int position, float positionOffset){
+    public void setPositionOffset(int position, float positionOffset) {
         if (position != mPosition || positionOffset != mPositionOffset) {
             mPosition = position;
             mPositionOffset = positionOffset;
@@ -587,12 +587,12 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Scroll to the location of a tab.
      */
-    public void scrollToChild(int position,int offsetPixels){
+    public void scrollToChild(int position, int offsetPixels) {
         if (mTabCount == 0) {
             return;
         }
         int width = getWidth();
-        int scrollOffset = (width-getTabWidth(position)) / 2;
+        int scrollOffset = (width - getTabWidth(position)) / 2;
         int scrollX = getTabLeft(position) + offsetPixels;
         if (position > 0 || offsetPixels > 0) {
             scrollX -= scrollOffset;
@@ -945,7 +945,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
     /**
      * Adds a tab.You can look up {@link #addTextTab(int, String)}.
      */
-    private void addTab(final int position,View tab) {
+    private void addTab(final int position, View tab) {
         tab.setFocusable(true);
         tab.setOnClickListener(new OnClickListener() {
 
@@ -961,7 +961,7 @@ public class HorizontalTabBar extends HorizontalScrollView {
             }
         });
         tab.setPadding(mTabPaddingLeft, 0, mTabPaddingRight, mUnderlineHeight);
-        mTabContainer.addView(tab,position,mAverage ? mAverageTabLayoutParams
+        mTabContainer.addView(tab, position, mAverage ? mAverageTabLayoutParams
                 : mWrapTabLayoutParams);
     }
 

@@ -98,7 +98,7 @@
         <item name="instrumentview_animationTime">500</item>
     </style>
     <style name="JackKnife.Theme.Widget.VerifyCodeEditTextGroup"
-        parent="JackKnife.Theme.Widget.AutoEditTextGroup">
+           parent="JackKnife.Theme.Widget.AutoEditTextGroup">
         <item name="verifycodeedittextgroup_type">lengthSix</item>
     </style>
     <style name="JackKnife.Theme.Widget.TitleBar">

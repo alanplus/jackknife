@@ -34,7 +34,7 @@ public abstract class BaseActivity<V extends IBaseView, P extends BasePresenter<
         Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         mPresenter = createPresenter();
-        mPresenter.attachView((V)this);
+        mPresenter.attachView((V) this);
     }
 
     @Override

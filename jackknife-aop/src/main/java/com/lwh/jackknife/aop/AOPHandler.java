@@ -37,7 +37,7 @@ public class AOPHandler implements InvocationHandler {
         this.mAction = action;
         Class<?> callbackType = action.getClass();
         return (Action) Proxy.newProxyInstance(callbackType.getClassLoader(),
-                new Class<?>[] {callbackType}, this);
+                new Class<?>[]{callbackType}, this);
     }
 
     @Override

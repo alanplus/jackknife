@@ -33,7 +33,7 @@ public enum DataType {
 
     private final DataMatcher mMatcher;
 
-    /* package */ DataType(DataMatcher matcher){
+    /* package */ DataType(DataMatcher matcher) {
         mMatcher = matcher;
     }
 

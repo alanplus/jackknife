@@ -25,9 +25,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EventBase {
     String listenerSetter();
+
     Class<?> listenerType();
+
     String callbackMethod();
+
     Class<?>[] parameters();
+
     String[] parameterNames();
+
     Class<?> returns();
 }

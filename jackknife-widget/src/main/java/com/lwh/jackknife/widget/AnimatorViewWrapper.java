@@ -94,16 +94,16 @@ public class AnimatorViewWrapper extends FrameLayout implements AnimatorDragger 
             setScaleY(ratio);
         }
         if (isTranslationFrom(TRANSLATION_FROM_BOTTOM)) {
-            setTranslationY(mHeight*(1-ratio));//mHeight-->0(代表原来的位置)
+            setTranslationY(mHeight * (1 - ratio));//mHeight-->0(代表原来的位置)
         }
         if (isTranslationFrom(TRANSLATION_FROM_TOP)) {
-            setTranslationY(-mHeight*(1-ratio));//-mHeight-->0(代表原来的位置)
+            setTranslationY(-mHeight * (1 - ratio));//-mHeight-->0(代表原来的位置)
         }
         if (isTranslationFrom(TRANSLATION_FROM_LEFT)) {
-            setTranslationX(-mWidth*(1-ratio));//-width-->0(代表原来的位置)
+            setTranslationX(-mWidth * (1 - ratio));//-width-->0(代表原来的位置)
         }
         if (isTranslationFrom(TRANSLATION_FROM_RIGHT)) {
-            setTranslationX(mWidth*(1-ratio));//width-->0(代表原来的位置)
+            setTranslationX(mWidth * (1 - ratio));//width-->0(代表原来的位置)
         }
         if (mFromColor != -1 && mToColor != -1) {
             setBackgroundColor((Integer) mEvaluator.evaluate(ratio, mFromColor, mToColor));

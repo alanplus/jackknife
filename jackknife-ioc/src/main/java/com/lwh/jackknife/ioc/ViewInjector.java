@@ -63,7 +63,7 @@ public class ViewInjector {
         types.add(new BindLayout(v));
         types.add(new BindView(v));
         types.add(new BindEvent(v));
-        for (BindType type:types) {
+        for (BindType type : types) {
             dispatchHandler(type, v);
         }
     }

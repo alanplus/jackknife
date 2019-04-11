@@ -50,7 +50,7 @@ public class FlipOverView extends ImageView {
     }
 
     public void flipOver() {
-        if (mFlipState ==  0) {
+        if (mFlipState == 0) {
             ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(this, "rotationY", 0, -180f);
             ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(this, "alpha", 1f, 0.2f);
             AnimatorSet set = new AnimatorSet();

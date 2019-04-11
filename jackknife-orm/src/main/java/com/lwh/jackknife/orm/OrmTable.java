@@ -18,16 +18,16 @@ package com.lwh.jackknife.orm;
 
 public interface OrmTable {
 
-     /**
-      * Gets the unique identifier's value.
-      *
-      * @return The primary key value.
-      */
-     <T> T getPrimaryKeyValue();
+    /**
+     * Gets the unique identifier's value.
+     *
+     * @return The primary key value.
+     */
+    <T> T getPrimaryKeyValue();
 
-     /**
-      * @return If true, it will drop table first and recreate the table when the table is
-      * upgraded.Instead,it will expand directly on the previous table.
-      */
-     boolean isUpgradeRecreated();
+    /**
+     * @return If true, it will drop table first and recreate the table when the table is
+     * upgraded.Instead,it will expand directly on the previous table.
+     */
+    boolean isUpgradeRecreated();
 }

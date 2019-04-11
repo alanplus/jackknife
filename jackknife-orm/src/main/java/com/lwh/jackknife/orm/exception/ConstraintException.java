@@ -21,7 +21,7 @@ public class ConstraintException extends RuntimeException {
     public ConstraintException() {
     }
 
-    public ConstraintException(String message){
+    public ConstraintException(String message) {
         super(message);
     }
 }

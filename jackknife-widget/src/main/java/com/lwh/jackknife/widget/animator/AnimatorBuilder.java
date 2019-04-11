@@ -32,7 +32,7 @@ public class AnimatorBuilder {
         } else {
             mAlphaAnimator = new AlphaAnimator();
         }
-        for (AlphaAction action:actions) {
+        for (AlphaAction action : actions) {
             mAlphaAnimator.add(action);
         }
         mBase = mAlphaAnimator;
@@ -45,7 +45,7 @@ public class AnimatorBuilder {
         } else {
             mRotateAnimator = new RotateAnimator();
         }
-        for (RotateAction action:actions) {
+        for (RotateAction action : actions) {
             mRotateAnimator.add(action);
         }
         mBase = mRotateAnimator;
@@ -58,7 +58,7 @@ public class AnimatorBuilder {
         } else {
             mScaleAnimator = new ScaleAnimator();
         }
-        for (ScaleAction action:actions) {
+        for (ScaleAction action : actions) {
             mScaleAnimator.add(action);
         }
         mBase = mScaleAnimator;
@@ -71,7 +71,7 @@ public class AnimatorBuilder {
         } else {
             this.mPathAnimator = new PathAnimator();
         }
-        for (PathAction action:actions) {
+        for (PathAction action : actions) {
             this.mPathAnimator.add(action);
         }
         mBase = mPathAnimator;

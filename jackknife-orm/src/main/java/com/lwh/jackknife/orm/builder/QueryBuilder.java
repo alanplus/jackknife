@@ -44,58 +44,58 @@ public class QueryBuilder {
 
     private WhereBuilder mWhereBuilder;
 
-    private QueryBuilder(){
+    private QueryBuilder() {
         mWhereBuilder = WhereBuilder.create();
     }
 
-    public QueryBuilder where(WhereBuilder builder){
+    public QueryBuilder where(WhereBuilder builder) {
         mWhereBuilder = builder;
         return this;
     }
 
-    public QueryBuilder where(Condition condition){
+    public QueryBuilder where(Condition condition) {
         mWhereBuilder = WhereBuilder.create();
         mWhereBuilder.where(condition);
         return this;
     }
 
-    public static QueryBuilder create(){
+    public static QueryBuilder create() {
         return new QueryBuilder();
     }
 
-    public QueryBuilder columns(String[] columns){
+    public QueryBuilder columns(String[] columns) {
         mColumns = columns;
         return this;
     }
 
-    public QueryBuilder having(String having){
+    public QueryBuilder having(String having) {
         mHaving = HAVING + having;
         return this;
     }
 
-    public QueryBuilder orderBy(String order){
+    public QueryBuilder orderBy(String order) {
         mOrder = ORDER_BY + order;
         return this;
     }
 
-    public QueryBuilder groupBy(String group){
+    public QueryBuilder groupBy(String group) {
         mGroup = GROUP_BY + group;
         return this;
     }
 
-    public QueryBuilder limit(int limit){
+    public QueryBuilder limit(int limit) {
         mLimit = LIMIT + limit;
         return this;
     }
 
-    public QueryBuilder limit(int start, int end){
+    public QueryBuilder limit(int start, int end) {
         mLimit = LIMIT + start + COMMA + end;
         return this;
     }
 
     public String build() {
-        return mWhereBuilder.build() + (mGroup!=null?mGroup:SPACE) + (mHaving!=null?mHaving:SPACE)
-                + (mOrder!=null?mOrder:SPACE) + (mLimit!=null?mLimit:SPACE);
+        return mWhereBuilder.build() + (mGroup != null ? mGroup : SPACE) + (mHaving != null ? mHaving : SPACE)
+                + (mOrder != null ? mOrder : SPACE) + (mLimit != null ? mLimit : SPACE);
     }
 
     public WhereBuilder getWhereBuilder() {
@@ -103,19 +103,19 @@ public class QueryBuilder {
     }
 
     public String getHaving() {
-        return mHaving != null?new StringBuilder(mHaving).delete(0, HAVING.length()).toString():SPACE;
+        return mHaving != null ? new StringBuilder(mHaving).delete(0, HAVING.length()).toString() : SPACE;
     }
 
     public String getOrder() {
-        return mOrder != null?new StringBuilder(mOrder).delete(0, ORDER_BY.length()).toString():SPACE;
+        return mOrder != null ? new StringBuilder(mOrder).delete(0, ORDER_BY.length()).toString() : SPACE;
     }
 
     public String getGroup() {
-        return mGroup != null?new StringBuilder(mGroup).delete(0, GROUP_BY.length()).toString():SPACE;
+        return mGroup != null ? new StringBuilder(mGroup).delete(0, GROUP_BY.length()).toString() : SPACE;
     }
 
     public String getLimit() {
-        return mLimit != null?new StringBuilder(mLimit).delete(0, LIMIT.length()).toString():SPACE;
+        return mLimit != null ? new StringBuilder(mLimit).delete(0, LIMIT.length()).toString() : SPACE;
     }
 
     public String[] getColumns() {

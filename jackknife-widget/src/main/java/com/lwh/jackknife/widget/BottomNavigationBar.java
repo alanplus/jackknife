@@ -56,7 +56,7 @@ public class BottomNavigationBar extends RadioGroup implements View.OnClickListe
         super.onFinishInflate();
         int count = getChildCount();
         if (count > 0) {
-            for (int i=0;i<count;i++) {
+            for (int i = 0; i < count; i++) {
                 View child = getChildAt(i);
                 if (child instanceof ShadeView) {
                     ShadeView button = (ShadeView) child;

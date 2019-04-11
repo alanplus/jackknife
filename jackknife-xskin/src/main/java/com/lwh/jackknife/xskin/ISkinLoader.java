@@ -47,7 +47,7 @@ public interface ISkinLoader {
      * 通过插件资源包的资源名resName获取插件的资源ID。
      *
      * @param resName 比如skin_theme_item_outside_color
-     * @return  资源ID，如R.color.skin_theme_item_outside_color
+     * @return 资源ID，如R.color.skin_theme_item_outside_color
      */
     @ColorRes
     int getColorRes(String resName);

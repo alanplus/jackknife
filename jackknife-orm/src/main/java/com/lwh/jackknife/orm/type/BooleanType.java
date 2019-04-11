@@ -20,11 +20,11 @@ public class BooleanType extends BaseDataType {
 
     private static final BooleanType mInstance = new BooleanType();
 
-    public BooleanType(){
+    public BooleanType() {
         super(SqlType.INTEGER);
     }
 
-    public static BooleanType getInstance(){
+    public static BooleanType getInstance() {
         return mInstance;
     }
 

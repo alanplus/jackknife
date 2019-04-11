@@ -40,9 +40,9 @@ public class LetterView extends View {
     private int mHoverTextColor;
     private Drawable mBackgroundDrawable;
     private Drawable mHoverBackgroundDrawable;
-    private String[] mLetters = { "A", "B", "C", "D", "E", "F", "G", "H", "I",
+    private String[] mLetters = {"A", "B", "C", "D", "E", "F", "G", "H", "I",
             "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
-            "W", "X", "Y", "Z", "#" };
+            "W", "X", "Y", "Z", "#"};
     private boolean mTextAllCaps;
     private int mSelected = -1;
     private final int DEFAULT_TEXT_COLOR = 0xFF000000;
@@ -212,7 +212,7 @@ public class LetterView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int measuredWidth =  measureWidth(widthMeasureSpec);
+        int measuredWidth = measureWidth(widthMeasureSpec);
         setMeasuredDimension(measuredWidth, MeasureSpec.getSize(heightMeasureSpec));
     }
 

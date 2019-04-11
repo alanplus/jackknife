@@ -46,7 +46,7 @@ public abstract class BaseDialog<V extends IBaseView, P extends BasePresenter<V>
         Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         mPresenter = createPresenter();
-        mPresenter.attachView((V)this);
+        mPresenter.attachView((V) this);
     }
 
     @Override

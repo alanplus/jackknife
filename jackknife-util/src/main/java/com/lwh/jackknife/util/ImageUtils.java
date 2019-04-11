@@ -124,7 +124,7 @@ public class ImageUtils {
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, int requiredWidth,
-                                            int requiredHeight) {
+                                             int requiredHeight) {
         int width = options.outWidth;
         int height = options.outHeight;
         int inSampleSize = 1;
@@ -155,7 +155,7 @@ public class ImageUtils {
         Rect rect = new Rect();
         view.getWindowVisibleDisplayFrame(rect);
         int statusBarHeight = rect.top;
-        Bitmap outputBitmap = Bitmap.createBitmap(bitmap,0,statusBarHeight,
+        Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, statusBarHeight,
                 SystemUtils.getScreenWidth(activity), SystemUtils.getScreenHeight(activity) - statusBarHeight);
         view.destroyDrawingCache();
         return outputBitmap;
@@ -212,10 +212,10 @@ public class ImageUtils {
             return ((BitmapDrawable) drawable).getBitmap();
         } else if (drawable instanceof NinePatchDrawable) {
             Bitmap bitmap = Bitmap.createBitmap(
-                            drawable.getIntrinsicWidth(),
-                            drawable.getIntrinsicHeight(),
-                            drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                                    : Bitmap.Config.RGB_565);
+                    drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight(),
+                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                            : Bitmap.Config.RGB_565);
             Canvas canvas = new Canvas(bitmap);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
                     drawable.getIntrinsicHeight());
@@ -237,10 +237,10 @@ public class ImageUtils {
         Rect outRect = new Rect();
         Rect containerRect = new Rect(0, 0, dstBitmap.getWidth(), dstBitmap.getHeight());
         Gravity.apply(gravity, outputBitmap.getWidth(), outputBitmap.getHeight(), containerRect, outRect);
-        int left = (int) (outRect.left+offsetX);
-        int top = (int) (outRect.top+offsetY);
-        int right = (int) (outRect.right+offsetX);
-        int bottom = (int) (outRect.bottom+offsetY);
+        int left = (int) (outRect.left + offsetX);
+        int top = (int) (outRect.top + offsetY);
+        int right = (int) (outRect.right + offsetX);
+        int bottom = (int) (outRect.bottom + offsetY);
         outRect.set(left, top, right, bottom);
         canvas.drawBitmap(markBitmap, null, outRect, null);
         canvas.save(Canvas.ALL_SAVE_FLAG);
@@ -249,7 +249,7 @@ public class ImageUtils {
     }
 
     public static Bitmap composeWatermark(Bitmap dstBitmap, Bitmap markBitmap) {
-        return composeWatermark(dstBitmap, markBitmap, Gravity.END|Gravity.BOTTOM, 0, 0);
+        return composeWatermark(dstBitmap, markBitmap, Gravity.END | Gravity.BOTTOM, 0, 0);
     }
 
     public static Bitmap zoomBitmap(Bitmap bitmap, int requiredWidth, int requiredHeight) {
@@ -307,22 +307,22 @@ public class ImageUtils {
         int height = bitmap.getHeight();
         Matrix matrix = new Matrix();
         matrix.preScale(1, -1);
-        Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, height/2, width, height/2, matrix,
+        Bitmap reflectionImage = Bitmap.createBitmap(bitmap, 0, height / 2, width, height / 2, matrix,
                 false);
-        Bitmap bitmapWithReflection = Bitmap.createBitmap(width, (height + height/2),
+        Bitmap bitmapWithReflection = Bitmap.createBitmap(width, (height + height / 2),
                 Bitmap.Config.ARGB_8888);
         Paint defaultPaint = new Paint();
         Canvas canvas = new Canvas(bitmapWithReflection);
         canvas.drawBitmap(bitmap, 0, 0, null);
-        canvas.drawRect(0, height,width,height + reflectionGap, defaultPaint);
+        canvas.drawRect(0, height, width, height + reflectionGap, defaultPaint);
         canvas.drawBitmap(reflectionImage, 0, height + reflectionGap, null);
         Paint paint = new Paint();
         LinearGradient shader = new LinearGradient(0, bitmap.getHeight(), 0,
-                bitmapWithReflection.getHeight()+reflectionGap, 0x70FFFFFF, 0x00FFFFFF,
+                bitmapWithReflection.getHeight() + reflectionGap, 0x70FFFFFF, 0x00FFFFFF,
                 Shader.TileMode.CLAMP);
         paint.setShader(shader);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        canvas.drawRect(0, height, width, bitmapWithReflection.getHeight()+reflectionGap, paint);
+        canvas.drawRect(0, height, width, bitmapWithReflection.getHeight() + reflectionGap, paint);
         return bitmapWithReflection;
     }
 

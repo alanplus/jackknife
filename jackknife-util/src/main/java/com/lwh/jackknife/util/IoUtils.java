@@ -60,8 +60,8 @@ public class IoUtils {
 
     public static String b2H(byte b) {
         String H = Integer.toHexString(b & 0xFF);
-        if (H.length() == 1){
-            H = '0'+H;
+        if (H.length() == 1) {
+            H = '0' + H;
         }
         return H;
     }
@@ -71,15 +71,15 @@ public class IoUtils {
             return null;
         }
         StringBuilder buffer = new StringBuilder();
-        for (int i=0;i<src.length;i++){
+        for (int i = 0; i < src.length; i++) {
             int value = src[i] & 0xFF;
             String H = NumberUtils.D2H(value);
-            if (H.length() < 2){
+            if (H.length() < 2) {
                 buffer.append(0);
             }
             buffer.append(H).append(separator);
         }
-        return buffer.substring(0, buffer.length()-1);
+        return buffer.substring(0, buffer.length() - 1);
     }
 
     public static String bs2H(byte[] src) {
@@ -87,11 +87,11 @@ public class IoUtils {
     }
 
     public static byte[] H2bs(String H, String separator) {
-        if (separator != null){
+        if (separator != null) {
             String[] HS = H.split(separator);
             byte[] bs = new byte[HS.length];
             int i = 0;
-            for (String b : HS){
+            for (String b : HS) {
                 bs[i++] = Integer.valueOf(b, 16).byteValue();
             }
             return bs;
@@ -341,7 +341,7 @@ public class IoUtils {
         try {
             SharedPreferences preferences = context.getSharedPreferences(fileNameNoExt, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
-            for (Iterator iterator = values.entrySet().iterator(); iterator.hasNext();) {
+            for (Iterator iterator = values.entrySet().iterator(); iterator.hasNext(); ) {
                 Map.Entry<String, ?> entry = (Map.Entry<String, ?>) iterator.next();
                 if (entry.getValue() instanceof String) {
                     editor.putString(entry.getKey(), (String) entry.getValue());
@@ -457,7 +457,7 @@ public class IoUtils {
 
     public static void createFolder(String[] dirs) {
         if (dirs != null) {
-            for (String dir:dirs) {
+            for (String dir : dirs) {
                 createFolder(dir);
             }
         }

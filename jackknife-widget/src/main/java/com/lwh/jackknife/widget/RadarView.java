@@ -121,7 +121,7 @@ public class RadarView extends View {
         int height = getHeight();
         mCircleCenterX = width / 2;
         mCircleCenterY = height / 2;
-        for (int i=0;i<mAnnulusNum;i++) {
+        for (int i = 0; i < mAnnulusNum; i++) {
             canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius + i * mSpaceRadius,
                     mAnnulusPaint);
         }
@@ -147,7 +147,7 @@ public class RadarView extends View {
             } else {
                 canvas.drawColor(Color.WHITE);
             }
-            for (int i=0;i<mAnnulusNum;i++) {
+            for (int i = 0; i < mAnnulusNum; i++) {
                 canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius + i * mSpaceRadius,
                         mAnnulusPaint);
             }

@@ -189,7 +189,7 @@ public class ApkUtils {
         return apkFile;
     }
 
-    public static void launch(Context context, String packageName, String className){
+    public static void launch(Context context, String packageName, String className) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.setComponent(new ComponentName(packageName, className));

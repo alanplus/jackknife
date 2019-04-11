@@ -33,7 +33,7 @@ public abstract class BasePresenter<V extends IBaseView> {
         }
     }
 
-    protected V getView(){
+    protected V getView() {
         return mViewRef.get();
     }
 
@@ -42,7 +42,7 @@ public abstract class BasePresenter<V extends IBaseView> {
      *
      * @return Ture means successful attachment, false otherwise.
      */
-    protected boolean isViewAttached(){
+    protected boolean isViewAttached() {
         return mViewRef != null && mViewRef.get() != null;
     }
 }

@@ -23,7 +23,7 @@ public class CubicTo extends PathAction<CubicTo> {
     private float mInflectionX2;
     private float mInflectionY2;
 
-    public CubicTo(float inflectionX1, float inflectionX2,float inflectionY1,float inflectionY2,
+    public CubicTo(float inflectionX1, float inflectionX2, float inflectionY1, float inflectionY2,
                    float x, float y) {
         super(x, y);
         this.mInflectionX1 = inflectionX1;

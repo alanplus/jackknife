@@ -100,7 +100,7 @@ public class ShadeView extends RadioButton {
     @Override
     public void setChecked(boolean checked) {
         super.setChecked(checked);
-        setShade(checked?1.0f:0.0f);
+        setShade(checked ? 1.0f : 0.0f);
     }
 
     private void initPaints() {

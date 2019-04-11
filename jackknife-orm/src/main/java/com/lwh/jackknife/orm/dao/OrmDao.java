@@ -93,7 +93,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     private ContentValues getContentValues(T bean) {
         ContentValues values = new ContentValues();
         Field[] fields = mBeanClass.getDeclaredFields();
-        for (Field field:fields) {
+        for (Field field : fields) {
             field.setAccessible(true);
             Ignore ignore = field.getAnnotation(Ignore.class);
             Column column = field.getAnnotation(Column.class);
@@ -129,9 +129,9 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 } else if (isAssignableFromDouble(fieldType)) {
                     values.put(columnName, field.getDouble(bean));
                 } else if (Class.class.isAssignableFrom(fieldType)) {
-                    values.put(columnName, ((Class)field.get(bean)).getName());
+                    values.put(columnName, ((Class) field.get(bean)).getName());
                 }
-            }catch (IllegalAccessException e){
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
@@ -141,7 +141,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     private String getColumnHack() {
         StringBuilder sb = new StringBuilder();
         Field[] fields = mBeanClass.getDeclaredFields();
-        for (Field field:fields) {
+        for (Field field : fields) {
             field.setAccessible(true);
             Ignore ignore = field.getAnnotation(Ignore.class);
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
@@ -151,7 +151,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
                 sb.append(name).append(",");
             }
         }
-        return sb.substring(0, sb.length()-2);
+        return sb.substring(0, sb.length() - 2);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     @Override
     public boolean insert(List<T> beans) {
         int count = 0;
-        for (T bean:beans) {
+        for (T bean : beans) {
             boolean isOk = insert(bean);
             if (isOk) {
                 count++;
@@ -392,7 +392,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
             InstantiationException, InvocationTargetException {
         T bean = newOrmTableInstance(mBeanClass);
         Field[] fields = mBeanClass.getDeclaredFields();
-        for (Field field:fields) {
+        for (Field field : fields) {
             field.setAccessible(true);
             String columnName;
             Column column = field.getAnnotation(Column.class);

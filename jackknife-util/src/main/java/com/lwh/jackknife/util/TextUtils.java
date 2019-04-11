@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 public class TextUtils {
 
-    public static String[] mPinyinKey = new String[] {"a", "ai", "an", "ang", "ao", "ba", "bai",
+    public static String[] mPinyinKey = new String[]{"a", "ai", "an", "ang", "ao", "ba", "bai",
             "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian", "biao", "bie", "bin", "bing",
             "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "ceng", "cha", "chai", "chan",
             "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chuai",
@@ -61,7 +61,7 @@ public class TextUtils {
             "zhao", "zhe", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan",
             "zhuang", "zhui", "zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"};
 
-    private static int[] mPinyinValue = new int[] {-20319, -20317, -20304, -20295, -20292, -20283,
+    private static int[] mPinyinValue = new int[]{-20319, -20317, -20304, -20295, -20292, -20283,
             -20265, -20257, -20242, -20230, -20051, -20036, -20032, -20026, -20002, -19990, -19986,
             -19982, -19976, -19805, -19784, -19775, -19774, -19763, -19756, -19751, -19746, -19741,
             -19739, -19728, -19725, -19715, -19540, -19531, -19525, -19515, -19500, -19484, -19479,
@@ -106,14 +106,14 @@ public class TextUtils {
         return android.text.TextUtils.isEmpty(str);
     }
 
-    public static boolean isNotEmpty(CharSequence str){
+    public static boolean isNotEmpty(CharSequence str) {
         return !isEmpty(str);
     }
 
     public static boolean checkEmpty(String... text) {
-        for (String element:text){
+        for (String element : text) {
             boolean isSucceed = isEmpty(element);
-            if (!isSucceed){
+            if (!isSucceed) {
                 return false;
             }
         }
@@ -121,9 +121,9 @@ public class TextUtils {
     }
 
     public static boolean checkNotEmpty(String... text) {
-        for (String element:text){
+        for (String element : text) {
             boolean isSucceed = isNotEmpty(element);
-            if (!isSucceed){
+            if (!isSucceed) {
                 return false;
             }
         }
@@ -134,7 +134,7 @@ public class TextUtils {
         return android.text.TextUtils.equals(lhss, rhss);
     }
 
-    public static boolean isNotEqualTo(String lhss, String rhss){
+    public static boolean isNotEqualTo(String lhss, String rhss) {
         return !isEqualTo(lhss, rhss);
     }
 
@@ -213,20 +213,20 @@ public class TextUtils {
             return text;
         }
         StringBuffer sb = new StringBuffer();
-        for (int i=0;i<text.length();i++) {
-            sb.append(text.substring(i,i+sectionLength)).append(divider);
+        for (int i = 0; i < text.length(); i++) {
+            sb.append(text.substring(i, i + sectionLength)).append(divider);
         }
         return sb.toString();
     }
 
     public static String parseJson(String str, String name) {
-        if (str.isEmpty()||name.isEmpty()) {
+        if (str.isEmpty() || name.isEmpty()) {
             return null;
         }
         String result = null;
         try {
             JSONObject jo = new JSONObject(str);
-            result = jo.has(name)?jo.getString(name):null;
+            result = jo.has(name) ? jo.getString(name) : null;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -244,8 +244,7 @@ public class TextUtils {
     /**
      * 判断输入char类型变量的字符类型
      *
-     * @param c
-     *            char类型变量
+     * @param c char类型变量
      * @return CharType 字符类型
      */
     public static CharType checkType(char c) {

@@ -65,9 +65,9 @@ public class RegexUtils {
 
     private static final String V_RAR = "(.*)\\.(rar|zip|7zip|tgz)$";
 
-    private static final String V_DATE="^((((1[6-9]|[2-9]\\d)\\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\\d|3[01]))|(((1[6-9]|[2-9]\\d)\\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\\d|30))|(((1[6-9]|[2-9]\\d)\\d{2})-0?2-(0?[1-9]|1\\d|2[0-8]))|(((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-)) (20|21|22|23|[0-1]?\\d):[0-5]?\\d:[0-5]?\\d$";
+    private static final String V_DATE = "^((((1[6-9]|[2-9]\\d)\\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\\d|3[01]))|(((1[6-9]|[2-9]\\d)\\d{2})-(0?[13456789]|1[012])-(0?[1-9]|[12]\\d|30))|(((1[6-9]|[2-9]\\d)\\d{2})-0?2-(0?[1-9]|1\\d|2[0-8]))|(((1[6-9]|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))-0?2-29-)) (20|21|22|23|[0-1]?\\d):[0-5]?\\d:[0-5]?\\d$";
 
-    private static final String V_QQ_NUMBER="^[1-9]*[1-9][0-9]*$";
+    private static final String V_QQ_NUMBER = "^[1-9]*[1-9][0-9]*$";
 
     private static final String V_TEL = "^(([0\\+]\\d{2,3}-)?(0\\d{2,3})-)?(\\d{7,8})(-(\\d{3,}))?$";
 
@@ -87,145 +87,145 @@ public class RegexUtils {
 
     private static final String V_TWO_POINT = "^[0-9]+(.[0-9]{2})?$";
 
-    private static final String V_31DAYS="^((0?[1-9])|((1|2)[0-9])|30|31)$";
+    private static final String V_31DAYS = "^((0?[1-9])|((1|2)[0-9])|30|31)$";
 
-    private RegexUtils(){
+    private RegexUtils() {
     }
 
-    public static boolean isInteger(String value){
-        return match(V_INTEGER,value);
+    public static boolean isInteger(String value) {
+        return match(V_INTEGER, value);
     }
 
-    public static boolean isZIndex(String value){
-        return match(V_Z_INDEX,value);
+    public static boolean isZIndex(String value) {
+        return match(V_Z_INDEX, value);
     }
 
-    public static boolean isNegativeInteger(String value){
-        return match(V_NEGATIVE_INTEGER,value);
+    public static boolean isNegativeInteger(String value) {
+        return match(V_NEGATIVE_INTEGER, value);
     }
 
-    public static boolean isNumber(String value){
-        return match(V_NUMBER,value);
+    public static boolean isNumber(String value) {
+        return match(V_NUMBER, value);
     }
 
-    public static boolean isPositiveNumber(String value){
-        return match(V_POSITIVE_NUMBER,value);
+    public static boolean isPositiveNumber(String value) {
+        return match(V_POSITIVE_NUMBER, value);
     }
 
-    public static boolean isNegativeNumber(String value){
-        return match(V_NEGATINE_NUMBER,value);
+    public static boolean isNegativeNumber(String value) {
+        return match(V_NEGATINE_NUMBER, value);
     }
 
-    public static boolean is31Days(String value){
-        return match(V_31DAYS,value);
+    public static boolean is31Days(String value) {
+        return match(V_31DAYS, value);
     }
 
-    public static boolean isASCII(String value){
-        return match(V_ASCII,value);
+    public static boolean isASCII(String value) {
+        return match(V_ASCII, value);
     }
 
-    public static boolean isChinese(String value){
-        return match(V_CHINESE,value);
+    public static boolean isChinese(String value) {
+        return match(V_CHINESE, value);
     }
 
-    public static boolean isColor(String value){
-        return match(V_COLOR,value);
+    public static boolean isColor(String value) {
+        return match(V_COLOR, value);
     }
 
-    public static boolean isDate(String value){
-        return match(V_DATE,value);
+    public static boolean isDate(String value) {
+        return match(V_DATE, value);
     }
 
-    public static boolean isEmail(String value){
-        return match(V_EMAIL,value);
+    public static boolean isEmail(String value) {
+        return match(V_EMAIL, value);
     }
 
-    public static boolean isFloat(String value){
-        return match(V_FLOAT,value);
+    public static boolean isFloat(String value) {
+        return match(V_FLOAT, value);
     }
 
-    public static boolean isIdCard(String value){
-        return match(V_IDCARD,value);
+    public static boolean isIdCard(String value) {
+        return match(V_IDCARD, value);
     }
 
-    public static boolean isIP4(String value){
-        return match(V_IP4,value);
+    public static boolean isIP4(String value) {
+        return match(V_IP4, value);
     }
 
-    public static boolean isLetter(String value){
-        return match(V_LETTER,value);
+    public static boolean isLetter(String value) {
+        return match(V_LETTER, value);
     }
 
-    public static boolean isLowerCaseLetter(String value){
-        return match(V_LETTER_I,value);
+    public static boolean isLowerCaseLetter(String value) {
+        return match(V_LETTER_I, value);
     }
 
-    public static boolean isUpperCaseLetter(String value){
-        return match(V_LETTER_U,value);
+    public static boolean isUpperCaseLetter(String value) {
+        return match(V_LETTER_U, value);
     }
 
-    public static boolean isMobilePhoneNumber(String value){
-        return match(V_MOBILE,value);
+    public static boolean isMobilePhoneNumber(String value) {
+        return match(V_MOBILE, value);
     }
 
-    public static boolean isNegativeFloat(String value){
-        return match(V_NEGATIVE_FLOAT,value);
+    public static boolean isNegativeFloat(String value) {
+        return match(V_NEGATIVE_FLOAT, value);
     }
 
-    public static boolean isNotEmpty(String value){
-        return match(V_NOTEMPTY,value);
+    public static boolean isNotEmpty(String value) {
+        return match(V_NOTEMPTY, value);
     }
 
-    public static boolean isNumberLength(String value){
-        return match(V_PASSWORD_LENGTH,value);
+    public static boolean isNumberLength(String value) {
+        return match(V_PASSWORD_LENGTH, value);
     }
 
-    public static boolean isPassword(String value){
-        return match(V_PASSWORD_REG,value);
+    public static boolean isPassword(String value) {
+        return match(V_PASSWORD_REG, value);
     }
 
-    public static boolean isPicture(String value){
-        return match(V_PICTURE,value);
+    public static boolean isPicture(String value) {
+        return match(V_PICTURE, value);
     }
 
-    public static boolean isPositiveFloat(String value){
-        return match(V_POSTTIVE_FLOAT,value);
+    public static boolean isPositiveFloat(String value) {
+        return match(V_POSTTIVE_FLOAT, value);
     }
 
-    public static boolean isQqNumber(String value){
-        return match(V_QQ_NUMBER,value);
+    public static boolean isQqNumber(String value) {
+        return match(V_QQ_NUMBER, value);
     }
 
-    public static boolean isRar(String value){
-        return match(V_RAR,value);
+    public static boolean isRar(String value) {
+        return match(V_RAR, value);
     }
 
-    public static boolean isTel(String value){
-        return match(V_TEL,value);
+    public static boolean isTel(String value) {
+        return match(V_TEL, value);
     }
 
-    public static boolean isTwoFloat(String value){
-        return match(V_TWO_POINT,value);
+    public static boolean isTwoFloat(String value) {
+        return match(V_TWO_POINT, value);
     }
 
-    public static boolean isUnnegativeFloat(String value){
-        return match(V_UNNEGATIVE_FLOAT,value);
+    public static boolean isUnnegativeFloat(String value) {
+        return match(V_UNNEGATIVE_FLOAT, value);
     }
 
     public static boolean isUnpositiveFloat(String value) {
-        return match(V_UNPOSITIVE_FLOAT,value);
+        return match(V_UNPOSITIVE_FLOAT, value);
     }
 
     public static boolean isUrl(String value) {
-        return match(V_URL,value);
+        return match(V_URL, value);
     }
 
     public static boolean isUsername(String value) {
-        return match(V_USERNAME,value);
+        return match(V_USERNAME, value);
     }
 
     public static boolean isZipCode(String value) {
-        return match(V_ZIPCODE,value);
+        return match(V_ZIPCODE, value);
     }
 
     private static boolean match(String regex, String str) {

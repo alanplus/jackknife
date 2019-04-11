@@ -113,16 +113,16 @@ public class InstrumentView extends View {
         int min = Math.min(measuredWidth, measuredHeight);
         mValidRect.set(0, 0, measuredWidth, measuredHeight);
         if (measuredWidth > min) {
-            mValidRect.left = (measuredWidth-min)/2;
+            mValidRect.left = (measuredWidth - min) / 2;
             mValidRect.right = mValidRect.left + min;
         }
         if (measuredHeight > min) {
-            mValidRect.top = (measuredHeight-min)/2;
+            mValidRect.top = (measuredHeight - min) / 2;
             mValidRect.bottom = mValidRect.top + min;
         }
         mAnnulusRect = new RectF();
-        mAnnulusRect.set(mValidRect.left+mAnnulusWidth/2, mValidRect.top+mAnnulusWidth/2,
-                        mValidRect.right-mAnnulusWidth/2, mValidRect.bottom-mAnnulusWidth/2);
+        mAnnulusRect.set(mValidRect.left + mAnnulusWidth / 2, mValidRect.top + mAnnulusWidth / 2,
+                mValidRect.right - mAnnulusWidth / 2, mValidRect.bottom - mAnnulusWidth / 2);
     }
 
     public void setRatio(final float ratio) {
@@ -194,17 +194,17 @@ public class InstrumentView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         float r = mAnnulusRect.width() / 2;
-        canvas.drawCircle(mAnnulusRect.left+r, mAnnulusRect.top+r, r, mBackgroundPaint);
+        canvas.drawCircle(mAnnulusRect.left + r, mAnnulusRect.top + r, r, mBackgroundPaint);
         mTextPaint.setTextSize(mTitleTextSize);
         mTextPaint.setColor(mTitleTextColor);
         Paint.FontMetrics titleMetrics = mTextPaint.getFontMetrics();
-        float titleBaselineY = mAnnulusRect.top + r / 2 + (titleMetrics.bottom-titleMetrics.top)/2-titleMetrics.bottom;
-        canvas.drawText(mTitle, mAnnulusRect.left+r-mTextPaint.measureText(mTitle)/2, titleBaselineY + mAnnulusWidth, mTextPaint);
+        float titleBaselineY = mAnnulusRect.top + r / 2 + (titleMetrics.bottom - titleMetrics.top) / 2 - titleMetrics.bottom;
+        canvas.drawText(mTitle, mAnnulusRect.left + r - mTextPaint.measureText(mTitle) / 2, titleBaselineY + mAnnulusWidth, mTextPaint);
         mTextPaint.setTextSize(mBodyTextSize);
         mTextPaint.setColor(mBodyTextColor);
         Paint.FontMetrics bodyMetrics = mTextPaint.getFontMetrics();
-        float bodyBaselineY = mAnnulusRect.bottom - r / 2 + (bodyMetrics.bottom-bodyMetrics.top)/2-bodyMetrics.bottom;
-        canvas.drawText(mBody, mAnnulusRect.left+r-mTextPaint.measureText(mBody)/2, bodyBaselineY - mAnnulusWidth, mTextPaint);
+        float bodyBaselineY = mAnnulusRect.bottom - r / 2 + (bodyMetrics.bottom - bodyMetrics.top) / 2 - bodyMetrics.bottom;
+        canvas.drawText(mBody, mAnnulusRect.left + r - mTextPaint.measureText(mBody) / 2, bodyBaselineY - mAnnulusWidth, mTextPaint);
         canvas.drawArc(mAnnulusRect, 0, 359, false, mAnnulusPaint);
         canvas.drawArc(mAnnulusRect, 90, mAngle, false, mHoverAnnulusPaint);
     }

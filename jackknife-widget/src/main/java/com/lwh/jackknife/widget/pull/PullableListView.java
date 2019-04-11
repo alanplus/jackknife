@@ -45,15 +45,15 @@ public class PullableListView extends ListView implements Pullable {
     }
 
     public boolean canPullUp() {
-		if (getCount() == 0) {
-			return true;
-		} else if (getLastVisiblePosition() == (getCount() - 1)) {
-			if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
-					&& getChildAt(
-							getLastVisiblePosition()
-									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
-				return true;
-		}
+        if (getCount() == 0) {
+            return true;
+        } else if (getLastVisiblePosition() == (getCount() - 1)) {
+            if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
+                    && getChildAt(
+                    getLastVisiblePosition()
+                            - getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
+                return true;
+        }
         return false;
     }
 }

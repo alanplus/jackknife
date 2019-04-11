@@ -90,6 +90,6 @@ public class ResourceManager {
     private String appendSuffix(String name) {
         if (!TextUtils.isEmpty(mSuffix))
             name += "_" + mSuffix;
-            return name;
+        return name;
     }
 }

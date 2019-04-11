@@ -88,7 +88,7 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
         String result = "";
         for (int i = 0; i < mSections.size(); i++) {
             result += mSections.get(i).getText().toString();
-            if (i != mSections.size()-1) {
+            if (i != mSections.size() - 1) {
                 result += getSemicolonText();
             }
         }
@@ -97,14 +97,14 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
 
     public E getSectionAt(int position) {
         int size = mSections.size();
-        if (position >=0 && position < size) {
+        if (position >= 0 && position < size) {
             return mSections.get(position);
         }
         return null;
     }
 
     public void clearText() {
-        for (int i=0;i<mSections.size();i++) {
+        for (int i = 0; i < mSections.size(); i++) {
             E section = getSectionAt(i);
             if (section != null) {
                 section.setText("");
@@ -119,7 +119,7 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
         }
         clearText();
         int size = mSections.size();
-        for (int i=0;i<sectionTexts.length;i++) {
+        for (int i = 0; i < sectionTexts.length; i++) {
             if (i < size) {
                 E section = getSectionAt(i);
                 if (section != null) {
@@ -140,7 +140,7 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
         private E mRequestEditText;
         private E mClearEditText;
 
-        public OnDelKeyListener(E request, E clear){
+        public OnDelKeyListener(E request, E clear) {
             this.mRequestEditText = request;
             this.mClearEditText = clear;
         }
@@ -170,18 +170,18 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
     public abstract void applyEditTextTheme(AutoEditText absEditText);
 
     private void initListeners() {
-        for (int i=0;i<mSections.size();i++) {
+        for (int i = 0; i < mSections.size(); i++) {
             mSections.get(i).addTextChangedListener(this);
             if (i != 0) {
-                mSections.get(i).setOnKeyListener(new OnDelKeyListener(mSections.get(i-1),mSections.get(i)));
+                mSections.get(i).setOnKeyListener(new OnDelKeyListener(mSections.get(i - 1), mSections.get(i)));
             }
         }
     }
 
     protected void initViews() {
         int count = getChildCount();
-        for (int i=0;i<count;i++) {
-            if (i%2 == 0) {
+        for (int i = 0; i < count; i++) {
+            if (i % 2 == 0) {
                 E section = createEditText();
                 addView(section);
                 mSections.add(section);
@@ -216,10 +216,10 @@ public abstract class AutoEditTextGroup<E extends AutoEditText> extends LinearLa
         int maxLength = getMaxLength();
         int length = s.toString().length();
         if (maxLength == length) {
-            for (int i=0;i<mSections.size()-1;i++) {
+            for (int i = 0; i < mSections.size() - 1; i++) {
                 if (mSections.get(i).hasFocus()) {//hasFocus √ & isFocus ×
                     mSections.get(i).clearFocus();
-                    mSections.get(i+1).requestFocus();
+                    mSections.get(i + 1).requestFocus();
                     break;
                 }
             }

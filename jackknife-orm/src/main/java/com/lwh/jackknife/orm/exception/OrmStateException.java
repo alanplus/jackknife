@@ -18,10 +18,10 @@ package com.lwh.jackknife.orm.exception;
 
 public class OrmStateException extends IllegalStateException {
 
-    public OrmStateException(){
+    public OrmStateException() {
     }
 
-    public OrmStateException(String message){
+    public OrmStateException(String message) {
         super(message);
     }
 }

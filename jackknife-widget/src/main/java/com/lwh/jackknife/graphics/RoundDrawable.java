@@ -29,10 +29,10 @@ public class RoundDrawable extends Drawable {
 
     private Paint mPaint;
     private int mRadius;
-    private Bitmap mBitmap ;
+    private Bitmap mBitmap;
 
     public RoundDrawable(Bitmap bitmap) {
-        mBitmap = bitmap ;
+        mBitmap = bitmap;
         BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP,
                 Shader.TileMode.CLAMP);
         mPaint = new Paint();

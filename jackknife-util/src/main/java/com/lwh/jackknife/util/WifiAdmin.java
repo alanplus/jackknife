@@ -48,7 +48,7 @@ public class WifiAdmin {
 
     public boolean openWifi() {
         return !mWifiManager.isWifiEnabled() && mWifiManager.setWifiEnabled(true);
-    }  
+    }
 
     public boolean closeWifi() {
         return !mWifiManager.isWifiEnabled() && mWifiManager.setWifiEnabled(false);
@@ -59,17 +59,17 @@ public class WifiAdmin {
     }
 
     public int getWifiState() {
-        return mWifiManager.getWifiState();    
+        return mWifiManager.getWifiState();
     }
 
-    public void acquireWifiLock(){
-        mWifiLock.acquire();  
+    public void acquireWifiLock() {
+        mWifiLock.acquire();
     }
 
     public void releaseWifiLock() {
         if (mWifiLock.isHeld()) {
-            mWifiLock.acquire();  
-        }  
+            mWifiLock.acquire();
+        }
     }
 
     public void createWifiLock(String tag) {
@@ -79,7 +79,7 @@ public class WifiAdmin {
     public void applyConfiguration(int index) {
         if (index > mWifiConfigurations.size()) {
             return;
-        }  
+        }
         mWifiManager.enableNetwork(mWifiConfigurations.get(index).networkId, true);
     }
 
@@ -274,7 +274,7 @@ public class WifiAdmin {
             return false;
         }
         mWifiInfo = mWifiManager.getConnectionInfo();
-        String suffixSSID = "\""+result.SSID+"\"";
+        String suffixSSID = "\"" + result.SSID + "\"";
         return mWifiInfo.getSSID() != null && mWifiInfo.getSSID().endsWith(suffixSSID);
     }
 }  

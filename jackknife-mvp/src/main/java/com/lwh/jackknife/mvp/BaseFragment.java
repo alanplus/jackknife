@@ -34,7 +34,7 @@ public abstract class BaseFragment<V extends IBaseView, P extends BasePresenter<
 
     public void onActivityCreated(Bundle savedInstanceState) {
         mPresenter = createPresenter();
-        mPresenter.attachView((V)this);
+        mPresenter.attachView((V) this);
         super.onActivityCreated(savedInstanceState);
     }
 

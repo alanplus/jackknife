@@ -163,7 +163,7 @@ public class MD5 {
             fis = new FileInputStream(src);
             dis = new DigestInputStream(fis, messageDigest);
             byte[] buffer = new byte[2048];
-            while (dis.read(buffer) > 0);
+            while (dis.read(buffer) > 0) ;
             messageDigest = dis.getMessageDigest();
         } finally {
             if (fis != null) {

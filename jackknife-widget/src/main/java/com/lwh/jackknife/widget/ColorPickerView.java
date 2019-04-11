@@ -135,7 +135,7 @@ public class ColorPickerView extends View {
                 TileMode.MIRROR);
         mRightPaint.setShader(rightShader);
         canvas.drawRect(new Rect(mWidth - mSplitWidth - mRightWidth, mSplitWidth, mWidth
-                - mSplitWidth, mHeight-mSplitWidth), mRightPaint);
+                - mSplitWidth, mHeight - mSplitWidth), mRightPaint);
         if (mLeftMove) {
             canvas.drawBitmap(mLeftNormalBitmap, mLeftSelectPoint.x - mLeftBitmapRadius,
                     mLeftSelectPoint.y - mLeftBitmapRadius, mBitmapPaint);
@@ -145,11 +145,11 @@ public class ColorPickerView extends View {
         }
         if (mRightMove) {
             canvas.drawBitmap(mRightNormalBitmap, mWidth - mSplitWidth - mRightWidth -
-                    mRightBitmapQuarterWidth, mRightSelectPoint.y - mRightBitmapHalfHeight,
+                            mRightBitmapQuarterWidth, mRightSelectPoint.y - mRightBitmapHalfHeight,
                     mBitmapPaint);
         } else {
             canvas.drawBitmap(mRightPressedBitmap, mWidth - mSplitWidth - mRightWidth -
-                    mRightBitmapQuarterWidth, mRightSelectPoint.y - mRightBitmapHalfHeight,
+                            mRightBitmapQuarterWidth, mRightSelectPoint.y - mRightBitmapHalfHeight,
                     mBitmapPaint);
         }
     }
@@ -186,8 +186,8 @@ public class ColorPickerView extends View {
                 if (mDownInLeft) {
                     mLeftMove = true;
                     reviseLeft(x, y);
-                    mRightPaint.setColor(getLeftColor(mLeftSelectPoint.x-mSplitWidth,
-                            mLeftSelectPoint.y-mSplitWidth));
+                    mRightPaint.setColor(getLeftColor(mLeftSelectPoint.x - mSplitWidth,
+                            mLeftSelectPoint.y - mSplitWidth));
                 } else if (mDownInRight) {
                     mRightMove = true;
                     reviseRight(x, y);
@@ -254,7 +254,7 @@ public class ColorPickerView extends View {
             int bitmapWidth = mGradualChangeBitmap.getWidth();
             mLeftWidth = bitmapWidth;
             int bitmapHeight = mGradualChangeBitmap.getHeight();
-            int[] leftColors = new int[] {Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN,
+            int[] leftColors = new int[]{Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN,
                     Color.BLUE, Color.MAGENTA};
             Shader leftShader = new LinearGradient(0, bitmapHeight / 2, bitmapWidth, bitmapHeight
                     / 2, leftColors, null, TileMode.REPEAT);
@@ -270,7 +270,7 @@ public class ColorPickerView extends View {
     }
 
     private boolean isInLeftPanel(float x, float y) {
-        if ( 0 < x && x < mSplitWidth + mLeftWidth + mSplitWidth / 2 && 0 < y && y < mWidth) {
+        if (0 < x && x < mSplitWidth + mLeftWidth + mSplitWidth / 2 && 0 < y && y < mWidth) {
             return true;
         } else {
             return false;
@@ -336,11 +336,11 @@ public class ColorPickerView extends View {
     private int getRightColor(float y) {
         int a, r, g, b, so, dst;
         float p;
-        float rightHalfHeight = (mHeight - (float)mSplitWidth * 2) / 2;
+        float rightHalfHeight = (mHeight - (float) mSplitWidth * 2) / 2;
         if (y < rightHalfHeight) {
             so = mRightColors[0];
             dst = mRightColors[1];
-            p =  y / rightHalfHeight;
+            p = y / rightHalfHeight;
         } else {
             so = mRightColors[1];
             dst = mRightColors[2];

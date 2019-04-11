@@ -69,7 +69,7 @@ public class WhereBuilder {
         this.mWhereArgs = whereArgs;
     }
 
-    public static WhereBuilder create(){
+    public static WhereBuilder create() {
         return new WhereBuilder();
     }
 
@@ -81,14 +81,14 @@ public class WhereBuilder {
         return new WhereBuilder(condition);
     }
 
-    public WhereBuilder and(){
+    public WhereBuilder and() {
         if (mWhereClause != null) {
             mWhereClause += AND;
         }
         return this;
     }
 
-    public WhereBuilder or(){
+    public WhereBuilder or() {
         if (mWhereClause != null) {
             mWhereClause += OR;
         }
@@ -229,15 +229,19 @@ public class WhereBuilder {
     public WhereBuilder orWhereNotEqualTo(String column, Object value) {
         return append(OR, column + NOT_EQUAL_HOLDER, value);
     }
+
     public WhereBuilder orWhereGreatorThan(String column, Object value) {
         return append(OR, column + GREATER_THAN_HOLDER, value);
     }
+
     public WhereBuilder orWhereGreatorThanOrEqualTo(String column, Object value) {
         return append(OR, column + GREATER_THAN_OR_EQUAL_TO_HOLDER, value);
     }
+
     public WhereBuilder orWhereLessThan(String column, Object value) {
         return append(OR, column + LESS_THAN_HOLDER, value);
     }
+
     public WhereBuilder orWhereLessThanOrEqualTo(String column, Object value) {
         return append(OR, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
@@ -248,7 +252,7 @@ public class WhereBuilder {
 
     public String[] toStringArgs(Object[] objArgs) {
         String[] tempValues = new String[objArgs.length];
-        for (int i=0;i<tempValues.length;i++) {
+        for (int i = 0; i < tempValues.length; i++) {
             tempValues[i] = String.valueOf(objArgs[i]);
         }
         return tempValues;
@@ -283,14 +287,14 @@ public class WhereBuilder {
     private String buildWhereIn(String column, int num) {
         StringBuilder sb = new StringBuilder(column).append(SPACE).append(IN).append(PARENTHESES_LEFT)
                 .append(HOLDER);
-        for (int i=0;i<num-1;i++) {
+        for (int i = 0; i < num - 1; i++) {
             sb.append(COMMA_HOLDER);
         }
         return sb.append(PARENTHESES_RIGHT).toString();
     }
 
     public String build() {
-        return mWhereClause != null ? WHERE + mWhereClause:SPACE;
+        return mWhereClause != null ? WHERE + mWhereClause : SPACE;
     }
 
     public String getSelection() {
@@ -298,7 +302,7 @@ public class WhereBuilder {
     }
 
     public String[] getSelectionArgs() {
-        return mWhereArgs != null?toStringArgs(mWhereArgs):null;
+        return mWhereArgs != null ? toStringArgs(mWhereArgs) : null;
     }
 
     public WhereBuilder where(Condition condition) {

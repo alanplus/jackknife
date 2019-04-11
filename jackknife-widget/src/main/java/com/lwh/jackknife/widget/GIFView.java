@@ -40,8 +40,8 @@ public class GIFView extends SurfaceView implements SurfaceHolder.Callback {
         public void run() {
             Canvas canvas = mSurfaceHolder.lockCanvas();
             canvas.save();
-            canvas.scale(zoom,zoom);
-            mMovie.setTime((int)(System.currentTimeMillis()%mMovie.duration()));
+            canvas.scale(zoom, zoom);
+            mMovie.setTime((int) (System.currentTimeMillis() % mMovie.duration()));
             mMovie.draw(canvas, 0, 0);
             canvas.restore();
             mSurfaceHolder.unlockCanvasAndPost(canvas);
@@ -49,17 +49,17 @@ public class GIFView extends SurfaceView implements SurfaceHolder.Callback {
         }
     };
 
-    public GIFView(Context context,AttributeSet attrs) {
-        super(context,attrs);
+    public GIFView(Context context, AttributeSet attrs) {
+        super(context, attrs);
         mSurfaceHolder = getHolder();
         mSurfaceHolder.addCallback(this);
     }
 
-    public void setPath(String path){
+    public void setPath(String path) {
         this.path = path;
     }
 
-    public void setZoom(float zoom){
+    public void setZoom(float zoom) {
         this.zoom = zoom;
     }
 
@@ -74,10 +74,10 @@ public class GIFView extends SurfaceView implements SurfaceHolder.Callback {
             width = mMovie.width();
             height = mMovie.height();
             mHandler.post(r);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        setMeasuredDimension((int)(width*zoom),(int)(height*zoom));
+        setMeasuredDimension((int) (width * zoom), (int) (height * zoom));
     }
 
     @Override

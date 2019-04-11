@@ -67,7 +67,7 @@ public class MultiRadioGroup extends LinearLayout {
         mPassThroughListener.mOnHierarchyChangeListener = listener;
     }
 
-    public void setCheckWithoutNotify(int id){
+    public void setCheckWithoutNotify(int id) {
         if (id != -1 && (id == mCheckedId)) {
             return;
         }
@@ -85,8 +85,8 @@ public class MultiRadioGroup extends LinearLayout {
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         List<RadioButton> buttons = getAllRadioButton(child);
-        if(buttons != null && buttons.size() > 0){
-            for(RadioButton button : buttons){
+        if (buttons != null && buttons.size() > 0) {
+            for (RadioButton button : buttons) {
                 if (button.isChecked()) {
                     mProtectFromCheckedChange = true;
                     if (mCheckedId != -1) {
@@ -103,13 +103,13 @@ public class MultiRadioGroup extends LinearLayout {
     /**
      * Gets all radio buttons which are in the view.
      */
-    private List<RadioButton> getAllRadioButton(View child){
+    private List<RadioButton> getAllRadioButton(View child) {
         List<RadioButton> buttons = new ArrayList<>();
         if (child instanceof RadioButton) {
             buttons.add((RadioButton) child);
-        }else if(child instanceof ViewGroup){
+        } else if (child instanceof ViewGroup) {
             int counts = ((ViewGroup) child).getChildCount();
-            for(int i = 0; i < counts; i++){
+            for (int i = 0; i < counts; i++) {
                 buttons.addAll(getAllRadioButton(((ViewGroup) child).getChildAt(i)));
             }
         }
@@ -122,7 +122,6 @@ public class MultiRadioGroup extends LinearLayout {
      * such an operation is equivalent to invoking {@link #clearCheck()}.</p>
      *
      * @param id the unique id of the radio button to select in this group
-     *
      * @see #getCheckedRadioButtonId()
      * @see #clearCheck()
      */
@@ -270,8 +269,8 @@ public class MultiRadioGroup extends LinearLayout {
          * height to  {@link ViewGroup.LayoutParams#WRAP_CONTENT}
          * when not specified in the XML file.</p>
          *
-         * @param a the styled attributes set
-         * @param widthAttr the width attribute to fetch
+         * @param a          the styled attributes set
+         * @param widthAttr  the width attribute to fetch
          * @param heightAttr the height attribute to fetch
          */
         @Override
@@ -300,7 +299,7 @@ public class MultiRadioGroup extends LinearLayout {
          * <p>Called when the checked radio button has changed. When the
          * selection is cleared, checkedId is -1.</p>
          *
-         * @param group the group in which the checked radio button has changed
+         * @param group     the group in which the checked radio button has changed
          * @param checkedId the unique identifier of the newly checked radio button
          */
         void onCheckedChanged(MultiRadioGroup group, int checkedId);
@@ -337,10 +336,10 @@ public class MultiRadioGroup extends LinearLayout {
          * {@inheritDoc}
          */
         public void onChildViewAdded(View parent, View child) {
-            if (parent == MultiRadioGroup.this ) {
+            if (parent == MultiRadioGroup.this) {
                 List<RadioButton> btns = getAllRadioButton(child);
-                if(btns != null && btns.size() > 0){
-                    for(RadioButton btn : btns){
+                if (btns != null && btns.size() > 0) {
+                    for (RadioButton btn : btns) {
                         int id = btn.getId();
                         // generates an id if it's missing
                         if (id == View.NO_ID && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -363,8 +362,8 @@ public class MultiRadioGroup extends LinearLayout {
         public void onChildViewRemoved(View parent, View child) {
             if (parent == MultiRadioGroup.this) {
                 List<RadioButton> buttons = getAllRadioButton(child);
-                if(buttons != null && buttons.size() > 0){
-                    for(RadioButton button : buttons){
+                if (buttons != null && buttons.size() > 0) {
+                    for (RadioButton button : buttons) {
                         button.setOnCheckedChangeListener(null);
                     }
                 }

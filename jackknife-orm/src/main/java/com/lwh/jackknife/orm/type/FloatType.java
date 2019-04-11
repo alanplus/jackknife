@@ -20,16 +20,16 @@ public class FloatType extends BaseDataType {
 
     private static final FloatType mInstance = new FloatType();
 
-    public FloatType(){
+    public FloatType() {
         super(SqlType.REAL);
     }
 
-    public static FloatType getInstance(){
+    public static FloatType getInstance() {
         return mInstance;
     }
 
     @Override
     public Class<?>[] getTypes() {
-        return new Class<?>[] {float.class, Float.class} ;
+        return new Class<?>[]{float.class, Float.class};
     }
 }
