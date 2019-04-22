@@ -369,4 +369,16 @@ public class TableManager {
             getInstance()._dropTable(tableClass, Orm.getDatabase());
         }
     }
+
+    /**
+     * Drop and create table.
+     *
+     * @since jackknife 4.2.1
+     */
+    public static <T extends OrmTable> void recreateTable(Class<T> tableClass) {
+        if (Orm.isPrepared()) {
+            getInstance()._dropTable(tableClass, Orm.getDatabase());
+            getInstance()._createTable(tableClass, Orm.getDatabase());
+        }
+    }
 }
