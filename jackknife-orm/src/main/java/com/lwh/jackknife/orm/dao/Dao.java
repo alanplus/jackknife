@@ -16,6 +16,8 @@
 
 package com.lwh.jackknife.orm.dao;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import com.lwh.jackknife.orm.OrmTable;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
@@ -28,13 +30,25 @@ public interface Dao<T extends OrmTable> {
 
     boolean insert(List<T> beans);
 
+    boolean insertSafety(T bean, SQLiteDatabase db);
+
+    boolean insertSafety(List<T> beans, SQLiteDatabase db);
+
     boolean delete(WhereBuilder builder);
 
     boolean deleteAll();
 
+    boolean deleteSafety(WhereBuilder builder, SQLiteDatabase db);
+
+    boolean deleteAllSafety(SQLiteDatabase db);
+
     boolean update(WhereBuilder builder, T newBean);
 
     boolean updateAll(T newBean);
+
+    boolean updateSafety(WhereBuilder builder, T newBean, SQLiteDatabase db);
+
+    boolean updateAllSafety(T newBean, SQLiteDatabase db);
 
     List<T> selectAll();
 

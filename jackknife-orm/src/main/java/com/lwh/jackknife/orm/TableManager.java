@@ -180,12 +180,6 @@ public class TableManager {
         return ByteArrayType.getInstance();
     }
 
-    public static <T extends OrmTable> void createTable(Class<T> tableClass) {
-        if (Orm.isPrepared()) {
-            getInstance()._createTable(tableClass, Orm.getDatabase());
-        }
-    }
-
     private <A extends Annotation> boolean checkColumnConstraint(Field field, Class<A> annotationType) {
         A annotation = field.getAnnotation(annotationType);
         return annotation != null;
@@ -330,10 +324,24 @@ public class TableManager {
         }
     }
 
+    public static <T extends OrmTable> void createTable(Class<T> tableClass) {
+        if (Orm.isPrepared()) {
+            getInstance()._createTable(tableClass, Orm.getDatabase());
+        }
+    }
+
+    public static <T extends OrmTable> void createTableSafety(Class<T> tableClass, SQLiteDatabase db) {
+        getInstance()._createTable(tableClass, db);
+    }
+
     public static <T extends OrmTable> void upgradeTable(Class<T> tableClass) {
         if (Orm.isPrepared()) {
             getInstance()._upgradeTable(tableClass, Orm.getDatabase());
         }
+    }
+
+    public static <T extends OrmTable> void upgradeTableSafety(Class<T> tableClass, SQLiteDatabase db) {
+        getInstance()._upgradeTable(tableClass, db);
     }
 
     /* package */ <T extends OrmTable> void _upgradeTable(Class<T> tableClass, SQLiteDatabase db) {
@@ -370,6 +378,10 @@ public class TableManager {
         }
     }
 
+    public static <T extends OrmTable> void dropTableSafety(Class<T> tableClass, SQLiteDatabase db) {
+        getInstance()._dropTable(tableClass, db);
+    }
+
     /**
      * Drop and create table.
      *
@@ -380,5 +392,10 @@ public class TableManager {
             getInstance()._dropTable(tableClass, Orm.getDatabase());
             getInstance()._createTable(tableClass, Orm.getDatabase());
         }
+    }
+
+    public static <T extends OrmTable> void recreateTableSafety(Class<T> tableClass, SQLiteDatabase db) {
+        getInstance()._dropTable(tableClass, db);
+        getInstance()._createTable(tableClass, db);
     }
 }

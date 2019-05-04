@@ -1,19 +1,17 @@
 /*
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
- *  * Copyright (C) 2017 The JackKnife Open Source Project
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *      http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.lwh.jackknife.orm.dao;
@@ -25,7 +23,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.lwh.jackknife.orm.Orm;
 import com.lwh.jackknife.orm.OrmTable;
 import com.lwh.jackknife.orm.TableManager;
-import com.lwh.jackknife.orm.Transaction;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
 import com.lwh.jackknife.orm.constraint.AssignType;
@@ -156,17 +153,19 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
 
     @Override
     public boolean insert(T bean) {
-        TableManager manager = TableManager.getInstance();
-        String tableName = manager.getTableName(mBeanClass);
-        ContentValues contentValues = getContentValues(bean);
-        return mDatabase.insert(tableName, getColumnHack(), contentValues) > 0;
+        return insertSafety(bean, mDatabase);
     }
 
     @Override
     public boolean insert(List<T> beans) {
+        return insertSafety(beans, mDatabase);
+    }
+
+    @Override
+    public boolean insertSafety(List<T> beans, SQLiteDatabase db) {
         int count = 0;
         for (T bean : beans) {
-            boolean isOk = insert(bean);
+            boolean isOk = insertSafety(bean, db);
             if (isOk) {
                 count++;
             }
@@ -175,53 +174,61 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     }
 
     @Override
-    public boolean delete(final WhereBuilder builder) {
-        return Transaction.execute(new Transaction.Worker() {
-            @Override
-            public boolean doTransition(SQLiteDatabase db) {
-                TableManager manager = TableManager.getInstance();
-                String tableName = manager.getTableName(mBeanClass);
-                return mDatabase.delete(tableName, builder.getSelection(), builder.getSelectionArgs()) > 0;
-            }
-        });
+    public boolean insertSafety(T bean, SQLiteDatabase db) {
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        ContentValues contentValues = getContentValues(bean);
+        return db.insert(tableName, getColumnHack(), contentValues) > 0;
+    }
+
+    @Override
+    public boolean delete(WhereBuilder builder) {
+        return deleteSafety(builder, mDatabase);
     }
 
     @Override
     public boolean deleteAll() {
-        return Transaction.execute(new Transaction.Worker() {
-            @Override
-            public boolean doTransition(SQLiteDatabase db) {
-                TableManager manager = TableManager.getInstance();
-                String tableName = manager.getTableName(mBeanClass);
-                return mDatabase.delete(tableName, null, null) > 0;
-            }
-        });
+        return deleteAllSafety(mDatabase);
     }
 
     @Override
-    public boolean update(final WhereBuilder builder, final T newBean) {
-        return Transaction.execute(new Transaction.Worker() {
-            @Override
-            public boolean doTransition(SQLiteDatabase db) {
-                TableManager manager = TableManager.getInstance();
-                String tableName = manager.getTableName(mBeanClass);
-                ContentValues contentValues = getContentValues(newBean);
-                return mDatabase.update(tableName, contentValues, builder.getSelection(), builder.getSelectionArgs()) > 0;
-            }
-        });
+    public boolean deleteAllSafety(SQLiteDatabase db) {
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        return db.delete(tableName, null, null) > 0;
     }
 
     @Override
-    public boolean updateAll(final T newBean) {
-        return Transaction.execute(new Transaction.Worker() {
-            @Override
-            public boolean doTransition(SQLiteDatabase db) {
-                TableManager manager = TableManager.getInstance();
-                String tableName = manager.getTableName(mBeanClass);
-                ContentValues contentValues = getContentValues(newBean);
-                return mDatabase.update(tableName, contentValues, null, null) > 0;
-            }
-        });
+    public boolean deleteSafety(WhereBuilder builder, SQLiteDatabase db) {
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        return db.delete(tableName, builder.getSelection(), builder.getSelectionArgs()) > 0;
+    }
+
+    @Override
+    public boolean update(WhereBuilder builder, final T newBean) {
+        return updateSafety(builder, newBean, mDatabase);
+    }
+
+    @Override
+    public boolean updateAll(T newBean) {
+        return updateAllSafety(newBean, mDatabase);
+    }
+
+    @Override
+    public boolean updateAllSafety(T newBean, SQLiteDatabase db) {
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        ContentValues contentValues = getContentValues(newBean);
+        return db.update(tableName, contentValues, null, null) > 0;
+    }
+
+    @Override
+    public boolean updateSafety(WhereBuilder builder, T newBean, SQLiteDatabase db) {
+        TableManager manager = TableManager.getInstance();
+        String tableName = manager.getTableName(mBeanClass);
+        ContentValues contentValues = getContentValues(newBean);
+        return db.update(tableName, contentValues, builder.getSelection(), builder.getSelectionArgs()) > 0;
     }
 
     @Override
