@@ -36,6 +36,8 @@ public interface Dao<T extends OrmTable> {
 
     boolean delete(WhereBuilder builder);
 
+    boolean delete(T bean);
+
     boolean deleteAll();
 
     boolean deleteSafety(WhereBuilder builder, SQLiteDatabase db);
@@ -43,6 +45,8 @@ public interface Dao<T extends OrmTable> {
     boolean deleteAllSafety(SQLiteDatabase db);
 
     boolean update(WhereBuilder builder, T newBean);
+
+    boolean update(T bean);
 
     boolean updateAll(T newBean);
 

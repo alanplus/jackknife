@@ -20,8 +20,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.lwh.jackknife.orm.Condition;
 import com.lwh.jackknife.orm.Orm;
 import com.lwh.jackknife.orm.OrmTable;
+import com.lwh.jackknife.orm.PrimaryKeyEntity;
 import com.lwh.jackknife.orm.TableManager;
 import com.lwh.jackknife.orm.builder.QueryBuilder;
 import com.lwh.jackknife.orm.builder.WhereBuilder;
@@ -187,6 +189,14 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     }
 
     @Override
+    public boolean delete(T bean) {
+        PrimaryKeyEntity primaryKey = bean.getPrimaryKey();
+        String name = primaryKey.getName();
+        String value = primaryKey.getValue();
+        return deleteSafety(WhereBuilder.create(new Condition(name+"=?", new String[]{value})), mDatabase);
+    }
+
+    @Override
     public boolean deleteAll() {
         return deleteAllSafety(mDatabase);
     }
@@ -208,6 +218,15 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
     @Override
     public boolean update(WhereBuilder builder, final T newBean) {
         return updateSafety(builder, newBean, mDatabase);
+    }
+
+    @Override
+    public boolean update(T bean) {
+        PrimaryKeyEntity primaryKey = bean.getPrimaryKey();
+        String name = primaryKey.getName();
+        String value = primaryKey.getValue();
+        return updateSafety(WhereBuilder.create(new Condition(name+"=?", new String[]{value})),
+                bean, mDatabase);
     }
 
     @Override
