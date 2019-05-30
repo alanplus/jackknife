@@ -36,7 +36,8 @@ public class ThreadPoolManager {
     private LinkedBlockingQueue<Future<?>> mService = new LinkedBlockingQueue<>();
 
     private ThreadPoolManager() {
-        mThreadPoolExecutor = new ThreadPoolExecutor(4, 10, 10, TimeUnit.SECONDS,
+        mThreadPoolExecutor = new ThreadPoolExecutor(4, 10, 10,
+                TimeUnit.SECONDS,
                 new ArrayBlockingQueue<Runnable>(4), handler);
         mThreadPoolExecutor.execute(runnable);
     }

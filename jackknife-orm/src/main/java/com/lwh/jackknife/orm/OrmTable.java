@@ -23,7 +23,7 @@ public interface OrmTable {
      *
      * @return The primary key value.
      */
-    <T> T getPrimaryKeyValue();
+    PrimaryKeyValue getPrimaryKeyValue();
 
     /**
      * @return If true, it will drop table first and recreate the table when the table is

@@ -18,20 +18,42 @@ package com.lwh.jackknife.orm.dao;
 
 import com.lwh.jackknife.orm.OrmTable;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DaoFactory {
 
-    private static Map<Class<? extends OrmTable>, OrmDao> sDaoMap = new ConcurrentHashMap<>();
+    private static Map<Class<? extends OrmTable>, OrmDao> sDaoMap = new HashMap<>();
+    private static Object sLock1 = new Object();
+    private static Object sLock2 = new Object();
+    private static Object sLock3 = new Object();
 
-    public synchronized static <T extends OrmTable> OrmDao<T> getDao(Class<T> beanClass) {
-        if (sDaoMap.containsKey(beanClass)) {
-            return sDaoMap.get(beanClass);
-        } else {
-            OrmDao<T> dao = new OrmDao<>(beanClass);
-            sDaoMap.put(beanClass, dao);
-            return dao;
+    public static <T extends OrmTable> OrmDao<T> getDao(Class<T> beanClass) {
+        synchronized (sLock1) {
+            if (sDaoMap.containsKey(beanClass)) {
+                return sDaoMap.get(beanClass);
+            } else {
+                OrmDao<T> dao = new OrmDao<>(beanClass);
+                sDaoMap.put(beanClass, dao);
+                return dao;
+            }
+        }
+    }
+
+    public static <T extends OrmTable> OrmDao<T> getDao(String className) {
+        synchronized (sLock2) {
+            try {
+                return getDao((Class<T>) Class.forName(className));
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static <T extends OrmTable> OrmDao<T> getDao(T bean) {
+        synchronized (sLock3) {
+            return (OrmDao<T>) getDao(bean.getClass());
         }
     }
 }
