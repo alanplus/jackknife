@@ -356,10 +356,8 @@ public class TableManager {
             if (ignore != null) {
                 continue;
             }
-            String columnName = getColumnName(field);
             try {
-                String sql = ALTER_TABLE + SPACE + tableName + SPACE + IF_NOT_EXISTS + SPACE
-                        + columnName + SPACE + ADD_COLUMN + SPACE
+                String sql = ALTER_TABLE + SPACE + tableName + SPACE + ADD_COLUMN + SPACE
                         + createColumnBuilder(field).build() + SEMICOLON;
                 OrmLog.d(sql);
                 db.execSQL(sql);
