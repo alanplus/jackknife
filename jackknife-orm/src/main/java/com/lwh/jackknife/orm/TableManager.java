@@ -46,6 +46,7 @@ import com.lwh.jackknife.orm.type.StringType;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -303,7 +304,7 @@ public class TableManager {
         for (Field field : fields) {
             field.setAccessible(true);
             Ignore ignore = field.getAnnotation(Ignore.class);
-            if (ignore != null) {
+            if (ignore != null || (field.getModifiers() & Modifier.STATIC) != 0) {
                 continue;
             }
             ColumnBuilder fieldBuilder = createColumnBuilder(field);
@@ -353,7 +354,7 @@ public class TableManager {
         for (Field field : fields) {
             field.setAccessible(true);
             Ignore ignore = field.getAnnotation(Ignore.class);
-            if (ignore != null) {
+            if (ignore != null || (field.getModifiers() & Modifier.STATIC) != 0) {
                 continue;
             }
             try {

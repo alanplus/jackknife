@@ -35,6 +35,7 @@ import com.lwh.jackknife.orm.table.Ignore;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class OrmDao<T extends OrmTable> implements Dao<T> {
             Ignore ignore = field.getAnnotation(Ignore.class);
             Column column = field.getAnnotation(Column.class);
             PrimaryKey primaryKey = field.getAnnotation(PrimaryKey.class);
-            if (ignore != null) {
+            if (ignore != null || (field.getModifiers() & Modifier.STATIC) != 0) {
                 continue;
             }
             if (primaryKey != null && primaryKey.value() == AssignType.AUTO_INCREMENT) {
