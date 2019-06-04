@@ -18,17 +18,17 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.3.0'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.3.5'</h3>
 }
 </blockquote>
 
@@ -63,7 +63,7 @@ dependencies {
 ##### （1）@Table
 > 配置你要映射的表名
 ##### （2）@Column
-> 配置你要映射的列名
+> 配置你要映射的列名，静态属性会被自动忽略，无需配置Ignore注解，例如Parcelable的CREATOR必须为static的，所以不需要配置Ignore
 ##### （3）@Ignore
 > 配置你要跳过映射的列名
 ##### （4）@PrimaryKey
@@ -83,7 +83,10 @@ dependencies {
 #### 4、事务提交
 > 如果要保证事务提交，请使用Transaction#execute(Worker worker),然后使用OrmDao中带safety后缀的API
 
-#### 5、主要API摘要
+#### 5、表升级
+> 从4.3.5版本开始支持数据库表字段重命名，更新OrmTable结构后，务必在初始化配置的时候提升db版本。
+
+#### 6、主要API摘要
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 

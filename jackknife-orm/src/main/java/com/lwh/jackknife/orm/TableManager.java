@@ -322,7 +322,7 @@ public class TableManager {
             OrmLog.d(sql);
             db.execSQL(sql);
         } catch (SQLException e) {
-            OrmLog.e(e.getMessage());
+            OrmLog.i(e.getMessage());
         }
         DaoFactory.removeDao(tableClass);
         Orm.update();
@@ -363,7 +363,7 @@ public class TableManager {
                 OrmLog.d(sql);
                 db.execSQL(sql);
             } catch (SQLException e) {
-                OrmLog.e(e.getMessage());
+                OrmLog.i(e.getMessage());
             }
         }
         DaoFactory.removeDao(tableClass);
