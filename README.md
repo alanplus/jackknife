@@ -18,16 +18,17 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xhttp:3.0.3'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:3.0.3'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.3.0'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.3.0'</h3>
 }
 </blockquote>
 
@@ -78,7 +79,11 @@ dependencies {
 #### 3、创表
 > 以User为例，TableManager.createTable(User.class);//创建OrmTable的实现类的表，创表一般在初始化配置时完成，因为这样可以在表结构改变时，自动更新。
 > 如果在第一步中使用了OrmConfig的创表配置config.tables()，则不需要此步骤。
-#### 4、API大全
+
+#### 4、事务提交
+> 如果要保证事务提交，请使用Transaction#execute(Worker worker),然后使用OrmDao中带safety后缀的API
+
+#### 5、主要API摘要
 > 首先要获取到操作该表的DAO对象，以User为例
 OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 
@@ -88,7 +93,9 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 | insert(List&lt;T&gt; bean) | OrmDao| 多条插入，插入一些数据 | 
 | deleteAll() | OrmDao | 删除所有数据 | 
 | delete(WhereBuilder builder) | OrmDao | 按条件删除数据 |
+| delete(T bean) | OrmDao | 删除特定数据 |
 | update(WhereBuilder builder) | OrmDao | 按条件修改数据 |
+| update(T bean) | OrmDao | 更新特定数据 |
 | selectOne() | OrmDao | 查询第一条数据 |
 | selectOne(QueryBuilder builder) | OrmDao | 查询最符合条件的一条数据 |
 | select(QueryBuilder builder) | OrmDao | 按条件查询数据 |
@@ -114,5 +121,5 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 #### 2、注意点
 > 关于mvp这种架构，市面上众说纷纭，有支持的，也有不支持的。总之，mvp既有优点，也有缺点。先说优点，解除模型数据和UI显示的耦合，界面显示和业务操作逻辑分离，易于创建副本，提高可维护性。缺点也是显而易见的，Presenter和View类爆炸的问题很严重，也就是说，如果你只需要写一个很小的项目，是完全没有必要使用mvp的。当然，个人建议你在业务变化大的界面上使用mvp，而在一些简单的界面（如SplashActivity启动页）上没有必要使用。
 
-### (四)高可扩展性的面向切面编程AOP（jackknife-aop）
-> 如果你需要在一组相似的业务需求前后添加相同的业务流程处理，比如百度云盘上传文件的一系列流程，有校验MD5值，如果之前已经被记录了，就可以秒传。以及识别一些非法的文件等。而这些业务可能会在以后发生变化，但是你上传文件的地方太多了，导致牵一发而动全身，到处都要改，这是很不好的。最好的编程体验就是高内聚、低耦合，要改，也是在少数的一两个类上面改。
+### (四)多渠道ProductFlavor业务代码兼容（jackknife-multiproxy）
+阅读https://github.com/JackWHLiu/MultiProxyTest
