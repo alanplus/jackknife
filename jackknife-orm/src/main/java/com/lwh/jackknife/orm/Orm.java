@@ -25,23 +25,39 @@ import com.lwh.jackknife.orm.exception.OrmStateException;
 public class Orm {
 
     private static SQLiteDatabase sDatabase;
-    private static int STATE_DATABASE_NOT_EXISTS = 0;
-    private static int STATE_DATABASE_EXISTS = 1;
+    private static SQLiteOpenHelper sHelper;
+    private static int STATE_DATABASE_NOT_EXISTS = -1;
+    private static int STATE_DATABASE_EXISTS = 0;
+    private static int STATE_DATABASE_UPDATING = 1;
     private static int sDatabaseState = STATE_DATABASE_NOT_EXISTS;
 
     public static boolean isPrepared() {
         return sDatabaseState == STATE_DATABASE_EXISTS;
     }
 
+    public static boolean isWaitingUpdate() {
+        return sDatabaseState == STATE_DATABASE_UPDATING;
+    }
+
+    public static void update() {
+        sDatabaseState = STATE_DATABASE_UPDATING;
+    }
+
     public static SQLiteDatabase getDatabase() {
         if (isPrepared()) {
+            return sDatabase;
+        } else if (isWaitingUpdate()) {
+            sDatabase = sHelper.getWritableDatabase();
+            if (sDatabase != null) {
+                sDatabaseState = STATE_DATABASE_EXISTS;
+            }
             return sDatabase;
         } else throw new OrmStateException("Database is not exists.");
     }
 
     public synchronized static void init(Context context, String databaseName) {
-        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, databaseName, 1, null);
-        sDatabase = helper.getWritableDatabase();
+        sHelper = new OrmSQLiteOpenHelper(context, databaseName, 1, null);
+        sDatabase = sHelper.getWritableDatabase();
         if (sDatabase != null) {
             sDatabaseState = STATE_DATABASE_EXISTS;
         }
@@ -51,8 +67,8 @@ public class Orm {
         String name = config.getDatabaseName();
         int versionCode = config.getVersionCode();
         Class<? extends OrmTable>[] tables = config.getTables();
-        SQLiteOpenHelper helper = new OrmSQLiteOpenHelper(context, name, versionCode, tables);
-        sDatabase = helper.getWritableDatabase();
+        sHelper = new OrmSQLiteOpenHelper(context, name, versionCode, tables);
+        sDatabase = sHelper.getWritableDatabase();
         if (sDatabase != null) {
             sDatabaseState = STATE_DATABASE_EXISTS;
         }

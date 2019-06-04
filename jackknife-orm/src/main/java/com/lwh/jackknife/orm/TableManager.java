@@ -322,6 +322,7 @@ public class TableManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Orm.update();
     }
 
     public static <T extends OrmTable> void createTable(Class<T> tableClass) {
@@ -364,12 +365,14 @@ public class TableManager {
                 e.printStackTrace();
             }
         }
+        Orm.update();
     }
 
     /* package */ <T extends OrmTable> void _dropTable(Class<T> tableClass, SQLiteDatabase db) {
         String sql = DROP_TABLE + SPACE + getTableName(tableClass);
         OrmLog.d(sql);
         db.execSQL(sql);
+        Orm.update();
     }
 
     public static <T extends OrmTable> void dropTable(Class<T> tableClass) {
