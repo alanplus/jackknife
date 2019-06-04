@@ -28,6 +28,14 @@ public class DaoFactory {
     private static Object sLock2 = new Object();
     private static Object sLock3 = new Object();
 
+    public static <T extends OrmTable> void removeDao(Class<T> beanClass) {
+        synchronized (DaoFactory.class) {
+            if (sDaoMap.containsKey(beanClass)) {
+                sDaoMap.remove(beanClass);
+            }
+        }
+    }
+
     public static <T extends OrmTable> OrmDao<T> getDao(Class<T> beanClass) {
         synchronized (sLock1) {
             if (sDaoMap.containsKey(beanClass)) {

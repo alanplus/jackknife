@@ -25,6 +25,7 @@ import com.lwh.jackknife.orm.constraint.Default;
 import com.lwh.jackknife.orm.constraint.NotNull;
 import com.lwh.jackknife.orm.constraint.PrimaryKey;
 import com.lwh.jackknife.orm.constraint.Unique;
+import com.lwh.jackknife.orm.dao.DaoFactory;
 import com.lwh.jackknife.orm.exception.ConstraintException;
 import com.lwh.jackknife.orm.table.Column;
 import com.lwh.jackknife.orm.table.Ignore;
@@ -320,8 +321,9 @@ public class TableManager {
             OrmLog.d(sql);
             db.execSQL(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            OrmLog.e(e.getMessage());
         }
+        DaoFactory.removeDao(tableClass);
         Orm.update();
     }
 
@@ -362,9 +364,10 @@ public class TableManager {
                 OrmLog.d(sql);
                 db.execSQL(sql);
             } catch (SQLException e) {
-                e.printStackTrace();
+                OrmLog.e(e.getMessage());
             }
         }
+        DaoFactory.removeDao(tableClass);
         Orm.update();
     }
 
@@ -372,6 +375,7 @@ public class TableManager {
         String sql = DROP_TABLE + SPACE + getTableName(tableClass);
         OrmLog.d(sql);
         db.execSQL(sql);
+        DaoFactory.removeDao(tableClass);
         Orm.update();
     }
 
