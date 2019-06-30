@@ -18,17 +18,17 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.3.5'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.3.5'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.3.6'</h3>
 }
 </blockquote>
 

@@ -24,14 +24,39 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class SystemUtils {
 
     private SystemUtils() {
+    }
+
+    public static void fixInputMethodManagerLeak(Context destContext) {
+        InputMethodManager imm = (InputMethodManager) destContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm == null) {
+            return;
+        }
+        Field[] declaredFields = imm.getClass().getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            try {
+                if (!declaredField.isAccessible()) {
+                    declaredField.setAccessible(true);
+                }
+                Object obj = declaredField.get(imm);
+                if (obj == null || !(obj instanceof View)) {
+                    continue;
+                }
+                declaredField.set(imm, null);
+            }
+            catch (Throwable th) {
+                th.printStackTrace();
+            }
+        }
     }
 
     public static int getScreenWidth(Context context) {
