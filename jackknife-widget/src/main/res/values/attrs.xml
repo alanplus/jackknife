@@ -190,6 +190,39 @@
         <attr name="wv_dividerColor" format="color"/>
         <attr name="wv_lineSpacingMultiplier" format="float"/>
     </declare-styleable>
+    <declare-styleable name="MenuItem">
+        <!-- 标题内容 -->
+        <attr name="mi_title" format="string|reference"/>
+        <!-- 图标 -->
+        <attr name="mi_icon" format="reference"/>
+        <!-- 标题字体大小 -->
+        <attr name="mi_titleTextSize" format="dimension|reference"/>
+        <!-- 标题字体颜色 -->
+        <attr name="mi_titleTextColor" format="color|reference"/>
+        <!-- 标题距离底边的距离 -->
+        <attr name="mi_titleBottomSpan" format="dimension|reference"/>
+        <!-- 站内信圆点是否启用 -->
+        <attr name="mi_tagEnabled" format="boolean"/>
+        <!-- 站内信圆点的颜色 -->
+        <attr name="mi_tagColor" format="color|reference"/>
+        <!-- 站内信圆点的宽度 -->
+        <attr name="mi_tagWidth" format="dimension|reference"/>
+        <!-- 站内信圆点的高度 -->
+        <attr name="mi_tagHeight" format="dimension|reference"/>
+        <!-- 站内信圆点所在的方位 -->
+        <attr name="mi_tagGravity" format="enum">
+            <enum name="leftTop" value="0x00"/>
+            <enum name="rightTop" value="0x01"/>
+            <enum name="leftBottom" value="0x02"/>
+            <enum name="rightBottom" value="0x03"/>
+        </attr>
+        <!-- 负数表示向左偏移，正数表示向右偏移，且会保证整个圆点显示完全 -->
+        <attr name="mi_tagXOffset" format="dimension|reference"/>
+        <!-- 负数表示向上偏移，正数表示向下偏移，且会保证整个圆点显示完全 -->
+        <attr name="mi_tagYOffset" format="dimension|reference"/>
+        <!-- 站内信的数字 -->
+        <attr name="mi_tagNum" format="integer"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
