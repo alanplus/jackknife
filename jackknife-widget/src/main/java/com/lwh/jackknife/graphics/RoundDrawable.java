@@ -41,6 +41,14 @@ public class RoundDrawable extends Drawable {
         mRadius = Math.min(mBitmap.getWidth(), mBitmap.getHeight());
     }
 
+    public RoundDrawable(Drawable drawable) {
+        int width = drawable.getIntrinsicWidth();
+        int height = drawable.getIntrinsicHeight();
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mRadius = Math.min(width, height);
+    }
+
     @Override
     public void draw(Canvas canvas) {
         canvas.drawCircle(mRadius / 2, mRadius / 2, mRadius / 2, mPaint);
