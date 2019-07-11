@@ -39,7 +39,6 @@ public class TitleBar extends FrameLayout {
         init(attrs, defStyleAttr);
     }
 
-
     private void init(AttributeSet attrs, int defStyleAttr) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, 0);
         int dp6 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
@@ -92,8 +91,8 @@ public class TitleBar extends FrameLayout {
         mBackView.setText(back);
     }
 
-    public void setmMenu(String mMenu) {
-        mMenuView.setText(mMenu);
+    public void setMenu(String menu) {
+        mMenuView.setText(menu);
     }
     public void setOnBackListener(OnClickListener listener) {
         mBackView.setOnClickListener(listener);
