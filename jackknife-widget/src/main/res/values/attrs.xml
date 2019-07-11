@@ -117,13 +117,13 @@
         </attr>
     </declare-styleable>
     <declare-styleable name="TitleBar">
-        <attr name="titlebar_title" format="string"/>
-        <attr name="titlebar_titleTextColor" format="color"/>
-        <attr name="titlebar_titleTextSize" format="dimension"/>
-        <attr name="titlebar_leftDrawable" format="reference"/>
-        <attr name="titlebar_rightDrawable" format="reference"/>
-        <attr name="titlebar_leftDrawableSize" format="dimension"/>
-        <attr name="titlebar_rightDrawableSize" format="dimension"/>
+        <attr name="tb_backIcon" format="reference"/>
+        <attr name="tb_backName" format="string|reference"/>
+        <attr name="tb_noBack" format="boolean"/>
+        <attr name="tb_title" format="string|reference"/>
+        <attr name="tb_menuIcon" format="reference"/>
+        <attr name="tb_menuName" format="string|reference"/>
+        <attr name="tb_menuBg" format="reference"/>
     </declare-styleable>
     <declare-styleable name="SlidingMenu">
         <attr name="slidingmenu_menuRightPadding" format="dimension|reference"/>
@@ -202,7 +202,6 @@
     <attr name="bottomNavigationBarStyle" format="reference"/>
     <attr name="instrumentViewStyle" format="reference"/>
     <attr name="verifyCodeEditTextGroupStyle" format="reference"/>
-    <attr name="titleBarStyle" format="reference"/>
     <attr name="slidingMenuStyle" format="reference"/>
     <attr name="progressButtonStyle" format="reference"/>
 </resources>

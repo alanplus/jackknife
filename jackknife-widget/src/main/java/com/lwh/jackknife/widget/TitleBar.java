@@ -1,218 +1,113 @@
-/*
- *
- *  * Copyright (C) 2017 The JackKnife Open Source Project
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *      http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
- *
- */
-
 package com.lwh.jackknife.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class TitleBar extends RelativeLayout {
-
-    private String mTitle;
-
-    private int mTitleTextColor;
-
-    private float mTitleTextSize = 12.0f;
-
-    private Drawable mLeftDrawable;
-
-    private Drawable mRightDrawable;
-
-    private int mLeftDrawableSize = 30;
-
-    private int mRightDrawableSize = 30;
+public class TitleBar extends FrameLayout {
 
     private TextView mTitleView;
+    private TextView mBackView;
+    private TextView mMenuView;
+    private String title;
+    private String back;
+    private String mMenu;
+    private Drawable mBackIcon;
+    private Drawable mMenuIcon;
+    private Drawable mMenuBg;
+    private boolean mNoBack;
 
-    private ImageView mLeftView;
-
-    private ImageView mRightView;
-
-    private OnLeftClickListener mOnLeftClickListener;
-
-    private OnRightClickListener mOnRightClickListener;
-
-    public TitleBar(Context context) {
+    public TitleBar(@NonNull Context context) {
         this(context, null);
     }
 
-    public TitleBar(Context context, AttributeSet attrs) {
-        this(context, attrs, R.attr.titleBarStyle);
+    public TitleBar(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public TitleBar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TitleBar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initAttrs(context, attrs, defStyleAttr);
-        initViews();
+        init(attrs, defStyleAttr);
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        if (mLeftView != null) {
-            mLeftView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mOnLeftClickListener != null) {
-                        mOnLeftClickListener.onClick(v);
-                    }
-                }
-            });
-        }
-        if (mRightView != null) {
-            mRightView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mOnRightClickListener != null) {
-                        mOnRightClickListener.onClick(v);
-                    }
-                }
-            });
-        }
-    }
 
-    private void initAttrs(Context context, AttributeSet attrs, int defStyleAttr) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TitleBar, 0, defStyleAttr);
-        mTitle = a.getString(R.styleable.TitleBar_titlebar_title);
-        mTitleTextColor = a.getColor(R.styleable.TitleBar_titlebar_titleTextColor,
-                getResources().getColor(R.color.gray));
-        mTitleTextSize = a.getDimension(R.styleable.TitleBar_titlebar_titleTextSize, mTitleTextSize);
-        mLeftDrawable = a.getDrawable(R.styleable.TitleBar_titlebar_leftDrawable);
-        mRightDrawable = a.getDrawable(R.styleable.TitleBar_titlebar_rightDrawable);
-        mLeftDrawableSize = a.getDimensionPixelOffset(R.styleable.TitleBar_titlebar_leftDrawableSize,
-                mLeftDrawableSize);
-        mRightDrawableSize = a.getDimensionPixelOffset(R.styleable.TitleBar_titlebar_rightDrawableSize,
-                mRightDrawableSize);
+    private void init(AttributeSet attrs, int defStyleAttr) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, 0);
+        int dp6 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
+        int dp8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        int dp10 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        title = a.getString(R.styleable.TitleBar_title);
+        back = a.getString(R.styleable.TitleBar_backName);
+        mMenu = a.getString(R.styleable.TitleBar_menuName);
+        mNoBack = a.getBoolean(R.styleable.TitleBar_noBack, false);
+        if (a.hasValue(R.styleable.TitleBar_backIcon)) {
+            mBackIcon = a.getDrawable(R.styleable.TitleBar_backIcon);
+        }
+        if (a.hasValue(R.styleable.TitleBar_menuIcon)) {
+            mMenuIcon = a.getDrawable(R.styleable.TitleBar_menuIcon);
+        }
+        if (a.hasValue(R.styleable.TitleBar_menuBg)) {
+            mMenuBg = a.getDrawable(R.styleable.TitleBar_menuBg);
+        }
         a.recycle();
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int measuredWidth = measureWidth(widthMeasureSpec);
-        int measuredHeight = measureHeight(heightMeasureSpec);
-        setMeasuredDimension(measuredWidth, measuredHeight);
-    }
-
-    private int measureWidth(int widthMeasureSpec) {
-        if (MeasureSpec.getMode(widthMeasureSpec) == MeasureSpec.EXACTLY) {
-            return MeasureSpec.getSize(widthMeasureSpec);
-        } else {
-            return getMeasuredWidth();
+        if (mBackIcon == null)
+            mBackIcon = ContextCompat.getDrawable(getContext(), R.drawable.jknf_title_bar_back);
+        View.inflate(getContext(), R.layout.jknf_title_bar, this);
+        mTitleView = findViewById(R.id.tv_titlebar_title);
+        mBackView = findViewById(R.id.tv_titlebar_back);
+        mMenuView = findViewById(R.id.tv_titlebar_menu);
+        mBackView.setVisibility(mNoBack ? GONE : VISIBLE);
+        mTitleView.setText(title);
+        mBackView.setText(back);
+        mMenuView.setText(mMenu);
+        if (mMenuIcon != null) {
+            mMenuView.setCompoundDrawables(mMenuIcon, null, null, null);
+            mMenuView.setCompoundDrawablePadding(10);
         }
-    }
-
-    private int measureHeight(int heightMeasureSpec) {
-        if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
-            return MeasureSpec.getSize(heightMeasureSpec);
-        } else {
-            return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
+        if (mMenuBg != null) {
+            mMenuView.setBackgroundDrawable(mMenuBg);
+            mMenuView.setPadding(dp8, dp6, dp8, dp6);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mMenuView.getLayoutParams();
+            params.rightMargin = dp10;
+            mMenuView.setLayoutParams(params);
         }
+        mBackView.setCompoundDrawables(mBackIcon, null, null, null);
+        mBackView.setCompoundDrawablePadding(10);
     }
 
-    private void initViews() {
-        if (mLeftDrawable != null) {
-            mLeftView = new ImageView(getContext());
-            LayoutParams leftLp = new LayoutParams(mLeftDrawableSize, mLeftDrawableSize);
-            leftLp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            leftLp.addRule(RelativeLayout.CENTER_VERTICAL);
-            mLeftView.setImageBitmap(((BitmapDrawable) mLeftDrawable).getBitmap());
-            addView(mLeftView, leftLp);
-        }
-        if (mTitle != null) {
-            mTitleView = new TextView(getContext());
-            mTitleView.setText(mTitle);
-            mTitleView.setTextColor(mTitleTextColor);
-            mTitleView.setTextSize(mTitleTextSize);
-            LayoutParams centerLp = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            centerLp.addRule(RelativeLayout.CENTER_IN_PARENT);
-            addView(mTitleView, centerLp);
-        }
-        if (mRightDrawable != null) {
-            mRightView = new ImageView(getContext());
-            LayoutParams rightLp = new LayoutParams(mRightDrawableSize, mRightDrawableSize);
-            rightLp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            rightLp.addRule(RelativeLayout.CENTER_VERTICAL);
-            mRightView.setImageBitmap(((BitmapDrawable) mRightDrawable).getBitmap());
-            addView(mRightView, rightLp);
-        }
+    public void setTitle(String title) {
+        mTitleView.setText(title);
     }
 
-    public String getTitle() {
-        return mTitle;
+    public void setBack(String back) {
+        mBackView.setText(back);
     }
 
-    public int getTitleTextColor() {
-        return mTitleTextColor;
+    public void setmMenu(String mMenu) {
+        mMenuView.setText(mMenu);
+    }
+    public void setOnBackListener(OnClickListener listener) {
+        mBackView.setOnClickListener(listener);
     }
 
-    public float getTitleTextSize() {
-        return mTitleTextSize;
-    }
-
-    public Drawable getLeftDrawable() {
-        return mLeftDrawable;
-    }
-
-    public Drawable getRightDrawable() {
-        return mRightDrawable;
+    public void setOnMenuListener(OnClickListener listener) {
+        mMenuView.setOnClickListener(listener);
     }
 
     public TextView getTitleView() {
         return mTitleView;
     }
 
-    public ImageView getLeftView() {
-        return mLeftView;
-    }
-
-    public ImageView getRightView() {
-        return mRightView;
-    }
-
-    public void setOnLeftClickListener(OnLeftClickListener l) {
-        if (mLeftView == null) {
-            throw new RuntimeException("The left-hand-side view is not specified.");
-        }
-        this.mOnLeftClickListener = l;
-    }
-
-    public void setOnRightClickListener(OnRightClickListener l) {
-        if (mRightView == null) {
-            throw new RuntimeException("The right-hand-side view is not specified.");
-        }
-        this.mOnRightClickListener = l;
-    }
-
-    public interface OnLeftClickListener {
-        void onClick(View view);
-    }
-
-    public interface OnRightClickListener {
-        void onClick(View view);
+    public void showMenu(boolean show) {
+        mMenuView.setVisibility(show ? VISIBLE : GONE);
     }
 }
