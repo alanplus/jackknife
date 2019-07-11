@@ -1,6 +1,6 @@
 JackKnife帮助文档![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)  [![API](https://img.shields.io/badge/API-11%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=11)
 ================================
-![avatar](http://jknf.org/static/images/banner.jpg)
+![avatar](https://jackknife.oss-cn-hangzhou.aliyuncs.com/jackknife_banner.jpg?Expires=1562829642&OSSAccessKeyId=TMP.hXAZVhZzdaLpYE7XosjYavYoSHREh38JmjLNJbF25nXAdnbBjR3XZVmML4CSm7AJBAPVkZvnRKYCgrvgTepMA2FBjRxTtdM5udPfFPJeK8mgJuhSU9MjvZp1UYiyNb.tmp&Signature=GQGf2KKNPeg%2FWIZtezz%2B%2FbZbY10%3D)
 
 一、环境配置
 --------------------------------
