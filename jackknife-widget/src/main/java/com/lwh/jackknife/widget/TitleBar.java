@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2019 The JackKnife Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lwh.jackknife.widget;
 
 import android.content.Context;
@@ -18,8 +34,8 @@ public class TitleBar extends FrameLayout {
     private TextView mTitleView;
     private TextView mBackView;
     private TextView mMenuView;
-    private String title;
-    private String back;
+    private String mTitle;
+    private String mBack;
     private String mMenu;
     private Drawable mBackIcon;
     private Drawable mMenuIcon;
@@ -44,8 +60,8 @@ public class TitleBar extends FrameLayout {
         int dp6 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
         int dp8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         int dp10 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-        title = a.getString(R.styleable.TitleBar_title);
-        back = a.getString(R.styleable.TitleBar_backName);
+        mTitle = a.getString(R.styleable.TitleBar_title);
+        mBack = a.getString(R.styleable.TitleBar_backName);
         mMenu = a.getString(R.styleable.TitleBar_menuName);
         mNoBack = a.getBoolean(R.styleable.TitleBar_noBack, false);
         if (a.hasValue(R.styleable.TitleBar_backIcon)) {
@@ -65,8 +81,8 @@ public class TitleBar extends FrameLayout {
         mBackView = findViewById(R.id.tv_titlebar_back);
         mMenuView = findViewById(R.id.tv_titlebar_menu);
         mBackView.setVisibility(mNoBack ? GONE : VISIBLE);
-        mTitleView.setText(title);
-        mBackView.setText(back);
+        mTitleView.setText(mTitle);
+        mBackView.setText(mBack);
         mMenuView.setText(mMenu);
         if (mMenuIcon != null) {
             mMenuView.setCompoundDrawables(mMenuIcon, null, null, null);
