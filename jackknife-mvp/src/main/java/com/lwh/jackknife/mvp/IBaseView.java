@@ -16,8 +16,12 @@
 
 package com.lwh.jackknife.mvp;
 
+import android.content.Context;
+
 public interface IBaseView {
     void showLoading();
 
     void hideLoading();
+
+    Context getContext();
 }
