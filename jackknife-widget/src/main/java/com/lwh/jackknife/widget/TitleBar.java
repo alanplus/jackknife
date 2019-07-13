@@ -60,18 +60,18 @@ public class TitleBar extends FrameLayout {
         int dp6 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
         int dp8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         int dp10 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-        mTitle = a.getString(R.styleable.TitleBar_title);
-        mBack = a.getString(R.styleable.TitleBar_backName);
-        mMenu = a.getString(R.styleable.TitleBar_menuName);
-        mNoBack = a.getBoolean(R.styleable.TitleBar_noBack, false);
-        if (a.hasValue(R.styleable.TitleBar_backIcon)) {
-            mBackIcon = a.getDrawable(R.styleable.TitleBar_backIcon);
+        mTitle = a.getString(R.styleable.TitleBar_tb_title);
+        mBack = a.getString(R.styleable.TitleBar_tb_backName);
+        mMenu = a.getString(R.styleable.TitleBar_tb_menuName);
+        mNoBack = a.getBoolean(R.styleable.TitleBar_tb_noBack, false);
+        if (a.hasValue(R.styleable.TitleBar_tb_backIcon)) {
+            mBackIcon = a.getDrawable(R.styleable.TitleBar_tb_backIcon);
         }
-        if (a.hasValue(R.styleable.TitleBar_menuIcon)) {
-            mMenuIcon = a.getDrawable(R.styleable.TitleBar_menuIcon);
+        if (a.hasValue(R.styleable.TitleBar_tb_menuIcon)) {
+            mMenuIcon = a.getDrawable(R.styleable.TitleBar_tb_menuIcon);
         }
-        if (a.hasValue(R.styleable.TitleBar_menuBg)) {
-            mMenuBg = a.getDrawable(R.styleable.TitleBar_menuBg);
+        if (a.hasValue(R.styleable.TitleBar_tb_menuBg)) {
+            mMenuBg = a.getDrawable(R.styleable.TitleBar_tb_menuBg);
         }
         a.recycle();
         if (mBackIcon == null)

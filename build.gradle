@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 buildscript {
-    def gradle_version = "2.3.1"
+    def gradle_version = '3.4.1'
     def gradle_plugin_version = "1.5"
     def apt_version = "1.8"
     repositories {
