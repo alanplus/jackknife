@@ -20,7 +20,6 @@ group = 'com.github.JackWHLiu'
 
 android {
     compileSdkVersion rootProject.ext.android.compile_sdk
-    buildToolsVersion rootProject.ext.android.build_tools_version
     defaultConfig {
         minSdkVersion rootProject.ext.android.min_sdk
         targetSdkVersion rootProject.ext.android.target_sdk
@@ -36,5 +35,5 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:23.0.1'
+    implementation 'com.android.support:recyclerview-v7:23.0.1'
 }

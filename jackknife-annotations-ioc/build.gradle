@@ -19,7 +19,6 @@ group = 'com.github.JackWHLiu'
 
 android {
     compileSdkVersion rootProject.ext.android.compile_sdk
-    buildToolsVersion rootProject.ext.android.build_tools_version
     defaultConfig {
         minSdkVersion rootProject.ext.android.min_sdk
         targetSdkVersion rootProject.ext.android.target_sdk
@@ -35,6 +34,6 @@ android {
 }
 
 dependencies {
-    compile project(':jackknife-ioc')
-    compile project(':jackknife-widget')
+    implementation project(':jackknife-ioc')
+    implementation project(':jackknife-widget')
 }
