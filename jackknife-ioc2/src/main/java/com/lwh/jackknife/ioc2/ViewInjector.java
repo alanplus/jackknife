@@ -18,7 +18,7 @@ package com.lwh.jackknife.ioc2;
 
 import com.lwh.jackknife.ioc2.adapter.InjectAdapter;
 import com.lwh.jackknife.ioc2.adapter.NullAdapter;
-import com.lwh.jackknife.ioc.EventBase;
+import com.lwh.jackknife.ioc.annotation.EventBase;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
