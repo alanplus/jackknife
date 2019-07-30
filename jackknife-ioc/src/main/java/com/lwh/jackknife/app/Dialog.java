@@ -66,8 +66,8 @@ public abstract class Dialog extends android.app.Dialog implements SupportDialog
     protected abstract void initData(Dialog dialog);
 
     @Override
-    public View findViewById(int id) {
-        return super.findViewById(id);
+    public <VIEW extends View> VIEW getView(int id) {
+        return getDialogActivity().getView(id);
     }
 
     /**

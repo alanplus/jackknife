@@ -3,6 +3,14 @@ package com.lwh.jackknife.ioc2;
 import com.lwh.jackknife.ioc2.adapter.InjectAdapter;
 import com.squareup.javapoet.TypeVariableName;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;

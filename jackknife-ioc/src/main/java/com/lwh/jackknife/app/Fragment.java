@@ -45,6 +45,11 @@ public abstract class Fragment extends android.app.Fragment implements SupportFr
     }
 
     @Override
+    public <VIEW extends View> VIEW getView(int id) {
+        return getFragmentActivity().getView(id);
+    }
+
+    @Override
     public SupportActivity getFragmentActivity() {
         if (getActivity() instanceof SupportActivity) {
             return (SupportActivity) getActivity();
