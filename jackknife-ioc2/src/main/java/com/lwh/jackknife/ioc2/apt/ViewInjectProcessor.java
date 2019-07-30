@@ -43,7 +43,7 @@ import javax.lang.model.element.TypeElement;
                 "com.lwh.jackknife.ioc2.annotation.ViewInject",
                 "com.lwh.jackknife.ioc2.annotation.ContentView"
         })
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ViewInjectProcessor extends AbstractProcessor {
 
     List<AnnotationHandler> mHandlers = new ArrayList<>();
