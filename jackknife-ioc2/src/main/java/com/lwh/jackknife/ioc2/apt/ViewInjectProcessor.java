@@ -51,10 +51,10 @@ public class ViewInjectProcessor extends AbstractProcessor {
     Map<String, List<Element>> map = new HashMap<>();
 
     @Override
-    public synchronized void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
+    public synchronized void init(ProcessingEnvironment env) {
+        super.init(env);
         registerHandler(new ViewInjectHandler());
-        mWriter = new JavaWriter(processingEnv);
+        mWriter = new JavaWriter(env);
     }
 
     protected void registerHandler(AnnotationHandler handler) {

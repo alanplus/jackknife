@@ -17,6 +17,7 @@ buildscript {
     def gradle_version = '3.4.1'
     def gradle_plugin_version = "1.5"
     def apt_version = "1.8"
+    def aspectj_version = "1.8.10"
     repositories {
         jcenter()
         mavenCentral()
@@ -26,7 +27,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:${gradle_version}"
         classpath "com.github.dcendents:android-maven-gradle-plugin:${gradle_plugin_version}"
         classpath "com.neenbedankt.gradle.plugins:android-apt:${apt_version}"
-        classpath 'org.aspectj:aspectjtools:1.8.10'
+        classpath "org.aspectj:aspectjtools:${aspectj_version}"
     }
 }
 
