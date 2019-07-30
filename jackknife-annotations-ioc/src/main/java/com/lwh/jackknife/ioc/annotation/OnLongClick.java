@@ -18,6 +18,8 @@ package com.lwh.jackknife.ioc.annotation;
 
 import android.view.View;
 
+import com.lwh.jackknife.ioc2.annotation.EventBase2;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -41,7 +43,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target(METHOD)
 @Retention(RUNTIME)
-@EventBase(
+@EventBase2(
         listenerSetter = "setOnLongClickListener",
         listenerType = View.OnLongClickListener.class,
         callbackMethod = "onLongClick",

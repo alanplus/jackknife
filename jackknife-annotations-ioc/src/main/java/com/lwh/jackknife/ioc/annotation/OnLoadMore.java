@@ -18,6 +18,7 @@ package com.lwh.jackknife.ioc.annotation;
 
 import android.view.View;
 
+import com.lwh.jackknife.ioc2.annotation.EventBase2;
 import com.lwh.jackknife.widget.pull.SwipeLayout;
 
 import java.lang.annotation.Retention;
@@ -28,7 +29,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target(METHOD)
 @Retention(RUNTIME)
-@EventBase(
+@EventBase2(
         listenerSetter = "setOnRefreshListener",
         listenerType = SwipeLayout.OnRefreshListener.class,
         callbackMethod = "onLoadMore",

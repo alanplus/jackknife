@@ -18,7 +18,7 @@ package com.lwh.jackknife.ioc2;
 
 import com.lwh.jackknife.ioc2.adapter.InjectAdapter;
 import com.lwh.jackknife.ioc2.adapter.NullAdapter;
-import com.lwh.jackknife.ioc.annotation.EventBase;
+import com.lwh.jackknife.ioc2.annotation.EventBase2;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
@@ -52,7 +52,7 @@ public class ViewInjector {
             Annotation[] annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
                 Class<? extends Annotation> annotationType = annotation.annotationType();
-                EventBase eventBase = annotationType.getAnnotation(EventBase.class);
+                EventBase2 eventBase = annotationType.getAnnotation(EventBase2.class);
                 if (eventBase == null) {
                     continue;
                 }

@@ -18,6 +18,8 @@ package com.lwh.jackknife.ioc.annotation;
 
 import android.view.View;
 
+import com.lwh.jackknife.ioc2.annotation.EventBase2;
+
 import static android.view.View.OnClickListener;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -41,6 +43,14 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 @Retention(RUNTIME)
 @EventBase(
+        listenerSetter = "setOnClickListener",
+        listenerType = View.OnClickListener.class,
+        callbackMethod = "onClick",
+        parameters = View.class,
+        parameterNames = "v",
+        returns = void.class
+)
+@EventBase2(
         listenerSetter = "setOnClickListener",
         listenerType = View.OnClickListener.class,
         callbackMethod = "onClick",

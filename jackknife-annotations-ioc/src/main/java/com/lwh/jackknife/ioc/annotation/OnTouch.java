@@ -19,6 +19,8 @@ package com.lwh.jackknife.ioc.annotation;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.lwh.jackknife.ioc2.annotation.EventBase2;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -42,7 +44,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target(METHOD)
 @Retention(RUNTIME)
-@EventBase(
+@EventBase2(
         listenerSetter = "setOnTouchListener",
         listenerType = View.OnTouchListener.class,
         callbackMethod = "onTouch",
