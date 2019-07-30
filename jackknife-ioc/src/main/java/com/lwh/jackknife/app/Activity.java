@@ -61,8 +61,8 @@ public abstract class Activity extends android.app.Activity implements SupportAc
     }
 
     @Override
-    public View findViewById(int id) {
-        return super.findViewById(id);
+    public <VIEW extends View> VIEW getView(int id) {
+        return (VIEW) findViewById(id);
     }
 
     @Override
