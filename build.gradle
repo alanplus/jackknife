@@ -45,8 +45,8 @@ ext {
             min_sdk : 11,
             target_sdk : 26,
             build_tools_version : "27.0.3",
-            release_version_code : 230,
-            release_version_name : "4.4.0"
+            release_version_code : 231,
+            release_version_name : "4.4.1"
     ]
 }
 
