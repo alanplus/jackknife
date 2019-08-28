@@ -1,11 +1,10 @@
-include ':jackknife-ioc',
+include ':jackknife-viewinject',
+        ':jackknife-viewinject-annotations',
         ':jackknife-xskin',
         ':jackknife-multiproxy',
         ':jackknife-av',
         ':jackknife-orm',
         ':jackknife-mvp',
         ':jackknife-widget',
-        ':jackknife-ioc2',
         ':jackknife-aop',
-        ':jackknife-util',
-        ':jackknife-annotations-ioc'
+        ':jackknife-util'

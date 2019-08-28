@@ -18,23 +18,22 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-annotations-ioc:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-ioc2:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.3.6'</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.3.6'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject-annotations:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.4.2'</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.4.2'</h3>
 }
 </blockquote>
 
 二、如何使用(参考https://github.com/JackWHLiu/JackKnifeDemo)
 --------------------------------
-### (一)基于IOC依赖注入的自动注入视图、绑定控件和注册事件（jackknife-ioc）
+### (一)基于依赖注入的自动注入视图、绑定控件和注册事件（jackknife-viewinject）
 #### 1、自动注入视图（Inject Layout）
 ##### （1）Activity继承com.lwh.jackknife.app.Activity,Fragment继承com.lwh.jackknife.app.Fragment
 ##### （2）保证布局的xml文件和Activity和Fragment的Java类的命名遵循一定的映射关系（Java类名必须以Activity或Fragment结尾）。

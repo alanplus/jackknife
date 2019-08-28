@@ -8,15 +8,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/jackknife-annotations-ioc" />
             <option value="$PROJECT_DIR$/jackknife-aop" />
             <option value="$PROJECT_DIR$/jackknife-av" />
-            <option value="$PROJECT_DIR$/jackknife-ioc" />
             <option value="$PROJECT_DIR$/jackknife-ioc2" />
             <option value="$PROJECT_DIR$/jackknife-multiproxy" />
             <option value="$PROJECT_DIR$/jackknife-mvp" />
             <option value="$PROJECT_DIR$/jackknife-orm" />
             <option value="$PROJECT_DIR$/jackknife-util" />
+            <option value="$PROJECT_DIR$/jackknife-viewinject" />
+            <option value="$PROJECT_DIR$/jackknife-viewinject-annotations" />
             <option value="$PROJECT_DIR$/jackknife-widget" />
             <option value="$PROJECT_DIR$/jackknife-xskin" />
           </set>

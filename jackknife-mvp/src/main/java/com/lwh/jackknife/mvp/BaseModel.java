@@ -39,7 +39,7 @@ public abstract class BaseModel<BEAN> {
             "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "ceng", "cha", "chai", "chan",
             "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chuai",
             "chuan", "chuang", "chui", "chun", "chuo", "ci", "cong", "cou", "cu", "cuan", "cui",
-            "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "deng", "di", "dian", "diao",
+            "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "deng", "viewinject", "dian", "diao",
             "die", "ding", "diu", "dong", "dou", "du", "duan", "dui", "dun", "duo", "e", "en",
             "er", "fa", "fan", "fang", "fei", "fen", "feng", "fo", "fou", "fu", "ga", "gai", "gan",
             "gang", "gao", "ge", "gei", "gen", "geng", "gong", "gou", "gu", "gua", "guai", "guan",
