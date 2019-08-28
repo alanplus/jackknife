@@ -64,7 +64,7 @@ public class IoUtils {
             }
             buffer.append(H).append(separator);
         }
-        return buffer.substring(0, buffer.length()-1);
+        return buffer.substring(0, buffer.length()-separator.length());
     }
 
     public static String bs2H(byte[] src) {
