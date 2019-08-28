@@ -35,7 +35,7 @@ public class MusicUtils {
         sBitmapOptions.inDither = false;
     }
 
-    public static String makeTimeString(long milliSecs) {
+    public static String formatTime(long milliSecs) {
         StringBuffer sb = new StringBuffer();
         long m = milliSecs / (60 * 1000);
         sb.append(m < 10 ? "0" + m : m);

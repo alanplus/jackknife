@@ -19,10 +19,11 @@ package com.lwh.jackknife.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
-public class NumberUtils implements N {
+public class Math implements Number {
 
-    private NumberUtils() {
+    private Math() {
     }
 
     public static int H2D(String hexadecimal) {
@@ -102,7 +103,7 @@ public class NumberUtils implements N {
     }
 
     public static float clamp(float value, float max, float min) {
-        return Math.max(Math.min(value, max), min);
+        return java.lang.Math.max(java.lang.Math.min(value, max), min);
     }
 
     public static int getRandom(int min, int max) {
@@ -137,5 +138,10 @@ public class NumberUtils implements N {
             randomList.remove(index);
         }
         return randoms;
+    }
+
+    /* package */ static String getUUID() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.replaceAll("-", "");
     }
 }

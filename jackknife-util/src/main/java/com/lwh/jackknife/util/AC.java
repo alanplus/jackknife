@@ -41,6 +41,10 @@ public class AC {
         return sInstance;
     }
 
+    public <T> T[] toA(List<T> lists, T[] newArrays) {
+        return lists.toArray(newArrays);
+    }
+
     /**
      * Converts an array into a collection.
      */

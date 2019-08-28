@@ -33,27 +33,12 @@ import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.nio.channels.FileChannel;
 import java.util.Iterator;
 import java.util.Map;
 
 public class IoUtils {
-
-    public static final String US_ASCII = "US-ASCII";
-
-    public static final String ISO_8859_1 = "ISO-8859-1";
-
-    public static final String UTF_8 = "UTF-8";
-
-    public static final String UTF_16BE = "UTF-16BE";
-
-    public static final String UTF_16LE = "UTF-16LE";
-
-    public static final String UTF_16 = "UTF-16";
-
-    public static final String GBK = "GBK";
-
-    public static final String GB_2312 = "GB2312";
 
     private IoUtils() {
     }
@@ -73,7 +58,7 @@ public class IoUtils {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < src.length; i++) {
             int value = src[i] & 0xFF;
-            String H = NumberUtils.D2H(value);
+            String H = Math.D2H(value);
             if (H.length() < 2) {
                 buffer.append(0);
             }
@@ -97,15 +82,6 @@ public class IoUtils {
             return bs;
         }
         throw new IllegalArgumentException("Separator can\'t be null.");
-    }
-
-    public static byte[] intToBytes(int number) {
-        byte[] bs = new byte[4];
-        for (int i = 3; i >= 0; i--) {
-            bs[i] = (byte) (number % 256);
-            number >>= 8;
-        }
-        return bs;
     }
 
     public static boolean checkMediaMounted() {
@@ -258,43 +234,6 @@ public class IoUtils {
         }
     }
 
-    public static String getRomTotalSize(Context context) {
-        File path = Environment.getDataDirectory();
-        StatFs stat = new StatFs(path.getPath());
-        long blockSize = stat.getBlockSize();
-        long totalBlocks = stat.getBlockCount();
-        return Formatter.formatFileSize(context, blockSize * totalBlocks);
-    }
-
-    public static String getRomAvailableSize(Context context) {
-        File path = Environment.getDataDirectory();
-        StatFs stat = new StatFs(path.getPath());
-        long blockSize = stat.getBlockSize();
-        long availableBlocks = stat.getAvailableBlocks();
-        return Formatter.formatFileSize(context, blockSize * availableBlocks);
-    }
-
-    public static String getFileSize(Context context, File file) {
-        FileChannel fc = null;
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(file);
-            fc = fis.getChannel();
-            long size = fc.size();
-            return Formatter.formatFileSize(context, size);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fc.close();
-                fis.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return "";
-    }
-
     public static int getSubCount(File file) {
         if (file != null) {
             if (!file.isDirectory()) {
@@ -388,7 +327,7 @@ public class IoUtils {
         }
     }
 
-    public static File write(InputStream inputStream, String filePath) throws IOException {
+    public static File write(InputStream inputStream, String filePath) {
         OutputStream outputStream = null;
         File mFile = new File(filePath);
         if (!mFile.getParentFile().exists())
@@ -414,47 +353,6 @@ public class IoUtils {
         return mFile;
     }
 
-    public String toASCII(String str) throws UnsupportedEncodingException {
-        return this.transcode(str, US_ASCII);
-    }
-
-    public String toISO88591(String str) throws UnsupportedEncodingException {
-        return this.transcode(str, ISO_8859_1);
-    }
-
-    public String toUTF8(String str) throws UnsupportedEncodingException {
-        return this.transcode(str, UTF_8);
-    }
-
-    public String toUTF16BE(String str) throws UnsupportedEncodingException {
-        return this.transcode(str, UTF_16BE);
-    }
-
-    public String toUTF16LE(String str) throws UnsupportedEncodingException {
-        return this.transcode(str, UTF_16LE);
-    }
-
-    public String toUTF16(String str) throws UnsupportedEncodingException {
-        return this.transcode(str, UTF_16);
-    }
-
-    public String toGBK(String str) throws UnsupportedEncodingException {
-        return transcode(str, GBK);
-    }
-
-    public String toGB2312(String str) throws UnsupportedEncodingException {
-        return transcode(str, GB_2312);
-    }
-
-    public String transcode(String str, String newCharset)
-            throws UnsupportedEncodingException {
-        if (str != null) {
-            byte[] bs = str.getBytes();
-            return new String(bs, newCharset);
-        }
-        return null;
-    }
-
     public static void createFolder(String[] dirs) {
         if (dirs != null) {
             for (String dir : dirs) {
@@ -470,6 +368,15 @@ public class IoUtils {
                 folder.mkdirs();
             }
         }
+    }
+
+    public static String transferCharset(String str, String newCharset)
+            throws UnsupportedEncodingException {
+        if (str != null) {
+            byte[] bs = str.getBytes();
+            return new String(bs, newCharset);
+        }
+        return null;
     }
 
     public static String getSdRoot() {
@@ -491,8 +398,108 @@ public class IoUtils {
         return baos.toByteArray();
     }
 
-    public static String getFileName(String path) {
+    public static String getRomTotalSize(Context context) {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long totalBlocks = stat.getBlockCount();
+        return Formatter.formatFileSize(context, blockSize * totalBlocks);
+    }
+
+    public static String getRomAvailableSize(Context context) {
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return Formatter.formatFileSize(context, blockSize * availableBlocks);
+    }
+
+    public static String formatFileSize(double size) {
+        double kiloByte = size / 1024;
+        if (kiloByte < 1) {
+            // return size + "Byte";
+            return "0K";
+        }
+        double megaByte = kiloByte / 1024;
+        if (megaByte < 1) {
+            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+            return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "KB";
+        }
+        double gigaByte = megaByte / 1024;
+        if (gigaByte < 1) {
+            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "MB";
+        }
+        double teraBytes = gigaByte / 1024;
+        if (teraBytes < 1) {
+            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
+                    .toPlainString() + "GB";
+        }
+        BigDecimal result4 = new BigDecimal(teraBytes);
+        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+                + "TB";
+    }
+
+    public static String getFileSize(Context context, File file) {
+        FileChannel fc = null;
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            fc = fis.getChannel();
+            long size = fc.size();
+            return Formatter.formatFileSize(context, size);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fc.close();
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
+    public static long getFolderTotalSize(File file) {
+        long size = 0;
+        try {
+            File[] files = file.listFiles();
+            int subCount;
+            if (files != null) {
+                subCount = files.length;
+                for (int i = 0; i < subCount; i++) {
+                    if (files[i].isDirectory()) {
+                        size = size + getFolderTotalSize(files[i]);
+                    } else {
+                        size = size + files[i].length();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
+
+    public static String getParentPath(String path) {
+        if (path.endsWith(File.separator)) {
+            path = path.substring(0, path.length()-1);
+        }
+        int start = path.lastIndexOf(File.separator);
+        return path.substring(0, start);
+    }
+
+    public static String getFileNameFromPath(String path, boolean withSuffix) {
         int start = path.lastIndexOf(File.separator) + 1;
-        return path.substring(start, path.length());
+        int end = path.lastIndexOf(".");
+        if (withSuffix) {
+            return path.substring(start);
+        } else {
+            return path.substring(start, end);
+        }
     }
 }

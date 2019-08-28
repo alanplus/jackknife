@@ -16,17 +16,13 @@
 
 package com.lwh.jackknife.util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextUtils {
 
-    public static String[] mPinyinKey = new String[]{"a", "ai", "an", "ang", "ao", "ba", "bai",
+    private static String[] mPinyinKey = new String[]{"a", "ai", "an", "ang", "ao", "ba", "bai",
             "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian", "biao", "bie", "bin", "bing",
             "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "ceng", "cha", "chai", "chan",
             "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chuai",
@@ -99,7 +95,95 @@ public class TextUtils {
             -10519, -10331, -10329, -10328, -10322, -10315, -10309, -10307, -10296, -10281, -10274,
             -10270, -10262, -10260, -10256, -10254};
 
+    private static final String US_ASCII = "US-ASCII";
+
+    private static final String ISO_8859_1 = "ISO-8859-1";
+
+    private static final String UTF_8 = "UTF-8";
+
+    private static final String UTF_16BE = "UTF-16BE";
+
+    private static final String UTF_16LE = "UTF-16LE";
+
+    private static final String UTF_16 = "UTF-16";
+
+    private static final String GBK = "GBK";
+
+    private static final String GB_2312 = "GB2312";
+
     private TextUtils() {
+    }
+
+    public static String transferASCII(String str)  {
+        try {
+            return IoUtils.transferCharset(str, US_ASCII);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String transferISO8859_1(String str) {
+        try {
+            return IoUtils.transferCharset(str, ISO_8859_1);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String transferUTF_8(String str) {
+        try {
+            return IoUtils.transferCharset(str, UTF_8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String transferUTF16BE(String str) {
+        try {
+            return IoUtils.transferCharset(str, UTF_16BE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String transferUTF16LE(String str) {
+        try {
+            return IoUtils.transferCharset(str, UTF_16LE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String transferUTF16(String str) {
+        try {
+            return IoUtils.transferCharset(str, UTF_16);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String transferGBK(String str) {
+        try {
+            return IoUtils.transferCharset(str, GBK);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String toGB2312(String str) {
+        try {
+            return IoUtils.transferCharset(str, GB_2312);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     public static boolean isEmpty(CharSequence str) {
@@ -110,7 +194,7 @@ public class TextUtils {
         return !isEmpty(str);
     }
 
-    public static boolean checkEmpty(String... text) {
+    public static boolean checkAllEmpty(String... text) {
         for (String element : text) {
             boolean isSucceed = isEmpty(element);
             if (!isSucceed) {
@@ -120,7 +204,7 @@ public class TextUtils {
         return true;
     }
 
-    public static boolean checkNotEmpty(String... text) {
+    public static boolean checkAllNotEmpty(String... text) {
         for (String element : text) {
             boolean isSucceed = isNotEmpty(element);
             if (!isSucceed) {
@@ -139,39 +223,11 @@ public class TextUtils {
     }
 
     public static String getUUID() {
-        String uuid = UUID.randomUUID().toString();
-        return uuid.replaceAll("-", "");
+        return Math.getUUID();
     }
 
     public static boolean match(String text, String regex) {
-        Pattern p = Pattern.compile(regex);
-        Matcher matcher = p.matcher(text);
-        if (matcher.matches()) {
-            return true;
-        }
-        return false;
-    }
-
-    private static int getASCII(String ch) {
-        int asc = 0;
-        byte[] bytes = new byte[0];
-        try {
-            bytes = ch.getBytes("gb2312");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        if (bytes == null || bytes.length > 2 || bytes.length <= 0) {
-            throw new RuntimeException("Illegal resource string.");
-        }
-        if (bytes.length == 1) {
-            asc = bytes[0];
-        }
-        if (bytes.length == 2) {
-            int highByte = 256 + bytes[0];
-            int lowByte = 256 + bytes[1];
-            asc = (256 * highByte + lowByte) - 256 * 256;
-        }
-        return asc;
+        return RegexUtils.match(text, regex);
     }
 
     public static String getPinyin(String ch) {
@@ -208,41 +264,38 @@ public class TextUtils {
         return builder.toString();
     }
 
-    public static String subsection(String text, String divider, int sectionLength) {
-        if (text.length() < sectionLength) {
-            return text;
-        }
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < text.length(); i++) {
-            sb.append(text.substring(i, i + sectionLength)).append(divider);
-        }
-        return sb.toString();
-    }
-
-    public static String parseJson(String str, String name) {
-        if (str.isEmpty() || name.isEmpty()) {
-            return null;
-        }
-        String result = null;
+    private static int getASCII(String ch) {
+        int asc = 0;
+        byte[] bytes = new byte[0];
         try {
-            JSONObject jo = new JSONObject(str);
-            result = jo.has(name) ? jo.getString(name) : null;
-        } catch (JSONException e) {
+            bytes = ch.getBytes("gb2312");
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return result;
+        if (bytes == null || bytes.length > 2 || bytes.length <= 0) {
+            throw new RuntimeException("Illegal resource string.");
+        }
+        if (bytes.length == 1) {
+            asc = bytes[0];
+        }
+        if (bytes.length == 2) {
+            int highByte = 256 + bytes[0];
+            int lowByte = 256 + bytes[1];
+            asc = (256 * highByte + lowByte) - 256 * 256;
+        }
+        return asc;
     }
 
-    public static enum CharType {
+    public enum CharType {
         DELIMITER, // 非字母截止字符，例如，．）（　等等　（ 包含U0000-U0080）
         NUM, // 2字节数字１２３４
         LETTER, // gb2312中的，例如:ＡＢＣ，2字节字符同时包含 1字节能表示的 basic latin and latin-1
         OTHER, // 其他字符
-        CHINESE;// 中文字
+        CHINESE// 中文字
     }
 
     /**
-     * 判断输入char类型变量的字符类型
+     * 判断输入char类型变量的字符类型。
      *
      * @param c char类型变量
      * @return CharType 字符类型

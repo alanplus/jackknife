@@ -129,8 +129,8 @@ public class ImageUtils {
         int height = options.outHeight;
         int inSampleSize = 1;
         if (height > requiredHeight || width > requiredWidth) {
-            int widthRatio = Math.round((float) width / (float) requiredWidth);
-            int heightRatio = Math.round((float) height / (float) requiredHeight);
+            int widthRatio = java.lang.Math.round((float) width / (float) requiredWidth);
+            int heightRatio = java.lang.Math.round((float) height / (float) requiredHeight);
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
         return inSampleSize;

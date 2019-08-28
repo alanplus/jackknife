@@ -71,6 +71,16 @@ public class ReflectionUtils {
         return field.getType().getComponentType();
     }
 
+    public static Class<?> getGenericType(Object obj) {
+        if(obj.getClass().getGenericSuperclass() instanceof ParameterizedType &&
+                ((ParameterizedType) (obj.getClass().getGenericSuperclass())).getActualTypeArguments().length > 0) {
+            Class tClass = (Class) ((ParameterizedType) (obj.getClass()
+                    .getGenericSuperclass())).getActualTypeArguments()[0];
+            return tClass;
+        }
+        return (Class<?>) ((ParameterizedType)obj.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
     public static Class<?> getGenericType(Field field) {
         Type type = field.getGenericType();
         if (type instanceof ParameterizedType) {

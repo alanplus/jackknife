@@ -23,89 +23,44 @@ import java.util.Locale;
 
 public class TimeUtils {
 
-    public final static String FORMAT_YEAR = "yyyy";
+    /**
+     * yyyy.MM.dd
+     */
+    public final static String FORMAT_DATE = "yyyy.MM.dd";
 
-    public final static String FORMAT_MONTH = "MM";
+    /**
+     * yyyy-MM-dd
+     */
+    public final static String FORMAT_DATE_2 = "yyyy-MM-dd";
 
-    public final static String FORMAT_DAY = "dd";
+    /**
+     * yyyyMMdd
+     */
+    public final static String FORMAT_DATE_3 = "yyyyMMdd";
 
-    public final static String FORMAT_HOUR = "HH";
+    /**
+     * HH:mm:ss
+     */
+    public final static String FORMAT_TIME = "HH:mm:ss";
 
-    public final static String FORMAT_MINUTE = "mm";
-
-    public final static String FORMAT_SECOND = "ss";
-
-    public final static String FORMAT_MILLISECOND = "SSS";
-
-    public final static String FORMAT_YEAR_MONTH = FORMAT_YEAR + FORMAT_MONTH;
-
-    public final static String FORMAT_YEAR_MONTH_2 = FORMAT_YEAR + "." + FORMAT_MONTH;
-
-    public final static String FORMAT_YEAR_MONTH_3 = FORMAT_YEAR + " " + FORMAT_MONTH;
-
-    public final static String FORMAT_MONTH_DAY = FORMAT_MONTH + FORMAT_DAY;
-
-    public final static String FORMAT_MONTH_DAY_2 = FORMAT_MONTH + "." + FORMAT_DAY;
-
-    public final static String FORMAT_MONTH_DAY_3 = FORMAT_MONTH + " " + FORMAT_DAY;
-
-    public final static String FORMAT_DATE = FORMAT_YEAR + FORMAT_MONTH + FORMAT_DAY;
-
-    public final static String FORMAT_DATE_2 = FORMAT_YEAR_MONTH_2 + "." + FORMAT_DAY;
-
-    public final static String FORMAT_DATE_3 = FORMAT_YEAR + "-" + FORMAT_MONTH + "-" + FORMAT_DAY;
-
-    public final static String FORMAT_HOUR_MINUTE = FORMAT_HOUR + FORMAT_MINUTE;
-
-    public final static String FORMAT_HOUR_MINUTE_2 = FORMAT_HOUR + ":" + FORMAT_MINUTE;
-
-    public final static String FORMAT_TIME = FORMAT_HOUR + FORMAT_MINUTE + FORMAT_SECOND;
-
-    public final static String FORMAT_TIME_2 = FORMAT_HOUR + ":" + FORMAT_MINUTE + ":" + FORMAT_SECOND;
-
-    public final static String FORMAT_DATE_TIME = FORMAT_DATE + FORMAT_TIME;
-
-    public final static String FORMAT_DATE_TIME_2 = FORMAT_DATE_2 + " " + FORMAT_TIME_2;
-
-    public final static String FORMAT_DATE_TIME_3 = FORMAT_DATE_3 + " " + FORMAT_TIME_2;
-
-    public static final int SECONDS_IN_MINUTE = 60;
-
-    public static final int SECONDS_IN_HOUR = SECONDS_IN_MINUTE * 60;
-
-    public static final int SECONDS_IN_DAY = SECONDS_IN_HOUR * 24;
-
-    public static final int SECONDS_IN_WEEK = SECONDS_IN_DAY * 7;
-
-    public static final int SECONDS_IN_MONTH = SECONDS_IN_DAY * 30;
-
-    public static final int SECONDS_IN_NON_LEAP_YEAR = SECONDS_IN_DAY * 365;
-
-    public static final int SECONDS_IN_LEAP_YEAR = SECONDS_IN_DAY * 366;
-
-    public static final int MILLISECONDS_IN_SECOND = 1000;
-
-    public static final int MILLISECONDS_IN_MINUTE = MILLISECONDS_IN_SECOND * SECONDS_IN_MINUTE;
-
-    public static final int MILLISECONDS_IN_HOUR = MILLISECONDS_IN_SECOND * SECONDS_IN_HOUR;
-
-    public static final int MILLISECONDS_IN_DAY = MILLISECONDS_IN_SECOND * SECONDS_IN_DAY;
-
-    public static final int MILLISECONDS_IN_WEEK = MILLISECONDS_IN_SECOND * SECONDS_IN_WEEK;
+    /**
+     * HHmmss
+     */
+    public final static String FORMAT_TIME_2 = "HHmmss";
 
     private TimeUtils() {
     }
 
-    public static String date2str(Date data, String formatType) {
+    public static String getString(Date data, String formatType) {
         return new SimpleDateFormat(formatType, Locale.ENGLISH).format(data);
     }
 
-    public static String long2str(long currentTime, String formatType) {
-        Date date = long2date(currentTime, formatType);
-        return date2str(date, formatType);
+    public static String getString(long currentTime, String formatType) {
+        Date date = getDate(currentTime, formatType);
+        return getString(date, formatType);
     }
 
-    public static Date str2date(String strTime, String formatType) {
+    public static Date getDate(String strTime, String formatType) {
         Date date = null;
         try {
             date = new SimpleDateFormat(formatType, Locale.ENGLISH).parse(strTime);
@@ -115,19 +70,23 @@ public class TimeUtils {
         return date;
     }
 
-    public static Date long2date(long currentTime, String formatType) {
+    public static Date getDate(long currentTime, String formatType) {
         Date dateOld = new Date(currentTime);
-        String sDateTime = date2str(dateOld, formatType);
-        return str2date(sDateTime, formatType);
+        String sDateTime = getString(dateOld, formatType);
+        return getDate(sDateTime, formatType);
     }
 
-    public static long str2long(String strTime, String formatType) {
-        Date date = str2date(strTime, formatType);
+    public static long getLong(String strTime, String formatType) {
+        Date date = getDate(strTime, formatType);
         if (date == null) {
             return 0;
         } else {
-            return date2long(date);
+            return getLong(date);
         }
+    }
+
+    public static long getLong(Date date) {
+        return date.getTime();
     }
 
     public static int getDaysOfMonth(int year, int month) {
@@ -159,21 +118,7 @@ public class TimeUtils {
         return result;
     }
 
-    public static long date2long(Date date) {
-        return date.getTime();
-    }
-
     public static boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
-    }
-
-    public static String formatTime(long milliSecs) {
-        StringBuffer sb = new StringBuffer();
-        long m = milliSecs / (60 * 1000);
-        sb.append(NumberUtils.zeroH(String.valueOf(m), 2));
-        sb.append(":");
-        long s = (milliSecs % (60 * 1000)) / 1000;
-        sb.append(NumberUtils.zeroH(String.valueOf(s), 2));
-        return sb.toString();
     }
 }

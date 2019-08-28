@@ -47,6 +47,146 @@ public class ApkUtils {
     private ApkUtils() {
     }
 
+    public static String getAppName(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(
+                    context.getPackageName(), 0);
+            int labelRes = packageInfo.applicationInfo.labelRes;
+            return context.getResources().getString(labelRes);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getVersionName(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static int getVersionCode(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static PackageInfo getPackageInfo(Context context, String packageName) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            return packageManager.getPackageInfo(packageName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Signature[] getSignatures(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo;
+        try {
+            packageInfo = packageManager.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_SIGNATURES);
+            return packageInfo.signatures;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static File extractApk(Context context) {
+        ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
+        String apkPath = applicationInfo.sourceDir;
+        File apkFile = new File(apkPath);
+        return apkFile;
+    }
+
+    public static void launch(Context context, String packageName, String className) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setComponent(new ComponentName(packageName, className));
+        context.startActivity(intent);
+    }
+
+    /**
+     * Uri contentUri = FileProvider.getUriForFile(context,
+     * BuildConfig.APPLICATION_ID+".fileprovider", file);
+     *
+     * @param context
+     * @param file
+     */
+    public void install(Context context, File file, Uri contentUri) {
+        Intent intent = new Intent();
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(contentUri, URI_INSTALL_PACKAGE);
+        } else {
+            uri = Uri.fromFile(file);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(uri, URI_INSTALL_PACKAGE);
+        }
+        context.startActivity(intent);
+    }
+
+    public static List<String> getAllPackageNames(Context context) {
+        PackageManager packManager = context.getPackageManager();
+        List<PackageInfo> packInfos = packManager
+                .getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        if (packInfos == null || packInfos.size() == 0) {
+            return null;
+        }
+        List<String> pkList = new ArrayList<>();
+        for (PackageInfo packInfo : packInfos) {
+            String packageName = packInfo.packageName;
+            pkList.add(packageName);
+        }
+        return pkList;
+    }
+
+
+    public static Drawable getUninstalledApkIcon(Context context, String apkPath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = getUninstalledApkPackageInfo(context, apkPath);
+        if (packageInfo == null) {
+            return null;
+        }
+        ApplicationInfo applicationInfo = packageInfo.applicationInfo;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            applicationInfo.sourceDir = apkPath;
+            applicationInfo.publicSourceDir = apkPath;
+        }
+        return packageManager.getApplicationIcon(applicationInfo);
+    }
+
+    public static CharSequence getUninstalledApkLabel(Context context, String apkPath) {
+        PackageManager packageManager = context.getPackageManager();
+        PackageInfo packageInfo = getUninstalledApkPackageInfo(context, apkPath);
+        if (packageInfo == null) {
+            return null;
+        }
+        ApplicationInfo applicationInfo = packageInfo.applicationInfo;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            applicationInfo.sourceDir = apkPath;
+            applicationInfo.publicSourceDir = apkPath;
+        }
+        return packageManager.getApplicationLabel(applicationInfo);
+    }
+
     public static Signature[] getUninstalledApkSignatures(String apkPath) {
         try {
             Class<?> packageParserClass = Class.forName(CLASS_PACKAGE_PARSER);
@@ -100,135 +240,10 @@ public class ApkUtils {
         return null;
     }
 
-    public static Signature[] getSignatures(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo;
-        try {
-            packageInfo = packageManager.getPackageInfo(context.getPackageName(),
-                    PackageManager.GET_SIGNATURES);
-            return packageInfo.signatures;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public static PackageInfo getUninstalledApkPackageInfo(Context context, String apkPath) {
         PackageManager packageManager = context.getPackageManager();
         PackageInfo packageInfo = packageManager.getPackageArchiveInfo(
                 apkPath, 0);
         return packageInfo;
-    }
-
-    public static PackageInfo getPackageInfo(Context context, String packageName) {
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            return packageManager.getPackageInfo(packageName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static Drawable getUninstalledApkIcon(Context context, String apkPath) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo = getUninstalledApkPackageInfo(context, apkPath);
-        if (packageInfo == null) {
-            return null;
-        }
-        ApplicationInfo applicationInfo = packageInfo.applicationInfo;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            applicationInfo.sourceDir = apkPath;
-            applicationInfo.publicSourceDir = apkPath;
-        }
-        return packageManager.getApplicationIcon(applicationInfo);
-    }
-
-    public static CharSequence getUninstalledApkLabel(Context context, String apkPath) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo = getUninstalledApkPackageInfo(context, apkPath);
-        if (packageInfo == null) {
-            return null;
-        }
-        ApplicationInfo applicationInfo = packageInfo.applicationInfo;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            applicationInfo.sourceDir = apkPath;
-            applicationInfo.publicSourceDir = apkPath;
-        }
-        return packageManager.getApplicationLabel(applicationInfo);
-    }
-
-    public static String getVersionName(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo;
-        try {
-            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static int getVersionCode(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        PackageInfo packageInfo;
-        try {
-            packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public static File extractApk(Context context) {
-        ApplicationInfo applicationInfo = context.getApplicationContext().getApplicationInfo();
-        String apkPath = applicationInfo.sourceDir;
-        File apkFile = new File(apkPath);
-        return apkFile;
-    }
-
-    public static void launch(Context context, String packageName, String className) {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setComponent(new ComponentName(packageName, className));
-        context.startActivity(intent);
-    }
-
-    public static void install(Context context, String apkPath) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setDataAndType(Uri.fromFile(new File(apkPath)),
-                URI_INSTALL_PACKAGE);
-        context.startActivity(intent);
-    }
-
-    public static String getAppName(Context context) {
-        try {
-            PackageManager packageManager = context.getPackageManager();
-            PackageInfo packageInfo = packageManager.getPackageInfo(
-                    context.getPackageName(), 0);
-            int labelRes = packageInfo.applicationInfo.labelRes;
-            return context.getResources().getString(labelRes);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static List<String> getAllPackageName(Context context) {
-        PackageManager packManager = context.getPackageManager();
-        List<PackageInfo> packInfos = packManager
-                .getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
-        if (packInfos == null || packInfos.size() == 0) {
-            return null;
-        }
-        List<String> pkList = new ArrayList<>();
-        for (PackageInfo packInfo : packInfos) {
-            String packageName = packInfo.packageName;
-            pkList.add(packageName);
-        }
-        return pkList;
     }
 }

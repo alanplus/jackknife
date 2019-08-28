@@ -25,9 +25,9 @@ import android.util.Log;
 public class Logger {
 
     /**
-     * The flag that represents the log system is opened or closed, default is closed.
+     * The flag that represents the log system is opened or closed, default is opened.
      */
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
 
     /**
      * The default log output tag.

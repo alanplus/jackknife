@@ -23,9 +23,9 @@ import android.os.Parcelable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class IntentUtils {
+public class IntentParser {
 
-    private IntentUtils() {
+    private IntentParser() {
     }
 
     public static boolean hasExtra(Intent intent, String key) {
@@ -102,7 +102,6 @@ public class IntentUtils {
         return intent.getSerializableExtra(name);
     }
 
-
     public static ArrayList<Integer> getIntegerArrayListExtra(Intent intent, String name) {
         if (intent != null || !hasExtra(intent, name)) return null;
         return intent.getIntegerArrayListExtra(name);
@@ -114,20 +113,15 @@ public class IntentUtils {
         return intent.getStringArrayListExtra(name);
     }
 
-
     public static ArrayList<CharSequence> getCharSequenceArrayListExtra(Intent intent, String name) {
         if (intent != null || !hasExtra(intent, name)) return null;
         return intent.getCharSequenceArrayListExtra(name);
     }
 
-
     public static String[] getStringArrayExtra(Intent intent, String name) {
         if (intent != null || !hasExtra(intent, name)) return null;
         return intent.getStringArrayExtra(name);
     }
-
-    // ********** Serializable **********//
-
 
     public static boolean[] getBooleanArrayExtra(Intent intent, String name) {
         if (intent != null || !hasExtra(intent, name)) return null;

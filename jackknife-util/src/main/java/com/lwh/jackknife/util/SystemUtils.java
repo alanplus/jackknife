@@ -18,15 +18,13 @@ package com.lwh.jackknife.util;
 
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -36,8 +34,45 @@ public class SystemUtils {
     private SystemUtils() {
     }
 
+    public static String getCacheSize(Context context) {
+        return CacheUtils.getCacheSize(context);
+    }
+
+    public static void clearAllCaches(Context context) {
+        CacheUtils.clearAllCaches(context);
+    }
+
+    public static int getScreenWidth(Context context) {
+        return ScreenUtils.getInstance(context).getScreenWidth();
+    }
+
+    public static int getScreenHeight(Context context) {
+        return ScreenUtils.getInstance(context).getScreenHeight();
+    }
+
+
+
+    public static void openKeyboard(View inputView, Context context) {
+        InputMethodManager imm = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(inputView, InputMethodManager.RESULT_SHOWN);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,
+                InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    public static void closeKeyboard(View inputView, Context context) {
+        InputMethodManager imm = (InputMethodManager) context
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(inputView.getWindowToken(), 0);
+    }
+
+    public static void closeKeyboard(Window window) {
+        closeKeyboard(window.getCurrentFocus(), window.getContext());
+    }
+
     public static void fixInputMethodManagerLeak(Context destContext) {
-        InputMethodManager imm = (InputMethodManager) destContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) destContext.getSystemService(
+                Context.INPUT_METHOD_SERVICE);
         if (imm == null) {
             return;
         }
@@ -52,36 +87,13 @@ public class SystemUtils {
                     continue;
                 }
                 declaredField.set(imm, null);
-            }
-            catch (Throwable th) {
+            } catch (Throwable th) {
                 th.printStackTrace();
             }
         }
     }
 
-    public static int getScreenWidth(Context context) {
-        return ScreenUtils.getInstance(context).getScreenWidth();
-    }
-
-    public static int getScreenHeight(Context context) {
-        return ScreenUtils.getInstance(context).getScreenHeight();
-    }
-
-    public static void openKeyboard(EditText editText, Context context) {
-        InputMethodManager imm = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(editText, InputMethodManager.RESULT_SHOWN);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,
-                InputMethodManager.HIDE_IMPLICIT_ONLY);
-    }
-
-    public static void closeKeyboard(EditText editText, Context context) {
-        InputMethodManager imm = (InputMethodManager) context
-                .getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-    }
-
-    public static boolean isBackground(Context context) {
+    public static boolean isRunInBackground(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processes = activityManager.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo processInfo : processes) {
@@ -92,63 +104,11 @@ public class SystemUtils {
         return false;
     }
 
-    public static boolean isAppAlive(Context context, String packageName) {
+    public static boolean checkAppAlive(Context context, String packageName) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
         for (int i = 0; i < processInfos.size(); i++) {
             if (processInfos.get(i).processName.equals(packageName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isTopActivity(Context context, Class className) {
-        return isTopActivity(context, className.getName());
-    }
-
-    public static boolean isTopActivity(Context context, String className) {
-        if (context == null || android.text.TextUtils.isEmpty(className)) {
-            return false;
-        }
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
-        if (list != null && list.size() > 0) {
-            ComponentName cpn = list.get(0).topActivity;
-            if (className.equals(cpn.getClassName())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static boolean isTopActivity(Context context, Class... classNames) {
-        if (context == null || classNames == null || classNames.length == 0) {
-            return false;
-        }
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
-        if (list != null && list.size() > 0) {
-            ComponentName cpn = list.get(0).topActivity;
-            for (Class className : classNames) {
-                if (className.getName().equals(cpn.getClassName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean isTopActivity(Context context) {
-        if (context == null) {
-            return false;
-        }
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
-        if (list != null && list.size() > 0) {
-            ComponentName cpn = list.get(0).topActivity;
-            if (context.getClass().getName().equals(cpn.getClassName())) {
                 return true;
             }
         }
@@ -168,21 +128,5 @@ public class SystemUtils {
             e.printStackTrace();
         }
         return false;
-    }
-
-    public static boolean beginHoneycomb() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-    }
-
-    public static boolean beginHoneycombMR1() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1;
-    }
-
-    public static boolean beginJellyBean() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-    }
-
-    public static String getIMEI() {
-        return String.valueOf(Build.TIME);
     }
 }

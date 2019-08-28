@@ -35,6 +35,4 @@ android {
 
 dependencies {
     implementation project(':jackknife-viewinject')
-    implementation project(':jackknife-ioc2')
-    implementation project(':jackknife-widget')
 }
