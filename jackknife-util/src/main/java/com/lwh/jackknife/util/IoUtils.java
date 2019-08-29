@@ -416,9 +416,10 @@ public class IoUtils {
 
     public static String formatFileSize(double size) {
         double kiloByte = size / 1024;
-        if (kiloByte < 1) {
-            // return size + "Byte";
-            return "0K";
+        if (kiloByte < 1 && size > 0) {
+            return size + "B";
+        } else if (size <= 0) {
+            return "0B";
         }
         double megaByte = kiloByte / 1024;
         if (megaByte < 1) {
