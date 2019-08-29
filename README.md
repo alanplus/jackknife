@@ -124,4 +124,4 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 > 关于mvp这种架构，市面上众说纷纭，有支持的，也有不支持的。总之，mvp既有优点，也有缺点。先说优点，解除模型数据和UI显示的耦合，界面显示和业务操作逻辑分离，易于创建副本，提高可维护性。缺点也是显而易见的，Presenter和View类爆炸的问题很严重，也就是说，如果你只需要写一个很小的项目，是完全没有必要使用mvp的。当然，个人建议你在业务变化大的界面上使用mvp，而在一些简单的界面（如SplashActivity启动页）上没有必要使用。
 
 ### (四)多渠道ProductFlavor业务代码兼容（jackknife-multiproxy）
-阅读https://github.com/JackWHLiu/MultiProxyTest
+阅读https://github.com/JackWHLiu/MultiProxyDemo
