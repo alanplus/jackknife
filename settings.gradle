@@ -6,5 +6,5 @@ include ':jackknife-viewinject',
         ':jackknife-orm',
         ':jackknife-mvp',
         ':jackknife-widget',
-        ':jackknife-aop',
+        ':jackknife-xpermission',
         ':jackknife-util'

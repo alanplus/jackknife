@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/jackknife.iml" filepath="$PROJECT_DIR$/jackknife.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jackknife-aop/jackknife-aop.iml" filepath="$PROJECT_DIR$/jackknife-aop/jackknife-aop.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-av/jackknife-av.iml" filepath="$PROJECT_DIR$/jackknife-av/jackknife-av.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jackknife-ioc2/jackknife-ioc2.iml" filepath="$PROJECT_DIR$/jackknife-ioc2/jackknife-ioc2.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" filepath="$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" filepath="$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-orm/jackknife-orm.iml" filepath="$PROJECT_DIR$/jackknife-orm/jackknife-orm.iml" />
@@ -13,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife-viewinject/jackknife-viewinject.iml" filepath="$PROJECT_DIR$/jackknife-viewinject/jackknife-viewinject.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-viewinject-annotations/jackknife-viewinject-annotations.iml" filepath="$PROJECT_DIR$/jackknife-viewinject-annotations/jackknife-viewinject-annotations.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-widget/jackknife-widget.iml" filepath="$PROJECT_DIR$/jackknife-widget/jackknife-widget.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackknife-xpermission/jackknife-xpermission.iml" filepath="$PROJECT_DIR$/jackknife-xpermission/jackknife-xpermission.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-xskin/jackknife-xskin.iml" filepath="$PROJECT_DIR$/jackknife-xskin/jackknife-xskin.iml" />
     </modules>
   </component>

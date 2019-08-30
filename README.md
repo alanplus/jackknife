@@ -25,7 +25,7 @@ dependencies {
     <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.4.2'    //mvp设计理念</h3>
     <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.4.2' //自定义控件，各种UI效果</h3>
     <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.4.2'//开发工具类</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-aop:4.4.2'//面向切面编程</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.4.2'//动态权限申请</h3>
     <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.4.2' //音视频开发工具</h3>
     <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.4.2'//一键换肤</h3>
 }
