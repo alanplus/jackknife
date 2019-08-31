@@ -5,9 +5,11 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$USER_HOME$/.gradle/wrapper/dists/gradle-5.1.1-all/97z1ksx6lirer3kbvdnh7jtjg/gradle-5.1.1/bin" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/jackknife-aop-plugin" />
             <option value="$PROJECT_DIR$/jackknife-av" />
             <option value="$PROJECT_DIR$/jackknife-multiproxy" />
             <option value="$PROJECT_DIR$/jackknife-mvp" />

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import com.lwh.jackknife.plugin.AspectjPlugin
+
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.JackWHLiu'
@@ -38,4 +40,7 @@ dependencies {
     implementation 'org.aspectj:aspectjtools:1.8.10'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation project(path: ':jackknife-viewinject')
+    implementation project(path: ':jackknife-aop-plugin')
 }
+
+apply plugin: AspectjPlugin

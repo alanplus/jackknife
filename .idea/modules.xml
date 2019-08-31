@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/jackknife.iml" filepath="$PROJECT_DIR$/jackknife.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" filepath="$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-av/jackknife-av.iml" filepath="$PROJECT_DIR$/jackknife-av/jackknife-av.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" filepath="$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" filepath="$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" />
