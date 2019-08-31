@@ -68,6 +68,14 @@ public class Application extends android.app.Application {
         mActivityStacks.add(new WeakReference<>(activity));
     }
 
+    public SupportActivity getCurActivity() {
+        WeakReference<? extends SupportActivity> ref = mActivityStacks.peek();
+        if (ref != null) {
+            return ref.get();
+        }
+        return null;
+    }
+
     /**
      * Destroy and remove activity from the top of the task stack.
      */

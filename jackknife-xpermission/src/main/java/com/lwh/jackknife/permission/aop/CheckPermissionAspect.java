@@ -17,8 +17,12 @@
 package com.lwh.jackknife.permission.aop;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.permission.annotation.Permission;
 import com.lwh.jackknife.permission.XPermission;
 
@@ -32,21 +36,19 @@ import java.util.List;
 @Aspect
 public class CheckPermissionAspect {
 
+    private static final int REQUEST_CODE_SETTING = 1;
+
     @Pointcut("execution(@com.lwh.jackknife.permission.annotation.Permission * *(..)) && @annotation(permission)")
     public void checkPermission(Permission permission) {
     }
 
-    public Activity getCurActivity() {
-        return null;
-    }
-
     @Around("checkPermission(permission)")
     public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, final Permission permission) throws Throwable {
-        final Activity activity = getCurActivity();
+        final Activity activity = (Activity) Application.getInstance().getCurActivity();
         if (XPermission.hasPermissions(activity, permission.value())) {
             joinPoint.proceed();//获得权限，执行原方法
         } else {
-            XPermission.with(getCurActivity())
+            XPermission.with(activity)
                 .runtime()
                 .permission(permission.value())
                 .rationale(new RuntimeRationale())
@@ -64,8 +66,8 @@ public class CheckPermissionAspect {
                     @Override
                     public void onAction(@NonNull List<String> permissions) {
                         if (XPermission.hasAlwaysDeniedPermission(activity, permissions)) {
-                            //如果是被永久拒绝就跳转到应用权限系统设置页面
-//                            showSettingDialog(MainActivity.this, permissions);
+                            // 如果是被永久拒绝就跳转到应用权限系统设置页面
+                            XPermission.with(activity).runtime().setting().start(REQUEST_CODE_SETTING);
                         }
                     }
                 })
