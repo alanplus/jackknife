@@ -5,15 +5,15 @@ dependencies {
     implementation gradleApi()//gradle sdk
     implementation localGroovy()//groovy sdk
     implementation 'com.android.tools.build:gradle:3.1.2'
-    compile 'org.aspectj:aspectjtools:1.8.10'
+    implementation 'org.aspectj:aspectjtools:1.8.10'
 }
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: uri('../repo'))
+        repository(url: uri('build/plugins'))
         pom.groupId = 'com.lwh.jackknife.plugin'
         pom.artifactId = 'jackknife-aop-plugin'
-        pom.version = '1.0.0'
+        pom.version = '1.0'
     }
 }
 
