@@ -19,7 +19,7 @@ package com.lwh.jackknife.permission.runtime;
 import android.content.Context;
 import android.os.Build;
 
-import com.lwh.jackknife.permission.aop.R;
+import com.lwh.jackknife.permission.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -17,14 +17,11 @@
 package com.lwh.jackknife.permission.aop;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.lwh.jackknife.app.Application;
-import com.lwh.jackknife.permission.annotation.Permission;
 import com.lwh.jackknife.permission.XPermission;
+import com.lwh.jackknife.permission.annotation.Permission;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

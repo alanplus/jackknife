@@ -16,4 +16,4 @@
   ~  */
   -->
 
-<manifest package="com.lwh.jackknife.permission.aop"/>
+<manifest package="com.lwh.jackknife.permission"/>

@@ -18,6 +18,7 @@ package com.lwh.jackknife.permission.install;
 
 import com.lwh.jackknife.permission.Action;
 import com.lwh.jackknife.permission.Rationale;
+
 import java.io.File;
 
 public interface InstallRequest {

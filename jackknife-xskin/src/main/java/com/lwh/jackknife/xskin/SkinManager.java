@@ -116,6 +116,10 @@ public class SkinManager {
         notifyChangedListeners();
     }
 
+    public String getSuffix() {
+        return mSuffix;
+    }
+
     public boolean needChangeSkin() {
         return mUsePlugin || !TextUtils.isEmpty(mSuffix);
     }

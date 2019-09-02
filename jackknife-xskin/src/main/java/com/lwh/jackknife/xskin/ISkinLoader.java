@@ -30,11 +30,6 @@ import android.widget.ImageView;
 public interface ISkinLoader {
 
     /**
-     * 无效值。
-     */
-    int INVALID = 0;
-
-    /**
      * 通过插件资源包的资源名resName获取插件的资源ID。
      *
      * @param resName 比如skin_logo

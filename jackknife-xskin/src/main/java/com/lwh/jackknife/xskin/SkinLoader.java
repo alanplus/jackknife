@@ -30,11 +30,13 @@ public class SkinLoader implements ISkinLoader {
     private static final String DEF_TYPE_COLOR = "color";
     private static SkinLoader sLoader;
     private ResourceManager mResourceManager;
+    private SkinManager mSkinManager;
     private Resources mSkinResources;
     private String mCurPluginPkgName;
 
     private SkinLoader() {
-        mResourceManager = SkinManager.getInstance().getResourceManager();
+        mSkinManager = SkinManager.getInstance();
+        mResourceManager = mSkinManager.getResourceManager();
         mSkinResources = mResourceManager.getResources();
         mCurPluginPkgName = mResourceManager.getPluginPackageName();
     }
@@ -54,19 +56,27 @@ public class SkinLoader implements ISkinLoader {
         return mSkinResources;
     }
 
+    public String combineResName(String resName) {
+        String suffix = mSkinManager.getSuffix();
+        if (suffix != null && !suffix.equals("")) {
+            return resName + "_" + suffix;
+        }
+        return resName;
+    }
+
     @Override
     public int getDrawableRes(String resName) {
-        return mSkinResources.getIdentifier(resName, DEF_TYPE_DRAWABLE, mCurPluginPkgName);
+        return mSkinResources.getIdentifier(combineResName(resName), DEF_TYPE_DRAWABLE, mCurPluginPkgName);
     }
 
     @Override
     public int getColorRes(String resName) {
-        return mSkinResources.getIdentifier(resName, DEF_TYPE_COLOR, mCurPluginPkgName);
+        return mSkinResources.getIdentifier(combineResName(resName), DEF_TYPE_COLOR, mCurPluginPkgName);
     }
 
     @Override
     public Drawable getDrawable(String resName) {
-        return mResourceManager.getDrawableByName(resName);
+        return mResourceManager.getDrawableByName(combineResName(resName));
     }
 
     @Override
@@ -91,7 +101,7 @@ public class SkinLoader implements ISkinLoader {
 
     @Override
     public Bitmap getBitmap(String resName) {
-        return BitmapFactory.decodeResource(mSkinResources, getDrawableRes(resName));
+        return BitmapFactory.decodeResource(mSkinResources, getDrawableRes(combineResName(resName)));
     }
 
     @Override

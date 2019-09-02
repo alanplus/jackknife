@@ -21,9 +21,9 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.lwh.jackknife.permission.Action;
-import com.lwh.jackknife.permission.XPermission;
 import com.lwh.jackknife.permission.Rationale;
 import com.lwh.jackknife.permission.RequestExecutor;
+import com.lwh.jackknife.permission.XPermission;
 import com.lwh.jackknife.permission.source.Source;
 
 import java.io.File;

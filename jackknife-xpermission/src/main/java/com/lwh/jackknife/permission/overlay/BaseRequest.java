@@ -21,8 +21,8 @@ import android.content.Context;
 import android.os.Build;
 import android.view.WindowManager;
 
-import com.lwh.jackknife.permission.aop.R;
 import com.lwh.jackknife.permission.Action;
+import com.lwh.jackknife.permission.R;
 import com.lwh.jackknife.permission.Rationale;
 import com.lwh.jackknife.permission.RequestExecutor;
 import com.lwh.jackknife.permission.source.Source;
