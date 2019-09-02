@@ -10,8 +10,8 @@ dependencies {
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: uri('https://jitpack.io'))
-        pom.groupId = 'com.github.JackWHLiu'
+        repository(url: uri('build/plugins'))
+        pom.groupId = 'com.lwh.jackknife.plugin'
         pom.artifactId = 'jackknife-aop-plugin'
         pom.version = '1.0'
     }
