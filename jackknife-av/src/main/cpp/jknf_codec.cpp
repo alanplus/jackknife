@@ -8,6 +8,7 @@ extern "C"
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include "jknf_log.h"
+#include <string.h>>
 
 void jknf_log_write(void *ptr, int level, const char *fmt, va_list vl) {
     FILE *fp = fopen("/storage/emulated/0/jknf_log.txt", "a+");
@@ -275,6 +276,67 @@ Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBgMusic(
     return true;
 }
 }
+
+
+JNIEXPORT jint JNICALL
+Java_com_lwh_jackknife_av_util_AudioUtils_getBitrate(
+        JNIEnv *env,
+        jobject jobj, jstring input_music) {
+
+    AVFormatContext* m_inputAVFormatCxt;
+    int          m_audioindex;
+    int          m_coded_width, m_coded_height; //视频宽高
+        const char* m_filePath = env->GetStringUTFChars(input_music, NULL);
+    int res = 0;
+    if ((res = avformat_open_input(&m_inputAVFormatCxt, m_filePath, 0, NULL)) < 0)
+    {
+
+    }
+    if(res < 0)
+    {
+        //std::string strError = "can not open file:" + m_filePath + ",errcode:" + std::to_string((int)res) + ",err msg:" + av_make_error_string(m_tmpErrString, AV_ERROR_MAX_STRING_SIZE, res);
+        //LOGE("%s \n", strError.c_str());
+        return false;
+    }
+    if (avformat_find_stream_info(m_inputAVFormatCxt, 0) < 0)
+    {
+       LOGE("can not find stream info \n");
+       return false;
+    }
+    av_dump_format(m_inputAVFormatCxt, 0, m_filePath, 0);
+
+
+       for (int i = 0; i < m_inputAVFormatCxt->nb_streams; i++)
+        {
+            AVStream *in_stream = m_inputAVFormatCxt->streams[i];
+
+            LOGD("codec id: %d, \n", in_stream->codec->codec_id);
+
+            if(in_stream->codec->codec_type == AVMEDIA_TYPE_AUDIO)
+            {
+                m_audioindex = i;
+               // LOGD("video stream index: %d, width: %d, height: %d \n", m_audioStreamIndex, in_stream->codec->width, in_stream->codec->height);
+
+
+                if(in_stream->codec->codec_id == AV_CODEC_ID_H264)
+                {
+                }
+            }
+    }
+
+    // 获取音频的采样信息
+    AVSampleFormat  sample_fmt;
+    int  sample_rate,  channels;
+    //读取音频码率
+    int bitrate = m_inputAVFormatCxt->streams[m_audioindex]->codec->bit_rate;
+    return bitrate;
+}
+
+
+
+
+
+
 
 
 
