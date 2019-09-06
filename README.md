@@ -125,3 +125,6 @@ IMainView。你可以用jackknife提供的com.lwh.jackknife.mvp.BaseActivity，�
 
 ### (四)多渠道ProductFlavor业务代码兼容（jackknife-multiproxy）
 阅读https://github.com/JackWHLiu/MultiProxyDemo
+
+### (五)自定义控件大纲（jackknife-widget）
+![avatar](https://jackknife.oss-cn-hangzhou.aliyuncs.com/custom_view.jpg?Expires=1567762781&OSSAccessKeyId=TMP.hXS8dP4kGh6zFZ1fHwGozW9nQLjZgjivJKVpRaEWjfNBFZcgwdmqKddZXsrBgAGcHdYUVpUmsLTfQVa8AubVof3EeDDJujs4bXYm5ADjTv4S1pmYwwMjUboJKA2PSf.tmp&Signature=d%2FuEHC7tbXXHgzWqmq5%2BTQxX4gs%3D)
