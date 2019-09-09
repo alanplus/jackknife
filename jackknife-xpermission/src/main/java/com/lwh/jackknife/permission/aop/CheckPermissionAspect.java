@@ -19,7 +19,6 @@ package com.lwh.jackknife.permission.aop;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 
-import com.lwh.jackknife.app.Application;
 import com.lwh.jackknife.permission.XPermission;
 import com.lwh.jackknife.permission.annotation.Permission;
 
@@ -41,7 +40,7 @@ public class CheckPermissionAspect {
 
     @Around("checkPermission(permission)")
     public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, final Permission permission) throws Throwable {
-        final Activity activity = (Activity) Application.getInstance().getCurActivity();
+        final Activity activity = (Activity) joinPoint.getTarget();
         if (XPermission.hasPermissions(activity, permission.value())) {
             joinPoint.proceed();//获得权限，执行原方法
         } else {
