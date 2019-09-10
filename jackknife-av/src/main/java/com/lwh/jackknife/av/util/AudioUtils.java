@@ -6,5 +6,5 @@ public class AudioUtils {
         System.loadLibrary("jknfav");
     }
 
-    public native int getBitrate(String input_music);
+    public native static int getBitrate(String input_music);
 }

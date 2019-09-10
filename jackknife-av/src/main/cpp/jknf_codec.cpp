@@ -22,7 +22,7 @@ void jknf_log_write(void *ptr, int level, const char *fmt, va_list vl) {
 JNIEXPORT jboolean JNICALL
 Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBgMusic(
         JNIEnv *env,
-        jobject, jstring input_video, jstring input_music, jstring output_path) {
+        jclass jcls, jstring input_video, jstring input_music, jstring output_path) {
 
     AVOutputFormat *ofmt = NULL;
     //Input AVFormatContext and Output AVFormatContext
@@ -281,7 +281,7 @@ Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBgMusic(
 JNIEXPORT jint JNICALL
 Java_com_lwh_jackknife_av_util_AudioUtils_getBitrate(
         JNIEnv *env,
-        jobject jobj, jstring input_music) {
+        jclass jcls, jstring input_music) {
 
     AVFormatContext* m_inputAVFormatCxt;
     int          m_audioindex;
@@ -317,16 +317,9 @@ Java_com_lwh_jackknife_av_util_AudioUtils_getBitrate(
                 m_audioindex = i;
                // LOGD("video stream index: %d, width: %d, height: %d \n", m_audioStreamIndex, in_stream->codec->width, in_stream->codec->height);
 
-
-                if(in_stream->codec->codec_id == AV_CODEC_ID_H264)
-                {
-                }
             }
     }
 
-    // 获取音频的采样信息
-    AVSampleFormat  sample_fmt;
-    int  sample_rate,  channels;
     //读取音频码率
     int bitrate = m_inputAVFormatCxt->streams[m_audioindex]->codec->bit_rate;
     return bitrate;
