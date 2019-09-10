@@ -227,6 +227,9 @@
         <attr name="ev_layout" format="reference"/>
         <attr name="ev_empty" format="boolean"/>
     </declare-styleable>
+    <declare-styleable name="EqualizerView">
+        <attr name="ev_bandsNum" format="integer"/>
+    </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
     <attr name="horizontalTabBarStyle" format="reference"/>
     <attr name="letterViewStyle" format="reference"/>
