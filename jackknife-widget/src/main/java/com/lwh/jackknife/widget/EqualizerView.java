@@ -11,8 +11,6 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.lang.reflect.Type;
-
 public class EqualizerView extends View {
 
     private Context mContext;
@@ -32,7 +30,7 @@ public class EqualizerView extends View {
     private int[] mFreqs;
     private float mRadius;
     private float mStep;
-    private int mBandsNum;
+    private int mBandsNum = 5;
     private OnUpdateDecibelListener mOnUpdateDecibelListener;
 
     public EqualizerView(Context context) {
@@ -156,21 +154,9 @@ public class EqualizerView extends View {
     }
 
     private void refreshView(Canvas canvas, int stepSize) {
-//        float[] points = new float[]{mPoints[0].x, mPoints[0].y, mPoints[1].x, mPoints[1].y,
-//                mPoints[1].x, mPoints[1].y, mPoints[2].x, mPoints[2].y,
-//                mPoints[2].x, mPoints[2].y, mPoints[3].x, mPoints[3].y,
-//                mPoints[3].x, mPoints[3].y, mPoints[4].x, mPoints[4].y,
-//                mPoints[4].x, mPoints[4].y, mPoints[5].x, mPoints[5].y,
-//                mPoints[5].x, mPoints[5].y, mPoints[6].x, mPoints[6].y,
-//                mPoints[6].x, mPoints[6].y, mPoints[7].x, mPoints[7].y,
-//                mPoints[7].x, mPoints[7].y, mPoints[8].x, mPoints[8].y,
-//                mPoints[8].x, mPoints[8].y, mPoints[9].x, mPoints[9].y,
-//                mPoints[9].x, mPoints[9].y, mPoints[10].x, mPoints[10].y,
-//                mPoints[10].x, mPoints[10].y, mPoints[11].x, mPoints[11].y};
-//        canvas.drawLines(points, mNodeConnectPaint);
         for (int i = 1; i <= mBandsNum; i++) {
             float cx = stepSize * i, cy = mPoints[i].y;
-            if (i == index && STATE_NOW != STATE_TOUCH_UP) {
+            if (i == mIndex && STATE_NOW != STATE_TOUCH_UP) {
                 mRadius = 50;
             } else {
                 mRadius = 40;
@@ -204,7 +190,7 @@ public class EqualizerView extends View {
     }
 
     private int mLastY = 0;
-    private int index = 0;
+    private int mIndex = 0;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -212,36 +198,36 @@ public class EqualizerView extends View {
         int x = (int) event.getX(), y = (int) event.getY();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                index = findNodeIndex(x, y);
-                if (index != 0) {
+                mIndex = findNodeIndex(x, y);
+                if (mIndex != 0) {
                     STATE_NOW = STATE_TOUCH_DOWN;
                     invalidate();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
                 float deltaY = y - mLastY;
-                if (index != 0) {
+                if (mIndex != 0) {
                     STATE_NOW = STATE_TOUCH_MOVE;
-                    mPoints[index].y += deltaY;
+                    mPoints[mIndex].y += deltaY;
                     if (y <= 40)
-                        mPoints[index].y = 40;
+                        mPoints[mIndex].y = 40;
                     if (y >= mHeight - 40)
-                        mPoints[index].y = mHeight - 40;
-                    mDecibels[index - 1] = getDecibel(mPoints[index].y);
+                        mPoints[mIndex].y = mHeight - 40;
+                    mDecibels[mIndex - 1] = getDecibel(mPoints[mIndex].y);
                     invalidate();
-                    mOnUpdateDecibelListener.onUpdateDecibel(mDecibels);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (index != 0) {
+                if (mIndex != 0) {
                     STATE_NOW = STATE_TOUCH_UP;
-                    if (mDecibels[index - 1] != 0 && mDecibels[index - 1] != -12 &&
-                            mDecibels[index - 1] != 12) {
-                        float lastY = mStep * (-mDecibels[index - 1] + 13);
-                        mPoints[index].y = lastY;
-                    } else if (mDecibels[index - 1] == 0)
-                        mPoints[index].y = mStep * 13;
+                    if (mDecibels[mIndex - 1] != 0 && mDecibels[mIndex - 1] != -12 &&
+                            mDecibels[mIndex - 1] != 12) {
+                        float lastY = mStep * (-mDecibels[mIndex - 1] + 13);
+                        mPoints[mIndex].y = lastY;
+                    } else if (mDecibels[mIndex - 1] == 0)
+                        mPoints[mIndex].y = mStep * 13;
                     invalidate();
+                    mOnUpdateDecibelListener.onUpdateDecibel(mDecibels);
                 }
                 break;
             default:
