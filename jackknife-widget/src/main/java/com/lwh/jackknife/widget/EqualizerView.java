@@ -83,7 +83,7 @@ public class EqualizerView extends View {
         mNodeConnectPaint.setStyle(Paint.Style.FILL);
         mNodeConnectPaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green));  //圆圈填充的颜色和连线的颜色
         mPoints = new PointF[12];
-        mDecibels = new int[10];
+        mDecibels = new int[mBandsNum];
     }
 
     private int measureView(int measureSpec, int defaultSize) {
