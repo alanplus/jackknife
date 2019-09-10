@@ -27,9 +27,9 @@ public class EqualizerView extends View {
     private int[] decibelArray;
     private float mRadius;
     private float step;
-    private updateDecibelListener listener;
+    private OnUpdateDecibelListener mOnUpdateDecibelListener;
 
-    public interface updateDecibelListener {
+    public interface OnUpdateDecibelListener {
         void updateDecibel(int[] decibels);
     }
 
@@ -47,8 +47,8 @@ public class EqualizerView extends View {
         init();
     }
 
-    public void setUpdateDecibelListener(updateDecibelListener listener) {
-        this.listener = listener;
+    public void setUpdateDecibelListener(OnUpdateDecibelListener l) {
+        this.mOnUpdateDecibelListener = l;
     }
 
     public int[] getDecibelArray() {
@@ -65,14 +65,14 @@ public class EqualizerView extends View {
         mPaint.setAntiAlias(true);
         nodePaint = new Paint();
         nodePaint.setAntiAlias(true);
-        nodePaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green));
+        nodePaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green)); //圆圈的颜色
         nodePaint.setStrokeWidth(6);
         nodePaint.setStyle(Paint.Style.STROKE);
         connectPaint = new Paint();
         connectPaint.setAntiAlias(true);
         connectPaint.setStrokeWidth(50);
         connectPaint.setStyle(Paint.Style.FILL);
-        connectPaint.setColor(ContextCompat.getColor(mContext, R.color.sky_blue));
+        connectPaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green));  //圆圈填充的颜色和连线的颜色
         pointsArray = new PointF[12];
         decibelArray = new int[10];
     }
@@ -105,7 +105,7 @@ public class EqualizerView extends View {
         mWidth = getWidth();
         mHeight = getHeight();
         step = mHeight / 26;    //-12到12共26份
-        canvas.drawColor(ContextCompat.getColor(mContext, R.color.yellow));
+        canvas.drawColor(ContextCompat.getColor(mContext, R.color.white));  //背景颜色
         int stepSize = mWidth / 11;
         pointsArray[0] = new PointF(-50, step * 13);
         pointsArray[11] = new PointF(mWidth + 50, step * 13);
@@ -142,10 +142,10 @@ public class EqualizerView extends View {
             }
             canvas.drawCircle(cx, cy, mRadius, nodePaint);
             canvas.drawCircle(cx, cy, mRadius - 6, connectPaint);
-            mPaint.setColor(ContextCompat.getColor(mContext, R.color.black));
+            mPaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green));    //下面的线的颜色
             mPaint.setStrokeWidth(6);
             canvas.drawLine(cx, cy + mRadius + 3, stepSize * i, mHeight, mPaint);
-            mPaint.setColor(ContextCompat.getColor(mContext, R.color.orange));
+            mPaint.setColor(ContextCompat.getColor(mContext, R.color.light_gray));  //上面的线的颜色
             canvas.drawLine(cx, cy - mRadius - 3, stepSize * i, 0, mPaint);
         }
     }
@@ -176,7 +176,7 @@ public class EqualizerView extends View {
                         pointsArray[index].y = mHeight - 40;
                     decibelArray[index - 1] = getTheDecibel(pointsArray[index].y);
                     invalidate();
-                    listener.updateDecibel(decibelArray);
+                    mOnUpdateDecibelListener.updateDecibel(decibelArray);
                 }
                 break;
             case MotionEvent.ACTION_UP:
