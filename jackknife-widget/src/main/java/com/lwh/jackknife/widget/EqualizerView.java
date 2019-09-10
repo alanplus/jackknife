@@ -49,6 +49,11 @@ public class EqualizerView extends View {
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EqualizerView);
         mBandsNum = a.getInt(R.styleable.EqualizerView_ev_bandsNum, 5);
+        if (mBandsNum > 10) {
+            mBandsNum = 10;
+        } else if (mBandsNum < 1) {
+            mBandsNum = 1;
+        }
         a.recycle();
     }
 
@@ -115,11 +120,11 @@ public class EqualizerView extends View {
         mHeight = getHeight();
         mStep = mHeight / 26;    //-12到12共26份
         canvas.drawColor(ContextCompat.getColor(mContext, R.color.white));  //背景颜色
-        int stepSize = mWidth / 11;
+        int stepSize = mWidth / (mBandsNum+1);
         mPoints[0] = new PointF(-50, mStep * 13);
         mPoints[11] = new PointF(mWidth + 50, mStep * 13);
         if ((STATE_NOW == STATE_NONE)) {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= mBandsNum; i++) {
                 float cx = stepSize * i, cy = mStep * (mDecibels[i - 1] + 13);
                 mPoints[i] = new PointF(cx, cy);
             }
