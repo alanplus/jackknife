@@ -5,9 +5,9 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,6 +17,7 @@ public class EqualizerView extends View {
     private Paint mPaint;
     private Paint mNodePaint;
     private Paint mNodeConnectPaint;
+    private TextPaint mFreqPaint;
     private int mWidth, mHeight;
     private PointF[] mPoints;
     private final int STATE_NONE = 0;
@@ -26,6 +27,7 @@ public class EqualizerView extends View {
     private int STATE_NOW = STATE_NONE;
 
     private int[] mDecibels;
+    private int[] mFreqs;
     private float mRadius;
     private float mStep;
     private int mBandsNum;
@@ -35,11 +37,11 @@ public class EqualizerView extends View {
         this(context, null);
     }
 
-    public EqualizerView(Context context, @Nullable AttributeSet attrs) {
+    public EqualizerView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public EqualizerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public EqualizerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.mContext = context;
         init();
@@ -69,19 +71,30 @@ public class EqualizerView extends View {
         invalidate();
     }
 
+    public int[] getFreqs() {
+        return mFreqs;
+    }
+
+    public void setFreqs(int[] freqs) {
+        this.mFreqs = freqs;
+        invalidate();
+    }
+
     public void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mNodePaint = new Paint();
         mNodePaint.setAntiAlias(true);
-        mNodePaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green)); //圆圈的颜色
+        mNodePaint.setColor(mContext.getResources().getColor(R.color.forest_green)); //圆圈的颜色
         mNodePaint.setStrokeWidth(6);
         mNodePaint.setStyle(Paint.Style.STROKE);
         mNodeConnectPaint = new Paint();
         mNodeConnectPaint.setAntiAlias(true);
         mNodeConnectPaint.setStrokeWidth(50);
         mNodeConnectPaint.setStyle(Paint.Style.FILL);
-        mNodeConnectPaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green));  //圆圈填充的颜色和连线的颜色
+        mNodeConnectPaint.setColor(mContext.getResources().getColor(R.color.forest_green));  //圆圈填充的颜色和连线的颜色
+        mFreqPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        mFreqPaint.setColor(mContext.getResources().getColor(R.color.light_gray));
         mPoints = new PointF[12];
         mDecibels = new int[mBandsNum];
     }
@@ -113,8 +126,9 @@ public class EqualizerView extends View {
         super.onDraw(canvas);
         mWidth = getWidth();
         mHeight = getHeight();
-        mStep = mHeight / 26;    //-12到12共26份
-        canvas.drawColor(ContextCompat.getColor(mContext, R.color.white));  //背景颜色
+        mStep = mHeight - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20,
+                mContext.getResources().getDisplayMetrics()) / 26;    //-12到12共26份
+        canvas.drawColor(mContext.getResources().getColor(R.color.white));  //背景颜色
         int stepSize = mWidth / 11;
         mPoints[0] = new PointF(-50, mStep * 13);
         mPoints[11] = new PointF(mWidth + 50, mStep * 13);
@@ -151,11 +165,21 @@ public class EqualizerView extends View {
             }
             canvas.drawCircle(cx, cy, mRadius, mNodePaint);
             canvas.drawCircle(cx, cy, mRadius - 6, mNodeConnectPaint);
-            mPaint.setColor(ContextCompat.getColor(mContext, R.color.forest_green));    //下面的线的颜色
+            mPaint.setColor(mContext.getResources().getColor(R.color.forest_green));    //下面的线的颜色
             mPaint.setStrokeWidth(6);
             canvas.drawLine(cx, cy + mRadius + 3, stepSize * i, mHeight, mPaint);
-            mPaint.setColor(ContextCompat.getColor(mContext, R.color.light_gray));  //上面的线的颜色
+            mPaint.setColor(mContext.getResources().getColor(R.color.light_gray));  //上面的线的颜色
             canvas.drawLine(cx, cy - mRadius - 3, stepSize * i, 0, mPaint);
+        }
+        Paint.FontMetrics fontMetrics = mFreqPaint.getFontMetrics();
+        for (int i=0;i<mFreqs.length;i++) {
+            String text = mFreqs[i]+"Hz";
+            float textWidth = mFreqPaint.measureText(text);
+            float x = mWidth / 5 * i + (mWidth / 5 - textWidth) / 2;
+            float centerY = mHeight - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                    10, mContext.getResources().getDisplayMetrics());
+            float baselineY = centerY + (fontMetrics.bottom-fontMetrics.top)/2-fontMetrics.bottom;
+            canvas.drawText(text, x, baselineY, mFreqPaint);
         }
     }
 
