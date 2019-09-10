@@ -11,6 +11,8 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.lang.reflect.Type;
+
 public class EqualizerView extends View {
 
     private Context mContext;
@@ -51,6 +53,8 @@ public class EqualizerView extends View {
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EqualizerView);
         mBandsNum = a.getInt(R.styleable.EqualizerView_ev_bandsNum, 5);
+        mDecibels = new int[mBandsNum];
+        mFreqs = new int[mBandsNum];
         a.recycle();
     }
 
@@ -68,6 +72,15 @@ public class EqualizerView extends View {
 
     public void setDecibels(int[] decibels) {
         this.mDecibels = decibels;
+        invalidate();
+    }
+
+    public int getBandsNum() {
+        return mBandsNum;
+    }
+
+    public void setBandsNum(int bandsNum) {
+        this.mBandsNum = bandsNum;
         invalidate();
     }
 
@@ -96,7 +109,6 @@ public class EqualizerView extends View {
         mFreqPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         mFreqPaint.setColor(mContext.getResources().getColor(R.color.light_gray));
         mPoints = new PointF[12];
-        mDecibels = new int[mBandsNum];
     }
 
     private int measureView(int measureSpec, int defaultSize) {
@@ -129,11 +141,11 @@ public class EqualizerView extends View {
         mStep = mHeight - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20,
                 mContext.getResources().getDisplayMetrics()) / 26;    //-12到12共26份
         canvas.drawColor(mContext.getResources().getColor(R.color.white));  //背景颜色
-        int stepSize = mWidth / 11;
+        int stepSize = mWidth / mBandsNum;
         mPoints[0] = new PointF(-50, mStep * 13);
         mPoints[11] = new PointF(mWidth + 50, mStep * 13);
         if ((STATE_NOW == STATE_NONE)) {
-            for (int i = 1; i <= 10; i++) {
+            for (int i = 1; i <= mBandsNum; i++) {
                 float cx = stepSize * i, cy = mStep * (mDecibels[i - 1] + 13);
                 mPoints[i] = new PointF(cx, cy);
             }
@@ -173,13 +185,21 @@ public class EqualizerView extends View {
         }
         Paint.FontMetrics fontMetrics = mFreqPaint.getFontMetrics();
         for (int i=0;i<mFreqs.length;i++) {
-            String text = mFreqs[i]+"Hz";
+            String text = formatHz(mFreqs[i]);
             float textWidth = mFreqPaint.measureText(text);
-            float x = mWidth / 5 * i + (mWidth / 5 - textWidth) / 2;
+            float x = mWidth / mFreqs.length * i + (mWidth / mFreqs.length - textWidth) / 2;
             float centerY = mHeight - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     10, mContext.getResources().getDisplayMetrics());
             float baselineY = centerY + (fontMetrics.bottom-fontMetrics.top)/2-fontMetrics.bottom;
             canvas.drawText(text, x, baselineY, mFreqPaint);
+        }
+    }
+
+    private String formatHz(int freq) {
+        if (freq > 1000) {
+            return (freq / 1000) + "kHz";
+        } else {
+            return String.valueOf(freq) + "Hz";
         }
     }
 
@@ -257,7 +277,8 @@ public class EqualizerView extends View {
      * @return
      */
     private int getDecibel(float y) {
-        if (y == getHeight() - 40)
+        if (y == getHeight() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                20, mContext.getResources().getDisplayMetrics()) - 40)
             return -12;
         else if (y == 40f)
             return 12;
