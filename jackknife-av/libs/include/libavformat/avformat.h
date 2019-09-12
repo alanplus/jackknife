@@ -1230,7 +1230,7 @@ typedef struct AVStream {
     AVStreamInternal *internal;
 
     /*
-     * Codec parameters associated with this stream. Allocated and freed by
+     * Encoder parameters associated with this stream. Allocated and freed by
      * libavformat in avformat_new_stream() and avformat_free_context()
      * respectively.
      *

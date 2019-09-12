@@ -1176,7 +1176,7 @@ typedef struct RcOverride{
 #define CODEC_CAP_DR1             AV_CODEC_CAP_DR1
 #define CODEC_CAP_TRUNCATED       AV_CODEC_CAP_TRUNCATED
 #if FF_API_XVMC
-/* Codec can export data for HW decoding. This flag indicates that
+/* Encoder can export data for HW decoding. This flag indicates that
  * the codec would call get_format() with list that might contain HW accelerated
  * pixel formats (XvMC, VDPAU, VAAPI, etc). The application can pick any of them
  * including raw image format.

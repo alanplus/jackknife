@@ -31,6 +31,23 @@ extern "C"
 
 extern "C"
 {
+#include <libswscale/swscale.h>
+#include <libavutil/log.h>
+#include <libavutil/opt.h>
+#include <libavcodec/avcodec.h>
+
+#include <libavformat/avformat.h>
+#include <libavutil/imgutils.h>
+#include <libavutil/time.h>
+}
+
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+#include <libswscale/swscale.h>
+#include <libavutil/imgutils.h>
+
+extern "C"
+{
 #include <libavutil/log.h>
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
@@ -466,8 +483,8 @@ Java_com_lwh_jackknife_av_player_JKNativePlayer_playAddFilter
     // Find the decoder for the video stream
     AVCodec *pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
     if (pCodec == NULL) {
-        LOGD("Codec not found.");
-        return -1; // Codec not found
+        LOGD("Encoder not found.");
+        return -1; // Encoder not found
     }
 
     if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
@@ -636,8 +653,8 @@ Java_com_lwh_jackknife_av_player_JKNativePlayer_play
     // Find the decoder for the video stream
     AVCodec *pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
     if (pCodec == NULL) {
-        LOGD("Codec not found.");
-        return -1; // Codec not found
+        LOGD("Encoder not found.");
+        return -1; // Encoder not found
     }
 
     if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
@@ -953,6 +970,363 @@ JNIEXPORT jint JNICALL Java_com_lwh_jackknife_av_live_JKPusher_close
         avcodec_close(video_st->codec);
     avio_close(ofmt_ctx->pb);
     avformat_free_context(ofmt_ctx);
+    return 0;
+}
+
+JNIEXPORT jint JNICALL Java_com_lwh_jackknife_av_codec_Encoder_init
+        (JNIEnv *env, jobject obj, jint width, jint height, jstring path) {
+    const char *out_path = env->GetStringUTFChars(path, JNI_FALSE);
+    yuv_width = width;
+    yuv_height = height;
+    y_length = width * height;
+    uv_length = width * height / 4;
+
+
+    av_register_all();
+
+    //output initialize
+    avformat_alloc_output_context2(&ofmt_ctx, NULL, "flv", out_path);
+    //output encoder initialize
+    pCodec = avcodec_find_encoder(AV_CODEC_ID_H264);
+    if (!pCodec) {
+        LOGE("Can not find encoder!\n");
+        return -1;
+    }
+    pCodecCtx = avcodec_alloc_context3(pCodec);
+    if (!pCodecCtx) {
+        LOGE("Could not allocate video codec context\n");
+        return -1;
+    }
+    pCodecCtx->pix_fmt =  AV_PIX_FMT_YUV420P;//PIX_FMT_YUV420P新版加
+    pCodecCtx->width = width;
+    pCodecCtx->height = height;
+    pCodecCtx->time_base.num = 1;
+    pCodecCtx->time_base.den = 30;
+    pCodecCtx->bit_rate = 800000;
+    pCodecCtx->gop_size = 300;
+    /* Some formats want stream headers to be separate. */
+    if (ofmt_ctx->oformat->flags & AVFMT_GLOBALHEADER)
+        pCodecCtx->flags |= CODEC_FLAG_GLOBAL_HEADER;
+
+    //H264 codec param
+    //pCodecCtx->me_range = 16;
+    //pCodecCtx->max_qdiff = 4;
+    //pCodecCtx->qcompress = 0.6;
+    pCodecCtx->qmin = 10;
+    pCodecCtx->qmax = 51;
+    //Optional Param
+    pCodecCtx->max_b_frames = 3;
+    // Set H264 preset and tune
+    AVDictionary *param = 0;
+    av_dict_set(&param, "preset", "ultrafast", 0);
+    av_dict_set(&param, "tune", "zerolatency", 0);
+
+    if (avcodec_open2(pCodecCtx, pCodec, &param) < 0) {
+        LOGE("Failed to open encoder!\n");
+        return -1;
+    }
+
+    //Add a new stream to output,should be called by the user before avformat_write_header() for muxing
+    video_st = avformat_new_stream(ofmt_ctx, pCodec);
+    if (video_st == NULL) {
+        return -1;
+    }
+    video_st->time_base.num = 1;
+    video_st->time_base.den = 30;
+    video_st->codec = pCodecCtx;
+
+    //Open output URL,set before avformat_write_header() for muxing
+    if (avio_open(&ofmt_ctx->pb, out_path, AVIO_FLAG_READ_WRITE) < 0) {
+        LOGE("Failed to open output file!\n");
+        return -1;
+    }
+
+    //Write File Header
+    avformat_write_header(ofmt_ctx, NULL);
+
+    start_time = av_gettime();
+    return 0;
+}
+
+
+JNIEXPORT jint JNICALL Java_com_lwh_jackknife_av_codec_Encoder_encode
+        (JNIEnv *env, jobject obj, jbyteArray yuv) {
+    int ret;
+    int enc_got_frame = 0;
+    int i = 0;
+
+    pFrameYUV = av_frame_alloc();//旧版 avcodec_alloc_frame()
+    uint8_t *out_buffer = (uint8_t *) av_malloc(
+            avpicture_get_size(AV_PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height));
+    avpicture_fill((AVPicture *) pFrameYUV, out_buffer, AV_PIX_FMT_YUV420P, pCodecCtx->width,
+                   pCodecCtx->height);
+
+    //安卓摄像头数据为NV21格式，此处将其转换为YUV420P格式
+    jbyte *in = (jbyte *) env->GetByteArrayElements(yuv, 0);
+    memcpy(pFrameYUV->data[0], in, y_length);
+    for (i = 0; i < uv_length; i++) {
+        *(pFrameYUV->data[2] + i) = *(in + y_length + i * 2);
+        *(pFrameYUV->data[1] + i) = *(in + y_length + i * 2 + 1);
+    }
+
+    pFrameYUV->format = AV_PIX_FMT_YUV420P;
+    pFrameYUV->width = yuv_width;
+    pFrameYUV->height = yuv_height;
+
+    enc_pkt.data = NULL;
+    enc_pkt.size = 0;
+    av_init_packet(&enc_pkt);
+    ret = avcodec_encode_video2(pCodecCtx, &enc_pkt, pFrameYUV, &enc_got_frame);
+    av_frame_free(&pFrameYUV);
+
+    if (enc_got_frame == 1) {
+        LOGI("Succeed to encode frame: %5d\tsize:%5d\n", framecnt, enc_pkt.size);
+        framecnt++;
+        enc_pkt.stream_index = video_st->index;
+
+        //Write PTS
+        AVRational time_base = ofmt_ctx->streams[0]->time_base;//{ 1, 1000 };
+        AVRational r_framerate1 = {60, 2};//{ 50, 2 };
+        AVRational time_base_q = {1, AV_TIME_BASE};
+        //Duration between 2 frames (us)
+        int64_t calc_duration = (double) (AV_TIME_BASE) * (1 / av_q2d(r_framerate1));    //内部时间戳
+        //Parameters
+        //enc_pkt.pts = (double)(framecnt*calc_duration)*(double)(av_q2d(time_base_q)) / (double)(av_q2d(time_base));
+        enc_pkt.pts = av_rescale_q(framecnt * calc_duration, time_base_q, time_base);
+        enc_pkt.dts = enc_pkt.pts;
+        enc_pkt.duration = av_rescale_q(calc_duration, time_base_q,
+                                        time_base); //(double)(calc_duration)*(double)(av_q2d(time_base_q)) / (double)(av_q2d(time_base));
+        enc_pkt.pos = -1;
+
+        //Delay
+        int64_t pts_time = av_rescale_q(enc_pkt.dts, time_base, time_base_q);
+        int64_t now_time = av_gettime() - start_time;
+        if (pts_time > now_time)
+            av_usleep(pts_time - now_time);
+
+        ret = av_interleaved_write_frame(ofmt_ctx, &enc_pkt);
+        av_free_packet(&enc_pkt);
+    }
+
+    return 0;
+}
+
+JNIEXPORT jint JNICALL Java_com_lwh_jackknife_av_codec_Encoder_flush
+        (JNIEnv *env, jobject obj) {
+    int ret;
+    int got_frame;
+    AVPacket enc_pkt;
+    if (!(ofmt_ctx->streams[0]->codec->codec->capabilities &
+          CODEC_CAP_DELAY))
+        return 0;
+    while (1) {
+        enc_pkt.data = NULL;
+        enc_pkt.size = 0;
+        av_init_packet(&enc_pkt);
+        ret = avcodec_encode_video2(ofmt_ctx->streams[0]->codec, &enc_pkt,
+                                    NULL, &got_frame);
+        if (ret < 0)
+            break;
+        if (!got_frame) {
+            ret = 0;
+            break;
+        }
+        LOGI("Flush Encoder: Succeed to encode 1 frame!\tsize:%5d\n", enc_pkt.size);
+
+        //Write PTS
+        AVRational time_base = ofmt_ctx->streams[0]->time_base;//{ 1, 1000 };
+        AVRational r_framerate1 = {60, 2};
+        AVRational time_base_q = {1, AV_TIME_BASE};
+        //Duration between 2 frames (us)
+        int64_t calc_duration = (double) (AV_TIME_BASE) * (1 / av_q2d(r_framerate1));    //内部时间戳
+        //Parameters
+        enc_pkt.pts = av_rescale_q(framecnt * calc_duration, time_base_q, time_base);
+        enc_pkt.dts = enc_pkt.pts;
+        enc_pkt.duration = av_rescale_q(calc_duration, time_base_q, time_base);
+
+        //转换PTS/DTS（Convert PTS/DTS）
+        enc_pkt.pos = -1;
+        framecnt++;
+        ofmt_ctx->duration = enc_pkt.duration * framecnt;
+
+        /* mux encoded frame */
+        ret = av_interleaved_write_frame(ofmt_ctx, &enc_pkt);
+        if (ret < 0)
+            break;
+    }
+    //Write file trailer
+    av_write_trailer(ofmt_ctx);
+    return 0;
+}
+
+JNIEXPORT jint JNICALL Java_com_lwh_jackknife_av_codec_Encoder_close
+        (JNIEnv *env, jobject obj) {
+    if (video_st)
+        avcodec_close(video_st->codec);
+    avio_close(ofmt_ctx->pb);
+    avformat_free_context(ofmt_ctx);
+    return 0;
+}
+
+
+JNIEXPORT jint JNICALL
+Java_com_lwh_jackknife_av_codec_Decoder_decode(
+        JNIEnv *env,
+        jobject , jstring input_jstr, jstring output_jstr) {
+
+    AVFormatContext *pFormatCtx;
+    int             i, videoindex;
+    AVCodecContext  *pCodecCtx;
+    AVCodec         *pCodec;
+    AVFrame *pFrame,*pFrameYUV;
+    uint8_t *out_buffer;
+    AVPacket *packet;
+    int y_size;
+    int ret, got_picture;
+    struct SwsContext *img_convert_ctx;
+    FILE *fp_yuv;
+    int frame_cnt;
+    clock_t time_start, time_finish;
+    double  time_duration = 0.0;
+
+    char input_str[500]={0};
+    char output_str[500]={0};
+    char info[1000]={0};
+    sprintf(input_str,"%s",env->GetStringUTFChars(input_jstr, NULL));
+    sprintf(output_str,"%s",env->GetStringUTFChars(output_jstr, NULL));
+
+
+    av_register_all();
+    avformat_network_init();
+    pFormatCtx = avformat_alloc_context();
+
+    if(avformat_open_input(&pFormatCtx,input_str,NULL,NULL)!=0){
+        LOGE("Couldn't open input stream.\n");
+        return -1;
+    }
+    if(avformat_find_stream_info(pFormatCtx,NULL)<0){
+        LOGE("Couldn't find stream information.\n");
+        return -1;
+    }
+    videoindex=-1;
+    for(i=0; i<pFormatCtx->nb_streams; i++)
+        if(pFormatCtx->streams[i]->codec->codec_type==AVMEDIA_TYPE_VIDEO){
+            videoindex=i;
+            break;
+        }
+    if(videoindex==-1){
+        LOGE("Couldn't find a video stream.\n");
+        return -1;
+    }
+    pCodecCtx=pFormatCtx->streams[videoindex]->codec;
+    pCodec=avcodec_find_decoder(pCodecCtx->codec_id);
+    if(pCodec==NULL){
+        LOGE("Couldn't find Codec.\n");
+        return -1;
+    }
+    if(avcodec_open2(pCodecCtx, pCodec,NULL)<0){
+        LOGE("Couldn't open codec.\n");
+        return -1;
+    }
+
+    pFrame=av_frame_alloc();
+    pFrameYUV=av_frame_alloc();
+    out_buffer=(unsigned char *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_YUV420P,  pCodecCtx->width, pCodecCtx->height,1));
+    av_image_fill_arrays(pFrameYUV->data, pFrameYUV->linesize,out_buffer,
+                         AV_PIX_FMT_YUV420P,pCodecCtx->width, pCodecCtx->height,1);
+
+
+    packet=(AVPacket *)av_malloc(sizeof(AVPacket));
+
+    img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt,
+                                     pCodecCtx->width, pCodecCtx->height, AV_PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
+
+
+    sprintf(info,   "[Input     ]%s\n", input_str);
+    sprintf(info, "%s[Output    ]%s\n",info,output_str);
+    sprintf(info, "%s[Format    ]%s\n",info, pFormatCtx->iformat->name);
+    sprintf(info, "%s[Codec     ]%s\n",info, pCodecCtx->codec->name);
+    sprintf(info, "%s[Resolution]%dx%d\n",info, pCodecCtx->width,pCodecCtx->height);
+
+
+    fp_yuv=fopen(output_str,"wb+");
+    if(fp_yuv==NULL){
+        printf("Cannot open output file.\n");
+        return -1;
+    }
+
+    frame_cnt=0;
+    time_start = clock();
+
+    while(av_read_frame(pFormatCtx, packet)>=0){
+        if(packet->stream_index==videoindex){
+            ret = avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, packet);
+            if(ret < 0){
+                LOGE("Decode Error.\n");
+                return -1;
+            }
+            if(got_picture){
+                sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height,
+                          pFrameYUV->data, pFrameYUV->linesize);
+
+                y_size=pCodecCtx->width*pCodecCtx->height;
+                fwrite(pFrameYUV->data[0],1,y_size,fp_yuv);    //Y
+                fwrite(pFrameYUV->data[1],1,y_size/4,fp_yuv);  //U
+                fwrite(pFrameYUV->data[2],1,y_size/4,fp_yuv);  //V
+                //Output info
+                char pictype_str[10]={0};
+                switch(pFrame->pict_type){
+                    case AV_PICTURE_TYPE_I:sprintf(pictype_str,"I");break;
+                    case AV_PICTURE_TYPE_P:sprintf(pictype_str,"P");break;
+                    case AV_PICTURE_TYPE_B:sprintf(pictype_str,"B");break;
+                    default:sprintf(pictype_str,"Other");break;
+                }
+                LOGI("Frame Index: %5d. Type:%s",frame_cnt,pictype_str);
+                frame_cnt++;
+            }
+        }
+        av_free_packet(packet);
+    }
+    //flush decoder
+    //FIX: Flush Frames remained in Codec
+    while (1) {
+        ret = avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, packet);
+        if (ret < 0)
+            break;
+        if (!got_picture)
+            break;
+        sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height,
+                  pFrameYUV->data, pFrameYUV->linesize);
+        int y_size=pCodecCtx->width*pCodecCtx->height;
+        fwrite(pFrameYUV->data[0],1,y_size,fp_yuv);    //Y
+        fwrite(pFrameYUV->data[1],1,y_size/4,fp_yuv);  //U
+        fwrite(pFrameYUV->data[2],1,y_size/4,fp_yuv);  //V
+        //Output info
+        char pictype_str[10]={0};
+        switch(pFrame->pict_type){
+            case AV_PICTURE_TYPE_I:sprintf(pictype_str,"I");break;
+            case AV_PICTURE_TYPE_P:sprintf(pictype_str,"P");break;
+            case AV_PICTURE_TYPE_B:sprintf(pictype_str,"B");break;
+            default:sprintf(pictype_str,"Other");break;
+        }
+        LOGI("Frame Index: %5d. Type:%s",frame_cnt,pictype_str);
+        frame_cnt++;
+    }
+    time_finish = clock();
+    time_duration=(double)(time_finish - time_start);
+
+    sprintf(info, "%s[Time      ]%fms\n",info,time_duration);
+    sprintf(info, "%s[Count     ]%d\n",info,frame_cnt);
+
+    sws_freeContext(img_convert_ctx);
+
+    fclose(fp_yuv);
+
+    av_frame_free(&pFrameYUV);
+    av_frame_free(&pFrame);
+    avcodec_close(pCodecCtx);
+    avformat_close_input(&pFormatCtx);
+
     return 0;
 }
 
