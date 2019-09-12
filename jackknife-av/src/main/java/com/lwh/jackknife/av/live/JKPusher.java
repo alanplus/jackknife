@@ -2,6 +2,10 @@ package com.lwh.jackknife.av.live;
 
 public class JKPusher {
 
+    static {
+        System.loadLibrary("jknfav");
+    }
+
     public native void init(int width, int height, String url);
 
     public void init(String url) {
