@@ -94,31 +94,33 @@ set_target_properties( avformat-57
                        PROPERTIES IMPORTED_LOCATION
         ${distribution_DIR}/${ANDROID_ABI}/libavformat-57.so )
 
-message("添加库fmodL")
-add_library(
-        fmodL
-        SHARED
-        IMPORTED
-)
-set_target_properties(
-        fmodL
-        PROPERTIES IMPORTED_LOCATION
-        ${distribution_DIR}/${ANDROID_ABI}/libfmodL.so
-)
+#message("添加库fmodL")
+#add_library(
+#        fmodL
+#        SHARED
+#        IMPORTED
+#)
+#set_target_properties(
+#        fmodL
+#        PROPERTIES IMPORTED_LOCATION
+#    ${distribution_DIR}/${ANDROID_ABI}/libfmodL.so
+#)
 
 if(UNIX)
     message("当前编译环境为UNIX")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 elseif(WIN32)
     message("当前编译环境为Win32")
+
 endif()
 
+# 也包含其子目录
 include_directories(libs/include)
 
 # target_include_directories(jknfav PRIVATE libs/include)
 # 设置 target 需要链接的库
-target_link_libraries( jknfav log android avutil-55 swresample-2 avcodec-57 avfilter-6 swscale-4 avdevice-57 avformat-57
-                       fmodL ${log-lib} )
+target_link_libraries( jknfav log android avutil-55 swresample-2 avcodec-57 avfilter-6 swscale-4
+        avdevice-57 avformat-57 ${log-lib} )
 # 指定全路径
 # target_link_libraries(demo ${CMAKE_CURRENT_SOURCE_DIR}/libs/libface.a)
 message("构建完成")
