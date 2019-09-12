@@ -1,12 +1,5 @@
-# Sets the minimum version of CMake required to build the native
-# library. You should either keep the default value or only pass a
-# value of 3.4.0 or lower.
-
-# 指定CMake的最小版本
-cmake_minimum_required(VERSION 3.4.1)
-
 # 设置项目名称
-project(JKNF_AV)
+project(jackknife-av)
 # 过滤源文件
 file(GLOB SRC_LIST "protocol/*.cpp" "*.c")
 # 搜索src/main/cpp目录下的所有过滤后的文件
@@ -94,6 +87,7 @@ set_target_properties( avformat-57
                        PROPERTIES IMPORTED_LOCATION
         ${distribution_DIR}/${ANDROID_ABI}/libavformat-57.so )
 
+
 message("添加库fmodL")
 add_library(
         fmodL
@@ -122,10 +116,3 @@ target_link_libraries( jknfav log android avutil-55 swresample-2 avcodec-57 avfi
 # 指定全路径
 # target_link_libraries(demo ${CMAKE_CURRENT_SOURCE_DIR}/libs/libface.a)
 message("构建完成")
-
-# 设置include的搜索路径，必须要设置
-#set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-#message(cmake文件搜索路径为->${CMAKE_MODULE_PATH})
-
-# 指定包含文件的全路径
-#include(jackknife-av.cmake)
