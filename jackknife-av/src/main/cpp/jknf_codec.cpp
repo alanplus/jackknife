@@ -1,64 +1,21 @@
-
 #include <jni.h>
 #include <string>
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 
 extern "C" {
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
-#include "libavutil/imgutils.h"
-
-//added by ws for AVfilter start
-#include <libavfilter/avfiltergraph.h>
-#include <libavfilter/buffersrc.h>
-#include <libavfilter/buffersink.h>
-//added by ws for AVfilter end
-};
-
-extern "C"
-{
-#include <libswscale/swscale.h>
-#include <libavutil/log.h>
-#include <libavutil/opt.h>
-#include <libavcodec/avcodec.h>
-
-#include <libavformat/avformat.h>
-#include <libavutil/imgutils.h>
-#include <libavutil/time.h>
-}
-
-extern "C"
-{
-#include <libswscale/swscale.h>
-#include <libavutil/log.h>
-#include <libavutil/opt.h>
-#include <libavcodec/avcodec.h>
-
-#include <libavformat/avformat.h>
-#include <libavutil/imgutils.h>
-#include <libavutil/time.h>
-}
-
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include <libswscale/swscale.h>
-#include <libavutil/imgutils.h>
-
-
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
-#include "libavutil/imgutils.h"
-
-extern "C"
-{
-#include <libavutil/log.h>
-#include <libavcodec/avcodec.h>
-#include <libavformat/avformat.h>
-#include "jknf_log.h"
-#include <string.h>>
+    #include "libavcodec/avcodec.h"
+    #include "libavformat/avformat.h"
+    #include "libswscale/swscale.h"
+    #include "libavutil/imgutils.h"
+    #include "libavutil/time.h"
+    #include "libavutil/log.h"
+    #include "libavutil/opt.h"
+    #include "libavfilter/avfiltergraph.h"
+    #include "libavfilter/buffersrc.h"
+    #include "libavfilter/buffersink.h"
+    #include "libswscale/swscale.h"
+    #include "jknf_log.h"
 
 void jknf_log_write(void *ptr, int level, const char *fmt, va_list vl) {
     FILE *fp = fopen("/storage/emulated/0/jknf_log.txt", "a+");
@@ -70,8 +27,7 @@ void jknf_log_write(void *ptr, int level, const char *fmt, va_list vl) {
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBgMusic(
-        JNIEnv *env,
+Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBgMusic(JNIEnv *env,
         jclass jcls, jstring input_video, jstring input_music, jstring output_path) {
 
     AVOutputFormat *ofmt = NULL;
@@ -324,7 +280,6 @@ Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBgMusic(
         return false;
     }
     return true;
-}
 }
 
 JNIEXPORT jint JNICALL
@@ -1487,7 +1442,7 @@ Java_com_lwh_jackknife_av_wallpaper_VideoLiveWallpaper_play
     avformat_close_input(&pFormatCtx);
     return 0;
 }
-
+}
 
 
 
