@@ -8,4 +8,5 @@ include ':jackknife-viewinject',
         ':jackknife-widget',
         ':jackknife-xpermission',
         ':jackknife-aop-plugin',
+        ':jackknife-filechooser',
         ':jackknife-util'
