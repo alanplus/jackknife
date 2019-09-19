@@ -18,17 +18,17 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject:4.5.4' //运行期注解的butterknife</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject-annotations:4.5.4' //viewinject的扩展包，要基于viewinject</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.5.4' //多渠道开发框架</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.5.4'    //android系统数据库操作框架</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.5.4'    //mvp设计理念</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.5.4' //自定义控件，各种UI效果</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.5.4'//开发工具类</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.5.4'//动态权限申请</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.5.4' //音视频开发工具</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.5.4'//一键换肤</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filechooser:4.5.4'//文件和文件夹路径选择器</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject:4.5.5' //运行期注解的butterknife</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject-annotations:4.5.5' //viewinject的扩展包，要基于viewinject</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.5.5' //多渠道开发框架</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.5.5'    //android系统数据库操作框架</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.5.5'    //mvp设计理念</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.5.5' //自定义控件，各种UI效果</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.5.5'//开发工具类</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.5.5'//动态权限申请</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.5.5' //音视频开发工具</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.5.5'//一键换肤</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filechooser:4.5.5'//文件和文件夹路径选择器</h3>
 }
 </blockquote>
 
