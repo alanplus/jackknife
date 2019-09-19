@@ -28,22 +28,19 @@ public class FileChooser {
     public static final int REQUEST_CODE_CHOOSE_BOTH_FILE_AND_FOLDER = 3;
 
     public static void chooseFile(Activity activity) {
-        Intent intent = new Intent();
-        intent.setPackage(activity.getPackageName());
+        Intent intent = new Intent(activity, FileExplorerActivity.class);
         intent.setAction(FileExplorerActivity.ACTION_CHOOSE_FILE);
         activity.startActivityForResult(intent, REQUEST_CODE_CHOOSE_FILE);
     }
 
     public static void chooseFolder(Activity activity) {
-        Intent intent = new Intent();
-        intent.setPackage(activity.getPackageName());
+        Intent intent = new Intent(activity, FileExplorerActivity.class);
         intent.setAction(FileExplorerActivity.ACTION_CHOOSE_FOLDER);
         activity.startActivityForResult(intent, REQUEST_CODE_CHOOSE_FOLDER);
     }
 
     public static void chooseFileAndFolder(Activity activity) {
-        Intent intent = new Intent();
-        intent.setPackage(activity.getPackageName());
+        Intent intent = new Intent(activity, FileExplorerActivity.class);
         intent.setAction(FileExplorerActivity.ACTION_CHOOSE_BOTH_FILE_AND_FOLDER);
         activity.startActivityForResult(intent, REQUEST_CODE_CHOOSE_BOTH_FILE_AND_FOLDER);
     }

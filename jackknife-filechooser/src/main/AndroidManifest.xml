@@ -9,7 +9,8 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">
-        <activity android:name=".ui.FileExplorerActivity">
+        <activity android:name="com.lwh.jackknife.fileexplorer.ui.FileExplorerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="com.lwh.jackknife.action.CHOOSE_FILE"/>
                 <action android:name="com.lwh.jackknife.action.CHOOSE_FOLDER"/>
