@@ -19,7 +19,7 @@ package com.lwh.jackknife.permission.aop;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 
-import com.lwh.jackknife.app.Application;
+import com.lwh.jackknife.permission.Action;
 import com.lwh.jackknife.permission.XPermission;
 import com.lwh.jackknife.permission.annotation.Permission;
 
@@ -33,7 +33,7 @@ import java.util.List;
 @Aspect
 public class CheckPermissionAspect {
 
-    private static final int REQUEST_CODE_SETTING = 1;
+    private static final int REQUEST_CODE_SETTING = 0x01;
 
     @Pointcut("execution(@com.lwh.jackknife.permission.annotation.Permission * *(..)) && @annotation(permission)")
     public void checkPermission(Permission permission) {
@@ -41,15 +41,14 @@ public class CheckPermissionAspect {
 
     @Around("checkPermission(permission)")
     public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, final Permission permission) throws Throwable {
-        final Activity activity = (Activity) Application.getInstance().getCurActivity();
+        final Activity activity = (Activity) joinPoint.getTarget();
         if (XPermission.hasPermissions(activity, permission.value())) {
             joinPoint.proceed();//获得权限，执行原方法
         } else {
             XPermission.with(activity)
                 .runtime()
                 .permission(permission.value())
-                .rationale(new RuntimeRationale())
-                .onGranted(new com.lwh.jackknife.permission.Action<List<String>>() {
+                .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> permissions) {
                         try {
@@ -59,7 +58,7 @@ public class CheckPermissionAspect {
                         }
                     }
                 })
-                .onDenied(new com.lwh.jackknife.permission.Action<List<String>>() {
+                .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(@NonNull List<String> permissions) {
                         if (XPermission.hasAlwaysDeniedPermission(activity, permissions)) {

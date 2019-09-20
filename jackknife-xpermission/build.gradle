@@ -25,6 +25,11 @@ android {
         targetSdkVersion rootProject.ext.android.target_sdk
         versionCode rootProject.ext.android.release_version_code
         versionName rootProject.ext.android.release_version_name
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+            }
+        }
     }
     buildTypes {
         release {
@@ -32,10 +37,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
-    implementation 'org.aspectj:aspectjtools:1.8.10'
+    implementation 'org.aspectj:aspectjrt:1.8.10'
     implementation 'com.android.support:support-v4:27.1.1'
-    implementation project(path: ':jackknife-viewinject')
 }

@@ -66,9 +66,10 @@ public class FileExplorerActivity extends AppCompatActivity {
     public static final String ACTION_CHOOSE_FILE = "com.lwh.jackknife.action.CHOOSE_FILE";
     public static final String ACTION_CHOOSE_FOLDER = "com.lwh.jackknife.action.CHOOSE_FOLDER";
     public static final String ACTION_CHOOSE_BOTH_FILE_AND_FOLDER = "com.lwh.jackknife.action.CHOOSE_BOTH_FILE_AND_FOLDER";
+    public static final String EXTRA_PATH = "path";
     private String mAction;
 
-    private final int REQUEST_CODE_SETTING = 1;
+    private final int REQUEST_CODE_SETTING = 0x01;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +167,7 @@ public class FileExplorerActivity extends AppCompatActivity {
                 if (sortLetter != null) {
                     char first = sortLetter.toUpperCase().charAt(0);
                     if (first == sectionIndex) {
-                        return i + 1;
+                        return i;
                     }
                 }
             }
@@ -273,10 +274,10 @@ public class FileExplorerActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        tv_main_curr_path.setText(Environment.getExternalStorageDirectory().getAbsolutePath());
+        tv_main_curr_path.setText(IoUtils.getSdRoot());
         tv_main_total_rom.setText("总共 " + IoUtils.getRomTotalSize(this));
         tv_main_available_rom.setText("剩余 " + IoUtils.getRomAvailableSize(this));
-        final MyFolder myFolder = initFolder(new MyFolder(new File(Environment.getExternalStorageDirectory().getAbsolutePath())));
+        final MyFolder myFolder = initFolder(new MyFolder(new File(IoUtils.getSdRoot())));
         mFileTree = myFolder.getAllChild();
         mAdapter = new FileAdapter(this);
         mAdapter.addItems(mFileTree);
@@ -288,7 +289,7 @@ public class FileExplorerActivity extends AppCompatActivity {
                 if (fileable instanceof MyFile) {
                     if (mAction.equals(ACTION_CHOOSE_FILE) || mAction.equals(ACTION_CHOOSE_BOTH_FILE_AND_FOLDER)) {
                         Intent intent = new Intent();
-                        intent.putExtra("path", fileable.getPath());
+                        intent.putExtra(EXTRA_PATH, fileable.getPath());
                         setResult(Activity.RESULT_OK, intent);
                         finish();
                     } else {
@@ -349,7 +350,7 @@ public class FileExplorerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-                intent.putExtra("path", tv_main_curr_path.getText().toString().trim());
+                intent.putExtra(EXTRA_PATH, tv_main_curr_path.getText().toString().trim());
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             }
