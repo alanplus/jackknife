@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~  * Copyright (C) 2017 The JackKnife Open Source Project
   ~  *
@@ -19,134 +18,134 @@
 
 <resources>
     <declare-styleable name="ShadeView">
-        <attr name="shadeview_icon" format="reference"/>
-        <attr name="shadeview_text" format="string|reference"/>
-        <attr name="shadeview_textColor" format="color|reference"/>
-        <attr name="shadeview_textSize" format="dimension|reference"/>
-        <attr name="shadeview_hoverColor" format="color|reference"/>
+        <attr name="shadeview_icon" format="reference" />
+        <attr name="shadeview_text" format="string|reference" />
+        <attr name="shadeview_textColor" format="color|reference" />
+        <attr name="shadeview_textSize" format="dimension|reference" />
+        <attr name="shadeview_hoverColor" format="color|reference" />
     </declare-styleable>
     <declare-styleable name="HorizontalTabBar">
         <attr name="horizontaltabbar_underlineHeight" format="dimension|reference" />
         <attr name="horizontaltabbar_underlineColor" format="color|reference" />
         <attr name="horizontaltabbar_indicatorHeight" format="dimension|reference" />
         <attr name="horizontaltabbar_indicatorColor" format="color|reference" />
-        <attr name="horizontaltabbar_dividerWidth" format="dimension|reference"/>
+        <attr name="horizontaltabbar_dividerWidth" format="dimension|reference" />
         <attr name="horizontaltabbar_dividerColor" format="color|reference" />
         <attr name="horizontaltabbar_dividerPaddingTop" format="dimension|reference" />
         <attr name="horizontaltabbar_dividerPaddingBottom" format="dimension|reference" />
         <attr name="horizontaltabbar_tabPaddingLeft" format="dimension|reference" />
         <attr name="horizontaltabbar_tabPaddingRight" format="dimension|reference" />
-        <attr name="horizontaltabbar_tabColor" format="color|reference"/>
-        <attr name="horizontaltabbar_tabTextSize" format="dimension|reference"/>
+        <attr name="horizontaltabbar_tabColor" format="color|reference" />
+        <attr name="horizontaltabbar_tabTextSize" format="dimension|reference" />
         <attr name="horizontaltabbar_tabTextColor" format="color|reference" />
-        <attr name="horizontaltabbar_tabSelectedTextColor" format="color|reference"/>
+        <attr name="horizontaltabbar_tabSelectedTextColor" format="color|reference" />
         <attr name="horizontaltabbar_isAverage" format="boolean" />
         <attr name="horizontaltabbar_textAllCaps" format="boolean" />
     </declare-styleable>
     <declare-styleable name="LetterView">
-        <attr name="letterview_letters" format="string|reference"/>
-        <attr name="letterview_textSize" format="dimension|reference"/>
-        <attr name="letterview_textColor" format="color|reference"/>
-        <attr name="letterview_hoverTextColor" format="color|reference"/>
-        <attr name="letterview_hoverBackgroundDrawable" format="reference"/>
-        <attr name="letterview_textAllCaps" format="boolean"/>
+        <attr name="letterview_letters" format="string|reference" />
+        <attr name="letterview_textSize" format="dimension|reference" />
+        <attr name="letterview_textColor" format="color|reference" />
+        <attr name="letterview_hoverTextColor" format="color|reference" />
+        <attr name="letterview_hoverBackgroundDrawable" format="reference" />
+        <attr name="letterview_textAllCaps" format="boolean" />
     </declare-styleable>
     <declare-styleable name="RadarView">
-        <attr name="radarview_radarColor" format="color|reference"/>
-        <attr name="radarview_circleRadius" format="dimension"/>
-        <attr name="radarview_spaceRadius" format="dimension"/>
-        <attr name="radarview_annulusNum" format="integer"/>
-        <attr name="radarview_annulusWidth" format="dimension"/>
-        <attr name="radarview_annulusColor" format="color|reference"/>
+        <attr name="radarview_radarColor" format="color|reference" />
+        <attr name="radarview_circleRadius" format="dimension" />
+        <attr name="radarview_spaceRadius" format="dimension" />
+        <attr name="radarview_annulusNum" format="integer" />
+        <attr name="radarview_annulusWidth" format="dimension" />
+        <attr name="radarview_annulusColor" format="color|reference" />
         <attr name="radarview_rotateRate">
-            <enum name="slow" value="0"/>
-            <enum name="fast" value="1"/>
+            <enum name="slow" value="0" />
+            <enum name="fast" value="1" />
         </attr>
-        <attr name="radarview_reverse" format="boolean"/>
+        <attr name="radarview_reverse" format="boolean" />
     </declare-styleable>
     <declare-styleable name="HighlightTextView">
-        <attr name="highlighttextview_defaultColor" format="color|reference"/>
-        <attr name="highlighttextview_highlightColor" format="color|reference"/>
+        <attr name="highlighttextview_defaultColor" format="color|reference" />
+        <attr name="highlighttextview_highlightColor" format="color|reference" />
     </declare-styleable>
     <declare-styleable name="AutoEditTextGroup">
-        <attr name="autoedittextgroup_sectionTextSize" format="dimension|reference"/>
-        <attr name="autoedittextgroup_semicolonTextSize" format="dimension|reference"/>
-        <attr name="autoedittextgroup_sectionPadding" format="dimension|reference"/>
-        <attr name="autoedittextgroup_semicolonPadding" format="dimension|reference"/>
+        <attr name="autoedittextgroup_sectionTextSize" format="dimension|reference" />
+        <attr name="autoedittextgroup_semicolonTextSize" format="dimension|reference" />
+        <attr name="autoedittextgroup_sectionPadding" format="dimension|reference" />
+        <attr name="autoedittextgroup_semicolonPadding" format="dimension|reference" />
     </declare-styleable>
     <declare-styleable name="AnimatorScrollView">
-        <attr name="animatorscrollview_firstMatchHeight" format="boolean"/>
+        <attr name="animatorscrollview_firstMatchHeight" format="boolean" />
     </declare-styleable>
     <declare-styleable name="AnimatorHorizontalScrollView">
-        <attr name="animatorhorizontalscrollview_firstMatchWidth" format="boolean"/>
+        <attr name="animatorhorizontalscrollview_firstMatchWidth" format="boolean" />
     </declare-styleable>
     <declare-styleable name="AnimatorViewWrapper">
-        <attr name="animatorviewwrapper_alpha" format="boolean"/>
-        <attr name="animatorviewwrapper_scaleX" format="boolean"/>
-        <attr name="animatorviewwrapper_scaleY" format="boolean"/>
-        <attr name="animatorviewwrapper_fromColor" format="color"/>
-        <attr name="animatorviewwrapper_toColor" format="color"/>
-        <attr name="animatorviewwrapper_translation"/>
+        <attr name="animatorviewwrapper_alpha" format="boolean" />
+        <attr name="animatorviewwrapper_scaleX" format="boolean" />
+        <attr name="animatorviewwrapper_scaleY" format="boolean" />
+        <attr name="animatorviewwrapper_fromColor" format="color" />
+        <attr name="animatorviewwrapper_toColor" format="color" />
+        <attr name="animatorviewwrapper_translation" />
     </declare-styleable>
     <attr name="animatorviewwrapper_translation">
-        <flag name="fromLeft" value="0x01"/>
-        <flag name="fromTop" value="0x02"/>
-        <flag name="fromRight" value="0x04"/>
-        <flag name="fromBottom" value="0x08"/>
+        <flag name="fromLeft" value="0x01" />
+        <flag name="fromTop" value="0x02" />
+        <flag name="fromRight" value="0x04" />
+        <flag name="fromBottom" value="0x08" />
     </attr>
     <declare-styleable name="BottomNavigationBar">
-        <attr name="bottomnavigationbar_checkedButton" format="integer"/>
+        <attr name="bottomnavigationbar_checkedButton" format="integer" />
     </declare-styleable>
     <declare-styleable name="InstrumentView">
-        <attr name="instrumentview_title" format="string|reference"/>
-        <attr name="instrumentview_body" format="string|reference"/>
-        <attr name="instrumentview_titleTextColor" format="color|reference"/>
-        <attr name="instrumentview_titleTextSize" format="dimension|reference"/>
-        <attr name="instrumentview_bodyTextColor" format="color|reference"/>
-        <attr name="instrumentview_bodyTextSize" format="dimension|reference"/>
-        <attr name="instrumentview_annulusWidth" format="dimension|reference"/>
-        <attr name="instrumentview_backgroundColor" format="color|reference"/>
-        <attr name="instrumentview_annulusColor" format="color|reference"/>
-        <attr name="instrumentview_annulusHoverColor" format="color|reference"/>
-        <attr name="instrumentview_animationTime" format="integer"/>
+        <attr name="instrumentview_title" format="string|reference" />
+        <attr name="instrumentview_body" format="string|reference" />
+        <attr name="instrumentview_titleTextColor" format="color|reference" />
+        <attr name="instrumentview_titleTextSize" format="dimension|reference" />
+        <attr name="instrumentview_bodyTextColor" format="color|reference" />
+        <attr name="instrumentview_bodyTextSize" format="dimension|reference" />
+        <attr name="instrumentview_annulusWidth" format="dimension|reference" />
+        <attr name="instrumentview_backgroundColor" format="color|reference" />
+        <attr name="instrumentview_annulusColor" format="color|reference" />
+        <attr name="instrumentview_annulusHoverColor" format="color|reference" />
+        <attr name="instrumentview_animationTime" format="integer" />
     </declare-styleable>
     <declare-styleable name="VerifyCodeEditTextGroup">
         <attr name="verifycodeedittextgroup_type">
-            <enum name="lengthFour" value="0"/>
-            <enum name="lengthSix" value="1"/>
+            <enum name="lengthFour" value="0" />
+            <enum name="lengthSix" value="1" />
         </attr>
     </declare-styleable>
     <declare-styleable name="TitleBar">
-        <attr name="tb_backIcon" format="reference"/>
-        <attr name="tb_backName" format="string|reference"/>
-        <attr name="tb_noBack" format="boolean"/>
-        <attr name="tb_title" format="string|reference"/>
-        <attr name="tb_menuIcon" format="reference"/>
-        <attr name="tb_menuName" format="string|reference"/>
-        <attr name="tb_menuBg" format="reference"/>
+        <attr name="tb_backIcon" format="reference" />
+        <attr name="tb_backName" format="string|reference" />
+        <attr name="tb_noBack" format="boolean" />
+        <attr name="tb_title" format="string|reference" />
+        <attr name="tb_menuIcon" format="reference" />
+        <attr name="tb_menuName" format="string|reference" />
+        <attr name="tb_menuBg" format="reference" />
     </declare-styleable>
     <declare-styleable name="SlidingMenu">
-        <attr name="slidingmenu_menuRightPadding" format="dimension|reference"/>
+        <attr name="slidingmenu_menuRightPadding" format="dimension|reference" />
     </declare-styleable>
     <declare-styleable name="ProgressButton">
-        <attr name="progressbutton_cornerRadius" format="dimension|reference"/>
-        <attr name="progressbutton_showBorder" format="boolean"/>
-        <attr name="progressbutton_borderWidth" format="dimension|reference"/>
-        <attr name="progressbutton_textSize" format="dimension|reference"/>
-        <attr name="progressbutton_textColor" format="color|reference"/>
-        <attr name="progressbutton_hoverTextColor" format="color|reference"/>
-        <attr name="progressbutton_backgroundColor" format="color|reference"/>
-        <attr name="progressbutton_secondaryBackgroundColor" format="color|reference"/>
-        <attr name="progressbutton_ballSpacing" format="dimension|reference"/>
-        <attr name="progressbutton_ballRadius" format="dimension|reference"/>
+        <attr name="progressbutton_cornerRadius" format="dimension|reference" />
+        <attr name="progressbutton_showBorder" format="boolean" />
+        <attr name="progressbutton_borderWidth" format="dimension|reference" />
+        <attr name="progressbutton_textSize" format="dimension|reference" />
+        <attr name="progressbutton_textColor" format="color|reference" />
+        <attr name="progressbutton_hoverTextColor" format="color|reference" />
+        <attr name="progressbutton_backgroundColor" format="color|reference" />
+        <attr name="progressbutton_secondaryBackgroundColor" format="color|reference" />
+        <attr name="progressbutton_ballSpacing" format="dimension|reference" />
+        <attr name="progressbutton_ballRadius" format="dimension|reference" />
     </declare-styleable>
     <declare-styleable name="CircularProgressBar">
         <attr name="borderWidth" format="dimension" />
     </declare-styleable>
     <declare-styleable name="SlidingItem">
-        <attr name="swipeAllowed" format="boolean"/>
-        <attr name="mutex" format="boolean"/>
-        <attr name="isLeftSwipe" format="boolean"/>
+        <attr name="swipeAllowed" format="boolean" />
+        <attr name="mutex" format="boolean" />
+        <attr name="isLeftSwipe" format="boolean" />
     </declare-styleable>
     <declare-styleable name="LuckyWheelView">
         <attr name="interval_line_width" format="dimension" />
@@ -160,88 +159,110 @@
         <attr name="selected_color" format="color" />
     </declare-styleable>
     <declare-styleable name="DatePickerView">
-        <attr name="dpv_startDate" format="string|reference"/>
-        <attr name="dpv_endDate" format="string|reference"/>
-        <attr name="dpv_markerRadius" format="dimension|reference"/>
+        <attr name="dpv_startDate" format="string|reference" />
+        <attr name="dpv_endDate" format="string|reference" />
+        <attr name="dpv_markerRadius" format="dimension|reference" />
         <attr name="dpv_markerColor" format="color|reference" />
         <attr name="dpv_markerTextColor" format="color|reference" />
-        <attr name="dpv_weekdayTextColor" format="color|reference"/>
-        <attr name="dpv_saturdayTextColor" format="color|reference"/>
+        <attr name="dpv_weekdayTextColor" format="color|reference" />
+        <attr name="dpv_saturdayTextColor" format="color|reference" />
         <attr name="dpv_sundayTextColor" format="color|reference" />
-        <attr name="dpv_headerHeight" format="dimension|reference"/>
+        <attr name="dpv_headerHeight" format="dimension|reference" />
         <attr name="dpv_headerBackgroundColor" format="color|reference" />
         <attr name="dpv_contentBackgroundColor" format="color|reference" />
         <attr name="dpv_headerTextColor" format="color|reference" />
         <attr name="dpv_headerTextSize" format="dimension|reference" />
         <attr name="dpv_edgeColor" format="color|reference" />
-        <attr name="dpv_useCustomDisabledDateTextColor" format="boolean"/>
-        <attr name="dpv_disabledDateTextColor" format="color|reference"/>
+        <attr name="dpv_useCustomDisabledDateTextColor" format="boolean" />
+        <attr name="dpv_disabledDateTextColor" format="color|reference" />
         <attr name="dpv_disabledDateAlphaRate" format="fraction" />
     </declare-styleable>
     <declare-styleable name="WheelView">
         <attr name="wv_gravity">
-            <enum name="center" value="17"/>
-            <enum name="left" value="3"/>
-            <enum name="right" value="5"/>
+            <enum name="center" value="17" />
+            <enum name="left" value="3" />
+            <enum name="right" value="5" />
         </attr>
-        <attr name="wv_textSize" format="dimension"/>
-        <attr name="wv_textColorOut" format="color"/>
-        <attr name="wv_textColorCenter" format="color"/>
-        <attr name="wv_dividerColor" format="color"/>
-        <attr name="wv_lineSpacingMultiplier" format="float"/>
+        <attr name="wv_textSize" format="dimension" />
+        <attr name="wv_textColorOut" format="color" />
+        <attr name="wv_textColorCenter" format="color" />
+        <attr name="wv_dividerColor" format="color" />
+        <attr name="wv_lineSpacingMultiplier" format="float" />
     </declare-styleable>
     <declare-styleable name="MenuItem">
         <!-- 标题内容 -->
-        <attr name="mi_title" format="string|reference"/>
+        <attr name="mi_title" format="string|reference" />
         <!-- 图标 -->
-        <attr name="mi_icon" format="reference"/>
+        <attr name="mi_icon" format="reference" />
         <!-- 标题字体大小 -->
-        <attr name="mi_titleTextSize" format="dimension|reference"/>
+        <attr name="mi_titleTextSize" format="dimension|reference" />
         <!-- 标题字体颜色 -->
-        <attr name="mi_titleTextColor" format="color|reference"/>
+        <attr name="mi_titleTextColor" format="color|reference" />
         <!-- 标题距离底边的距离 -->
-        <attr name="mi_titleBottomSpan" format="dimension|reference"/>
+        <attr name="mi_titleBottomSpan" format="dimension|reference" />
         <!-- 站内信圆点是否启用 -->
-        <attr name="mi_tagEnabled" format="boolean"/>
+        <attr name="mi_tagEnabled" format="boolean" />
         <!-- 站内信圆点的颜色 -->
-        <attr name="mi_tagColor" format="color|reference"/>
+        <attr name="mi_tagColor" format="color|reference" />
         <!-- 站内信圆点的宽度 -->
-        <attr name="mi_tagWidth" format="dimension|reference"/>
+        <attr name="mi_tagWidth" format="dimension|reference" />
         <!-- 站内信圆点的高度 -->
-        <attr name="mi_tagHeight" format="dimension|reference"/>
+        <attr name="mi_tagHeight" format="dimension|reference" />
         <!-- 站内信圆点所在的方位 -->
         <attr name="mi_tagGravity" format="enum">
-            <enum name="leftTop" value="0x00"/>
-            <enum name="rightTop" value="0x01"/>
-            <enum name="leftBottom" value="0x02"/>
-            <enum name="rightBottom" value="0x03"/>
+            <enum name="leftTop" value="0x00" />
+            <enum name="rightTop" value="0x01" />
+            <enum name="leftBottom" value="0x02" />
+            <enum name="rightBottom" value="0x03" />
         </attr>
         <!-- 负数表示向左偏移，正数表示向右偏移，且会保证整个圆点显示完全 -->
-        <attr name="mi_tagXOffset" format="dimension|reference"/>
+        <attr name="mi_tagXOffset" format="dimension|reference" />
         <!-- 负数表示向上偏移，正数表示向下偏移，且会保证整个圆点显示完全 -->
-        <attr name="mi_tagYOffset" format="dimension|reference"/>
+        <attr name="mi_tagYOffset" format="dimension|reference" />
         <!-- 站内信的数字 -->
-        <attr name="mi_tagNum" format="integer"/>
+        <attr name="mi_tagNum" format="integer" />
     </declare-styleable>
     <declare-styleable name="EmptyView">
-        <attr name="ev_layout" format="reference"/>
-        <attr name="ev_empty" format="boolean"/>
+        <attr name="ev_layout" format="reference" />
+        <attr name="ev_empty" format="boolean" />
     </declare-styleable>
     <declare-styleable name="EqualizerView">
-        <attr name="ev_bandsNum" format="integer"/>
+        <attr name="ev_bandsNum" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="ToggleButton">
+        <attr name="tb_shadow_radius" format="reference|dimension" />
+        <attr name="tb_shadow_offset" format="reference|dimension" />
+        <attr name="tb_shadow_color" format="reference|color" />
+        <attr name="tb_uncheck_color" format="reference|color" />
+        <attr name="tb_checked_color" format="reference|color" />
+
+        <attr name="tb_border_width" format="reference|dimension" />
+        <attr name="tb_checkline_color" format="reference|color" />
+        <attr name="tb_checkline_width" format="reference|dimension" />
+        <attr name="tb_uncheckcircle_color" format="reference|color" />
+        <attr name="tb_uncheckcircle_width" format="reference|dimension" />
+        <attr name="tb_uncheckcircle_radius" format="reference|dimension" />
+
+        <attr name="tb_checked" format="reference|boolean" />
+        <attr name="tb_shadow_effect" format="reference|boolean" />
+        <attr name="tb_effect_duration" format="reference|integer" />
+        <attr name="tb_button_color" format="reference|color" />
+        <attr name="tb_show_indicator" format="reference|boolean" />
+        <attr name="tb_background" format="reference|color" />
+        <attr name="tb_enable_effect" format="reference|boolean" />
     </declare-styleable>
     <attr name="shadeViewStyle" format="reference" />
-    <attr name="horizontalTabBarStyle" format="reference"/>
-    <attr name="letterViewStyle" format="reference"/>
-    <attr name="radarViewStyle" format="reference"/>
-    <attr name="highlightTextViewStyle" format="reference"/>
-    <attr name="autoEditTextGroupStyle" format="reference"/>
-    <attr name="animatorScrollViewStyle" format="reference"/>
-    <attr name="animatorHorizontalScrollViewStyle" format="reference"/>
-    <attr name="animatorViewWrapperStyle" format="reference"/>
-    <attr name="bottomNavigationBarStyle" format="reference"/>
-    <attr name="instrumentViewStyle" format="reference"/>
-    <attr name="verifyCodeEditTextGroupStyle" format="reference"/>
-    <attr name="slidingMenuStyle" format="reference"/>
-    <attr name="progressButtonStyle" format="reference"/>
+    <attr name="horizontalTabBarStyle" format="reference" />
+    <attr name="letterViewStyle" format="reference" />
+    <attr name="radarViewStyle" format="reference" />
+    <attr name="highlightTextViewStyle" format="reference" />
+    <attr name="autoEditTextGroupStyle" format="reference" />
+    <attr name="animatorScrollViewStyle" format="reference" />
+    <attr name="animatorHorizontalScrollViewStyle" format="reference" />
+    <attr name="animatorViewWrapperStyle" format="reference" />
+    <attr name="bottomNavigationBarStyle" format="reference" />
+    <attr name="instrumentViewStyle" format="reference" />
+    <attr name="verifyCodeEditTextGroupStyle" format="reference" />
+    <attr name="slidingMenuStyle" format="reference" />
+    <attr name="progressButtonStyle" format="reference" />
 </resources>
