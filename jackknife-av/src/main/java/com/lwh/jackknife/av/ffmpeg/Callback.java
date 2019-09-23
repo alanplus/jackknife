@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.live;
+package com.lwh.jackknife.av.ffmpeg;
 
-public class JKPusher {
+public interface Callback {
 
-    static {
-        System.loadLibrary("jknfav");
-    }
+    void printLog(String log);
 
-    public native void init(int width, int height, String url);
+    void onSuccess();
 
-    public void init(String url) {
-        init(500, 400, url);
-    }
-
-    public native void start(byte[] yuvImage);
-
-    public native void stop();
-
-    public native void close();
+    void onError();
 }

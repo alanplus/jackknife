@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.live;
+package com.lwh.jackknife.av.ffmpeg;
 
-public class JKPusher {
+public final class FFmpegJni {
 
+    private FFmpegJni() {
+    }
+
+    // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("jknfav");
     }
 
-    public native void init(int width, int height, String url);
+    public static native int execute(String[] commands);
 
-    public void init(String url) {
-        init(500, 400, url);
-    }
+    public static native String getLog();
 
-    public native void start(byte[] yuvImage);
-
-    public native void stop();
-
-    public native void close();
 }
