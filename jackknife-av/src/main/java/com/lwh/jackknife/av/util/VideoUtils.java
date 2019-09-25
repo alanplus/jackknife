@@ -29,6 +29,11 @@ import java.util.List;
 
 public class VideoUtils {
 
+    public static final int WATERMARK_POS_LEFT_UP = 0;
+    public static final int WATERMARK_POS_RIGHT_UP = 1;
+    public static final int WATERMARK_POS_LEFT_BOTTOM = 2;
+    public static final int WATERMARK_POS_RIGHT_BOTTOM = 3;
+
     static {
         System.loadLibrary("jknfav");
     }
@@ -83,78 +88,82 @@ public class VideoUtils {
         }
     }
 
-    private static void setVideo(List<String> commandList) {
-        commandList.add("-b:v");
-        commandList.add("600k");
-        commandList.add("-bufsize");
-        commandList.add("600k");
-        commandList.add("-maxrate");
-        commandList.add("800k");
+    private static void setVideo(List<String> cmdLine) {
+        cmdLine.add("-b:v");
+        cmdLine.add("600k");
+        cmdLine.add("-bufsize");
+        cmdLine.add("600k");
+        cmdLine.add("-maxrate");
+        cmdLine.add("800k");
 
-        commandList.add("-c:v");
-        commandList.add("libx264");
-        commandList.add("-preset");
-        commandList.add("fast");
-        commandList.add("-crf");
-        commandList.add("28");
-        commandList.add("-threads");
-        commandList.add("2");
+        cmdLine.add("-c:v");
+        cmdLine.add("libx264");
+        cmdLine.add("-preset");
+        cmdLine.add("fast");
+        cmdLine.add("-crf");
+        cmdLine.add("28");
+        cmdLine.add("-threads");
+        cmdLine.add("2");
 
-        commandList.add("-y");
-        commandList.add("-f");
-        commandList.add("mp4");
+        cmdLine.add("-y");
+        cmdLine.add("-f");
+        cmdLine.add("mp4");
     }
 
-    private static void setAudio(List<String> commandList) {
-        commandList.add("-c:a");
-        commandList.add("aac");
-        commandList.add("-ar");
-        commandList.add("44100");
-        commandList.add("-ab");
-        commandList.add("48k");
+    private static void setAudio(List<String> cmdLine) {
+        cmdLine.add("-c:a");
+        cmdLine.add("aac");
+        cmdLine.add("-ar");
+        cmdLine.add("44100");
+        cmdLine.add("-ab");
+        cmdLine.add("48k");
     }
 
 
-    private static void setSize(List<String> commandList) {
-        commandList.add("scale");
-        commandList.add("400x600");
+    private static void setSize(List<String> cmdLine) {
+        cmdLine.add("scale");
+        cmdLine.add("400x600");
     }
 
     public static void mixVideo(List<String> videoPathList, String outputPath, Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
         for (String audioPath : videoPathList) {
-            commandList.add("-i");
-            commandList.add(audioPath);
+            cmdLine.add("-i");
+            cmdLine.add(audioPath);
         }
-        setAudio(commandList);
-        setVideo(commandList);
-        commandList.add("-filter_complex");
+        setAudio(cmdLine);
+        setVideo(cmdLine);
+        cmdLine.add("-filter_complex");
         if (videoPathList.size() == 2) {
-            commandList.add("[0:v]pad=iw*2:ih[int];[int][1:v]overlay=W/2:0[vid]");
+            cmdLine.add("[0:v]pad=iw*2:ih[int];[int][1:v]overlay=W/2:0[vid]");
         } else if (videoPathList.size() == 3) {
-            commandList.add("[0:v]pad=iw*2:ih*2[a];[a][1:v]overlay=w[b];[b][2:v]overlay=0:h[vid]");
+            cmdLine.add("[0:v]pad=iw*2:ih*2[a];[a][1:v]overlay=w[b];[b][2:v]overlay=0:h[vid]");
         } else if (videoPathList.size() == 4) {
-            commandList.add("[0:v]pad=iw*2:ih*2[a];[a][1:v]overlay=w[b];[b][2:v]overlay=0:h[c];[c][3:v]overlay=w:h[vid]");
+            cmdLine.add("[0:v]pad=iw*2:ih*2[a];[a][1:v]overlay=w[b];[b][2:v]overlay=0:h[c];[c][3:v]overlay=w:h[vid]");
         }
-        commandList.add("-map");
-        commandList.add("[vid]");
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        cmdLine.add("-map");
+        cmdLine.add("[vid]");
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 
-
     /**
-     * @param pos 0:左上；1右上；2左下；3右下
+     * 给视频加水印。
+     *
+     * @see #WATERMARK_POS_LEFT_UP
+     * @see #WATERMARK_POS_RIGHT_UP
+     * @see #WATERMARK_POS_LEFT_BOTTOM
+     * @see #WATERMARK_POS_RIGHT_BOTTOM
      */
-    public static void addWaterMark(String srcVideoPath, String watermarkImgPath, int pos, String outputPath, Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
-        commandList.add("-i");
-        commandList.add(srcVideoPath);
-        setAudio(commandList);
-        setVideo(commandList);
-        commandList.add("-vf");
+    public static void addWatermark(String srcVideoPath, String watermarkImgPath, int pos, String outputPath, Callback callback) {
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcVideoPath);
+        setAudio(cmdLine);
+        setVideo(cmdLine);
+        cmdLine.add("-vf");
         String cmd = "movie=";
         cmd += watermarkImgPath;
         cmd += ",scale= 100: 60[watermask]; [in] [watermask] ";
@@ -173,27 +182,27 @@ public class VideoUtils {
                 break;
         }
         cmd += " [out]";
-        commandList.add(cmd);
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        cmdLine.add(cmd);
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 
     /**
      * 去水印。
      *
-     * @param x 去处区域位置
-     * @param y 去处区域位置
-     * @param w 去处区域宽
-     * @param h 去处区域高
+     * @param x 去除区域位置
+     * @param y 去除区域位置
+     * @param w 去除区域宽
+     * @param h 去除区域高
      */
-    public static void cleanWaterMark(String srcVideoPath, int x, int y, int w, int h, String outputPath, Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
-        commandList.add("-i");
-        commandList.add(srcVideoPath);
-        setAudio(commandList);
-        setVideo(commandList);
-        commandList.add("-filter_complex");
+    public static void clearWatermark(String srcVideoPath, int x, int y, int w, int h, String outputPath, Callback callback) {
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcVideoPath);
+        setAudio(cmdLine);
+        setVideo(cmdLine);
+        cmdLine.add("-filter_complex");
         String cmd = "delogo=";
         cmd += "x=" + x;
         cmd += ":";
@@ -203,53 +212,67 @@ public class VideoUtils {
         cmd += ":";
         cmd += "h=" + h;
         cmd += ":show=0";
-        commandList.add(cmd);
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        cmdLine.add(cmd);
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 
+    /**
+     * 从视频文件中提取音频。
+     *
+     * @param srcVideoPath
+     * @param outputPath
+     * @param callback
+     */
     public static void demuxAudio(String srcVideoPath, String outputPath, Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
-        commandList.add("-i");
-        commandList.add(srcVideoPath);
-        commandList.add("-acodec");
-        commandList.add("copy");
-        commandList.add("-vn");
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcVideoPath);
+        cmdLine.add("-acodec");
+        cmdLine.add("copy");
+        cmdLine.add("-vn");
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 
+    /**
+     * 从视频文件中提取视频。
+     *
+     * @param srcVideoPath
+     * @param outputPath
+     * @param callback
+     */
     public static void demuxVideo(String srcVideoPath, String outputPath, Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
-        commandList.add("-i");
-        commandList.add(srcVideoPath);
-        commandList.add("-vcodec");
-        commandList.add("copy");
-        commandList.add("-an");
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcVideoPath);
+        cmdLine.add("-vcodec");
+        cmdLine.add("copy");
+        cmdLine.add("-an");
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 
     /**
      * 镜像翻转。
      */
     public static void flipVideo(String srcVideoPath, String outputPath, boolean vertical, Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
-        commandList.add("-i");
-        commandList.add(srcVideoPath);
-        setAudio(commandList);
-        setVideo(commandList);
-        commandList.add("-vf");
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcVideoPath);
+        setAudio(cmdLine);
+        setVideo(cmdLine);
+        cmdLine.add("-vf");
         if (vertical) {
-            commandList.add("vflip");
+            cmdLine.add("vflip");
         } else {
-            commandList.add("hflip");
+            cmdLine.add("hflip");
         }
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 
     /**
@@ -276,15 +299,15 @@ public class VideoUtils {
                                    String filter,
                                    String outputPath,
                                    Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
-        commandList.add("-i");
-        commandList.add(srcVideoPath);
-        setAudio(commandList);
-        setVideo(commandList);
-        commandList.add("-vf");
-        commandList.add(filter);
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcVideoPath);
+        setAudio(cmdLine);
+        setVideo(cmdLine);
+        cmdLine.add("-vf");
+        cmdLine.add(filter);
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 }

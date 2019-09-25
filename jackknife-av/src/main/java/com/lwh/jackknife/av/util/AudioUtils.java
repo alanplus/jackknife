@@ -31,6 +31,24 @@ public class AudioUtils {
     public native static int getBitrate(String input_music);
 
     /**
+     * 转码压缩。
+     */
+    public static void transcodeAndCompress(String srcAudioPath, String outputPath, int samplingRate, int bitrate, Callback callback) {
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcAudioPath);
+        cmdLine.add("-ar"); //采样率
+        cmdLine.add(String.valueOf(samplingRate));
+        cmdLine.add("-ab");//比特率
+        cmdLine.add(String.valueOf(bitrate));
+        cmdLine.add("-y");  //覆盖已有文件
+        cmdLine.add(outputPath);
+        cmdLine.add(String.valueOf(bitrate));
+        FFmpeg.getInstance().run(cmdLine, callback);
+    }
+
+    /**
      * 混音。
      *
      * @param srcAudioPath  原音
@@ -38,26 +56,30 @@ public class AudioUtils {
      * @param outputPath    输出目录
      */
     public static void mixAudio(String srcAudioPath, List<String> audioPathList, String outputPath, Callback callback) {
-        ArrayList<String> commandList = new ArrayList<>();
-        commandList.add("ffmpeg");
-        commandList.add("-i");
-        commandList.add(srcAudioPath);
+        mixAudio(srcAudioPath, audioPathList, outputPath, 24_000, 32_000, callback);
+    }
+
+    public static void mixAudio(String srcAudioPath, List<String> audioPathList, String outputPath, int samplingRate, int bitrate, Callback callback) {
+        ArrayList<String> cmdLine = new ArrayList<>();
+        cmdLine.add("ffmpeg");
+        cmdLine.add("-i");
+        cmdLine.add(srcAudioPath);
         for (String audioPath : audioPathList) {
-            commandList.add("-i");
-            commandList.add(audioPath);
+            cmdLine.add("-i");
+            cmdLine.add(audioPath);
         }
-        commandList.add("-filter_complex");
-        commandList.add("amix=inputs=" + (audioPathList.size() + 1) + ":duration=first:dropout_transition=1");
-        commandList.add("-f");
-        commandList.add("mp3");
-        commandList.add("-ac");//声道数
-        commandList.add("1");
-        commandList.add("-ar"); //采样率
-        commandList.add("24k");
-        commandList.add("-ab");//比特率
-        commandList.add("32k");
-        commandList.add("-y");
-        commandList.add(outputPath);
-        FFmpeg.getInstance().run(commandList, callback);
+        cmdLine.add("-filter_complex");
+        cmdLine.add("amix=inputs=" + (audioPathList.size() + 1) + ":duration=first:dropout_transition=1");
+        cmdLine.add("-f");
+        cmdLine.add("mp3");
+        cmdLine.add("-ac");//声道数
+        cmdLine.add("1");
+        cmdLine.add("-ar"); //采样率
+        cmdLine.add(String.valueOf(samplingRate));
+        cmdLine.add("-ab");//比特率
+        cmdLine.add(String.valueOf(bitrate));
+        cmdLine.add("-y");  //覆盖已有文件
+        cmdLine.add(outputPath);
+        FFmpeg.getInstance().run(cmdLine, callback);
     }
 }

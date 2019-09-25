@@ -16,6 +16,8 @@
 
 package com.lwh.jackknife.av.live;
 
+import com.lwh.jackknife.av.ffmpeg.BaseConfig;
+
 public class JKPusher {
 
     static {
@@ -25,7 +27,7 @@ public class JKPusher {
     public native void init(int width, int height, String url);
 
     public void init(String url) {
-        init(500, 400, url);
+        init(BaseConfig.DEFAULT_VIDEO_WIDTH, BaseConfig.DEFAULT_VIDEO_HEIGHT, url);
     }
 
     public native void start(byte[] yuvImage);

@@ -22,25 +22,25 @@ import java.util.List;
 
 public enum FFmpeg {
 
-    instance;
+    INSTANCE;
 
     public static FFmpeg getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
-    private volatile boolean mIsRunning = false;
+    private volatile boolean mRunning = false;
 
     boolean isRunning() {
-        return mIsRunning;
+        return mRunning;
     }
 
     FFmpeg() {
-//        FFmpegExecutors.executeWork(mProgressRunnable);
+        FFmpegExecutors.executeWork(mProgressRunnable);
     }
 
     private Callback mCallback;
 
-    public void run(List<String> list, final Callback callback) {
+    public void run(List<String> list, Callback callback) {
         String[] commands = new String[list.size()];
         list.toArray(commands);
         run(commands, callback);
@@ -48,14 +48,14 @@ public enum FFmpeg {
 
     private void run(final String[] cmd, final Callback callback) {
         assert cmd != null;
-        if (mIsRunning) {
-            throw new IllegalStateException("FFmpeg IsRunning");
+        if (mRunning) {
+            throw new IllegalStateException("FFmpeg is running");
         }
         mCallback = callback;
         FFmpegExecutors.executeWork(new Runnable() {
             @Override
             public void run() {
-                mIsRunning = true;
+                mRunning = true;
                 int ret = 1;
                 try {
                     ret = FFmpegJni.execute(cmd);
@@ -63,7 +63,7 @@ public enum FFmpeg {
                 } catch (Exception e) {
                     done(callback, ret != 1);
                 }
-                mIsRunning = false;
+                mRunning = false;
             }
         });
     }
@@ -86,7 +86,7 @@ public enum FFmpeg {
     private final Runnable mProgressRunnable = new Runnable() {
         @Override
         public void run() {
-            for (; ; ) {
+            for (;;) {
                 if (isRunning()) {
                     if (mCallback != null) {
                         String log = FFmpegJni.getLog();

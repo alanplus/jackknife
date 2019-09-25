@@ -21,7 +21,6 @@ public final class FFmpegJni {
     private FFmpegJni() {
     }
 
-    // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("jknfav");
     }
@@ -29,5 +28,4 @@ public final class FFmpegJni {
     public static native int execute(String[] commands);
 
     public static native String getLog();
-
 }
