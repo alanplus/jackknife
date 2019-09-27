@@ -18,7 +18,7 @@ aux_source_directory(src/main/cpp SRC_FFMPEG_LIST)
 set(BUILD_SHARED_LIBS ON)
 
 # 添加所有源代码目录打入so，不指定SHARED默认为静态库
-add_library(jknfav SHARED ${SRC_LIST} ${SRC_FFMPEG_LIST})
+#add_library(jknfav SHARED ${SRC_LIST} ${SRC_FFMPEG_LIST})
 # 生成可执行文件
 # add_executable(jackknife-av src/main/cpp/jknf_ffmpeg.cpp)
 # 默认的搜索路径为 cmake 包含的系统库，因此如果是 NDK 的公共库只需要指定库的 name 即可
@@ -115,9 +115,17 @@ elseif(WIN32)
     message("当前编译环境为Win32")
 
 endif()
-
+set(ffmpeg_DIR ${CMAKE_SOURCE_DIR}/src/main/cpp/ffmpeg)
+set(cpp_DIR ${CMAKE_SOURCE_DIR}/src/main/cpp)
+add_library(jknfav STATIC ${cpp_DIR}/ffmpeg/build_noConfig/ffmpeg.c
+        ${cpp_DIR}/ffmpeg/build_noConfig/ffmpeg_filter.c
+        ${cpp_DIR}/ffmpeg/build_noConfig/ffmpeg_opt.c
+        ${cpp_DIR}/ffmpeg/build_noConfig/cmdutils.c
+        ${cpp_DIR}/ffmpeg/build_noConfig/libavutil/log.c)
 # 也包含其子目录
 include_directories(libs/include)
+target_include_directories(jknfav PRIVATE ${ffmpeg_DIR}/${ANDROID_ABI}
+        ${ffmpeg_DIR}/build_noConfig)
 
 # target_include_directories(jknfav PRIVATE libs/include)
 # 设置 target 需要链接的库

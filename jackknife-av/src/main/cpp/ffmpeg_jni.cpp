@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <string>
 #include "jknf_log.h"
+#include "ffmpeg.h"
 
 #include "j4a_base.h"
 
@@ -30,8 +31,8 @@ Java_com_lwh_jackknife_av_ffmpeg_FFmpegJni_execute(JNIEnv *env, jclass jcls, job
         argv[i] = (char *) env->GetStringUTFChars(js, 0);
     }
     LOGD("----------begin---------");
-    //return main(argc, argv)
-    return 0;
+    return ffmpeg_main(argc, argv);
+//    return 0;
 }
 
 extern "C"
