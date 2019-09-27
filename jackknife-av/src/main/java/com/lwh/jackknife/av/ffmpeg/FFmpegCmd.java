@@ -27,22 +27,11 @@ public class FFmpegCmd {
     private List<String> mCmdLine;
     private static FFmpegCmd sInstance;
 
-    private FFmpegCmd(String inputPath, String outputPath) {
+    public FFmpegCmd(String inputPath, String outputPath) {
         this.mInputPath = inputPath;
         this.mOutputPath = outputPath;
         this.mCmdLine = new ArrayList<>();
         this.mCmdLine.add(FFMPEG);
-    }
-
-    public static FFmpegCmd create(String inputPath, String outputPath) {
-        if (sInstance == null) {
-            synchronized(FFmpegCmd.class) {
-                if (sInstance == null) {
-                    sInstance = new FFmpegCmd(inputPath, outputPath);
-                }
-            }
-        }
-        return sInstance;
     }
 
     public void start() {
