@@ -25,7 +25,7 @@ public final class FFmpegJni {
         System.loadLibrary("jknfav");
     }
 
-    public static native int execute(String[] commands);
+    native static int execute(String[] commands);
 
-    public static native String getLog();
+    public native static String getLog();
 }

@@ -49,7 +49,7 @@ public enum FFmpeg {
     private void run(final String[] cmd, final Callback callback) {
         assert cmd != null;
         if (mRunning) {
-            throw new IllegalStateException("FFmpeg is running");
+            throw new IllegalStateException("FFmpeg is running.");
         }
         mCallback = callback;
         FFmpegExecutors.executeWork(new Runnable() {
@@ -90,7 +90,7 @@ public enum FFmpeg {
                 if (isRunning()) {
                     if (mCallback != null) {
                         String log = FFmpegJni.getLog();
-                        Log.d("FFmpeg", log);
+                        Log.d("ffmpeg", log);
                         mCallback.printLog(log);
                     }
                 }
