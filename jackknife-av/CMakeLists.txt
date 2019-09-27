@@ -110,7 +110,7 @@ set_target_properties( avformat-57
 
 if(UNIX)
     message("当前编译环境为UNIX")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 elseif(WIN32)
     message("当前编译环境为Win32")
 

@@ -21,7 +21,7 @@ jstring stoJstring(JNIEnv *env, const char *pat) {
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_com_lwh_jackknife_av_ffmpeg_FFmpegJni_execute(JNIEnv *env, jclass type, jobjectArray commands) {
+Java_com_lwh_jackknife_av_ffmpeg_FFmpegJni_execute(JNIEnv *env, jclass jcls, jobjectArray commands) {
     int argc = env->GetArrayLength(commands);
     char *argv[argc];
     int i;
