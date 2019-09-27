@@ -25,7 +25,6 @@ public class FFmpegCmd {
     private String mOutputPath;
     private final String FFMPEG = "ffmpeg";
     private List<String> mCmdLine;
-    private static FFmpegCmd sInstance;
 
     public FFmpegCmd(String inputPath, String outputPath) {
         this.mInputPath = inputPath;
