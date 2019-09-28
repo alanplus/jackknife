@@ -9,7 +9,6 @@ cmake_minimum_required(VERSION 3.4.1)
 project(JKNF_AV)
 # 过滤源文件
 file(GLOB SRC_LIST "protocol/*.cpp" "*.c")
-file(GLOB SRC_FFMPEG_LIST "protocol/*.cpp" "*.c")
 # 搜索src/main/cpp目录下的所有过滤后的文件
 aux_source_directory(src/main/cpp SRC_LIST)
 aux_source_directory(src/main/cpp SRC_FFMPEG_LIST)
@@ -17,8 +16,6 @@ aux_source_directory(src/main/cpp SRC_FFMPEG_LIST)
 # 打开默认编译成共享库的开关，如果不设置默认编译成静态库
 set(BUILD_SHARED_LIBS ON)
 
-# 添加所有源代码目录打入so，不指定SHARED默认为静态库
-#add_library(jknfav SHARED ${SRC_LIST} ${SRC_FFMPEG_LIST})
 # 生成可执行文件
 # add_executable(jackknife-av src/main/cpp/jknf_ffmpeg.cpp)
 # 默认的搜索路径为 cmake 包含的系统库，因此如果是 NDK 的公共库只需要指定库的 name 即可
@@ -96,38 +93,16 @@ set_target_properties( avformat-57
                        PROPERTIES IMPORTED_LOCATION
         ${distribution_DIR}/${ANDROID_ABI}/libavformat-57.so )
 
-#message("添加库fmodL")
-#add_library(
-#        fmodL
-#        SHARED
-#        IMPORTED
-#)
-#set_target_properties(
-#        fmodL
-#        PROPERTIES IMPORTED_LOCATION
-#    ${distribution_DIR}/${ANDROID_ABI}/libfmodL.so
-#)
+# 添加所有源代码目录打入so，不指定SHARED默认为静态库
+add_library(jknfav ${SRC_LIST})
 
 if(UNIX)
-    message("当前编译环境为UNIX")
-#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+    message("current is UNIX")
 elseif(WIN32)
-    message("当前编译环境为Win32")
-
+    message("current is WIN32")
 endif()
-set(ffmpeg_DIR ${CMAKE_SOURCE_DIR}/src/main/cpp/ffmpeg)
-set(cpp_DIR ${CMAKE_SOURCE_DIR}/src/main/cpp)
-add_library(jknfav STATIC ${cpp_DIR}/ffmpeg/build_noConfig/ffmpeg.c
-        ${cpp_DIR}/ffmpeg/build_noConfig/ffmpeg_filter.c
-        ${cpp_DIR}/ffmpeg/build_noConfig/ffmpeg_opt.c
-        ${cpp_DIR}/ffmpeg/build_noConfig/cmdutils.c
-        ${cpp_DIR}/ffmpeg/build_noConfig/libavutil/log.c)
-# 也包含其子目录
-include_directories(libs/include)
-target_include_directories(jknfav PRIVATE ${ffmpeg_DIR}/${ANDROID_ABI}
-        ${ffmpeg_DIR}/build_noConfig)
 
-# target_include_directories(jknfav PRIVATE libs/include)
+target_include_directories(jknfav PRIVATE libs/include)
 # 设置 target 需要链接的库
 target_link_libraries( jknfav log android avutil-55 swresample-2 avcodec-57 avfilter-6 swscale-4
         avdevice-57 avformat-57 ${log-lib} )

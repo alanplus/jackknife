@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <string>
 #include "jknf_log.h"
-#include "ffmpeg.h"
+//#include "ffmpeg.h"
 
 #include "j4a_base.h"
 
