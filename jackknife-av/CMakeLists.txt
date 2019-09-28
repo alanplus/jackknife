@@ -101,6 +101,15 @@ set_target_properties(avformat-57
         ${distribution_DIR}/${ANDROID_ABI}/libavformat-57.so
         INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/src/main/cpp/include/)
 
+message("添加库postproc")
+add_library(postproc-54
+        SHARED
+        IMPORTED)
+set_target_properties(postproc-54
+        PROPERTIES IMPORTED_LOCATION
+        ${distribution_DIR}/${ANDROID_ABI}/libpostproc-54.so
+        INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/src/main/cpp/include/)
+
 # 添加所有源代码目录打入so，不指定SHARED默认为静态库
 add_library(jknfav ${SRC_C_CXX})
 
