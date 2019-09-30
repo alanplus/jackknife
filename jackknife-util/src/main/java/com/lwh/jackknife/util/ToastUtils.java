@@ -83,7 +83,9 @@ public class ToastUtils {
             if (toast != null) {
                 toast.setDuration(duration);
                 toast.setText(text);
-            } else return;
+            } else {
+                return;
+            }
         }
         toast.show();
     }
@@ -98,7 +100,9 @@ public class ToastUtils {
             if (toast != null) {
                 toast.setDuration(duration);
                 toast.setText(resId);
-            } else return;
+            } else {
+                return;
+            }
         }
         toast.show();
     }

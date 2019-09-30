@@ -209,10 +209,12 @@ public class EqualizerView extends View {
                 if (mIndex != 0) {
                     STATE_NOW = STATE_TOUCH_MOVE;
                     mPoints[mIndex].y += deltaY;
-                    if (y <= 40)
+                    if (y <= 40) {
                         mPoints[mIndex].y = 40;
-                    if (y >= mHeight - 40)
+                    }
+                    if (y >= mHeight - 40) {
                         mPoints[mIndex].y = mHeight - 40;
+                    }
                     mDecibels[mIndex - 1] = getDecibel(mPoints[mIndex].y);
                     invalidate();
                 }
@@ -224,8 +226,9 @@ public class EqualizerView extends View {
                             mDecibels[mIndex - 1] != 12) {
                         float lastY = mStep * (-mDecibels[mIndex - 1] + 13);
                         mPoints[mIndex].y = lastY;
-                    } else if (mDecibels[mIndex - 1] == 0)
+                    } else if (mDecibels[mIndex - 1] == 0) {
                         mPoints[mIndex].y = mStep * 13;
+                    }
                     invalidate();
                     mOnUpdateDecibelListener.onUpdateDecibel(mDecibels);
                 }
@@ -264,11 +267,12 @@ public class EqualizerView extends View {
      */
     private int getDecibel(float y) {
         if (y == getHeight() - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                20, mContext.getResources().getDisplayMetrics()) - 40)
+                20, mContext.getResources().getDisplayMetrics()) - 40) {
             return -12;
-        else if (y == 40f)
+        } else if (y == 40f) {
             return 12;
-        else
+        } else {
             return 13 - Math.round(y / mStep);
+        }
     }
 }

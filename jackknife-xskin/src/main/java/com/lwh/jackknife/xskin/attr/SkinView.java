@@ -36,7 +36,9 @@ public class SkinView {
 
     public void apply() {
         // View view = viewRef.get();
-        if (view == null) return;
+        if (view == null) {
+            return;
+        }
         for (SkinAttr attr : attrs) {
             attr.apply(view);
         }

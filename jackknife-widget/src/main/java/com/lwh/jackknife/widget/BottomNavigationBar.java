@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
+import com.lwh.jackknife.widget.callback.OnShadeChangeListener;
+
 import java.util.ArrayList;
 import java.util.List;
 

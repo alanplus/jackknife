@@ -123,21 +123,24 @@ public class SwipeLayout extends RelativeLayout {
             }
             if (mPullDownY < 0) {
                 mPullDownY = 0;
-                if (mState != REFRESHING && mState != LOADING)
+                if (mState != REFRESHING && mState != LOADING) {
                     changeState(INIT);
+                }
                 mTimer.cancel();
                 requestLayout();
             }
             if (mPullUpY > 0) {
                 mPullUpY = 0;
-                if (mState != REFRESHING && mState != LOADING)
+                if (mState != REFRESHING && mState != LOADING) {
                     changeState(INIT);
+                }
                 mTimer.cancel();
                 requestLayout();
             }
             requestLayout();
-            if (mPullDownY + Math.abs(mPullUpY) == 0)
+            if (mPullDownY + Math.abs(mPullUpY) == 0) {
                 mTimer.cancel();
+            }
         }
     };
 
@@ -292,8 +295,9 @@ public class SwipeLayout extends RelativeLayout {
                             mCanPullDown = false;
                             mCanPullUp = true;
                         }
-                        if (mPullDownY > getMeasuredHeight())
+                        if (mPullDownY > getMeasuredHeight()) {
                             mPullDownY = getMeasuredHeight();
+                        }
                         if (mState == REFRESHING) {
                             mTouch = true;
                         }
@@ -306,8 +310,9 @@ public class SwipeLayout extends RelativeLayout {
                             mCanPullDown = true;
                             mCanPullUp = false;
                         }
-                        if (mPullUpY < -getMeasuredHeight())
+                        if (mPullUpY < -getMeasuredHeight()) {
                             mPullUpY = -getMeasuredHeight();
+                        }
                         if (mState == LOADING) {
                             mTouch = true;
                         }
@@ -350,12 +355,14 @@ public class SwipeLayout extends RelativeLayout {
                 }
                 if (mState == RELEASE_TO_REFRESH) {
                     changeState(REFRESHING);
-                    if (mOnRefreshListener != null)
+                    if (mOnRefreshListener != null) {
                         mOnRefreshListener.onRefresh(this);
+                    }
                 } else if (mState == RELEASE_TO_LOAD) {
                     changeState(LOADING);
-                    if (mOnRefreshListener != null)
+                    if (mOnRefreshListener != null) {
                         mOnRefreshListener.onLoadMore(this);
+                    }
                 }
                 hide();
             default:

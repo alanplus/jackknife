@@ -60,7 +60,9 @@ public class MSettingPage {
     private static Intent defaultApi(Context context) {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         intent.setData(Uri.fromParts("package", context.getPackageName(), null));
-        if (hasActivity(context, intent)) return intent;
+        if (hasActivity(context, intent)) {
+            return intent;
+        }
 
         return appDetailsApi(context);
     }
@@ -69,7 +71,9 @@ public class MSettingPage {
         Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
         intent.putExtra("packageName", context.getPackageName());
         intent.setClassName("com.meizu.safe", "com.meizu.safe.security.AppSecActivity");
-        if (hasActivity(context, intent)) return intent;
+        if (hasActivity(context, intent)) {
+            return intent;
+        }
 
         return defaultApi(context);
     }

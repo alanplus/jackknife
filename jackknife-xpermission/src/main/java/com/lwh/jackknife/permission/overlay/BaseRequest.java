@@ -98,7 +98,9 @@ abstract class BaseRequest implements OverlayRequest {
         } catch (Exception e) {
             return false;
         } finally {
-            if (dialog.isShowing()) dialog.dismiss();
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
         }
         return true;
     }

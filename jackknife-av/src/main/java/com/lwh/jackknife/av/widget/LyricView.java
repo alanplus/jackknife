@@ -121,11 +121,14 @@ public class LyricView extends ScrollView {
      * 更新歌词序列。
      */
     public void updateIndex(long time) {
-        if (mLyric == null) return;
+        if (mLyric == null) {
+            return;
+        }
         // 歌词序号
         int t = mLyric.getCurSentenceIndex(time);
-        if (mIndex == -1)
+        if (mIndex == -1) {
             return;
+        }
         if (mIndex != t) {
             TextView oldOne = mTextViews.get(mIndex);
             oldOne.setTextColor(Color.WHITE);

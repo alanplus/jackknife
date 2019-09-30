@@ -96,8 +96,9 @@ public class LrcUtils {
         int j = length - 1;
         while (j >= 0) {
             int c = song[j];
-            if (c >= 0x80)
+            if (c >= 0x80) {
                 c = c - 0x100;
+            }
             t1 = (int) ((c + t2) & 0x00000000FFFFFFFF);
             t2 = (int) ((t2 << (j % 2 + 4)) & 0x00000000FFFFFFFF);
             t2 = (int) ((t1 + t2) & 0x00000000FFFFFFFF);
@@ -107,8 +108,9 @@ public class LrcUtils {
         t1 = 0;
         while (j <= length - 1) {
             int c = song[j];
-            if (c >= 128)
+            if (c >= 128) {
                 c = c - 256;
+            }
             int t4 = (int) ((c + t1) & 0x00000000FFFFFFFF);
             t1 = (int) ((t1 << (j % 2 + 3)) & 0x00000000FFFFFFFF);
             t1 = (int) ((t1 + t4) & 0x00000000FFFFFFFF);
@@ -119,23 +121,27 @@ public class LrcUtils {
         t5 = (int) conv(t5 * (t1 | t3));
         t5 = (int) conv(t5 * (t2 ^ lrcId));
         long t6 = (long) t5;
-        if (t6 > 2147483648L)
+        if (t6 > 2147483648L) {
             t5 = (int) (t6 - 4294967296L);
+        }
         return String.valueOf(t5);
     }
 
     private long conv(int i) {
         long r = i % 4294967296L;
-        if (i >= 0 && r > 2147483648L)
+        if (i >= 0 && r > 2147483648L) {
             r = r - 4294967296L;
-        if (i < 0 && r < 2147483648L)
+        }
+        if (i < 0 && r < 2147483648L) {
             r = r + 4294967296L;
+        }
         return r;
     }
 
     public List<Sentence> parseLrc(String line, String musicName, long duration) {
-        if (line.equals(""))
+        if (line.equals("")) {
             return null;
+        }
         List<Sentence> list = new ArrayList<>();
         final Pattern pattern = Pattern.compile("(?<=\\[).*?(?=\\])");
         Matcher matcher = pattern.matcher(line);

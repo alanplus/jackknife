@@ -39,7 +39,9 @@ public class SkinAttrSupport {
             String attrName = attrs.getAttributeName(i);
             String attrValue = attrs.getAttributeValue(i);
             SkinAttrType attrType = getSupprotAttrType(attrName);
-            if (attrType == null) continue;
+            if (attrType == null) {
+                continue;
+            }
             if (attrValue.startsWith("@")) {
                 int id = Integer.parseInt(attrValue.substring(1));
                 // 获取资源id的实体名称
@@ -56,8 +58,9 @@ public class SkinAttrSupport {
 
     private static SkinAttrType getSupprotAttrType(String attrName) {
         for (SkinAttrType attrType : SkinAttrType.values()) {
-            if (attrType.getAttrType().equals(attrName))
+            if (attrType.getAttrType().equals(attrName)) {
                 return attrType;
+            }
         }
         return null;
     }

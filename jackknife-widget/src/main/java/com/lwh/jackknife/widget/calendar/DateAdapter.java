@@ -234,17 +234,19 @@ public final class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHold
             mSelectedDays.setLast(calendarDay);
             if (mController != null) {
                 if (mSelectedDays.getFirst().month < calendarDay.month) {
-                    for (int i = 0; i < mSelectedDays.getFirst().month - calendarDay.month - 1; ++i)
+                    for (int i = 0; i < mSelectedDays.getFirst().month - calendarDay.month - 1; ++i) {
                         mController.onDateSelected(mSelectedDays.getFirst().year, mSelectedDays
                                 .getFirst().month + i, mSelectedDays.getFirst().day);
+                    }
                 }
                 mController.onDateRangeSelected(mSelectedDays);
             }
         } else if (mSelectedDays.getLast() != null) {
             mSelectedDays.setFirst(calendarDay);
             mSelectedDays.setLast(null);
-        } else
+        } else {
             mSelectedDays.setFirst(calendarDay);
+        }
         notifyDataSetChanged();
     }
 

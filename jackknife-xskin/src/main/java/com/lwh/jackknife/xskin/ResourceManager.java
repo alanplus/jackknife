@@ -88,8 +88,9 @@ public class ResourceManager {
      * 追加皮肤后缀。
      */
     private String appendSuffix(String name) {
-        if (!TextUtils.isEmpty(mSuffix))
+        if (!TextUtils.isEmpty(mSuffix)) {
             name += "_" + mSuffix;
+        }
         return name;
     }
 }

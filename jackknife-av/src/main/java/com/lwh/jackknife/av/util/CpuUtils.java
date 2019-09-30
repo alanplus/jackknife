@@ -45,8 +45,9 @@ public class CpuUtils {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static String[] getABIList21() {
         final String[] abis = Build.SUPPORTED_ABIS;
-        if (abis == null || abis.length == 0)
+        if (abis == null || abis.length == 0) {
             return getABIList();
+        }
         return abis;
     }
 
@@ -64,7 +65,9 @@ public class CpuUtils {
      */
     public static boolean hasCompatibleCPU(Context context) {
         // If already checked return cached result
-        if (errorMsg != null || isCompatible) return isCompatible;
+        if (errorMsg != null || isCompatible) {
+            return isCompatible;
+        }
         isCompatible = true;
         boolean hasNeon = false, hasFpu = false, hasArmV6 = false, hasPlaceHolder = false,
                 hasArmV7 = false, hasMips = false, hasX86 = false, is64bits = false, isIntel = false;
@@ -73,10 +76,11 @@ public class CpuUtils {
 
         /* ABI */
         String[] abis;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             abis = getABIList21();
-        else
+        } else {
             abis = getABIList();
+        }
 
         for (String abi : abis) {
             Log.i(TAG, "abi=" + abi);
@@ -134,28 +138,34 @@ public class CpuUtils {
                 } else if (line.contains("ARMv7")) {
                     hasArmV7 = true;
                     hasArmV6 = true; /* Armv7 is backwards compatible to < v6 */
-                } else if (line.contains("ARMv6"))
+                } else if (line.contains("ARMv6")) {
                     hasArmV6 = true;
+                }
                     // "clflush size" is a x86-specific cpuinfo tag.
                     // (see kernel sources arch/x86/kernel/cpu/proc.c)
-                else if (line.contains("clflush size"))
+                else if (line.contains("clflush size")) {
                     hasX86 = true;
-                else if (line.contains("GenuineIntel"))
+                } else if (line.contains("GenuineIntel")) {
                     hasX86 = true;
-                else if (line.contains("placeholder"))
+                } else if (line.contains("placeholder")) {
                     hasPlaceHolder = true;
-                else if (line.contains("CPU implementer") && line.contains("0x69"))
+                } else if (line.contains("CPU implementer") && line.contains("0x69")) {
                     isIntel = true;
+                }
                     // "microsecond timers" is specific to MIPS.
                     // see arch/mips/kernel/proc.c
-                else if (line.contains("microsecond timers"))
+                else if (line.contains("microsecond timers")) {
                     hasMips = true;
-                if (line.contains("neon") || line.contains("asimd"))
+                }
+                if (line.contains("neon") || line.contains("asimd")) {
                     hasNeon = true;
-                if (line.contains("vfp") || (line.contains("Features") && line.contains("fp")))
+                }
+                if (line.contains("vfp") || (line.contains("Features") && line.contains("fp"))) {
                     hasFpu = true;
-                if (line.startsWith("processor"))
+                }
+                if (line.startsWith("processor")) {
                     processors++;
+                }
                 if (bogoMIPS < 0 && line.toLowerCase(Locale.ENGLISH).contains("bogomips")) {
                     String[] bogo_parts = line.split(":");
                     try {
@@ -170,8 +180,9 @@ public class CpuUtils {
             close(br);
             close(fileReader);
         }
-        if (processors == 0)
+        if (processors == 0) {
             processors = 1; // possibly borked cpuinfo?
+        }
 
 
         /* compare ELF with ABI/cpuinfo */
@@ -227,8 +238,9 @@ public class CpuUtils {
             fileReader = new FileReader("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq");
             br = new BufferedReader(fileReader);
             line = br.readLine();
-            if (line != null)
+            if (line != null) {
                 frequency = Float.parseFloat(line) / 1000.f; /* Convert to MHz */
+            }
         } catch (IOException ex) {
             Log.w(TAG, "Could not find maximum CPU frequency!");
         } catch (NumberFormatException e) {
@@ -349,8 +361,9 @@ public class CpuUtils {
         File lib;
         for (String libraryPath : libraryPaths) {
             lib = new File(libraryPath, "libjknfffmpeg.so");
-            if (lib.exists() && lib.canRead())
+            if (lib.exists() && lib.canRead()) {
                 return lib;
+            }
         }
         Log.i(TAG, "WARNING: Can't find shared library");
         return null;
@@ -386,8 +399,9 @@ public class CpuUtils {
             in = new RandomAccessFile(file, "r");
 
             ElfData elf = new ElfData();
-            if (!readHeader(in, elf))
+            if (!readHeader(in, elf)) {
                 return null;
+            }
 
             switch (elf.e_machine) {
                 case EM_386:
@@ -398,12 +412,14 @@ public class CpuUtils {
                 case EM_ARM:
                     in.close();
                     in = new RandomAccessFile(file, "r");
-                    if (!readSection(in, elf))
+                    if (!readSection(in, elf)) {
                         return null;
+                    }
                     in.close();
                     in = new RandomAccessFile(file, "r");
-                    if (!readArmAttributes(in, elf))
+                    if (!readArmAttributes(in, elf)) {
                         return null;
+                    }
                     break;
                 default:
                     return null;
@@ -418,11 +434,12 @@ public class CpuUtils {
     }
 
     private static void close(Closeable closeable) {
-        if (closeable != null)
+        if (closeable != null) {
             try {
                 closeable.close();
             } catch (IOException ignored) {
             }
+        }
     }
 
     private static boolean readHeader(RandomAccessFile in, ElfData elf) throws IOException {
@@ -465,8 +482,9 @@ public class CpuUtils {
             buffer.order(elf.order);
 
             int sh_type = buffer.getInt(4); /* Section type */
-            if (sh_type != SHT_ARM_ATTRIBUTES)
+            if (sh_type != SHT_ARM_ATTRIBUTES) {
                 continue;
+            }
 
             elf.sh_offset = buffer.getInt(16);  /* Section file offset */
             elf.sh_size = buffer.getInt(20);    /* Section size in bytes */
@@ -488,7 +506,9 @@ public class CpuUtils {
         //http://infocenter.arm.com/help/topic/com.arm.doc.ihi0044e/IHI0044E_aaelf.pdf
         //http://infocenter.arm.com/help/topic/com.arm.doc.ihi0045d/IHI0045D_ABI_addenda.pdf
         if (buffer.get() != 'A') // format-version
+        {
             return false;
+        }
 
         // sub-sections loop
         while (buffer.remaining() > 0) {
@@ -521,10 +541,11 @@ public class CpuUtils {
                             // string for >32 && odd tags
                             // uleb128 for other
                             tag %= 128;
-                            if (tag == 4 || tag == 5 || tag == 32 || (tag > 32 && (tag & 1) != 0))
+                            if (tag == 4 || tag == 5 || tag == 32 || (tag > 32 && (tag & 1) != 0)) {
                                 getString(buffer);
-                            else
+                            } else {
                                 getUleb128(buffer);
+                            }
                         }
                     }
                 }
@@ -538,8 +559,9 @@ public class CpuUtils {
         StringBuilder sb = new StringBuilder(buffer.limit());
         while (buffer.remaining() > 0) {
             char c = (char) buffer.get();
-            if (c == 0)
+            if (c == 0) {
                 break;
+            }
             sb.append(c);
         }
         return sb.toString();

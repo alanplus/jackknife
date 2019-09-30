@@ -149,8 +149,9 @@ public class MusicUtils {
                         Bitmap tmp = Bitmap.createScaledBitmap(b, w, h, true);
                         // Bitmap.createScaledBitmap() can return the same
                         // bitmap
-                        if (tmp != b)
+                        if (tmp != b) {
                             b.recycle();
+                        }
                         b = tmp;
                     }
                 }
@@ -158,8 +159,9 @@ public class MusicUtils {
             } catch (FileNotFoundException e) {
             } finally {
                 try {
-                    if (fd != null)
+                    if (fd != null) {
                         fd.close();
+                    }
                 } catch (IOException e) {
                 }
             }

@@ -40,8 +40,9 @@ public class PullableListView extends ListView implements Pullable {
         } else if (getFirstVisiblePosition() == 0
                 && getChildAt(0).getTop() >= 0) {
             return true;
-        } else
+        } else {
             return false;
+        }
     }
 
     public boolean canPullUp() {
@@ -51,8 +52,9 @@ public class PullableListView extends ListView implements Pullable {
             if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
                     && getChildAt(
                     getLastVisiblePosition()
-                            - getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
+                            - getFirstVisiblePosition()).getBottom() <= getMeasuredHeight()) {
                 return true;
+            }
         }
         return false;
     }

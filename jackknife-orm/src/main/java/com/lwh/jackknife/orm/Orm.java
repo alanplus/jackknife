@@ -52,7 +52,9 @@ public class Orm {
                 sDatabaseState = STATE_DATABASE_EXISTS;
             }
             return sDatabase;
-        } else throw new OrmStateException("Database is not exists.");
+        } else {
+            throw new OrmStateException("Database is not exists.");
+        }
     }
 
     public synchronized static void init(Context context, String databaseName) {

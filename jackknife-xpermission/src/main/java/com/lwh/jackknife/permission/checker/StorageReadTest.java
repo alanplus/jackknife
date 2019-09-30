@@ -28,10 +28,14 @@ class StorageReadTest implements PermissionTest {
 
     @Override
     public boolean test() throws Throwable {
-        if (!TextUtils.equals(Environment.MEDIA_MOUNTED, Environment.getExternalStorageState())) return true;
+        if (!TextUtils.equals(Environment.MEDIA_MOUNTED, Environment.getExternalStorageState())) {
+            return true;
+        }
 
         File directory = Environment.getExternalStorageDirectory();
-        if (!directory.exists()) return true;
+        if (!directory.exists()) {
+            return true;
+        }
 
         long modified = directory.lastModified();
         String[] pathList = directory.list();

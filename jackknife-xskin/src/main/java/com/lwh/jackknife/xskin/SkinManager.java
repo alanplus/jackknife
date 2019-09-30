@@ -74,9 +74,13 @@ public class SkinManager {
         String skinPluginPkgName = mPrefsUtils.getPluginPkgName();
         mSuffix = mPrefsUtils.getSuffix();
         if (TextUtils.isEmpty(skinPluginPath))  //皮肤路径不存在
+        {
             return;
+        }
         File file = new File(skinPluginPath);
-        if (!file.exists()) return;
+        if (!file.exists()) {
+            return;
+        }
         try {
             loadPlugin(skinPluginPath, skinPluginPkgName, mSuffix);
             mCurPluginPath = skinPluginPath;
@@ -166,8 +170,9 @@ public class SkinManager {
      * 根据suffix选择插件内某套皮肤，默认为""。
      */
     public void changeSkin(final String skinPluginPath, final String pkgName, final String suffix, ISkinChangingCallback callback) {
-        if (callback == null)
+        if (callback == null) {
             callback = ISkinChangingCallback.DEFAULT_SKIN_CHANGING_CALLBACK;
+        }
         final ISkinChangingCallback skinChangingCallback = callback;
         skinChangingCallback.onStart();
         checkPluginParamsThrow(skinPluginPath, pkgName);
@@ -210,7 +215,9 @@ public class SkinManager {
 
     public void apply(ISkinChangedListener listener) {
         List<SkinView> skinViews = getSkinViews(listener);
-        if (skinViews == null) return;
+        if (skinViews == null) {
+            return;
+        }
         for (SkinView skinView : skinViews) {
             skinView.apply();
         }

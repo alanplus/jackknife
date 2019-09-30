@@ -330,8 +330,9 @@ public class IoUtils {
     public static File write(InputStream inputStream, String filePath) {
         OutputStream outputStream = null;
         File mFile = new File(filePath);
-        if (!mFile.getParentFile().exists())
+        if (!mFile.getParentFile().exists()) {
             mFile.getParentFile().mkdirs();
+        }
         try {
             outputStream = new FileOutputStream(mFile);
             byte buffer[] = new byte[4 * 1024];

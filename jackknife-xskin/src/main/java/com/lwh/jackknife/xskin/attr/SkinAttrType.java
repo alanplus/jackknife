@@ -34,7 +34,9 @@ public enum SkinAttrType {
         @Override
         public void apply(View view, String resName) {
             Drawable drawable = getResourceManager().getDrawableByName(resName);
-            if (drawable == null) return;
+            if (drawable == null) {
+                return;
+            }
             view.setBackgroundDrawable(drawable);
         }
     },
@@ -45,7 +47,9 @@ public enum SkinAttrType {
         @Override
         public void apply(View view, String resName) {
             ColorStateList colorlist = getResourceManager().getColorStateList(resName);
-            if (colorlist == null) return;
+            if (colorlist == null) {
+                return;
+            }
             ((TextView) view).setTextColor(colorlist);
         }
     },
@@ -57,7 +61,9 @@ public enum SkinAttrType {
         public void apply(View view, String resName) {
             if (view instanceof ImageView) {
                 Drawable drawable = getResourceManager().getDrawableByName(resName);
-                if (drawable == null) return;
+                if (drawable == null) {
+                    return;
+                }
                 ((ImageView) view).setImageDrawable(drawable);
             }
 

@@ -54,23 +54,15 @@ public class ToggleButton extends View implements Checkable {
     private final int ANIMATE_STATE_SWITCH = 5;
 
     public ToggleButton(Context context) {
-        super(context);
-        init(context, null);
+        this(context, null);
     }
 
     public ToggleButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs);
+        this(context, attrs, 0);
     }
 
     public ToggleButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public ToggleButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
     }
 

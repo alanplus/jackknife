@@ -190,14 +190,18 @@ public abstract class BaseDialog extends Dialog {
         bottomLayout.addView(mPositiveButton);
         dialogLayout.addView(bottomLayout);
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        if (getWidth() > 0)
+        if (getWidth() > 0) {
             params.width = getWidth();
-        if (getHeight() > 0)
+        }
+        if (getHeight() > 0) {
             params.height = getHeight();
-        if (getX() > 0)
+        }
+        if (getX() > 0) {
             params.width = getX();
-        if (getY() > 0)
+        }
+        if (getY() > 0) {
             params.height = getY();
+        }
         if (mFullScreen) {
             params.width = WindowManager.LayoutParams.MATCH_PARENT;
             params.height = WindowManager.LayoutParams.MATCH_PARENT;

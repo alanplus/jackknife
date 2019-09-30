@@ -88,7 +88,9 @@ public class Runtime implements RuntimeOption {
      * @param permissions permissions which will be checked.
      */
     private void checkPermissions(String... permissions) {
-        if (sAppPermissions == null) sAppPermissions = getManifestPermissions(mSource.getContext());
+        if (sAppPermissions == null) {
+            sAppPermissions = getManifestPermissions(mSource.getContext());
+        }
 
         if (permissions.length == 0) {
             throw new IllegalArgumentException("Please enter at least one permission.");

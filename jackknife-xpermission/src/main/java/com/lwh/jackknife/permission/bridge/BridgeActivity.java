@@ -115,7 +115,9 @@ public final class BridgeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) return;
+        if (savedInstanceState != null) {
+            return;
+        }
 
         Intent intent = getIntent();
         int operation = intent.getIntExtra(KEY_TYPE, -1);

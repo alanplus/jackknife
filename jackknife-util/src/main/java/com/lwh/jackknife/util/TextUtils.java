@@ -321,8 +321,9 @@ public class TextUtils {
             }
 
             // 其他字符，可以认为是标点符号
-            else
+            else {
                 ct = CharType.DELIMITER;
+            }
         }
 
         // basic latin，编码区间 0000-007f
@@ -335,18 +336,21 @@ public class TextUtils {
                 ct = CharType.LETTER;
             }
             // 其他字符，可以认为是标点符号
-            else
+            else {
                 ct = CharType.DELIMITER;
+            }
         }
 
         // latin-1，编码区间0080-00ff
         else if ((c >= 0x00a1) && (c <= 0x00ff)) {
             if ((c >= 0x00c0) && (c <= 0x00ff)) {
                 ct = CharType.LETTER;
-            } else
+            } else {
                 ct = CharType.DELIMITER;
-        } else
+            }
+        } else {
             ct = CharType.OTHER;
+        }
 
         return ct;
     }

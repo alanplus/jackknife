@@ -265,7 +265,9 @@ public class XPermission {
     public static boolean hasPermissions(Context context, String[]... permissions) {
         for (String[] permission : permissions) {
             boolean hasPermission = PERMISSION_CHECKER.hasPermission(context, permission);
-            if (!hasPermission) return false;
+            if (!hasPermission) {
+                return false;
+            }
         }
         return true;
     }
@@ -305,7 +307,9 @@ public class XPermission {
     public static boolean hasPermissions(Activity activity, String[]... permissions) {
         for (String[] permission : permissions) {
             boolean hasPermission = PERMISSION_CHECKER.hasPermission(activity, permission);
-            if (!hasPermission) return false;
+            if (!hasPermission) {
+                return false;
+            }
         }
         return true;
     }

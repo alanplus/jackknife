@@ -42,7 +42,9 @@ class LocationFineTest implements PermissionTest {
 
         PackageManager packageManager = mContext.getPackageManager();
         boolean gpsHardware = packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
-        if (!gpsHardware) return true;
+        if (!gpsHardware) {
+            return true;
+        }
 
         return !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
