@@ -18,17 +18,18 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject:4.5.7' //运行期注解的butterknife</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject-annotations:4.5.7' //viewinject的扩展包，要基于viewinject</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.5.7' //多渠道开发框架</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.5.7'    //android系统数据库操作框架</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.5.7'    //mvp设计理念</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.5.7' //自定义控件，各种UI效果</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.5.7'//开发工具类</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.5.7'//动态权限申请</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.5.7 //音视频开发工具</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.5.7'//一键换肤</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filechooser:4.5.7'//文件和文件夹路径选择器</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject:4.6.0' //运行期注解的butterknife</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject-annotations:4.6.0' //viewinject的扩展包，要基于viewinject</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.6.0' //多渠道开发框架</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.6.0'    //android系统数据库操作框架</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.6.0'    //mvp设计理念</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.6.0' //自定义控件，各种UI效果</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.6.0'//开发工具类</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.6.0'//动态权限申请</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.6.0' //音视频开发工具</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.6.0'//一键换肤</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filechooser:4.6.0'//文件和文件夹路径选择器</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filepatch:4.6.0'//文件补丁差分合并工具（用于增量更新）</h3>
 }
 </blockquote>
 
