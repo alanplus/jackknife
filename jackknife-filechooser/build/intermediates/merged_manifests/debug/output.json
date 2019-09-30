@@ -1,0 +1,1 @@
+[{"outputType":{"type":"MERGED_MANIFESTS"},"apkData":{"type":"MAIN","splits":[],"versionCode":256,"versionName":"4.5.11","enabled":true,"outputFile":"jackknife-filechooser-debug.aar","fullName":"debug","baseName":"debug"},"path":"..\\..\\library_manifest\\debug\\AndroidManifest.xml","properties":{"packageId":"com.lwh.jackknife.fileexplorer","split":""}}]
