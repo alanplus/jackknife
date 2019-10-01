@@ -57,6 +57,7 @@ public class TitleBar extends FrameLayout {
 
     private void init(AttributeSet attrs, int defStyleAttr) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, 0);
+        int dp5 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
         int dp6 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
         int dp8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         int dp10 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
@@ -96,6 +97,9 @@ public class TitleBar extends FrameLayout {
             params.rightMargin = dp10;
             mMenuView.setLayoutParams(params);
         }
+        int measuredHeight = getMeasuredHeight();
+        int iconSize = measuredHeight - dp10;
+        mBackIcon.setBounds(dp5, dp5, dp5 + iconSize, dp5 + iconSize);
         mBackView.setCompoundDrawables(mBackIcon, null, null, null);
         mBackView.setCompoundDrawablePadding(10);
     }
