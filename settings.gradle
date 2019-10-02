@@ -1,4 +1,5 @@
 include ':jackknife-viewinject',
+		':jackknife-xhttp',
 		':jackknife-filepatch',
         ':jackknife-viewinject-annotations',
         ':jackknife-xskin',

@@ -244,8 +244,11 @@ attr layout_anchor
 attr layout_anchorGravity
 attr layout_behavior
 attr layout_dodgeInsetEdges
+attr layout_empty
+attr layout_error
 attr layout_insetEdge
 attr layout_keyline
+attr layout_progress
 attr letterViewStyle
 attr letterview_hoverBackgroundDrawable
 attr letterview_hoverTextColor
@@ -328,7 +331,15 @@ attr radioButtonStyle
 attr ratingBarStyle
 attr ratingBarStyleIndicator
 attr ratingBarStyleSmall
+attr recyclerClipToPadding
+attr recyclerPadding
+attr recyclerPaddingBottom
+attr recyclerPaddingLeft
+attr recyclerPaddingRight
+attr recyclerPaddingTop
 attr reverseLayout
+attr scrollbarStyle
+attr scrollbars
 attr searchHintIcon
 attr searchIcon
 attr searchViewStyle
@@ -984,18 +995,23 @@ id customPanel
 id decor_content_parent
 id default_activity_button
 id edit_query
+id empty
 id end
 id end_padder
+id error
 id expand_activities_button
 id expanded_menu
 id fast
 id forever
 id head_view
 id home
+id horizontal
 id icon
 id icon_group
 id image
 id info
+id insideInset
+id insideOverlay
 id italic
 id item_touch_helper_previous_elevation
 id iv_file_type
@@ -1030,9 +1046,13 @@ id normal
 id notification_background
 id notification_main_column
 id notification_main_column_container
+id outsideInset
+id outsideOverlay
 id parentPanel
+id progress
 id progress_circular
 id progress_horizontal
+id ptr_layout
 id radio
 id right
 id rightBottom
@@ -1096,6 +1116,7 @@ id tv_titlebar_right
 id tv_titlebar_title
 id uniform
 id up
+id vertical
 id wrap_content
 integer abc_config_activityDefaultDur
 integer abc_config_activityShortDur
@@ -1136,6 +1157,7 @@ layout jknf_item_dialog_menu
 layout jknf_item_popup_dialog_menu
 layout jknf_item_popup_menu
 layout jknf_menu_popup_dialog
+layout jknf_progress_recyclerview
 layout jknf_swipe_layout_footer
 layout jknf_swipe_layout_header
 layout jknf_title_bar
@@ -1638,3 +1660,4 @@ styleable View android_focusable android_theme paddingEnd paddingStart theme
 styleable ViewBackgroundHelper android_background backgroundTint backgroundTintMode
 styleable ViewStubCompat android_id android_inflatedId android_layout
 styleable WheelView wv_dividerColor wv_gravity wv_lineSpacingMultiplier wv_textColorCenter wv_textColorOut wv_textSize
+styleable XRecyclerView layout_empty layout_error layout_progress recyclerClipToPadding recyclerPadding recyclerPaddingBottom recyclerPaddingLeft recyclerPaddingRight recyclerPaddingTop scrollbarStyle scrollbars
