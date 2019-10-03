@@ -57,7 +57,6 @@ public class TitleBar extends FrameLayout {
 
     private void init(AttributeSet attrs, int defStyleAttr) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.TitleBar, defStyleAttr, 0);
-        int dp5 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics());
         int dp6 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics());
         int dp8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         int dp10 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
@@ -76,7 +75,7 @@ public class TitleBar extends FrameLayout {
         }
         a.recycle();
         if (mBackIcon == null) {
-            mBackIcon = ContextCompat.getDrawable(getContext(), R.drawable.jknf_title_bar_back);
+            mBackIcon = getContext().getResources().getDrawable(R.drawable.jknf_title_bar_back);
         }
         View.inflate(getContext(), R.layout.jknf_title_bar, this);
         mTitleView = findViewById(R.id.tv_titlebar_title);
@@ -99,7 +98,7 @@ public class TitleBar extends FrameLayout {
         }
         int measuredHeight = getMeasuredHeight();
         int iconSize = measuredHeight - dp10;
-        mBackIcon.setBounds(dp5, dp5, dp5 + iconSize, dp5 + iconSize);
+        mBackIcon.setBounds(0, 0, iconSize, iconSize);
         mBackView.setCompoundDrawables(mBackIcon, null, null, null);
         mBackView.setCompoundDrawablePadding(10);
     }
@@ -115,6 +114,7 @@ public class TitleBar extends FrameLayout {
     public void setMenu(String menu) {
         mMenuView.setText(menu);
     }
+
     public void setOnBackListener(OnClickListener listener) {
         mBackView.setOnClickListener(listener);
     }
@@ -123,8 +123,16 @@ public class TitleBar extends FrameLayout {
         mMenuView.setOnClickListener(listener);
     }
 
+    public TextView getBackView() {
+        return mBackView;
+    }
+
     public TextView getTitleView() {
         return mTitleView;
+    }
+
+    public TextView getMenuView() {
+        return mMenuView;
     }
 
     public void showMenu(boolean show) {
