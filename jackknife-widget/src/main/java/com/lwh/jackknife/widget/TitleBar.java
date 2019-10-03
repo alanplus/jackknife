@@ -86,7 +86,7 @@ public class TitleBar extends FrameLayout {
         mBackView.setText(mBack);
         mMenuView.setText(mMenu);
         if (mMenuIcon != null) {
-            mMenuView.setCompoundDrawables(mMenuIcon, null, null, null);
+            mMenuView.setCompoundDrawablesWithIntrinsicBounds(mMenuIcon, null, null, null);
             mMenuView.setCompoundDrawablePadding(10);
         }
         if (mMenuBg != null) {
@@ -99,7 +99,7 @@ public class TitleBar extends FrameLayout {
         int measuredHeight = getMeasuredHeight();
         int iconSize = measuredHeight - dp10;
         mBackIcon.setBounds(0, 0, iconSize, iconSize);
-        mBackView.setCompoundDrawables(mBackIcon, null, null, null);
+        mBackView.setCompoundDrawablesWithIntrinsicBounds(mBackIcon, null, null, null);
         mBackView.setCompoundDrawablePadding(10);
     }
 

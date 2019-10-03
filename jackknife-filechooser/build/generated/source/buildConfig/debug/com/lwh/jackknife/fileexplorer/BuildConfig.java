@@ -8,6 +8,6 @@ public final class BuildConfig {
   public static final String APPLICATION_ID = "com.lwh.jackknife.fileexplorer";
   public static final String BUILD_TYPE = "debug";
   public static final String FLAVOR = "";
-  public static final int VERSION_CODE = 260;
-  public static final String VERSION_NAME = "4.6.2";
+  public static final int VERSION_CODE = 262;
+  public static final String VERSION_NAME = "4.6.4";
 }
