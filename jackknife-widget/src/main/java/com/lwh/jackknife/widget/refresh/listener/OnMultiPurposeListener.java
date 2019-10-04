@@ -1,7 +1,7 @@
 package com.lwh.jackknife.widget.refresh.listener;
 
-import com.scwang.smartrefresh.layout.api.RefreshFooter;
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.lwh.jackknife.widget.refresh.api.RefreshFooter;
+import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
 
 /**
  * 多功能监听器

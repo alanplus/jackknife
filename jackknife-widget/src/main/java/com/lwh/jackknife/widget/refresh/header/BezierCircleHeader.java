@@ -30,12 +30,12 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.internal.InternalAbstract;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 /**
  * CircleRefresh

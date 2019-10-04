@@ -15,22 +15,22 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 
-import com.scwang.smartrefresh.layout.api.RefreshContent;
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
-import com.scwang.smartrefresh.layout.listener.CoordinatorLayoutListener;
-import com.scwang.smartrefresh.layout.util.DesignUtil;
+import com.lwh.jackknife.widget.refresh.api.RefreshContent;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.api.ScrollBoundaryDecider;
+import com.lwh.jackknife.widget.refresh.listener.CoordinatorLayoutListener;
+import com.lwh.jackknife.widget.refresh.util.DesignUtil;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.canScrollVertically;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.isContentView;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.isTransformedTouchPointInView;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.measureViewHeight;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.scrollListBy;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.canScrollVertically;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.isContentView;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.isTransformedTouchPointInView;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.measureViewHeight;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.scrollListBy;
 
 /**
  * 刷新内容包装

@@ -30,12 +30,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.scwang.smartrefresh.layout.R;
-import com.scwang.smartrefresh.layout.api.RefreshFooter;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.internal.InternalAbstract;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.R;
+import com.lwh.jackknife.widget.refresh.api.RefreshFooter;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 /**
  * 球脉冲底部加载组件

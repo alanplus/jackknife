@@ -16,12 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.scwang.smartrefresh.layout.R;
-import com.scwang.smartrefresh.layout.api.RefreshInternal;
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.R;
+import com.lwh.jackknife.widget.refresh.api.RefreshInternal;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 import static android.view.View.MeasureSpec.EXACTLY;
 

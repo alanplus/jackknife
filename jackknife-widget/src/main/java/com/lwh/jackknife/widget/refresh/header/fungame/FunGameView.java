@@ -38,11 +38,11 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.scwang.smartrefresh.header.R;
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.R;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
@@ -364,7 +364,7 @@ public abstract class FunGameView<T extends FunGameView> extends FunGameBase {
                 mMaskViewTop.setText(mMaskTextTopRelease);
                 break;
 //            case ReleaseToTwoLevel:
-//                mMaskViewTop.setText(com.scwang.smartrefresh.layout.R.string.srl_header_secondary);
+//                mMaskViewTop.setText(com.lwh.jackknife.widget.refresh.R.string.srl_header_secondary);
 //                break;
         }
     }

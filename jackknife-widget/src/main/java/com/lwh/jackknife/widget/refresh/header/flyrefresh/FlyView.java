@@ -19,8 +19,8 @@ package com.lwh.jackknife.widget.refresh.header.flyrefresh;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.scwang.smartrefresh.header.internal.pathview.PathsView;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.header.internal.pathview.PathsView;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 /**
  * 纸飞机视图

@@ -3,8 +3,8 @@ package com.lwh.jackknife.widget.refresh.impl;
 import android.graphics.PointF;
 import android.view.View;
 
-import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.api.ScrollBoundaryDecider;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 /**
  * 滚动边界

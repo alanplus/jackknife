@@ -34,13 +34,13 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
-import com.scwang.smartrefresh.layout.R;
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.internal.InternalAbstract;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.R;
+import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 /**
  * 贝塞尔曲线类雷达风格刷新组件

@@ -25,7 +25,7 @@ import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
-import com.scwang.smartrefresh.layout.internal.PaintDrawable;
+import com.lwh.jackknife.widget.refresh.internal.PaintDrawable;
 
 import java.util.ArrayList;
 import java.util.List;

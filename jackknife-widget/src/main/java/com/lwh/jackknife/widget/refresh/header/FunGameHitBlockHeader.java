@@ -26,9 +26,10 @@ import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.scwang.smartrefresh.header.fungame.FunGameView;
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.R;
+import com.lwh.jackknife.widget.refresh.header.fungame.FunGameView;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 import java.util.ArrayList;
 import java.util.List;

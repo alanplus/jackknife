@@ -26,7 +26,7 @@ import android.support.annotation.ColorInt;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 
 /**

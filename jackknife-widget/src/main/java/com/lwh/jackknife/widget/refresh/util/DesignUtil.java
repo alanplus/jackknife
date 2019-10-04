@@ -5,8 +5,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.listener.CoordinatorLayoutListener;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.listener.CoordinatorLayoutListener;
 
 /**
  * Design 兼容包缺省尝试

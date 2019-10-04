@@ -19,7 +19,7 @@ package com.lwh.jackknife.widget.refresh.api;
 import android.animation.ValueAnimator;
 import android.support.annotation.NonNull;
 
-import com.scwang.smartrefresh.layout.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
 
 /**
  * 刷新布局核心功能接口

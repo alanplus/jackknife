@@ -30,7 +30,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Interpolator;
 
-import com.scwang.smartrefresh.header.R;
+import com.lwh.jackknife.widget.R;
 
 /**
  * 山丘树木场景视图

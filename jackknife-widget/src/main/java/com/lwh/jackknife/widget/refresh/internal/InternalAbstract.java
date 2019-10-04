@@ -10,17 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshFooter;
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.api.RefreshInternal;
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.impl.RefreshFooterWrapper;
-import com.scwang.smartrefresh.layout.impl.RefreshHeaderWrapper;
-import com.scwang.smartrefresh.layout.listener.OnStateChangedListener;
+import com.lwh.jackknife.widget.refresh.SmartRefreshLayout;
+import com.lwh.jackknife.widget.refresh.api.RefreshFooter;
+import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
+import com.lwh.jackknife.widget.refresh.api.RefreshInternal;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.impl.RefreshFooterWrapper;
+import com.lwh.jackknife.widget.refresh.impl.RefreshHeaderWrapper;
+import com.lwh.jackknife.widget.refresh.listener.OnStateChangedListener;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 

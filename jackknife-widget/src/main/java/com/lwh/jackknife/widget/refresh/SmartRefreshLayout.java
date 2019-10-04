@@ -35,30 +35,31 @@ import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lwh.jackknife.widget.R;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreator;
-import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreator;
-import com.scwang.smartrefresh.layout.api.DefaultRefreshInitializer;
-import com.scwang.smartrefresh.layout.api.RefreshContent;
-import com.scwang.smartrefresh.layout.api.RefreshFooter;
-import com.scwang.smartrefresh.layout.api.RefreshHeader;
-import com.scwang.smartrefresh.layout.api.RefreshInternal;
-import com.scwang.smartrefresh.layout.api.RefreshKernel;
-import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
-import com.scwang.smartrefresh.layout.constant.DimensionStatus;
-import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
-import com.scwang.smartrefresh.layout.impl.RefreshContentWrapper;
-import com.scwang.smartrefresh.layout.impl.RefreshFooterWrapper;
-import com.scwang.smartrefresh.layout.impl.RefreshHeaderWrapper;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnMultiPurposeListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnStateChangedListener;
-import com.scwang.smartrefresh.layout.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.api.DefaultRefreshFooterCreator;
+import com.lwh.jackknife.widget.refresh.api.DefaultRefreshHeaderCreator;
+import com.lwh.jackknife.widget.refresh.api.DefaultRefreshInitializer;
+import com.lwh.jackknife.widget.refresh.api.RefreshContent;
+import com.lwh.jackknife.widget.refresh.api.RefreshFooter;
+import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
+import com.lwh.jackknife.widget.refresh.api.RefreshInternal;
+import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
+import com.lwh.jackknife.widget.refresh.api.ScrollBoundaryDecider;
+import com.lwh.jackknife.widget.refresh.constant.DimensionStatus;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.footer.BallPulseFooter;
+import com.lwh.jackknife.widget.refresh.header.BezierRadarHeader;
+import com.lwh.jackknife.widget.refresh.impl.RefreshContentWrapper;
+import com.lwh.jackknife.widget.refresh.impl.RefreshFooterWrapper;
+import com.lwh.jackknife.widget.refresh.impl.RefreshHeaderWrapper;
+import com.lwh.jackknife.widget.refresh.listener.OnLoadMoreListener;
+import com.lwh.jackknife.widget.refresh.listener.OnMultiPurposeListener;
+import com.lwh.jackknife.widget.refresh.listener.OnRefreshListener;
+import com.lwh.jackknife.widget.refresh.listener.OnRefreshLoadMoreListener;
+import com.lwh.jackknife.widget.refresh.listener.OnStateChangedListener;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 import static android.view.MotionEvent.obtain;
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -67,9 +68,9 @@ import static android.view.View.MeasureSpec.getSize;
 import static android.view.View.MeasureSpec.makeMeasureSpec;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.dp2px;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.fling;
-import static com.scwang.smartrefresh.layout.util.SmartUtil.isContentView;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.dp2px;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.fling;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtil.isContentView;
 import static java.lang.System.currentTimeMillis;
 
 /**
@@ -1663,7 +1664,7 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
          *         });
          *
          * 2.XML关闭
-         *          <com.scwang.smartrefresh.layout.SmartRefreshLayout
+         *          <com.lwh.jackknife.widget.refresh.SmartRefreshLayout
          *              android:layout_width="match_parent"
          *              android:layout_height="match_parent"
          *              android:tag="close egg"/>
@@ -2702,9 +2703,9 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
 
     /**
      * Set up a multi-function listener.
-     * Recommended {@link com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener}
+     * Recommended {@link com.lwh.jackknife.widget.refresh.listener.SimpleMultiPurposeListener}
      * 设置多功能监听器
-     * 建议使用 {@link com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener}
+     * 建议使用 {@link com.lwh.jackknife.widget.refresh.listener.SimpleMultiPurposeListener}
      *
      * @param listener OnMultiPurposeListener 多功能监听器
      * @return RefreshLayout
@@ -2754,9 +2755,9 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
 
     /**
      * Set the scroll boundary Decider, Can customize when you can refresh.
-     * Recommended {@link com.scwang.smartrefresh.layout.impl.ScrollBoundaryDeciderAdapter}
+     * Recommended {@link com.lwh.jackknife.widget.refresh.impl.ScrollBoundaryDeciderAdapter}
      * 设置滚动边界判断器
-     * 建议使用 {@link com.scwang.smartrefresh.layout.impl.ScrollBoundaryDeciderAdapter}
+     * 建议使用 {@link com.lwh.jackknife.widget.refresh.impl.ScrollBoundaryDeciderAdapter}
      *
      * @param boundary ScrollBoundaryDecider 判断器
      * @return RefreshLayout

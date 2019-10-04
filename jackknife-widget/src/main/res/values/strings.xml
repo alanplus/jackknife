@@ -50,4 +50,13 @@
 
     <string name="srl_content_empty">SmartRefreshLayout中没有找到内容视图。您是否忘记在xml布局文件中添加？</string>
     <string name="srl_component_falsify" formatted="false">%s 虚假区域\n代表运行时拖动的高度【%.1fdp】 \n而不会显示任何东西</string>
+
+    <string name="fgh_mask_top_pull">Pull To Break Out!</string>
+    <string name="fgh_mask_top_release">Release To Break Out!</string>
+    <string name="fgh_mask_bottom">Scroll to move handle</string>
+
+    <string name="fgh_text_game_over">Game Over</string>
+    <string name="fgh_text_loading">Refreshing…</string>
+    <string name="fgh_text_loading_finish">Refreshing Finished</string>
+    <string name="fgh_text_loading_failed">Refreshing Failed</string>
 </resources>

@@ -35,15 +35,20 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
 
+import com.lwh.jackknife.widget.R;
 import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.header.internal.MaterialProgressDrawable;
 import com.lwh.jackknife.widget.refresh.header.waveswipe.WaveView;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 import static android.view.View.MeasureSpec.EXACTLY;
 import static android.view.View.MeasureSpec.getSize;
 import static android.view.View.MeasureSpec.makeMeasureSpec;
 
-@SuppressWarnings("unused")
 public class WaveSwipeHeader extends InternalAbstract implements RefreshHeader {
 
     /**
@@ -269,12 +274,15 @@ public class WaveSwipeHeader extends InternalAbstract implements RefreshHeader {
         };
         scaleDownAnimation.setDuration(200);
         mCircleView.setAnimationListener(new Animation.AnimationListener() {
+            @Override
             public void onAnimationStart(Animation animation) {
             }
 
+            @Override
             public void onAnimationRepeat(Animation animation) {
             }
 
+            @Override
             public void onAnimationEnd(Animation animation) {
                 mProgress.stop();
                 mProgress.setAlpha(0xff);

@@ -25,11 +25,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
-import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnMultiPurposeListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.listener.OnLoadMoreListener;
+import com.lwh.jackknife.widget.refresh.listener.OnMultiPurposeListener;
+import com.lwh.jackknife.widget.refresh.listener.OnRefreshListener;
+import com.lwh.jackknife.widget.refresh.listener.OnRefreshLoadMoreListener;
 
 /**
  * 刷新布局
@@ -444,9 +444,9 @@ public interface RefreshLayout {
 
     /**
      * Set up a multi-function listener.
-     * Recommended {@link com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener}
+     * Recommended {@link com.lwh.jackknife.widget.refresh.listener.SimpleMultiPurposeListener}
      * 设置多功能监听器
-     * 建议使用 {@link com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener}
+     * 建议使用 {@link com.lwh.jackknife.widget.refresh.listener.SimpleMultiPurposeListener}
      *
      * @param listener OnMultiPurposeListener 多功能监听器
      * @return RefreshLayout
@@ -455,9 +455,9 @@ public interface RefreshLayout {
 
     /**
      * Set the scroll boundary Decider, Can customize when you can refresh.
-     * Recommended {@link com.scwang.smartrefresh.layout.impl.ScrollBoundaryDeciderAdapter}
+     * Recommended {@link com.lwh.jackknife.widget.refresh.impl.ScrollBoundaryDeciderAdapter}
      * 设置滚动边界判断器
-     * 建议使用 {@link com.scwang.smartrefresh.layout.impl.ScrollBoundaryDeciderAdapter}
+     * 建议使用 {@link com.lwh.jackknife.widget.refresh.impl.ScrollBoundaryDeciderAdapter}
      *
      * @param boundary ScrollBoundaryDecider 判断器
      * @return RefreshLayout

@@ -3,8 +3,8 @@ package com.lwh.jackknife.widget.refresh.impl;
 import android.annotation.SuppressLint;
 import android.view.View;
 
-import com.scwang.smartrefresh.layout.api.RefreshFooter;
-import com.scwang.smartrefresh.layout.internal.InternalAbstract;
+import com.lwh.jackknife.widget.refresh.api.RefreshFooter;
+import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
 
 /**
  * 刷新底部包装

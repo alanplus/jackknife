@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -33,7 +34,13 @@ import android.widget.TextView;
 
 import com.lwh.jackknife.widget.R;
 import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
+import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
+import com.lwh.jackknife.widget.refresh.constant.RefreshState;
+import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
+import com.lwh.jackknife.widget.refresh.internal.ArrowDrawable;
 import com.lwh.jackknife.widget.refresh.internal.InternalClassics;
+import com.lwh.jackknife.widget.refresh.internal.ProgressDrawable;
+import com.lwh.jackknife.widget.refresh.util.SmartUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
