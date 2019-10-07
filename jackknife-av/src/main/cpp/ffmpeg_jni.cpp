@@ -31,8 +31,8 @@ Java_com_lwh_jackknife_av_ffmpeg_FFmpegJni_execute(JNIEnv *env, jclass jcls, job
         argv[i] = (char *) env->GetStringUTFChars(js, 0);
     }
     LOGD("----------begin---------");
-    return ffmpeg_main(argc, argv);
-//    return 1;
+//    return ffmpeg_main(argc, argv);
+    return 1;
 }
 
 extern "C"
@@ -42,7 +42,7 @@ void callJavaMethod(const char *log) {
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_lwh_jackknife_av_ffmpeg_FFmpegJni_getLog(JNIEnv *env, jclass type) {
+Java_com_lwh_jackknife_av_ffmpeg_FFmpegJni_getLog(JNIEnv *env, jclass jcls) {
     if (m_avlog != NULL && m_avlog != nullptr) {
         return stoJstring(env, m_avlog);
 //        return env->NewStringUTF(m_avlog);

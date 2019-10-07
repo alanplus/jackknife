@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.xhttp.callback;
 
-import com.lwh.jackknife.xhttp.OkHttpUtils;
+import com.lwh.jackknife.xhttp.util.OkHttpUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;

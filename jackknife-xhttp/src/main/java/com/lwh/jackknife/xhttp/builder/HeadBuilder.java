@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.xhttp.builder;
 
-import com.lwh.jackknife.xhttp.OkHttpUtils;
+import com.lwh.jackknife.xhttp.util.OkHttpUtils;
 import com.lwh.jackknife.xhttp.request.OtherRequest;
 import com.lwh.jackknife.xhttp.request.RequestCall;
 

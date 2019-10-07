@@ -18,8 +18,8 @@ package com.lwh.jackknife.xhttp.request;
 
 import android.text.TextUtils;
 
-import com.lwh.jackknife.xhttp.OkHttpUtils;
-import com.lwh.jackknife.xhttp.utils.Exceptions;
+import com.lwh.jackknife.xhttp.util.OkHttpUtils;
+import com.lwh.jackknife.xhttp.util.Exceptions;
 
 import java.util.Map;
 

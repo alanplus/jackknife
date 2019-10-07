@@ -1,6 +1,6 @@
 package com.lwh.jackknife.xhttp.request;
 
-import com.lwh.jackknife.xhttp.OkHttpUtils;
+import com.lwh.jackknife.xhttp.util.OkHttpUtils;
 import com.lwh.jackknife.xhttp.callback.Callback;
 
 import java.io.IOException;

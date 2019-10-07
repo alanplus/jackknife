@@ -576,6 +576,7 @@ extern const HWAccel hwaccels[];
 extern int hwaccel_lax_profile_check;
 extern AVBufferRef *hw_device_ctx;
 
+int ffmpeg_main(int argc, char **argv);
 /*Talkboy methods:*/
 void kill_program();
 int stop_process;
@@ -616,6 +617,5 @@ int vaapi_decode_init(AVCodecContext *avctx);
 int vaapi_device_init(const char *device);
 int cuvid_init(AVCodecContext *s);
 int cuvid_transcode_init(OutputStream *ost);
-int ffmpeg_main(int argc, char **argv);
 
 #endif /* FFMPEG_H */

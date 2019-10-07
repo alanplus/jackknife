@@ -27,6 +27,7 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/
         ${CMAKE_SOURCE_DIR}/src/main/cpp/include
 )
 
@@ -115,6 +116,7 @@ add_library(jknfav ${SRC_C_CXX})
 
 if (UNIX)
     message("current is UNIX")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 elseif (WIN32)
     message("current is WIN32")
 endif ()

@@ -30,7 +30,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 
-
 public class LoggerInterceptor implements Interceptor {
     public static final String TAG = "OkHttpUtils";
     private String tag;

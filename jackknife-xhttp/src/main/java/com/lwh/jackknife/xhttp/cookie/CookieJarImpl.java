@@ -18,7 +18,7 @@ package com.lwh.jackknife.xhttp.cookie;
 
 
 import com.lwh.jackknife.xhttp.cookie.store.CookieStore;
-import com.lwh.jackknife.xhttp.utils.Exceptions;
+import com.lwh.jackknife.xhttp.util.Exceptions;
 
 import java.util.List;
 

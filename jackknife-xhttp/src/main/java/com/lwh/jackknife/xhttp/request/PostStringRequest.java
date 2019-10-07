@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.xhttp.request;
 
-import com.lwh.jackknife.xhttp.utils.Exceptions;
+import com.lwh.jackknife.xhttp.util.Exceptions;
 
 import java.util.Map;
 

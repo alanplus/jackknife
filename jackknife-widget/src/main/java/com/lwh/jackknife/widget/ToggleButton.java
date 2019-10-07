@@ -18,7 +18,6 @@ package com.lwh.jackknife.widget;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;

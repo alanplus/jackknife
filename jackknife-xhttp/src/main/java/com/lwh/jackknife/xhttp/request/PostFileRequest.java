@@ -17,9 +17,9 @@
 package com.lwh.jackknife.xhttp.request;
 
 
-import com.lwh.jackknife.xhttp.OkHttpUtils;
+import com.lwh.jackknife.xhttp.util.OkHttpUtils;
 import com.lwh.jackknife.xhttp.callback.Callback;
-import com.lwh.jackknife.xhttp.utils.Exceptions;
+import com.lwh.jackknife.xhttp.util.Exceptions;
 
 import java.io.File;
 import java.util.Map;
