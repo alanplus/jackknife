@@ -18,22 +18,22 @@ allprojects {
 #### //依赖本库，在app模块的build.gradle加入加粗的代码，版本号也可改成master-SNAPSHOT直接拿最新代码编译。
 <blockquote>
 dependencies {
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject:4.6.5' //运行期注解的butterknife</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject-annotations:4.6.5' //viewinject的扩展包，要基于viewinject</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.6.5' //多渠道开发框架</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.6.5'    //android系统数据库操作框架</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.6.5'    //mvp设计理念</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.6.5' //自定义控件，各种UI效果</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.6.5'//开发工具类</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.6.5'//动态权限申请</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.6.5' //音视频开发工具</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.6.5'//一键换肤</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filechooser:4.6.5'//文件和文件夹路径选择器</h3>
-    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filepatch:4.6.5'//文件补丁差分合并工具（用于增量更新）</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-orm:4.6.6'    //android系统数据库操作框架</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.6.6'//动态权限申请</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.6.6'//一键换肤</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-widget:4.6.6' //自定义控件，各种UI效果</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-util:4.6.6'//开发工具类</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-av:4.6.6' //音视频开发工具</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filechooser:4.6.6'//文件和文件夹路径选择器</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-filepatch:4.6.6'//文件补丁差分合并工具（用于增量更新）</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject:4.6.6' //运行期注解的butterknife</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-viewinject-annotations:4.6.6' //viewinject的扩展包，要基于viewinject</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-multiproxy:4.6.6' //多渠道开发框架</h3>
+    <h3>compile 'com.github.JackWHLiu.jackknife:jackknife-mvp:4.6.6'    //mvp设计理念</h3>
 }
 </blockquote>
 
-二、如何使用(参考https://github.com/JackWHLiu/JackKnifeDemo)
+二、如何使用(参考https://github.com/JackWHLiu/JackKnifeDemo)，已过时
 --------------------------------
 ### (一)基于依赖注入的自动注入视图、绑定控件和注册事件（jackknife-viewinject）
 #### 1、自动注入视图（Inject Layout）
@@ -110,7 +110,7 @@ OrmDao&lt;User&gt; dao = DaoFactory.getDao(User.class);
 | dropTable(Class&lt;? extends OrmTable&gt; tableClass) | TableManager | 删除一张表 |
 | upgradeTable(Class&lt;? extends OrmTable&gt; tableClass) | TableManager | 升级一张表 |
 
-### (三)基于MVP设计理念的开发（jackknife-mvp）
+### (三)基于MVP设计理念的开发（jackknife-mvp），已过时
 #### 1、所需要依赖的类
 ##### （1）BaseModel（M层）
 > 它是一个强大的数据筛选器，可以支持多条件筛选。

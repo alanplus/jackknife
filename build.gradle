@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 buildscript {
-    def gradle_version = '3.4.1'
+    def gradle_version = '3.5.3'
     def gradle_plugin_version = "1.5"
     def apt_version = "1.8"
     def aspectj_version = "1.8.10"
@@ -43,11 +43,11 @@ allprojects {
 ext {
     android = [
             compile_sdk : 26,
-            min_sdk : 11,
+            min_sdk : 14,
             target_sdk : 26,
             build_tools_version : "27.0.3",
-            release_version_code : 263,
-            release_version_name : "4.6.5"
+            release_version_code : 264,
+            release_version_name : "4.6.6"
     ]
 }
 

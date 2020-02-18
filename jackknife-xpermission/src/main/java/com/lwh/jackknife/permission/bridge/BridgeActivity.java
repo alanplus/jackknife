@@ -24,6 +24,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
 
+import com.lwh.jackknife.permission.R;
 import com.lwh.jackknife.permission.overlay.setting.LSettingPage;
 import com.lwh.jackknife.permission.overlay.setting.MSettingPage;
 import com.lwh.jackknife.permission.source.ActivitySource;
@@ -115,6 +116,7 @@ public final class BridgeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_jknf_bridge);
         if (savedInstanceState != null) {
             return;
         }

@@ -1414,6 +1414,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_file_explorer
+layout activity_jknf_bridge
 layout design_layout_snackbar
 layout design_layout_snackbar_include
 layout design_layout_tab_icon
