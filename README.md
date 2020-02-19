@@ -33,9 +33,9 @@ dependencies {
 }
 </blockquote>
 
-二、如何使用(参考https://github.com/JackWHLiu/JackKnifeDemo)，已过时
+二、如何使用(参考https://github.com/JackWHLiu/JackKnifeDemo)
 --------------------------------
-### (一)基于依赖注入的自动注入视图、绑定控件和注册事件（jackknife-viewinject）
+### (一)基于依赖注入的自动注入视图、绑定控件和注册事件（jackknife-viewinject），已过时
 #### 1、自动注入视图（Inject Layout）
 ##### （1）Activity继承com.lwh.jackknife.app.Activity,Fragment继承com.lwh.jackknife.app.Fragment
 ##### （2）保证布局的xml文件和Activity和Fragment的Java类的命名遵循一定的映射关系（Java类名必须以Activity或Fragment结尾）。
