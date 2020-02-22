@@ -59,13 +59,19 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * 条目点击事件。
      */
     var onItemClickListener: OnItemClickListener? = null
-    set
 
     /**
      * 条目长按事件。
      */
     var onItemLongClickListener: OnItemLongClickListener? = null
-    set
+
+    fun itemClick(l: OnItemClickListener) {
+        this.onItemClickListener = l
+    }
+
+    fun itemLongClick(l: OnItemLongClickListener) {
+        this.onItemLongClickListener = l
+    }
 
     /**
      * 条目控件的id。
