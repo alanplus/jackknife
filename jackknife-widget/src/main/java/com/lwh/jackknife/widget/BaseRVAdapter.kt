@@ -42,13 +42,13 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
     /**
      * 用来加载条目的布局。
      */
-    private val inflater: LayoutInflater
+    protected val inflater: LayoutInflater
 
     /**
      * 数据。
      */
     @Volatile
-    private var datas: MutableList<BEAN>? = null
+    protected var datas: MutableList<BEAN>? = null
 
     /**
      * 默认的替换条目的策略。
@@ -58,12 +58,12 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
     /**
      * 条目点击事件。
      */
-    private var mOnItemClickListener: OnItemClickListener? = null
+    var onItemClickListener: OnItemClickListener? = null
 
     /**
      * 条目长按事件。
      */
-    private var mOnItemLongClickListener: OnItemLongClickListener? = null
+    var onItemLongClickListener: OnItemLongClickListener? = null
 
     /**
      * 条目控件的id。
@@ -114,14 +114,6 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
 
     interface OnItemLongClickListener {
         fun onItemLongClick(parent: ViewGroup, pos: Int): Boolean
-    }
-
-    fun setOnItemClickListener(l: OnItemClickListener) {
-        this.mOnItemClickListener = l
-    }
-
-    fun setOnItemLongClickListener(l: OnItemLongClickListener) {
-        this.mOnItemLongClickListener = l
     }
 
     /**
@@ -181,15 +173,15 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * @param holder 缓存View的对象。
      */
     private fun bindListeners(holder: ViewHolder) {
-        if (mOnItemClickListener != null) {
+        if (onItemClickListener != null) {
             holder.itemView.setOnClickListener {
-                mOnItemClickListener!!.onItemClick(holder.itemView as ViewGroup,
+                onItemClickListener!!.onItemClick(holder.itemView as ViewGroup,
                         holder.adapterPosition)
             }
         }
-        if (mOnItemLongClickListener != null) {
+        if (onItemLongClickListener != null) {
             holder.itemView.setOnLongClickListener {
-                mOnItemLongClickListener!!.onItemLongClick(holder.itemView as ViewGroup,
+                onItemLongClickListener!!.onItemLongClick(holder.itemView as ViewGroup,
                         holder.adapterPosition)
             }
         }
