@@ -48,7 +48,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * 数据。
      */
     @Volatile
-    protected var datas: MutableList<BEAN>? = null
+    var datas: MutableList<BEAN>? = null
 
     /**
      * 默认的替换条目的策略。
