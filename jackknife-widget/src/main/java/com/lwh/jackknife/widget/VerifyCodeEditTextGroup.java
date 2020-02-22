@@ -25,6 +25,7 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 
 public class VerifyCodeEditTextGroup extends AutoEditTextGroup<VerifyCodeEditText> {
@@ -72,6 +73,12 @@ public class VerifyCodeEditTextGroup extends AutoEditTextGroup<VerifyCodeEditTex
         section.setSingleLine();
         section.addInputType(InputType.TYPE_CLASS_NUMBER);
         section.setFocusableInTouchMode(true);
+        section.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
         applyEditTextTheme(section);
         return section;
     }
