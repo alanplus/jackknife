@@ -10,7 +10,9 @@ dependencies {
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: uri('build/plugins'))
+        repository(url: 'http://doramusic.site:9001/repository/android/') {
+            authentication(userName: 'admin', password: 'admin')
+        }
         pom.groupId = 'com.lwh.jackknife.plugin'
         pom.artifactId = 'jackknife-aop-plugin'
         pom.version = '1.0'

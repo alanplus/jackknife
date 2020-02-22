@@ -15,7 +15,8 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven'
 group = 'com.github.JackWHLiu'
 
 android {
@@ -32,4 +33,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
 }
+//uploadArchives {
+//    repositories.mavenDeployer {
+//        repository(url: "http://doramusic.site:9001/repository/android/") {
+//            authentication(userName: 'admin', password: 'admin')
+//        }
+//        pom.version = "4.6.7"
+//        pom.artifactId = "orm"
+//        pom.groupId = "site.doramusic"
+//    }
+//}

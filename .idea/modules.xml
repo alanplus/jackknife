@@ -2,11 +2,26 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Desktop-jackknife.iml" filepath="$PROJECT_DIR$/.idea/modules/Desktop-jackknife.iml" group="jackknife" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-av/com.github.JackWHLiu-jackknife-av.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-av/com.github.JackWHLiu-jackknife-av.iml" group="jackknife/jackknife-av" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-filechooser/com.github.JackWHLiu-jackknife-filechooser.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-filechooser/com.github.JackWHLiu-jackknife-filechooser.iml" group="jackknife/jackknife-filechooser" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-filepatch/com.github.JackWHLiu-jackknife-filepatch.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-filepatch/com.github.JackWHLiu-jackknife-filepatch.iml" group="jackknife/jackknife-filepatch" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-multiproxy/com.github.JackWHLiu-jackknife-multiproxy.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-multiproxy/com.github.JackWHLiu-jackknife-multiproxy.iml" group="jackknife/jackknife-multiproxy" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-mvp/com.github.JackWHLiu-jackknife-mvp.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-mvp/com.github.JackWHLiu-jackknife-mvp.iml" group="jackknife/jackknife-mvp" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-orm/com.github.JackWHLiu-jackknife-orm.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-orm/com.github.JackWHLiu-jackknife-orm.iml" group="jackknife/jackknife-orm" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-util/com.github.JackWHLiu-jackknife-util.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-util/com.github.JackWHLiu-jackknife-util.iml" group="jackknife/jackknife-util" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-viewinject/com.github.JackWHLiu-jackknife-viewinject.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-viewinject/com.github.JackWHLiu-jackknife-viewinject.iml" group="jackknife/jackknife-viewinject" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-viewinject-annotations/com.github.JackWHLiu-jackknife-viewinject-annotations.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-viewinject-annotations/com.github.JackWHLiu-jackknife-viewinject-annotations.iml" group="jackknife/jackknife-viewinject-annotations" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-widget/com.github.JackWHLiu-jackknife-widget.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-widget/com.github.JackWHLiu-jackknife-widget.iml" group="jackknife/jackknife-widget" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-xhttp/com.github.JackWHLiu-jackknife-xhttp.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-xhttp/com.github.JackWHLiu-jackknife-xhttp.iml" group="jackknife/jackknife-xhttp" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-xpermission/com.github.JackWHLiu-jackknife-xpermission.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-xpermission/com.github.JackWHLiu-jackknife-xpermission.iml" group="jackknife/jackknife-xpermission" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-xskin/com.github.JackWHLiu-jackknife-xskin.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-xskin/com.github.JackWHLiu-jackknife-xskin.iml" group="jackknife/jackknife-xskin" />
       <module fileurl="file://$PROJECT_DIR$/jackknife.iml" filepath="$PROJECT_DIR$/jackknife.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" filepath="$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-av/jackknife-av.iml" filepath="$PROJECT_DIR$/jackknife-av/jackknife-av.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filechooser/jackknife-filechooser.iml" filepath="$PROJECT_DIR$/jackknife-filechooser/jackknife-filechooser.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filepatch/jackknife-filepatch.iml" filepath="$PROJECT_DIR$/jackknife-filepatch/jackknife-filepatch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-aop-plugin/jackknife-jackknife-aop-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-aop-plugin/jackknife-jackknife-aop-plugin.iml" group="jackknife/jackknife-aop-plugin" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" filepath="$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" filepath="$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-orm/jackknife-orm.iml" filepath="$PROJECT_DIR$/jackknife-orm/jackknife-orm.iml" />

@@ -18,14 +18,19 @@ buildscript {
     def gradle_plugin_version = "1.5"
     def apt_version = "1.8"
     def aspectj_version = "1.8.10"
+    def kotlin_version = "1.3.61"
     repositories {
         jcenter()
         mavenCentral()
         google()
+//        maven {
+//            url "http://doramusic.site:9001/repository/android/"
+//        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${gradle_version}"
         classpath "com.github.dcendents:android-maven-gradle-plugin:${gradle_plugin_version}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.neenbedankt.gradle.plugins:android-apt:${apt_version}"
         classpath "org.aspectj:aspectjtools:${aspectj_version}"
 //        classpath 'com.lwh.jackknife.plugin:jackknife-aop-plugin:1.0'
@@ -36,6 +41,7 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
+        mavenLocal()
         google()
     }
 }
@@ -46,8 +52,8 @@ ext {
             min_sdk : 14,
             target_sdk : 26,
             build_tools_version : "27.0.3",
-            release_version_code : 266,
-            release_version_name : "4.6.8"
+            release_version_code : 267,
+            release_version_name : "4.6.9"
     ]
 }
 
