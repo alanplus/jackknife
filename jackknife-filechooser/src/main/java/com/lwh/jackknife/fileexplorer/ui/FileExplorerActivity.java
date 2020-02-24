@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import com.lwh.jackknife.fileexplorer.FileAdapter;
 import com.lwh.jackknife.fileexplorer.R;
 import com.lwh.jackknife.fileexplorer.bean.MyFile;
 import com.lwh.jackknife.fileexplorer.bean.MyFolder;
@@ -111,161 +112,6 @@ public class FileExplorerActivity extends AppCompatActivity {
         mTextDialog = findViewById(R.id.mTextDialog);
     }
 
-    public class FileAdapter extends CommonAdapter<F> implements SectionIndexer {
-
-        ImageView iv_file_type;
-        TextView tv_file_name;
-        TextView tv_file_last_modified;
-
-        public FileAdapter(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void addItems(List<F> datas) {
-            super.addItems(generateLetters(datas));
-        }
-
-        private List<F> generateLetters(List<F> fileables) {
-            for (F fileable : fileables) {
-                String sortLetter = TextUtils.getPinyinFromSentence(fileable.getName().substring(0, 1))
-                        .toUpperCase();
-                fileable.setSortLetter(sortLetter);
-            }
-            Collections.sort(fileables, PinyinComparator.get());
-            return fileables;
-        }
-
-        @Override
-        public Object[] getSections() {
-            return new Object[0];
-        }
-
-        @Override
-        public int getPositionForSection(int sectionIndex) {
-            for (int i = 0; i < getCount(); i++) {
-                String sortLetter = datas.get(i).getSortLetter();
-                if (sortLetter != null) {
-                    char first = sortLetter.toUpperCase().charAt(0);
-                    if (first == sectionIndex) {
-                        return i;
-                    }
-                }
-            }
-            return -1;
-        }
-
-        @Override
-        public int getSectionForPosition(int position) {
-            return datas.get(position).getSortLetter() == null ? -1 : datas.get(position).getSortLetter().toUpperCase().charAt(0);
-        }
-
-        public int getPositionForSection(char sectionIndex) {
-            for (int i = 0; i < getCount(); i++) {
-                String sortLetter = datas.get(i).getSortLetter();
-                if (sortLetter != null) {
-                    char first = sortLetter.toUpperCase().charAt(0);
-                    if (first == sectionIndex) {
-                        return i;
-                    }
-                }
-            }
-            return -1;
-        }
-
-        @Override
-        protected int getItemLayoutId() {
-            return R.layout.item_file;
-        }
-
-        @Override
-        protected int[] getItemViewIds() {
-            return new int[]{
-                    R.id.iv_file_type,
-                    R.id.tv_file_name,
-                    R.id.tv_file_last_modified
-            };
-        }
-
-        @Override
-        protected <VIEW extends View> void onBindViewHolder(int position, F fileable, ViewHolder<VIEW> holder) {
-            iv_file_type = (ImageView) holder.findViewById(R.id.iv_file_type);
-            tv_file_name = (TextView) holder.findViewById(R.id.tv_file_name);
-            tv_file_last_modified = (TextView) holder.findViewById(R.id.tv_file_last_modified);
-            tv_file_name.setText(fileable.getName());
-            tv_file_last_modified.setText(TimeUtils.getString(fileable.lastModified(), TimeUtils.FORMAT_DATE_2));
-            if (fileable.isFolder()) {
-                iv_file_type.setImageResource(R.drawable.icon_mime_group_folder);
-            } else {
-                setFileIcon(iv_file_type, fileable.getName().substring(fileable.getName().lastIndexOf(".") + 1));
-            }
-        }
-    }
-
-    /**
-     * 设置显示的图标
-     *
-     * @param suffix 文件后缀
-     */
-    private void setFileIcon(ImageView iconView, String suffix) {
-        suffix = suffix.toUpperCase(Locale.CHINA);
-        if ((suffix.equals("MP3")) || (suffix.equals("AAC")) || (suffix.equals("FLAC"))) {
-            iconView.setImageResource(R.drawable.icon_mime_group_music);
-            return;
-        }
-        if ((suffix.equals("MP4")) || (suffix.equals("AVI")) || (suffix.equals("FLV")) || (suffix.equals("MPEG")) || (suffix.equals("MOV"))) {
-            iconView.setImageResource(R.drawable.icon_mime_group_movie);
-            return;
-        }
-        if ((suffix.equals("JPG")) || (suffix.equals("GIF")) || (suffix.equals("PNG")) || (suffix.equals("JPEG")) || (suffix.equals("BMP"))) {
-            iconView.setImageResource(R.drawable.icon_mime_group_photo);
-            return;
-        }
-        if ((suffix.equals("ZIP")) || (suffix.equals("RAR")) || (suffix.equals("7Z"))) {
-            iconView.setImageResource(R.drawable.icon_mime_group_compress);
-            return;
-        }
-        if (suffix.equals("APK")) {
-            iconView.setImageResource(R.drawable.icon_mime_apk);
-            return;
-        }
-        if (suffix.equals("TXT")) {
-            iconView.setImageResource(R.drawable.icon_mime_txt);
-            return;
-        }
-        if (suffix.equals("EPUB")) {
-            iconView.setImageResource(R.drawable.icon_mime_group_text);
-            return;
-        }
-        if ((suffix.equals("DOC")) || (suffix.equals("DOCX")) || (suffix.equals("WPS"))) {
-            iconView.setImageResource(R.drawable.icon_mime_group_doc);
-            return;
-        }
-        if ((suffix.equals("XLS")) || (suffix.equals("XLSX")) || (suffix.equals("ET"))) {
-            iconView.setImageResource(R.drawable.icon_mime_group_excel);
-            return;
-        }
-        if ((suffix.equals("PPT")) || (suffix.equals("PPTX")) || (suffix.equals("DPS"))) {
-            iconView.setImageResource(R.drawable.icon_mime_group_ppt);
-            return;
-        }
-        if (suffix.equals("PDF")) {
-            iconView.setImageResource(R.drawable.icon_mime_pdf);
-            return;
-        }
-        if (suffix.equals("HTML")) {
-            iconView.setImageResource(R.drawable.icon_mime_html);
-            return;
-        }
-        if (suffix.equals("CHM")) {
-            iconView.setImageResource(R.drawable.icon_mime_chm);
-            return;
-        }
-        if (suffix.equals("URL")) {
-            iconView.setImageResource(R.drawable.icon_mime_url);
-            return;
-        }
-    }
 
     private void initData() {
         tv_main_curr_path.setText(IoUtils.getSdRoot());
@@ -279,7 +125,7 @@ public class FileExplorerActivity extends AppCompatActivity {
         mFileListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                F fileable = (F) mAdapter.getItem(position);
+                F fileable = mAdapter.getItem(position);
                 if (fileable instanceof MyFile) {
                     if (mAction.equals(ACTION_CHOOSE_FILE) || mAction.equals(ACTION_CHOOSE_BOTH_FILE_AND_FOLDER)) {
                         Intent intent = new Intent();

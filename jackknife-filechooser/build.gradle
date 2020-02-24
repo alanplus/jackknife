@@ -15,6 +15,8 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.JackWHLiu'
 
@@ -39,4 +41,8 @@ dependencies {
     implementation project(':jackknife-xpermission')
     implementation project(':jackknife-widget')
     implementation project(':jackknife-util')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

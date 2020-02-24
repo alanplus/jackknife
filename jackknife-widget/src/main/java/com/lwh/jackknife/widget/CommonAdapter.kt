@@ -54,18 +54,18 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
         return position.toLong()
     }
 
-    fun addItem(data: BEAN) {
+    open fun addItem(data: BEAN) {
         datas!!.add(data)
         notifyDataSetChanged()
     }
 
-    fun addItems(beans: MutableList<BEAN>) {
+    open fun addItems(beans: MutableList<BEAN>) {
         datas!!.addAll(beans)
         notifyDataSetChanged()
     }
 
     fun replaceItems(beans: MutableList<BEAN>) {
-        this.datas = beans
+        datas = beans
         notifyDataSetInvalidated()
     }
 
