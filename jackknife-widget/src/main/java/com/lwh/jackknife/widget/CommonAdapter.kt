@@ -59,7 +59,7 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
         notifyDataSetChanged()
     }
 
-    open fun addItems(beans: MutableList<BEAN>) {
+    fun addItems(beans: MutableList<BEAN>) {
         datas!!.addAll(beans)
         notifyDataSetChanged()
     }
@@ -127,7 +127,7 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
         }
         val bean = getChildAt(position)
         onBindViewHolder(position, bean!!, holder!!)
-        return holder.convertView
+        return convertView
     }
 
     companion object {
