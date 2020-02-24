@@ -33,10 +33,9 @@ import java.util.Collections
 /**
  * 万能的[RecyclerView]适配器。
  *
- * @author lwh
- * @param <BEAN> 适配的数据类型。
+ * @param <M> 适配的数据类型。
 </BEAN> */
-abstract class BaseRVAdapter<BEAN>(val context: Context)
+abstract class BaseRVAdapter<M>(val context: Context)
         : RecyclerView.Adapter<BaseRVAdapter.ViewHolder>() {
 
     /**
@@ -48,12 +47,12 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * 数据。
      */
     @Volatile
-    var datas: MutableList<BEAN>? = null
+    var models: MutableList<M>? = null
 
     /**
      * 默认的替换条目的策略。
      */
-    private var defaultPolicy: ReplacePolicy<BEAN>? = null
+    private var defaultPolicy: ReplacePolicy<M>? = null
 
     /**
      * 条目点击事件。
@@ -97,22 +96,22 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
 
     init {
         this.inflater = LayoutInflater.from(context)
-        this.datas = ArrayList()
+        this.models = ArrayList()
         applyDefaultReplacePolicy()
     }
 
-    constructor(context: Context, beans: MutableList<BEAN>) : this(context) {
-        this.datas = beans
+    constructor(context: Context, beans: MutableList<M>) : this(context) {
+        this.models = beans
         applyDefaultReplacePolicy()
     }
 
-    constructor(context: Context, beans: Array<BEAN>) : this(context) {
+    constructor(context: Context, beans: Array<M>) : this(context) {
         bindDatas(Arrays.asList(*beans))
         applyDefaultReplacePolicy()
     }
 
-    interface DataConverter<T, BEAN> {
-        fun convertDatas(beans: T): ArrayList<BEAN>
+    interface DataConverter<T, M> {
+        fun convertDatas(beans: T): ArrayList<M>
     }
 
     interface OnItemClickListener {
@@ -128,11 +127,11 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      *
      * @param beans 要绑定的数据。
      */
-    private fun bindDatas(beans: MutableList<BEAN>) {
-        if (datas!!.size > 0) {
-            datas!!.clear()
+    private fun bindDatas(beans: MutableList<M>) {
+        if (models!!.size > 0) {
+            models!!.clear()
         }
-        datas!!.addAll(beans)
+        models!!.addAll(beans)
         notifyDataSetChanged()
     }
 
@@ -172,7 +171,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * @param position 条目在列表中的位置，从0开始。
      * @param data 给条目加载数据的模型对象。
      */
-    abstract fun onBindViewHolder(holder: ViewHolder, position: Int, data: BEAN)
+    abstract fun onBindViewHolder(holder: ViewHolder, position: Int, data: M)
 
     /**
      * 绑定条目的点击事件和长按事件的监听。
@@ -195,8 +194,8 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
     }
 
     override fun getItemCount(): Int {
-        return if (datas != null) {
-            datas!!.size
+        return if (models != null) {
+            models!!.size
         } else -1
     }
 
@@ -248,45 +247,45 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
         }
     }
 
-    fun addItem(newData: BEAN) {
-        datas!!.add(newData)
-        val position = datas!!.size - 1
+    fun addItem(m: M) {
+        models!!.add(m)
+        val position = models!!.size - 1
         notifyItemInserted(position)
     }
 
-    fun addItem(newData: BEAN, index: Int) {
-        datas!!.add(index, newData)
+    fun addItem(m: M, index: Int) {
+        models!!.add(index, m)
         notifyItemChanged(index)
     }
 
-    fun addItems(newDatas: MutableList<BEAN>) {
+    fun addItems(beans: MutableList<M>) {
         val lastSize = itemCount
-        val newSize = newDatas.size
-        datas!!.addAll(newDatas)
+        val newSize = beans.size
+        models!!.addAll(beans)
         notifyItemRangeInserted(lastSize, newSize)
     }
 
-    fun setItem(position: Int, newData: BEAN) {
-        datas!![position] = newData
+    fun setItem(position: Int, m: M) {
+        models!![position] = m
         notifyItemChanged(position)
     }
 
-    fun setItems(newDatas: MutableList<BEAN>) {
-        setItems(0, newDatas)
+    fun setItems(beans: MutableList<M>) {
+        setItems(0, beans)
     }
 
     @JvmOverloads
-    fun setItems(start: Int, newDatas: MutableList<BEAN>, policy: ReplacePolicy<BEAN>? = defaultPolicy) {
-        if (newDatas.size + start == datas!!.size) {
+    fun setItems(start: Int, beans: MutableList<M>, policy: ReplacePolicy<M>? = defaultPolicy) {
+        if (beans.size + start == models!!.size) {
             for (i in start until itemCount) {
-                datas!![i] = newDatas[start + i]
+                models!![i] = beans[start + i]
             }
         }
-        if (newDatas.size + start > datas!!.size) {
-            policy!!.replaceIfOutOfRange(this, newDatas, start, datas!!)
+        if (beans.size + start > models!!.size) {
+            policy!!.replaceIfOutOfRange(this, beans, start, models!!)
         }
-        if (newDatas.size + start < datas!!.size) {
-            policy!!.replaceIfNotUpToCapacity(this, newDatas, start, datas!!)
+        if (beans.size + start < models!!.size) {
+            policy!!.replaceIfNotUpToCapacity(this, beans, start, models!!)
         }
     }
 
@@ -325,17 +324,17 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      *
      * @param policy 替换数据的策略。
      */
-    fun setReplacePolicy(policy: ReplacePolicy<BEAN>) {
+    fun setReplacePolicy(policy: ReplacePolicy<M>) {
         this.defaultPolicy = policy
     }
 
     /**
      * 默认的替换策略，超出将忽略超出的条目，不足将只覆盖数据，不会影响到超出范围的。
      */
-    private inner class DefaultReplacePolicy : ReplacePolicy<BEAN> {
+    private inner class DefaultReplacePolicy : ReplacePolicy<M> {
 
-        override fun replaceIfOutOfRange(adapter: RecyclerView.Adapter<*>, dstDatas: MutableList<BEAN>,
-                                         start: Int, srcDatas: MutableList<BEAN>) {
+        override fun replaceIfOutOfRange(adapter: RecyclerView.Adapter<*>, dstDatas: MutableList<M>,
+                                         start: Int, srcDatas: MutableList<M>) {
             val leftSize = dstDatas.size - start
             for (i in start until leftSize) {
                 dstDatas[i] = srcDatas[i]
@@ -344,7 +343,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
         }
 
         override fun replaceIfNotUpToCapacity(adapter: RecyclerView.Adapter<*>,
-                                              dstDatas: MutableList<BEAN>, start: Int, srcDatas: MutableList<BEAN>) {
+                                              dstDatas: MutableList<M>, start: Int, srcDatas: MutableList<M>) {
             val srcSize = srcDatas.size
             for (i in start until start + srcSize) {
                 dstDatas!![i] = srcDatas[i]
@@ -359,7 +358,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * @param position 要移除数据的下标。
      */
     private fun removeItem(position: Int) {
-        datas!!.removeAt(position)
+        models!!.removeAt(position)
         notifyItemRemoved(position)
     }
 
@@ -373,7 +372,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
     fun removeItem(start: Int, count: Int) {
         val end = start + count
         for (i in start until end) {
-            datas!!.removeAt(i)
+            models!!.removeAt(i)
         }
         notifyItemRangeRemoved(start, count)
     }
@@ -382,8 +381,8 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * 清空所有的条目。
      */
     fun clear() {
-        val dataSize = datas!!.size
-        datas!!.clear()
+        val dataSize = models!!.size
+        models!!.clear()
         notifyItemRangeRemoved(0, dataSize)
     }
 
@@ -393,8 +392,8 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * @param position 要获取的Bean数据的位置。
      * @return Bean数据。
      */
-    fun getData(position: Int): BEAN {
-        return datas!![position]
+    fun getData(position: Int): M {
+        return models!![position]
     }
 
     /**
@@ -403,7 +402,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * @param position 需要置顶的条目的位置。
      */
     fun stickItem(position: Int) {
-        val data = datas!![position]
+        val data = models!![position]
         removeItem(position)
         addItem(data)
     }
@@ -412,7 +411,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      * 将条目的顺序倒过来。
      */
     fun reverseItems() {
-        Collections.reverse(datas!!)
+        Collections.reverse(models!!)
         notifyDataSetChanged()
     }
 }
