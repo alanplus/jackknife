@@ -188,11 +188,6 @@ public class FileExplorerActivity extends AppCompatActivity {
         }
 
         @Override
-        protected List<F> initDatas() {
-            return null;
-        }
-
-        @Override
         protected <VIEW extends View> void onBindViewHolder(int position, F fileable, ViewHolder<VIEW> holder) {
             iv_file_type = (ImageView) holder.findViewById(R.id.iv_file_type);
             tv_file_name = (TextView) holder.findViewById(R.id.tv_file_name);

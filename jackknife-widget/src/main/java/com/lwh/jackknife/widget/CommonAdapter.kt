@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import java.lang.reflect.InvocationTargetException
 import java.util.*
+import kotlin.collections.ArrayList
 
 abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
 
@@ -86,7 +87,11 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
 
     protected abstract val itemLayoutId: Int
     protected abstract val itemViewIds: IntArray
-    protected abstract fun initDatas(): MutableList<BEAN>?
+
+    open fun initDatas(): MutableList<BEAN> {
+        return ArrayList()
+    }
+
     @Throws(NoSuchMethodException::class, IllegalArgumentException::class, IllegalAccessException::class, InvocationTargetException::class)
     protected fun inflateView(): View {
         val layoutId = itemLayoutId
