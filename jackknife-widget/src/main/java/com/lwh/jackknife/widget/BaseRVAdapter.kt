@@ -101,19 +101,18 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
         applyDefaultReplacePolicy()
     }
 
-    constructor(context: Context, datas: MutableList<BEAN>) : this(context) {
-        this.datas = datas
+    constructor(context: Context, beans: MutableList<BEAN>) : this(context) {
+        this.datas = beans
         applyDefaultReplacePolicy()
     }
 
-    constructor(context: Context, datas: Array<BEAN>) : this(context) {
-        bindDatas(Arrays.asList(*datas))
+    constructor(context: Context, beans: Array<BEAN>) : this(context) {
+        bindDatas(Arrays.asList(*beans))
         applyDefaultReplacePolicy()
     }
-
 
     interface DataConverter<T, BEAN> {
-        fun convertDatas(datas: T): ArrayList<BEAN>
+        fun convertDatas(beans: T): ArrayList<BEAN>
     }
 
     interface OnItemClickListener {
@@ -127,13 +126,13 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
     /**
      * 绑定数据到适配器。
      *
-     * @param datas 要绑定的数据。
+     * @param beans 要绑定的数据。
      */
-    private fun bindDatas(datas: MutableList<BEAN>) {
+    private fun bindDatas(beans: MutableList<BEAN>) {
         if (datas!!.size > 0) {
             datas!!.clear()
         }
-        datas!!.addAll(datas)
+        datas!!.addAll(beans)
         notifyDataSetChanged()
     }
 
@@ -249,45 +248,45 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
         }
     }
 
-    fun addItem(data: BEAN) {
-        datas!!.add(data)
+    fun addItem(newData: BEAN) {
+        datas!!.add(newData)
         val position = datas!!.size - 1
         notifyItemInserted(position)
     }
 
-    fun addItem(data: BEAN, index: Int) {
-        datas!!.add(index, data)
+    fun addItem(newData: BEAN, index: Int) {
+        datas!!.add(index, newData)
         notifyItemChanged(index)
     }
 
-    fun addItems(datas: MutableList<BEAN>) {
+    fun addItems(newDatas: MutableList<BEAN>) {
         val lastSize = itemCount
-        val newSize = datas.size
-        datas!!.addAll(datas)
+        val newSize = newDatas.size
+        datas!!.addAll(newDatas)
         notifyItemRangeInserted(lastSize, newSize)
     }
 
-    fun setItem(position: Int, data: BEAN) {
-        datas!![position] = data
+    fun setItem(position: Int, newData: BEAN) {
+        datas!![position] = newData
         notifyItemChanged(position)
     }
 
-    fun setItems(datas: MutableList<BEAN>) {
-        setItems(0, datas)
+    fun setItems(newDatas: MutableList<BEAN>) {
+        setItems(0, newDatas)
     }
 
     @JvmOverloads
-    fun setItems(start: Int, datas: MutableList<BEAN>, policy: ReplacePolicy<BEAN>? = defaultPolicy) {
-        if (datas.size + start == datas!!.size) {
+    fun setItems(start: Int, newDatas: MutableList<BEAN>, policy: ReplacePolicy<BEAN>? = defaultPolicy) {
+        if (newDatas.size + start == datas!!.size) {
             for (i in start until itemCount) {
-                datas!![i] = datas[start + i]
+                datas!![i] = newDatas[start + i]
             }
         }
-        if (datas.size + start > datas!!.size) {
-            policy!!.replaceIfOutOfRange(this, datas, start, datas)
+        if (newDatas.size + start > datas!!.size) {
+            policy!!.replaceIfOutOfRange(this, newDatas, start, datas!!)
         }
-        if (datas.size + start < datas!!.size) {
-            policy!!.replaceIfNotUpToCapacity(this, datas, start, datas)
+        if (newDatas.size + start < datas!!.size) {
+            policy!!.replaceIfNotUpToCapacity(this, newDatas, start, datas!!)
         }
     }
 
@@ -359,7 +358,7 @@ abstract class BaseRVAdapter<BEAN>(val context: Context)
      *
      * @param position 要移除数据的下标。
      */
-    fun removeItem(position: Int) {
+    private fun removeItem(position: Int) {
         datas!!.removeAt(position)
         notifyItemRemoved(position)
     }
