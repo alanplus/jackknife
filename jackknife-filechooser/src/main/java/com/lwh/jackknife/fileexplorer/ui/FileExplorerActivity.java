@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -145,7 +144,7 @@ public class FileExplorerActivity extends AppCompatActivity {
         @Override
         public int getPositionForSection(int sectionIndex) {
             for (int i = 0; i < getCount(); i++) {
-                String sortLetter = mDatas.get(i).getSortLetter();
+                String sortLetter = datas.get(i).getSortLetter();
                 if (sortLetter != null) {
                     char first = sortLetter.toUpperCase().charAt(0);
                     if (first == sectionIndex) {
@@ -158,12 +157,12 @@ public class FileExplorerActivity extends AppCompatActivity {
 
         @Override
         public int getSectionForPosition(int position) {
-            return mDatas.get(position).getSortLetter() == null ? -1 : mDatas.get(position).getSortLetter().toUpperCase().charAt(0);
+            return datas.get(position).getSortLetter() == null ? -1 : datas.get(position).getSortLetter().toUpperCase().charAt(0);
         }
 
         public int getPositionForSection(char sectionIndex) {
             for (int i = 0; i < getCount(); i++) {
-                String sortLetter = mDatas.get(i).getSortLetter();
+                String sortLetter = datas.get(i).getSortLetter();
                 if (sortLetter != null) {
                     char first = sortLetter.toUpperCase().charAt(0);
                     if (first == sectionIndex) {
