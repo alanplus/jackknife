@@ -21,12 +21,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import java.lang.reflect.InvocationTargetException
-import java.util.*
 import kotlin.collections.ArrayList
 
 abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
 
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     @JvmField
     var datas: MutableList<BEAN>?
@@ -60,13 +59,13 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
         notifyDataSetChanged()
     }
 
-    open fun addItems(datas: MutableList<BEAN>?) {
-        this.datas!!.addAll(datas!!)
+    open fun addItems(beans: MutableList<BEAN>) {
+        datas!!.addAll(beans)
         notifyDataSetChanged()
     }
 
-    fun replaceItems(datas: MutableList<BEAN>?) {
-        this.datas = datas
+    fun replaceItems(beans: MutableList<BEAN>) {
+        this.datas = beans
         notifyDataSetInvalidated()
     }
 
@@ -108,7 +107,7 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
      * @param holder   The view cache.
      * @param <VIEW>   Subtype of view.
     </VIEW> */
-    protected abstract fun <VIEW : View?> onBindViewHolder(position: Int, data: BEAN?, holder: ViewHolder<VIEW>?)
+    protected abstract fun <VIEW : View> onBindViewHolder(position: Int, data: BEAN, holder: ViewHolder<VIEW>)
 
     override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
         var holder: ViewHolder<*>? = null
@@ -125,11 +124,10 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
             }
         } else {
             holder = convertView.tag as ViewHolder<*>
-            holder.setPosition(position)
         }
         val bean = getChildAt(position)
-        onBindViewHolder(position, bean, holder)
-        return holder!!.convertView
+        onBindViewHolder(position, bean!!, holder!!)
+        return holder.convertView
     }
 
     companion object {
@@ -137,10 +135,9 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
     }
 
     init {
-        inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         datas = ArrayList()
         this.context = context
-        val datas = initDatas()
-        datas?.let { addItems(it) }
+        val beans = initDatas()
+        datas!!.addAll(beans)
     }
 }
