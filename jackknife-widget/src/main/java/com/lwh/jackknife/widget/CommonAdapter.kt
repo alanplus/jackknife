@@ -127,7 +127,7 @@ abstract class CommonAdapter<BEAN>(context: Context) : BaseAdapter() {
         }
         val bean = getChildAt(position)
         onBindViewHolder(position, bean!!, holder!!)
-        return convertView
+        return holder.convertView
     }
 
     companion object {
