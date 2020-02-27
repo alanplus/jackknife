@@ -49,14 +49,14 @@ class RotateCoverView @JvmOverloads constructor(internal var context: Context, a
     }
 
     fun start() {
-        rotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 359f)
+        rotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
         rotateAnimator.interpolator = LinearInterpolator()
         rotateAnimator.duration = 20000
         rotateAnimator.repeatMode = RESTART
         rotateAnimator.repeatCount = INFINITE
         setBorderColorResource(R.color.black)
         borderWidth = 5
-        setBackgroundResource(R.drawable.jknf_doramusic_logo)
+        setImageResource(R.drawable.jknf_doramusic_logo)
         rotateAnimator.setupStartValues()
         rotateAnimator.start()
     }
