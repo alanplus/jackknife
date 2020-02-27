@@ -62,11 +62,15 @@ class RotateCoverView @JvmOverloads constructor(internal var context: Context, a
     }
 
     fun stop() {
-        rotateAnimator.cancel()
+        if (!firstRotate) {
+            rotateAnimator.cancel()
+        }
     }
 
     fun pause() {
-        rotateAnimator.pause()
+        if (!firstRotate) {
+            rotateAnimator.pause()
+        }
     }
 
     fun resume() {
