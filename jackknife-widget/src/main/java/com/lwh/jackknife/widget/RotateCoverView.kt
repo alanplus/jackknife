@@ -27,11 +27,26 @@ import android.view.animation.LinearInterpolator
 import com.lwh.jackknife.widget.CircleTextImageView
 import com.lwh.jackknife.widget.R
 
+@RequiresApi(Build.VERSION_CODES.KITKAT)
 class RotateCoverView @JvmOverloads constructor(internal var context: Context, attrs: AttributeSet? = null,
                                                 defStyleAttr: Int = 0) : CircleTextImageView(context,
                                                 attrs, defStyleAttr) {
 
     private lateinit var rotateAnimator: ObjectAnimator
+    private var firstRotate: Boolean = true
+
+    fun start(smart: Boolean) {
+        if (smart) {
+            if (firstRotate) {
+                firstRotate = false
+                start()
+            } else {
+                resume()
+            }
+        } else {
+            start()
+        }
+    }
 
     fun start() {
         rotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 359f)
@@ -50,13 +65,13 @@ class RotateCoverView @JvmOverloads constructor(internal var context: Context, a
         rotateAnimator.cancel()
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun pause() {
         rotateAnimator.pause()
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun resume() {
-        rotateAnimator.resume()
+        if (!firstRotate) {
+            rotateAnimator.resume()
+        }
     }
 }
