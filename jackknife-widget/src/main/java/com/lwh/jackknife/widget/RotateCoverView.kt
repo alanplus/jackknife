@@ -27,33 +27,36 @@ import android.view.animation.LinearInterpolator
 import com.lwh.jackknife.widget.CircleTextImageView
 import com.lwh.jackknife.widget.R
 
-class RotateCoverView @JvmOverloads constructor(internal var context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : CircleTextImageView(context, attrs, defStyleAttr) {
+class RotateCoverView @JvmOverloads constructor(internal var context: Context, attrs: AttributeSet? = null,
+                                                defStyleAttr: Int = 0) : CircleTextImageView(context,
+                                                attrs, defStyleAttr) {
 
-    val ratoteAnimator: ObjectAnimator
-
-    init {
-        ratoteAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
-        ratoteAnimator.setInterpolator(LinearInterpolator())
-        ratoteAnimator.setDuration(20000)
-        ratoteAnimator.repeatMode = RESTART
-        ratoteAnimator.repeatCount = INFINITE
-        setBorderColorResource(R.color.black)
-        setBorderWidth(5)
-        setImageResource(R.drawable.jknf_doramusic_logo)
-    }
+    private lateinit var rotateAnimator: ObjectAnimator
 
     fun start() {
-        ratoteAnimator.setupStartValues()
-        ratoteAnimator.start()
+        rotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 359f)
+        rotateAnimator.interpolator = LinearInterpolator()
+        rotateAnimator.duration = 20000
+        rotateAnimator.repeatMode = RESTART
+        rotateAnimator.repeatCount = INFINITE
+        setBorderColorResource(R.color.black)
+        borderWidth = 5
+        setBackgroundResource(R.drawable.jknf_doramusic_logo)
+        rotateAnimator.setupStartValues()
+        rotateAnimator.start()
+    }
+
+    fun stop() {
+        rotateAnimator.cancel()
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun pause() {
-        ratoteAnimator.pause()
+        rotateAnimator.pause()
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun resume() {
-        ratoteAnimator.resume()
+        rotateAnimator.resume()
     }
 }
