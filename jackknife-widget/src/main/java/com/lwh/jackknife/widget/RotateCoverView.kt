@@ -27,33 +27,55 @@ import android.view.animation.LinearInterpolator
 import com.lwh.jackknife.widget.CircleTextImageView
 import com.lwh.jackknife.widget.R
 
-class RotateCoverView @JvmOverloads constructor(internal var context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : CircleTextImageView(context, attrs, defStyleAttr) {
+@RequiresApi(Build.VERSION_CODES.KITKAT)
+class RotateCoverView @JvmOverloads constructor(internal var context: Context, attrs: AttributeSet? = null,
+                                                defStyleAttr: Int = 0) : CircleTextImageView(context,
+                                                attrs, defStyleAttr) {
 
-    val ratoteAnimator: ObjectAnimator
+    private lateinit var rotateAnimator: ObjectAnimator
+    private var firstRotate: Boolean = true
 
-    init {
-        ratoteAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
-        ratoteAnimator.setInterpolator(LinearInterpolator())
-        ratoteAnimator.setDuration(20000)
-        ratoteAnimator.repeatMode = RESTART
-        ratoteAnimator.repeatCount = INFINITE
-        setBorderColorResource(R.color.black)
-        setBorderWidth(5)
-        setImageResource(R.drawable.jknf_doramusic_logo)
+    fun start(smart: Boolean) {
+        if (smart) {
+            if (firstRotate) {
+                firstRotate = false
+                start()
+            } else {
+                resume()
+            }
+        } else {
+            start()
+        }
     }
 
     fun start() {
-        ratoteAnimator.setupStartValues()
-        ratoteAnimator.start()
+        rotateAnimator = ObjectAnimator.ofFloat(this, "rotation", 0f, 360f)
+        rotateAnimator.interpolator = LinearInterpolator()
+        rotateAnimator.duration = 20000
+        rotateAnimator.repeatMode = RESTART
+        rotateAnimator.repeatCount = INFINITE
+        setBorderColorResource(R.color.black)
+        borderWidth = 5
+        setImageResource(R.drawable.jknf_doramusic_logo)
+        rotateAnimator.setupStartValues()
+        rotateAnimator.start()
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    fun stop() {
+        if (!firstRotate) {
+            rotateAnimator.cancel()
+        }
+    }
+
     fun pause() {
-        ratoteAnimator.pause()
+        if (!firstRotate) {
+            rotateAnimator.pause()
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.KITKAT)
     fun resume() {
-        ratoteAnimator.resume()
+        if (!firstRotate) {
+            rotateAnimator.resume()
+        }
     }
 }
