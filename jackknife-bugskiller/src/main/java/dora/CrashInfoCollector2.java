@@ -10,8 +10,9 @@ public class CrashInfoCollector2 extends Collector {
     }
 
     @Override
-    public void report(CrashReportPolicy policy) {
+    public void report(Thread thread, CrashReportPolicy policy) {
         if (mInfo != null) {
+            mInfo.setThread(thread);
             policy.report(mInfo);
         }
     }

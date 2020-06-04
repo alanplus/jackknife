@@ -19,6 +19,7 @@ public class CrashInfo {
     private String model;
     //手机制造商
     private String mobileName;
+    private Thread thread;
     private Throwable throwable;
 
     protected CrashInfo(Context context) {
@@ -39,13 +40,18 @@ public class CrashInfo {
         mobileName = Build.MANUFACTURER;
     }
 
+    public void setThread(Thread thread) {
+        this.thread = thread;
+    }
+
     public void setException(Throwable e) {
         this.throwable = e;
     }
 
     @Override
     public String toString() {
-        return "\nMobile型号：" + model + "\nMobileName：" + mobileName + "\nSDK版本：" + sdkVersion +
+        return "\n线程"+thread.getName()+"#"+thread.getId()
+                +"\nMobile型号：" + model + "\nMobileName：" + mobileName + "\nSDK版本：" + sdkVersion +
                 "\nAndroid版本：" + release +
             "\n版本名称：" + versionName + "\n版本号：" + versionCode + "\n异常信息：" + throwable.toString();
     }

@@ -33,7 +33,7 @@ class DoraUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
         CrashInfo info = mConf.info;
         info.setException(e);
         collector.collect(info);
-        collector.report(mConf.policy);
+        collector.report(t, mConf.policy);
         //如果系统提供了异常处理类，则交给系统去处理
         if (mDefaultExceptionHandler != null) {
             mDefaultExceptionHandler.uncaughtException(t, e);
