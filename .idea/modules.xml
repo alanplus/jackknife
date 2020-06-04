@@ -21,6 +21,7 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife.iml" filepath="$PROJECT_DIR$/jackknife.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" filepath="$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-av/jackknife-av.iml" filepath="$PROJECT_DIR$/jackknife-av/jackknife-av.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-bugskiller/jackknife-bugskiller.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-bugskiller/jackknife-bugskiller.iml" group="jackknife/jackknife-bugskiller" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filechooser/jackknife-filechooser.iml" filepath="$PROJECT_DIR$/jackknife-filechooser/jackknife-filechooser.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filepatch/jackknife-filepatch.iml" filepath="$PROJECT_DIR$/jackknife-filepatch/jackknife-filepatch.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-aop-plugin/jackknife-jackknife-aop-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-aop-plugin/jackknife-jackknife-aop-plugin.iml" group="jackknife/jackknife-aop-plugin" />
