@@ -3,23 +3,25 @@ package dora;
 import android.content.Context;
 import android.os.Process;
 
-public class DoraUncatchExceptionHandler implements Thread.UncaughtExceptionHandler {
+class DoraUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
-    private Context mContext;//留作备用
+    private Context mContext;
+    private CrashConfig mConf;
 
     private Thread.UncaughtExceptionHandler mDefaultExceptionHandler;//系统的默认异常处理类
 
-    private static DoraUncatchExceptionHandler instance = new DoraUncatchExceptionHandler();//用户自定义的异常处理类
+    private static DoraUncaughtExceptionHandler instance = new DoraUncaughtExceptionHandler();//用户自定义的异常处理类
 
-    private DoraUncatchExceptionHandler() {
+    private DoraUncaughtExceptionHandler() {
     }
 
-    public static DoraUncatchExceptionHandler getInstance() {
+    static DoraUncaughtExceptionHandler getInstance() {
         return instance;
     }
 
-    public void init(Context context) {
+    void init(Context context, CrashConfig config) {
         this.mContext = context.getApplicationContext();
+        this.mConf = config;
         mDefaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
@@ -28,8 +30,10 @@ public class DoraUncatchExceptionHandler implements Thread.UncaughtExceptionHand
     public void uncaughtException(Thread t, Throwable e) {
         //收集异常信息，做我们自己的处理
         Collector collector = new CrashInfoCollector2();
-        collector.collect(new CrashInfo());
-        collector.report(new StoragePolicy());
+        CrashInfo info = mConf.info;
+        info.setException(e);
+        collector.collect(info);
+        collector.report(mConf.policy);
         //如果系统提供了异常处理类，则交给系统去处理
         if (mDefaultExceptionHandler != null) {
             mDefaultExceptionHandler.uncaughtException(t, e);
