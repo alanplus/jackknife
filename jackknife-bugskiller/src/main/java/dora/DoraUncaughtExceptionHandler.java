@@ -3,8 +3,6 @@ package dora;
 import android.content.Context;
 import android.os.Process;
 
-import com.example.myapplication.BuildConfig;
-
 class DoraUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     private Context mContext;
