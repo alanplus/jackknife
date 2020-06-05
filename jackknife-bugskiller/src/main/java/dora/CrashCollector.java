@@ -1,6 +1,6 @@
 package dora;
 
-public class CrashInfoCollector2 extends Collector {
+public class CrashCollector extends Collector {
 
     CrashInfo mInfo;
 
@@ -10,7 +10,7 @@ public class CrashInfoCollector2 extends Collector {
     }
 
     @Override
-    public void report(Thread thread, CrashReportPolicy policy) {
+    public void reportCrash(Thread thread, CrashReportPolicy policy) {
         if (mInfo != null) {
             mInfo.setThread(thread);
             policy.report(mInfo);

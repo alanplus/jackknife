@@ -21,8 +21,10 @@ public class CrashInfo {
     private String mobileName;
     private Thread thread;
     private Throwable throwable;
+    private Context context;
 
     protected CrashInfo(Context context) {
+        this.context = context;
         //获取手机的一些信息
         PackageManager pm = context.getPackageManager();
         PackageInfo pkgInfo;
@@ -40,6 +42,10 @@ public class CrashInfo {
         mobileName = Build.MANUFACTURER;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public void setThread(Thread thread) {
         this.thread = thread;
     }
@@ -50,9 +56,23 @@ public class CrashInfo {
 
     @Override
     public String toString() {
-        return "\n线程"+thread.getName()+"#"+thread.getId()
-                +"\nMobile型号：" + model + "\nMobileName：" + mobileName + "\nSDK版本：" + sdkVersion +
-                "\nAndroid版本：" + release +
-            "\n版本名称：" + versionName + "\n版本号：" + versionCode + "\n异常信息：" + throwable.toString();
+        return "\nCrash线程："+thread.getName()+"#"+thread.getId()
+                + "\n手机型号：" + model
+                + "\n手机品牌：" + mobileName
+                + "\nSDK版本：" + sdkVersion
+                + "\nAndroid版本：" + release
+                + "\n版本名称：" + versionName
+                + "\n版本号：" + versionCode
+                + "\n异常信息：" + throwable.toString()
+                + buildStackTrace(throwable.getStackTrace());
+    }
+
+    public String buildStackTrace(StackTraceElement[] lines) {
+        StringBuilder sb = new StringBuilder();
+        for (StackTraceElement line : lines) {
+            sb.append("\n").append("at ").append(line.getClassName()).append(".").append(line.getMethodName())
+                    .append("(").append(line.getFileName()+":"+line.getLineNumber()).append(")");
+        }
+        return sb.toString();
     }
 }

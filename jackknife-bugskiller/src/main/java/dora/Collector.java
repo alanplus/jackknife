@@ -15,5 +15,5 @@ public abstract class Collector {
      * @param thread 崩溃发生的线程
      * @param policy 崩溃报告的方针
      */
-    public abstract void report(Thread thread, CrashReportPolicy policy);
+    public abstract void reportCrash(Thread thread, CrashReportPolicy policy);
 }
