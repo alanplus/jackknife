@@ -11,5 +11,4 @@ include ':jackknife-viewinject',
         ':jackknife-xpermission',
         ':jackknife-aop-plugin',
         ':jackknife-filechooser',
-        ':jackknife-util',
-		':jackknife-bugskiller'
+        ':jackknife-util'
