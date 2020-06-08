@@ -178,7 +178,3 @@ dependencies {
 
 > 1. 支持本地资源color和drawable的更换
 > 2. 支持插件包资源color和drawable的更换
-
-
-
-**了解更多请添加作者唯一QQ: 924666990**
