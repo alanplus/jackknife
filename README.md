@@ -31,7 +31,7 @@ dependencies {
 
 #### 二、如何使用
 
-##### (一)基于依赖注入的自动注入视图、绑定控件和注册事件（jackknife-viewinject），已过时
+##### (一)基于依赖注入的自动注入视图、绑定控件和注册事件（jackknife-viewinject），已过时，从4.8.0开始被剔除
 
 ##### 1、自动注入视图（Inject Layout）
 
@@ -140,7 +140,7 @@ dependencies {
 | dropTable(Class&lt;? extends OrmTable&gt; tableClass)    | TableManager | 删除一张表               |
 | upgradeTable(Class&lt;? extends OrmTable&gt; tableClass) | TableManager | 升级一张表               |
 
-##### (三)基于MVP设计理念的开发（jackknife-mvp），已过时
+##### (三)基于MVP设计理念的开发（jackknife-mvp），已过时，从4.8.0开始被剔除
 
 ##### 1、所需要依赖的类
 
