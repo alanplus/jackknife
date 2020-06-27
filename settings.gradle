@@ -7,5 +7,4 @@ include ':jackknife-xhttp',
         ':jackknife-widget',
         ':jackknife-xpermission',
         ':jackknife-aop-plugin',
-        ':jackknife-filechooser',
         ':jackknife-util'
