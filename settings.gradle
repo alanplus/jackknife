@@ -1,7 +1,6 @@
 include ':jackknife-xhttp',
 		':jackknife-filepatch',
         ':jackknife-xskin',
-        ':jackknife-multiproxy',
         ':jackknife-av',
         ':jackknife-orm',
         ':jackknife-widget',
