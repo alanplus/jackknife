@@ -24,7 +24,6 @@ dependencies {
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.6.7'//一键换肤
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.6.7' //自定义控件，各种UI效果
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-util:4.6.7'//开发工具类
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-filepatch:4.6.7'//文件补丁差分合并工具（用于增量更新）
 }
 ```
 
