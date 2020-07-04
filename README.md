@@ -19,11 +19,10 @@ allprojects {
 
 ```
 dependencies {
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-orm:4.6.7'   //android sqlite orm框架 
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-xpermission:4.6.7'	//动态权限申请
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-xskin:4.6.7'//一键换肤
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.6.7' //自定义控件，各种UI效果
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-util:4.6.7'//开发工具类
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-orm:4.8.2'   //jackknife数据存储库 
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.8.2' //jackknife自定义控件库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-util:4.8.2'//jackknife工具库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.8.2'// jackknife音视频库
 }
 ```
 
