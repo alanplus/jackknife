@@ -11,13 +11,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/jackknife-aop-plugin" />
             <option value="$PROJECT_DIR$/jackknife-av" />
             <option value="$PROJECT_DIR$/jackknife-orm" />
             <option value="$PROJECT_DIR$/jackknife-util" />
             <option value="$PROJECT_DIR$/jackknife-widget" />
-            <option value="$PROJECT_DIR$/jackknife-xhttp" />
-            <option value="$PROJECT_DIR$/jackknife-xpermission" />
             <option value="$PROJECT_DIR$/jackknife-xskin" />
           </set>
         </option>

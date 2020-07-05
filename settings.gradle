@@ -1,8 +1,5 @@
-include ':jackknife-xhttp',
-        ':jackknife-xskin',
+include ':jackknife-xskin',
         ':jackknife-av',
         ':jackknife-orm',
         ':jackknife-widget',
-        ':jackknife-xpermission',
-        ':jackknife-aop-plugin',
         ':jackknife-util'

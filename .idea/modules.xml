@@ -23,7 +23,6 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife-av/jackknife-av.iml" filepath="$PROJECT_DIR$/jackknife-av/jackknife-av.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filechooser/jackknife-filechooser.iml" filepath="$PROJECT_DIR$/jackknife-filechooser/jackknife-filechooser.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filepatch/jackknife-filepatch.iml" filepath="$PROJECT_DIR$/jackknife-filepatch/jackknife-filepatch.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-aop-plugin/jackknife-jackknife-aop-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-aop-plugin/jackknife-jackknife-aop-plugin.iml" group="jackknife/jackknife-aop-plugin" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-av/jackknife-jackknife-av.iml" filepath="$PROJECT_DIR$/jackknife-av/jackknife-jackknife-av.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filechooser/jackknife-jackknife-filechooser.iml" filepath="$PROJECT_DIR$/jackknife-filechooser/jackknife-jackknife-filechooser.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-filepatch/jackknife-jackknife-filepatch.iml" filepath="$PROJECT_DIR$/jackknife-filepatch/jackknife-jackknife-filepatch.iml" />
@@ -51,8 +50,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-orm/liuwenhao-Desktop-jackknife-jackknife-orm.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-orm/liuwenhao-Desktop-jackknife-jackknife-orm.iml" group="jackknife/jackknife-orm" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-util/liuwenhao-Desktop-jackknife-jackknife-util.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-util/liuwenhao-Desktop-jackknife-jackknife-util.iml" group="jackknife/jackknife-util" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-widget/liuwenhao-Desktop-jackknife-jackknife-widget.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-widget/liuwenhao-Desktop-jackknife-jackknife-widget.iml" group="jackknife/jackknife-widget" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-xhttp/liuwenhao-Desktop-jackknife-jackknife-xhttp.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-xhttp/liuwenhao-Desktop-jackknife-jackknife-xhttp.iml" group="jackknife/jackknife-xhttp" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-xpermission/liuwenhao-Desktop-jackknife-jackknife-xpermission.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-xpermission/liuwenhao-Desktop-jackknife-jackknife-xpermission.iml" group="jackknife/jackknife-xpermission" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-xskin/liuwenhao-Desktop-jackknife-jackknife-xskin.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-xskin/liuwenhao-Desktop-jackknife-jackknife-xskin.iml" group="jackknife/jackknife-xskin" />
     </modules>
   </component>

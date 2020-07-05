@@ -20,12 +20,12 @@ apply plugin: 'maven'
 group = 'com.github.JackWHLiu'
 
 android {
-    compileSdkVersion rootProject.ext.android.compile_sdk
+    compileSdkVersion this.compile_sdk
     defaultConfig {
-        minSdkVersion rootProject.ext.android.min_sdk
-        targetSdkVersion rootProject.ext.android.target_sdk
-        versionCode rootProject.ext.android.release_version_code
-        versionName rootProject.ext.android.release_version_name
+        minSdkVersion this.min_sdk
+        targetSdkVersion this.target_sdk
+        versionCode this.release_version_code
+        versionName this.release_version_name
     }
     buildTypes {
         release {
