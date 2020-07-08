@@ -15,7 +15,6 @@
             <option value="$PROJECT_DIR$/jackknife-orm" />
             <option value="$PROJECT_DIR$/jackknife-util" />
             <option value="$PROJECT_DIR$/jackknife-widget" />
-            <option value="$PROJECT_DIR$/jackknife-xskin" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -1,5 +1,4 @@
-include ':jackknife-xskin',
-        ':jackknife-av',
+include ':jackknife-av',
         ':jackknife-orm',
         ':jackknife-widget',
         ':jackknife-util'
