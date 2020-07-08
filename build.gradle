@@ -13,6 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ext {
+    compile_sdk = 26
+    min_sdk = 14
+    target_sdk = 26
+    build_tools_version = '27.0.3'
+    release_version_code = 296
+    release_version_name = '4.8.5'
+}
+
 buildscript {
     repositories {
         jcenter()
@@ -38,15 +47,6 @@ allprojects {
         mavenLocal()
         google()
     }
-}
-
-ext {
-    compile_sdk = 26
-    min_sdk = 14
-    target_sdk = 26
-    build_tools_version = '27.0.3'
-    release_version_code = 295
-    release_version_name = '4.8.4'
 }
 
 task clean(type: Delete) {
