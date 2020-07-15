@@ -34,6 +34,8 @@ public class Logger {
      */
     private static final String TAG = Logger.class.getSimpleName().toLowerCase();
 
+    // <editor-folder desc="日志控制">
+
     public static void close() {
         DEBUG = false;
     }
@@ -49,6 +51,10 @@ public class Logger {
     public static boolean isClosed() {
         return !DEBUG;
     }
+
+    // </editor-folder>
+
+    // <editor-folder desc="日志输出">
 
     public static void info(String msg) {
         info(TAG, msg);
@@ -99,4 +105,6 @@ public class Logger {
             Log.v(tag, msg);
         }
     }
+
+    // </editor-folder>
 }

@@ -26,6 +26,8 @@ public class Math implements Number {
     private Math() {
     }
 
+    // <editor-folder desc="进制转换">
+
     public static int H2D(String hexadecimal) {
         return Integer.parseInt(hexadecimal, SIXTEEN);
     }
@@ -74,6 +76,10 @@ public class Math implements Number {
         return D2H(B2D(binary));
     }
 
+    // </editor-folder>
+
+    // <editor-folder desc="给字符串的前后补0">
+
     public static String zeroH(String num, int requiredLength) {
         if (requiredLength < 0) {
             throw new IllegalArgumentException("requiredLength must be more than 0.");
@@ -102,9 +108,13 @@ public class Math implements Number {
         return sb.toString();
     }
 
+    // </editor-folder>
+
     public static float clamp(float value, float max, float min) {
         return java.lang.Math.max(java.lang.Math.min(value, max), min);
     }
+
+    // <editor-folder desc="随机数生成">
 
     public static int getRandom(int min, int max) {
         Random random = new Random();
@@ -144,4 +154,6 @@ public class Math implements Number {
         String uuid = UUID.randomUUID().toString();
         return uuid.replaceAll("-", "");
     }
+
+    // </editor-folder>
 }

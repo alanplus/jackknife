@@ -47,6 +47,8 @@ public class ApkUtils {
     private ApkUtils() {
     }
 
+    // <editor-folder desc="获取apk包信息">
+
     public static String getAppName(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
@@ -112,35 +114,6 @@ public class ApkUtils {
         String apkPath = applicationInfo.sourceDir;
         File apkFile = new File(apkPath);
         return apkFile;
-    }
-
-    public static void launch(Context context, String packageName, String className) {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setComponent(new ComponentName(packageName, className));
-        context.startActivity(intent);
-    }
-
-    /**
-     * Uri contentUri = FileProvider.getUriForFile(context,
-     * BuildConfig.APPLICATION_ID+".fileprovider", file);
-     *
-     * @param context
-     * @param file
-     */
-    public void install(Context context, File file, Uri contentUri) {
-        Intent intent = new Intent();
-        intent.setAction(android.content.Intent.ACTION_VIEW);
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setDataAndType(contentUri, URI_INSTALL_PACKAGE);
-        } else {
-            uri = Uri.fromFile(file);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setDataAndType(uri, URI_INSTALL_PACKAGE);
-        }
-        context.startActivity(intent);
     }
 
     public static List<String> getAllPackageNames(Context context) {
@@ -246,4 +219,39 @@ public class ApkUtils {
                 apkPath, 0);
         return packageInfo;
     }
+
+    // </editor-folder>
+
+    // <editor-folder desc="安装和启动">
+
+    /**
+     * Uri contentUri = FileProvider.getUriForFile(context,
+     * BuildConfig.APPLICATION_ID+".fileprovider", file);
+     *
+     * @param context
+     * @param file
+     */
+    public void install(Context context, File file, Uri contentUri) {
+        Intent intent = new Intent();
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(contentUri, URI_INSTALL_PACKAGE);
+        } else {
+            uri = Uri.fromFile(file);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(uri, URI_INSTALL_PACKAGE);
+        }
+        context.startActivity(intent);
+    }
+
+    public static void launch(Context context, String packageName, String className) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setComponent(new ComponentName(packageName, className));
+        context.startActivity(intent);
+    }
+
+    // </editor-folder>
 }

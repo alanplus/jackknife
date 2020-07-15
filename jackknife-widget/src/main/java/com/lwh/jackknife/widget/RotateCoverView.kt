@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.widget
+package com.lwh.jackknife.widget
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator.INFINITE
@@ -24,8 +24,6 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.AttributeSet
 import android.view.animation.LinearInterpolator
-import com.lwh.jackknife.widget.CircleTextImageView
-import com.lwh.jackknife.widget.R
 
 @RequiresApi(Build.VERSION_CODES.KITKAT)
 class RotateCoverView @JvmOverloads constructor(internal var context: Context, attrs: AttributeSet? = null,
