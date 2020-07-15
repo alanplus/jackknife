@@ -51,6 +51,8 @@ public class TimeUtils {
     private TimeUtils() {
     }
 
+    // <editor-folder desc="日期时间转换">
+
     public static String getString(Date data, String formatType) {
         return new SimpleDateFormat(formatType, Locale.ENGLISH).format(data);
     }
@@ -88,6 +90,8 @@ public class TimeUtils {
     public static long getLong(Date date) {
         return date.getTime();
     }
+
+    // </editor-folder>
 
     public static int getDaysOfMonth(int year, int month) {
         int result;

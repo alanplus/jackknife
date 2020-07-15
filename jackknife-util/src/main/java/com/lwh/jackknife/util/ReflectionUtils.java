@@ -214,6 +214,8 @@ public class ReflectionUtils {
         return false;
     }
 
+    // <editor-folder desc="判断属性是否有某关键字">
+
     public static boolean isStaticField(Field f) {
         return Modifier.isStatic(f.getModifiers());
     }
@@ -241,4 +243,6 @@ public class ReflectionUtils {
     public static boolean isTransient(Field f) {
         return Modifier.isTransient(f.getModifiers());
     }
+
+    // </editor-folder>
 }

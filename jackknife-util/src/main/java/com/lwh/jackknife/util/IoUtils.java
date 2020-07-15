@@ -43,52 +43,33 @@ public class IoUtils {
     private IoUtils() {
     }
 
-    public static String b2H(byte b) {
-        String H = Integer.toHexString(b & 0xFF);
-        if (H.length() == 1) {
-            H = '0' + H;
-        }
-        return H;
-    }
-
-    public static String bs2H(byte[] src, String separator) {
-        if (src == null) {
-            return null;
-        }
-        StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < src.length; i++) {
-            int value = src[i] & 0xFF;
-            String H = Math.D2H(value);
-            if (H.length() < 2) {
-                buffer.append(0);
-            }
-            buffer.append(H).append(separator);
-        }
-        return buffer.substring(0, buffer.length()-separator.length());
-    }
-
-    public static String bs2H(byte[] src) {
-        return bs2H(src, "");
-    }
-
-    public static byte[] H2bs(String H, String separator) {
-        if (separator != null) {
-            String[] HS = H.split(separator);
-            byte[] bs = new byte[HS.length];
-            int i = 0;
-            for (String b : HS) {
-                bs[i++] = Integer.valueOf(b, 16).byteValue();
-            }
-            return bs;
-        }
-        throw new IllegalArgumentException("Separator can\'t be null.");
-    }
-
     public static boolean checkMediaMounted() {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            return true;
-        } else {
-            return false;
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    public static String getSdRoot() {
+        if (checkMediaMounted()) {
+            return Environment.getExternalStorageDirectory().getAbsolutePath();
+        }
+        return "";
+    }
+
+    // <editor-folder desc="文件（夹）创建、复制、删除、移动、重命名">
+
+    public static void createFolder(String[] dirs) {
+        if (dirs != null) {
+            for (String dir : dirs) {
+                createFolder(dir);
+            }
+        }
+    }
+
+    public static void createFolder(String dir) {
+        if (TextUtils.isNotEmpty(dir)) {
+            File folder = new File(dir);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
         }
     }
 
@@ -179,7 +160,7 @@ public class IoUtils {
         }
     }
 
-    private static boolean cutFile(File file, String target) {
+    private static boolean moveFile(File file, String target) {
         File targetFile = new File(target);
         if (!file.isFile() || !targetFile.exists() || !targetFile.isDirectory()) {
             return false;
@@ -190,19 +171,19 @@ public class IoUtils {
         }
     }
 
-    private static boolean cutFolder(File file, String target) {
+    private static boolean moveFolder(File file, String target) {
         File targetFile = new File(target);
         return !(!file.isDirectory()) || !targetFile.exists() || !targetFile.isDirectory()
                 && copyFolder(file, target) && deleteFolder(file);
     }
 
-    public static boolean cut(File file, String target) {
+    public static boolean move(File file, String target) {
         File targetFile = new File(target);
         if (!targetFile.exists() || !targetFile.isDirectory()) {
             return false;
         }
         if (file.isFile()) {
-            return cutFile(file, target);
+            return moveFile(file, target);
         } else {
             return copyFolder(file, target) && delete(file);
         }
@@ -234,16 +215,9 @@ public class IoUtils {
         }
     }
 
-    public static int getSubCount(File file) {
-        if (file != null) {
-            if (!file.isDirectory()) {
-                return -1;
-            } else {
-                return file.list().length;
-            }
-        }
-        throw new NullPointerException("File can\'t be null.");
-    }
+    // </editor-folder>
+
+    // <editor-folder desc="文件读写">
 
     public static byte[] read(File file) throws IOException {
         byte[] buffers = new byte[1024];
@@ -354,50 +328,9 @@ public class IoUtils {
         return mFile;
     }
 
-    public static void createFolder(String[] dirs) {
-        if (dirs != null) {
-            for (String dir : dirs) {
-                createFolder(dir);
-            }
-        }
-    }
+    // </editor-folder>
 
-    public static void createFolder(String dir) {
-        if (TextUtils.isNotEmpty(dir)) {
-            File folder = new File(dir);
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-        }
-    }
-
-    public static String transferCharset(String str, String newCharset)
-            throws UnsupportedEncodingException {
-        if (str != null) {
-            byte[] bs = str.getBytes();
-            return new String(bs, newCharset);
-        }
-        return null;
-    }
-
-    public static String getSdRoot() {
-        if (checkMediaMounted()) {
-            return Environment.getExternalStorageDirectory().getAbsolutePath();
-        }
-        return "";
-    }
-
-    public static byte[] bytes(Object obj) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos;
-        try {
-            oos = new ObjectOutputStream(baos);
-            oos.writeObject(obj);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return baos.toByteArray();
-    }
+    // <editor-folder desc="文件（夹）大小">
 
     public static String getRomTotalSize(Context context) {
         File path = Environment.getDataDirectory();
@@ -487,6 +420,10 @@ public class IoUtils {
         return size;
     }
 
+    // </editor-folder>
+
+    // <editor-folder desc="路径处理">
+
     public static String getParentPath(String path) {
         if (path.endsWith(File.separator)) {
             path = path.substring(0, path.length()-1);
@@ -503,5 +440,39 @@ public class IoUtils {
         } else {
             return path.substring(start, end);
         }
+    }
+
+    // </editor-folder>
+
+    public static byte[] bytes(Object obj) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos;
+        try {
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
+    }
+
+    public static int getSubCount(File file) {
+        if (file != null) {
+            if (!file.isDirectory()) {
+                return -1;
+            } else {
+                return file.list().length;
+            }
+        }
+        throw new NullPointerException("File can\'t be null.");
+    }
+
+    /* package */ static String transferCharset(String str, String newCharset)
+            throws UnsupportedEncodingException {
+        if (str != null) {
+            byte[] bs = str.getBytes();
+            return new String(bs, newCharset);
+        }
+        return null;
     }
 }

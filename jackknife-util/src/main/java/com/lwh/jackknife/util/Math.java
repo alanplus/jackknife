@@ -76,6 +76,47 @@ public class Math implements Number {
         return D2H(B2D(binary));
     }
 
+    public static String b2H(byte b) {
+        String H = Integer.toHexString(b & 0xFF);
+        if (H.length() == 1) {
+            H = '0' + H;
+        }
+        return H;
+    }
+
+    public static String bs2H(byte[] src, String separator) {
+        if (src == null) {
+            return null;
+        }
+        StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < src.length; i++) {
+            int value = src[i] & 0xFF;
+            String H = Math.D2H(value);
+            if (H.length() < 2) {
+                buffer.append(0);
+            }
+            buffer.append(H).append(separator);
+        }
+        return buffer.substring(0, buffer.length()-separator.length());
+    }
+
+    public static String bs2H(byte[] src) {
+        return bs2H(src, "");
+    }
+
+    public static byte[] H2bs(String H, String separator) {
+        if (separator != null) {
+            String[] HS = H.split(separator);
+            byte[] bs = new byte[HS.length];
+            int i = 0;
+            for (String b : HS) {
+                bs[i++] = Integer.valueOf(b, 16).byteValue();
+            }
+            return bs;
+        }
+        throw new IllegalArgumentException("Separator can\'t be null.");
+    }
+
     // </editor-folder>
 
     // <editor-folder desc="给字符串的前后补0">

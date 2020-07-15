@@ -227,7 +227,7 @@ public class SecurityUtils {
                 e.printStackTrace();
             }
 
-            return ret == null ? null : IoUtils.bs2H(ret);
+            return ret == null ? null : Math.bs2H(ret);
         }
 
         public static String digest32(String src, String charset) {
@@ -242,7 +242,7 @@ public class SecurityUtils {
                 e.printStackTrace();
             }
 
-            return ret == null ? null : IoUtils.bs2H(ret);
+            return ret == null ? null : Math.bs2H(ret);
         }
 
         public static String digest32(File src) throws IOException {
@@ -268,7 +268,7 @@ public class SecurityUtils {
                     dis.close();
                 }
             }
-            return IoUtils.bs2H(messageDigest.digest());
+            return Math.bs2H(messageDigest.digest());
         }
 
         public static String digest32(byte[] src) {
@@ -277,7 +277,7 @@ public class SecurityUtils {
             }
             MessageDigest messageDigest = checkAlgorithm();
             byte[] ret = messageDigest.digest(src);
-            return ret == null ? null : IoUtils.bs2H(ret);
+            return ret == null ? null : Math.bs2H(ret);
         }
 
         public static String digest16(String src) {

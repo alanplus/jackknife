@@ -114,6 +114,8 @@ public class TextUtils {
     private TextUtils() {
     }
 
+    // <editor-folder desc="编码转换">
+
     public static String transferASCII(String str)  {
         try {
             return IoUtils.transferCharset(str, US_ASCII);
@@ -177,7 +179,7 @@ public class TextUtils {
         return str;
     }
 
-    public static String toGB2312(String str) {
+    public static String transferGB2312(String str) {
         try {
             return IoUtils.transferCharset(str, GB_2312);
         } catch (UnsupportedEncodingException e) {
@@ -185,6 +187,10 @@ public class TextUtils {
         }
         return str;
     }
+
+    // </editor-folder>
+
+    // <editor-folder desc="字符格式校验或比对">
 
     public static boolean isEmpty(CharSequence str) {
         return android.text.TextUtils.isEmpty(str);
@@ -222,13 +228,13 @@ public class TextUtils {
         return !isEqualTo(lhss, rhss);
     }
 
-    public static String getUUID() {
-        return Math.getUUID();
-    }
-
     public static boolean match(String text, String regex) {
         return RegexUtils.match(text, regex);
     }
+
+    // </editor-folder>
+
+    // <editor-folder desc="获取拼音">
 
     public static String getPinyin(String ch) {
         String result = null;
@@ -284,6 +290,11 @@ public class TextUtils {
             asc = (256 * highByte + lowByte) - 256 * 256;
         }
         return asc;
+    }
+    // </editor-folder>
+
+    public static String getUUID() {
+        return Math.getUUID();
     }
 
     public enum CharType {

@@ -47,7 +47,7 @@ public class ToastUtils {
         showToast(context, resId, Toast.LENGTH_LONG);
     }
 
-    private static void showToast(final Context context, final int resId, final int duration) {
+    /* package */ static void showToast(final Context context, final int resId, final int duration) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             sHandler.post(new Runnable() {
                 @Override
@@ -60,7 +60,7 @@ public class ToastUtils {
         }
     }
 
-    private static void showToast(final Context context, final String text, final int duration) {
+    /* package */ static void showToast(final Context context, final String text, final int duration) {
         if (Looper.myLooper() != Looper.getMainLooper()) {
             sHandler.post(new Runnable() {
                 @Override
@@ -73,7 +73,7 @@ public class ToastUtils {
         }
     }
 
-    private static void showToastInternal(Context context, String text, int duration) {
+    /* package */ static void showToastInternal(Context context, String text, int duration) {
         Toast toast;
         if (sToastRef == null || sToastRef.get() == null) {
             toast = Toast.makeText(context, text, duration);
@@ -90,7 +90,7 @@ public class ToastUtils {
         toast.show();
     }
 
-    private static void showToastInternal(Context context, int resId, int duration) {
+    /* package */ static void showToastInternal(Context context, int resId, int duration) {
         Toast toast;
         if (sToastRef == null || sToastRef.get() == null) {
             toast = Toast.makeText(context, resId, duration);

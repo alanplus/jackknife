@@ -25,16 +25,16 @@ import android.util.Log;
 public class Logger {
 
     /**
-     * The flag that represents the log system is opened or closed, default is opened.
-     */
-    private static boolean DEBUG = true;
-
-    /**
      * The default log output tag.
      */
     private static final String TAG = Logger.class.getSimpleName().toLowerCase();
 
     // <editor-folder desc="日志控制">
+
+    /**
+     * The flag that represents the log system is opened or closed, default is opened.
+     */
+    private static boolean DEBUG = true;
 
     public static void close() {
         DEBUG = false;

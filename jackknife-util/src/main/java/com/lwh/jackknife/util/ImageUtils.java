@@ -49,6 +49,8 @@ import java.io.IOException;
 
 public class ImageUtils {
 
+    // <editor-folder desc="像素单位转换">
+
     public static float dp2px(float dpVal, Context context) {
         return DensityUtils.dp2px(dpVal, context);
     }
@@ -64,6 +66,52 @@ public class ImageUtils {
     public static float px2sp(float pxVal, Context context) {
         return DensityUtils.px2sp(pxVal, context);
     }
+
+    // </editor-folder>
+
+    // <editor-folder desc="Bitmap创建和回收">
+
+    public static Bitmap createBitmap(Context context, int resId) {
+        return BitmapFactory.decodeResource(context.getResources(), resId);
+    }
+
+    public static Bitmap createBitmap(byte[] bytes) {
+        if (bytes != null && bytes.length != 0) {
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        } else {
+            return null;
+        }
+    }
+
+    public static Bitmap createBitmap(Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof NinePatchDrawable) {
+            Bitmap bitmap = Bitmap.createBitmap(
+                    drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight(),
+                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                            : Bitmap.Config.RGB_565);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } else {
+            return null;
+        }
+    }
+
+    public static void recycle(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+        }
+        System.gc();
+    }
+
+    // </editor-folder>
+
+    // <editor-folder desc="保存和加载图片">
 
     public static void saveAsJpeg(Bitmap bitmap, String path, int quality) {
         FileOutputStream fos = null;
@@ -123,107 +171,36 @@ public class ImageUtils {
         saveAsPng(bitmap, path, 100);
     }
 
-    private static int calculateInSampleSize(BitmapFactory.Options options, int requiredWidth,
-                                             int requiredHeight) {
-        int width = options.outWidth;
-        int height = options.outHeight;
-        int inSampleSize = 1;
-        if (height > requiredHeight || width > requiredWidth) {
-            int widthRatio = java.lang.Math.round((float) width / (float) requiredWidth);
-            int heightRatio = java.lang.Math.round((float) height / (float) requiredHeight);
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-        return inSampleSize;
-    }
-
-    public static Bitmap decodeSampledBitmap(Resources res, int resId, int requiredWidth,
-                                             int requiredHeight) {
+    public static Bitmap loadImageThumbnail(String imagePath, int width, int height) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(res, resId, options);
-        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
-                requiredHeight);
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(res, resId, options);
-    }
-
-    public static Bitmap takeScreenShot(Activity activity) {
-        View view = activity.getWindow().getDecorView();
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
-        Rect rect = new Rect();
-        view.getWindowVisibleDisplayFrame(rect);
-        int statusBarHeight = rect.top;
-        Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, statusBarHeight,
-                SystemUtils.getScreenWidth(activity), SystemUtils.getScreenHeight(activity) - statusBarHeight);
-        view.destroyDrawingCache();
-        return outputBitmap;
-    }
-
-    public static int getPictureDegree(String path) {
-        int degree = 0;
-        try {
-            ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    degree = 90;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    degree = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return degree;
-    }
-
-    public static byte[] getBytes(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
-    }
-
-    public static Bitmap createBitmap(Context context, int resId) {
-        return BitmapFactory.decodeResource(context.getResources(), resId);
-    }
-
-    public static Bitmap createBitmap(byte[] bytes) {
-        if (bytes != null && bytes.length != 0) {
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        int outWidth = options.outWidth;
+        int outHeight = options.outHeight;
+        int w = outWidth / width;
+        int h = outHeight / height;
+        int inSampleSize;
+        if (w < h) {
+            inSampleSize = w;
         } else {
-            return null;
+            inSampleSize = h;
         }
+        if (inSampleSize <= 0) {
+            inSampleSize = 1;
+        }
+        options.inSampleSize = inSampleSize;
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
+                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        return bitmap;
     }
 
-    public static Bitmap createBitmap(Bitmap bitmap, int width, int height) {
-        return Bitmap.createScaledBitmap(bitmap, width, height, true);
-    }
+    // </editor-folder>
 
-    public static Bitmap createBitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        } else if (drawable instanceof NinePatchDrawable) {
-            Bitmap bitmap = Bitmap.createBitmap(
-                    drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight(),
-                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                            : Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(bitmap);
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-                    drawable.getIntrinsicHeight());
-            drawable.draw(canvas);
-            return bitmap;
-        } else {
-            return null;
-        }
+    // <editor-folder desc="图像处理或变换">
+
+    public static Bitmap composeWatermark(Bitmap dstBitmap, Bitmap markBitmap) {
+        return composeWatermark(dstBitmap, markBitmap, Gravity.END | Gravity.BOTTOM, 0, 0);
     }
 
     public static Bitmap composeWatermark(Bitmap dstBitmap, Bitmap markBitmap, int gravity, float offsetX, float offsetY) {
@@ -248,8 +225,8 @@ public class ImageUtils {
         return outputBitmap;
     }
 
-    public static Bitmap composeWatermark(Bitmap dstBitmap, Bitmap markBitmap) {
-        return composeWatermark(dstBitmap, markBitmap, Gravity.END | Gravity.BOTTOM, 0, 0);
+    public static Bitmap scaleBitmap(Bitmap bitmap, int requiredWidth, int requiredHeight) {
+        return Bitmap.createScaledBitmap(bitmap, requiredWidth, requiredHeight, true);
     }
 
     public static Bitmap zoomBitmap(Bitmap bitmap, int requiredWidth, int requiredHeight) {
@@ -268,37 +245,6 @@ public class ImageUtils {
         Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                 bitmap.getHeight(), matrix, true);
         return outputBitmap;
-    }
-
-    public static void recycle(Bitmap bitmap) {
-        if (bitmap != null && !bitmap.isRecycled()) {
-            bitmap.recycle();
-        }
-        System.gc();
-    }
-
-    public static Bitmap createImageThumbnail(String imagePath, int width, int height) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        options.inJustDecodeBounds = false;
-        int outWidth = options.outWidth;
-        int outHeight = options.outHeight;
-        int w = outWidth / width;
-        int h = outHeight / height;
-        int inSampleSize;
-        if (w < h) {
-            inSampleSize = w;
-        } else {
-            inSampleSize = h;
-        }
-        if (inSampleSize <= 0) {
-            inSampleSize = 1;
-        }
-        options.inSampleSize = inSampleSize;
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-        bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
-                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-        return bitmap;
     }
 
     public static Bitmap makeReflectionBitmap(Bitmap bitmap) {
@@ -390,5 +336,75 @@ public class ImageUtils {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return outputBitmap;
+    }
+
+    // </editor-folder>
+
+    private static int calculateInSampleSize(BitmapFactory.Options options, int requiredWidth,
+                                             int requiredHeight) {
+        int width = options.outWidth;
+        int height = options.outHeight;
+        int inSampleSize = 1;
+        if (height > requiredHeight || width > requiredWidth) {
+            int widthRatio = java.lang.Math.round((float) width / (float) requiredWidth);
+            int heightRatio = java.lang.Math.round((float) height / (float) requiredHeight);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmap(Resources res, int resId, int requiredWidth,
+                                             int requiredHeight) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+        options.inSampleSize = calculateInSampleSize(options, requiredWidth,
+                requiredHeight);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static Bitmap takeScreenShot(Activity activity) {
+        View view = activity.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+        Rect rect = new Rect();
+        view.getWindowVisibleDisplayFrame(rect);
+        int statusBarHeight = rect.top;
+        Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, statusBarHeight,
+                SystemUtils.getScreenWidth(activity), SystemUtils.getScreenHeight(activity) - statusBarHeight);
+        view.destroyDrawingCache();
+        return outputBitmap;
+    }
+
+    public static int getPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
+    }
+
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
 }

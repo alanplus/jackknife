@@ -21,6 +21,8 @@ package com.lwh.jackknife.util;
  */
 public interface Number {
 
+    // <editor-folder desc="整数部分">
+
     int ZERO = 0;
 
     int ONE = 1;
@@ -228,6 +230,10 @@ public interface Number {
     int ONE_MILLION = ONE_THOUSAND * ONE_THOUSAND;
 
     int ONE_BILLION = ONE_MILLION * ONE_THOUSAND;
+
+    // </editor-folder>
+
+    // <editor-folder desc="分数部分">
 
     float ONE_SECOND = (float) ONE / TWO;
 
@@ -482,4 +488,6 @@ public interface Number {
     float SEVENTEEN_TWENTIETH = (float) SEVENTEEN / TWENTY;
 
     float NINETEEN_TWENTIETH = (float) NINETEEN / TWENTY;
+
+    // </editor-folder>
 }

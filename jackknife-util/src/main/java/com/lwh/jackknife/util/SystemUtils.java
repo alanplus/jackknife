@@ -49,9 +49,7 @@ public class SystemUtils {
     public static int getScreenHeight(Context context) {
         return ScreenUtils.getInstance(context).getScreenHeight();
     }
-
-
-
+    
     public static void openKeyboard(View inputView, Context context) {
         InputMethodManager imm = (InputMethodManager) context
                 .getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
 
 public class StatusBarUtils {
 
-    public static void transparencyBar(Activity activity) {
+    public static void setTransparencyStatusBar(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -58,13 +58,72 @@ public class StatusBarUtils {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void setLightStatusBar(final Window window, final boolean dark, boolean isFullMode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            switch (RomUtils.getLightStatusBarAvailableRomType()) {
+                case RomUtils.AvailableRomType.MIUI:
+                    setMIUIStatusBarLightMode(window, dark);
+                    break;
+
+                case RomUtils.AvailableRomType.FLYME:
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        setAndroidNativeLightStatusBar(window, dark, isFullMode);
+                    } else {
+                        setFlymeLightStatusBar(window, dark);
+                    }
+                    break;
+
+                case RomUtils.AvailableRomType.ANDROID_NATIVE:
+                    setAndroidNativeLightStatusBar(window, dark, isFullMode);
+                    break;
+
+                case RomUtils.AvailableRomType.NA:
+                    // N/A do nothing
+                    break;
+            }
+        }
+    }
+
+    /**
+     * @param dark       true 字体颜色为黑色，false为白色
+     * @param isFullMode 是否在全屏模式下
+     */
+    public static void setLightStatusBar(final Activity activity, final boolean dark, boolean isFullMode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int romType = RomUtils.getLightStatusBarAvailableRomType();
+            switch (romType) {
+                case RomUtils.AvailableRomType.MIUI:
+                    setMIUIStatusBarLightMode(activity, dark);
+                    break;
+
+                case RomUtils.AvailableRomType.FLYME:
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        setAndroidNativeLightStatusBar(activity, dark, isFullMode);
+                    } else {
+                        setFlymeLightStatusBar(activity, dark);
+                    }
+                    break;
+
+                case RomUtils.AvailableRomType.ANDROID_NATIVE:
+                    setAndroidNativeLightStatusBar(activity, dark, isFullMode);
+                    break;
+
+                case RomUtils.AvailableRomType.NA:
+                    // N/A do nothing
+                    break;
+            }
+        }
+    }
+
+
     /**
      * 需要MIUIV6以上。
      *
      * @param dark 是否把状态栏文字及图标颜色设置为深色
      * @return boolean 成功执行返回true
      */
-    private static void MIUISetStatusBarLightMode(Object object, boolean dark) {
+    private static void setMIUIStatusBarLightMode(Object object, boolean dark) {
         Window window = null;
         if (object instanceof Activity) {
             window = ((Activity) object).getWindow();
@@ -97,64 +156,6 @@ public class StatusBarUtils {
 
             } catch (Exception ignore) {
 
-            }
-        }
-    }
-
-    /**
-     * @param dark       true 字体颜色为黑色，false为白色
-     * @param isFullMode 是否在全屏模式下
-     */
-    public static void setLightStatusBar(final Activity activity, final boolean dark, boolean isFullMode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int romType = RomUtils.getLightStatusBarAvailableRomType();
-            switch (romType) {
-                case RomUtils.AvailableRomType.MIUI:
-                    MIUISetStatusBarLightMode(activity, dark);
-                    break;
-
-                case RomUtils.AvailableRomType.FLYME:
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                        setAndroidNativeLightStatusBar(activity, dark, isFullMode);
-                    } else {
-                        setFlymeLightStatusBar(activity, dark);
-                    }
-                    break;
-
-                case RomUtils.AvailableRomType.ANDROID_NATIVE:
-                    setAndroidNativeLightStatusBar(activity, dark, isFullMode);
-                    break;
-
-                case RomUtils.AvailableRomType.NA:
-                    // N/A do nothing
-                    break;
-            }
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public static void setLightStatusBar(final Window window, final boolean dark, boolean isFullMode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            switch (RomUtils.getLightStatusBarAvailableRomType()) {
-                case RomUtils.AvailableRomType.MIUI:
-                    MIUISetStatusBarLightMode(window, dark);
-                    break;
-
-                case RomUtils.AvailableRomType.FLYME:
-                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                        setAndroidNativeLightStatusBar(window, dark, isFullMode);
-                    } else {
-                        setFlymeLightStatusBar(window, dark);
-                    }
-                    break;
-
-                case RomUtils.AvailableRomType.ANDROID_NATIVE:
-                    setAndroidNativeLightStatusBar(window, dark, isFullMode);
-                    break;
-
-                case RomUtils.AvailableRomType.NA:
-                    // N/A do nothing
-                    break;
             }
         }
     }
