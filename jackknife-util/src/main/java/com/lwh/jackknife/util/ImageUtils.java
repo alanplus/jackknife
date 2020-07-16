@@ -241,7 +241,7 @@ public class ImageUtils {
         int bottom = (int) (outRect.bottom + offsetY);
         outRect.set(left, top, right, bottom);
         canvas.drawBitmap(markBitmap, null, outRect, null);
-        canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.save();
         canvas.restore();
         return outputBitmap;
     }
