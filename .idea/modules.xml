@@ -18,6 +18,11 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife-xhttp/Desktop-jackknife-jackknife-xhttp.iml" filepath="$PROJECT_DIR$/jackknife-xhttp/Desktop-jackknife-jackknife-xhttp.iml" group="jackknife/jackknife-xhttp" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-xpermission/Desktop-jackknife-jackknife-xpermission.iml" filepath="$PROJECT_DIR$/jackknife-xpermission/Desktop-jackknife-jackknife-xpermission.iml" group="jackknife/jackknife-xpermission" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-xskin/Desktop-jackknife-jackknife-xskin.iml" filepath="$PROJECT_DIR$/jackknife-xskin/Desktop-jackknife-jackknife-xskin.iml" group="jackknife/jackknife-xskin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/alm-Desktop-jackknife.iml" filepath="$PROJECT_DIR$/.idea/modules/alm-Desktop-jackknife.iml" group="jackknife" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-av/com.github.JackWHLiu-jackknife-av.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-av/com.github.JackWHLiu-jackknife-av.iml" group="jackknife/jackknife-av" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-orm/com.github.JackWHLiu-jackknife-orm.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-orm/com.github.JackWHLiu-jackknife-orm.iml" group="jackknife/jackknife-orm" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-util/com.github.JackWHLiu-jackknife-util.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-util/com.github.JackWHLiu-jackknife-util.iml" group="jackknife/jackknife-util" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-widget/com.github.JackWHLiu-jackknife-widget.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-widget/com.github.JackWHLiu-jackknife-widget.iml" group="jackknife/jackknife-widget" />
       <module fileurl="file://$PROJECT_DIR$/jackknife.iml" filepath="$PROJECT_DIR$/jackknife.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" filepath="$PROJECT_DIR$/jackknife-aop-plugin/jackknife-aop-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-av/jackknife-av.iml" filepath="$PROJECT_DIR$/jackknife-av/jackknife-av.iml" />

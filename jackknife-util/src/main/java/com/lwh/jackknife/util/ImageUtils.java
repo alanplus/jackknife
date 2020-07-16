@@ -38,6 +38,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 
@@ -46,6 +47,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ImageUtils {
 
@@ -179,12 +181,7 @@ public class ImageUtils {
         int outHeight = options.outHeight;
         int w = outWidth / width;
         int h = outHeight / height;
-        int inSampleSize;
-        if (w < h) {
-            inSampleSize = w;
-        } else {
-            inSampleSize = h;
-        }
+        int inSampleSize = java.lang.Math.min(w, h);
         if (inSampleSize <= 0) {
             inSampleSize = 1;
         }
@@ -193,6 +190,30 @@ public class ImageUtils {
         bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,
                 ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
         return bitmap;
+    }
+
+    public static Bitmap loadAssetBitmap(Context context, String assetPath) {
+        InputStream is = null;
+        try {
+            Resources resources = context.getResources();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inDensity = DisplayMetrics.DENSITY_HIGH;
+            options.inScreenDensity = resources.getDisplayMetrics().densityDpi;
+            options.inTargetDensity = resources.getDisplayMetrics().densityDpi;
+            is = context.getAssets().open(assetPath);
+            return BitmapFactory.decodeStream(is, new Rect(), options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
     // </editor-folder>
