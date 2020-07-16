@@ -36,7 +36,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApkUtils {
+public final class ApkUtils {
 
     private static final String CLASS_PACKAGE_PARSER = "android.content.pm.PackageParser";
     private static final String METHOD_PARSE_PACKAGE = "parsePackage";

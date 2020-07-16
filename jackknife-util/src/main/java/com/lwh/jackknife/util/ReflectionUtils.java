@@ -16,7 +16,6 @@
 
 package com.lwh.jackknife.util;
 
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +23,10 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class ReflectionUtils {
+public final class ReflectionUtils {
+
+    private ReflectionUtils() {
+    }
 
     public static <T> T newInstance(Class<T> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
@@ -67,10 +69,6 @@ public class ReflectionUtils {
         return null;
     }
 
-    public static Class<?> getComponentType(Field field) {
-        return field.getType().getComponentType();
-    }
-
     public static Class<?> getGenericType(Object obj) {
         if(obj.getClass().getGenericSuperclass() instanceof ParameterizedType &&
                 ((ParameterizedType) (obj.getClass().getGenericSuperclass())).getActualTypeArguments().length > 0) {
@@ -94,15 +92,7 @@ public class ReflectionUtils {
         return null;
     }
 
-    public static Class<?> getArrayType(Field f) {
-        return f.getType().getComponentType();
-    }
-
-    public static Class<?> getFirstGenericType(Field f) {
-        return getGenericType(f, 0);
-    }
-
-    public static Class<?> getGenericType(Field f, int genericTypeIndex) {
+    public static Class<?> getNestedGenericType(Field f, int genericTypeIndex) {
         Type type = f.getGenericType();
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
@@ -113,34 +103,6 @@ public class ReflectionUtils {
             return (Class<?>) type;
         }
         return null;
-    }
-
-    public static void setNumber(Object obj, Field f, long n) {
-        f.setAccessible(true);
-        Class<?> fieldType = f.getType();
-        try {
-            if (fieldType == long.class) {
-                f.setLong(obj, n);
-            } else if (fieldType == int.class) {
-                f.setInt(obj, (int) n);
-            } else if (fieldType == short.class) {
-                f.setShort(obj, (short) n);
-            } else if (fieldType == byte.class) {
-                f.setByte(obj, (byte) n);
-            } else if (fieldType == Long.class) {
-                f.set(obj, Long.valueOf(n));
-            } else if (fieldType == Integer.class) {
-                f.set(obj, Integer.valueOf((int) n));
-            } else if (fieldType == Short.class) {
-                f.set(obj, new Short((short) n));
-            } else if (fieldType == Byte.class) {
-                f.set(obj, Byte.valueOf((byte) n));
-            } else {
-                throw new RuntimeException("Field is not a number class.");
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 
     public static boolean isNumber(Class<?> numberCls) {
@@ -154,25 +116,30 @@ public class ReflectionUtils {
                 || numberCls == Byte.class;
     }
 
-    public static Object getFieldValue(Field f, Object obj) {
-        f.setAccessible(true);
+    public static Object getFieldValue(Field field, Object obj) {
+        field.setAccessible(true);
         try {
-            return f.get(obj);
+            return field.get(obj);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public static Object getStaticFieldValue(Field f) {
-        return getStaticFieldValue(f, null);
+    public static void setFieldValue(Field field, Object value) {
+        field.setAccessible(true);
+        try {
+            field.set(field, value);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static Object getStaticFieldValue(Field f, Class<?> fieldCls) {
-        f.setAccessible(true);
-        if (isStaticField(f)) {
+    public static Object getStaticFieldValue(Field field) {
+        field.setAccessible(true);
+        if (isStaticField(field)) {
             try {
-                return f.get(fieldCls);
+                return field.get(null);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -180,38 +147,16 @@ public class ReflectionUtils {
         throw new RuntimeException("Field is not static.");
     }
 
-    public static void setFieldValue(Field f, Object obj, Object value) {
-        f.setAccessible(true);
-        try {
-            f.set(obj, value);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void setStaticFieldValue(Field f, Object value) {
-        setStaticFieldValue(f, null, value);
-    }
-
-    public static void setStaticFieldValue(Field f, Class<?> fieldCls, Object value) {
-        f.setAccessible(true);
-        if (isStaticField(f)) {
+    public static void setStaticFieldValue(Field field, Object value) {
+        field.setAccessible(true);
+        if (isStaticField(field)) {
             try {
-                f.set(fieldCls, value);
+                field.set(null, value);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static boolean isSerializable(Field f) {
-        Class<?>[] classes = f.getType().getInterfaces();
-        for (Class<?> cls : classes) {
-            if (Serializable.class == cls) {
-                return true;
-            }
-        }
-        return false;
+        throw new RuntimeException("Field is not static.");
     }
 
     // <editor-folder desc="判断属性是否有某关键字">

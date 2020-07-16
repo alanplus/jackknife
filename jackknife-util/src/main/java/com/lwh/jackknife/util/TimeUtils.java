@@ -21,73 +21,66 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class TimeUtils {
+public final class TimeUtils {
 
-    /**
-     * yyyy.MM.dd
-     */
-    public final static String FORMAT_DATE = "yyyy.MM.dd";
-
-    /**
-     * yyyy-MM-dd
-     */
-    public final static String FORMAT_DATE_2 = "yyyy-MM-dd";
-
-    /**
-     * yyyyMMdd
-     */
-    public final static String FORMAT_DATE_3 = "yyyyMMdd";
-
-    /**
-     * HH:mm:ss
-     */
-    public final static String FORMAT_TIME = "HH:mm:ss";
-
-    /**
-     * HHmmss
-     */
-    public final static String FORMAT_TIME_2 = "HHmmss";
+    public final static String FORMAT_TYPE_DATE = "yyyy.MM.dd"; //yyyy.MM.dd
+    public final static String FORMAT_TYPE_DATE_2 = "yyyy-MM-dd";   //yyyy-MM-dd
+    public final static String FORMAT_TYPE_DATE_3 = "yyyyMMdd"; //yyyyMMdd
+    public final static String FORMAT_TYPE_TIME = "HH:mm:ss";   //HH:mm:ss
+    public final static String FORMAT_TYPE_TIME_2 = "HHmmss";   //HHmmss
 
     private TimeUtils() {
     }
 
     // <editor-folder desc="日期时间转换">
 
-    public static String getString(Date data, String formatType) {
-        return new SimpleDateFormat(formatType, Locale.ENGLISH).format(data);
+    public static String getTimeString(String formatType) {
+        return getTimeString(getTimeLong(), formatType);
     }
 
-    public static String getString(long currentTime, String formatType) {
-        Date date = getDate(currentTime, formatType);
-        return getString(date, formatType);
+    public static String getTimeString(Date data, String formatType) {
+        return new SimpleDateFormat(formatType, Locale.getDefault()).format(data);
     }
 
-    public static Date getDate(String strTime, String formatType) {
+    public static String getTimeString(long currentTime, String formatType) {
+        Date date = getTimeDate(currentTime, formatType);
+        return getTimeString(date, formatType);
+}
+
+    public static Date getTimeDate(String formatType) {
+        return getTimeDate(getTimeLong(), formatType);
+    }
+
+    public static Date getTimeDate(String strTime, String formatType) {
         Date date = null;
         try {
-            date = new SimpleDateFormat(formatType, Locale.ENGLISH).parse(strTime);
+            date = new SimpleDateFormat(formatType, Locale.getDefault()).parse(strTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return date;
     }
 
-    public static Date getDate(long currentTime, String formatType) {
+    public static Date getTimeDate(long currentTime, String formatType) {
         Date dateOld = new Date(currentTime);
-        String sDateTime = getString(dateOld, formatType);
-        return getDate(sDateTime, formatType);
+        String sDateTime = getTimeString(dateOld, formatType);
+        return getTimeDate(sDateTime, formatType);
     }
 
-    public static long getLong(String strTime, String formatType) {
-        Date date = getDate(strTime, formatType);
+    public static long getTimeLong() {
+        return System.currentTimeMillis();
+    }
+
+    public static long getTimeLong(String strTime, String formatType) {
+        Date date = getTimeDate(strTime, formatType);
         if (date == null) {
             return 0;
         } else {
-            return getLong(date);
+            return getTimeLong(date);
         }
     }
 
-    public static long getLong(Date date) {
+    public static long getTimeLong(Date date) {
         return date.getTime();
     }
 

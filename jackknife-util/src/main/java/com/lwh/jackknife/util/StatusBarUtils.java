@@ -29,7 +29,7 @@ import android.view.WindowManager;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class StatusBarUtils {
+public final class StatusBarUtils {
 
     public static boolean hasNotchInScreen(Activity activity) {
         // android  P 以上有标准 API 来判断是否有刘海屏

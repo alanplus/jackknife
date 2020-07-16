@@ -23,9 +23,9 @@ import android.os.Parcelable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class IntentParser {
+public final class IntentUtils {
 
-    private IntentParser() {
+    private IntentUtils() {
     }
 
     public static boolean hasExtra(Intent intent, String key) {

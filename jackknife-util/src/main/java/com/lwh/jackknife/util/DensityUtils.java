@@ -19,27 +19,27 @@ package com.lwh.jackknife.util;
 import android.content.Context;
 import android.util.TypedValue;
 
-final class DensityUtils {
+public final class DensityUtils {
 
     private DensityUtils() {
     }
 
-    /* package */ static float dp2px(float dpVal, Context context) {
+    public static float dp2px(float dpVal, Context context) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dpVal, context.getResources().getDisplayMetrics());
     }
 
-    /* package */ static float sp2px(float spVal, Context context) {
+    public static float sp2px(float spVal, Context context) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 spVal, context.getResources().getDisplayMetrics());
     }
 
-    /* package */ static float px2dp(float pxVal, Context context) {
+    public static float px2dp(float pxVal, Context context) {
         float scale = context.getResources().getDisplayMetrics().density;
         return pxVal / scale;
     }
 
-    /* package */ static float px2sp(float pxVal, Context context) {
+    public static float px2sp(float pxVal, Context context) {
         float scale = context.getResources().getDisplayMetrics().scaledDensity;
         return pxVal / scale;
     }

@@ -17,13 +17,13 @@
 package com.lwh.jackknife.util;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.format.Formatter;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,13 +32,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.nio.channels.FileChannel;
-import java.util.Iterator;
-import java.util.Map;
+import java.security.MessageDigest;
 
-public class IoUtils {
+public final class IoUtils {
 
     private IoUtils() {
     }
@@ -233,8 +231,8 @@ public class IoUtils {
         return fileBytes;
     }
 
-    public static String readText(String filePath) throws IOException {
-        FileInputStream is = new FileInputStream(filePath);
+    public static String readText(File file) throws IOException {
+        FileInputStream is = new FileInputStream(file);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024 * 4];
         int len;
@@ -245,43 +243,13 @@ public class IoUtils {
         return new String(data);
     }
 
-    public static Map<String, ?> read(Context context, String fileNameNoExt) {
-        SharedPreferences preferences = context.getSharedPreferences(fileNameNoExt, Context.MODE_PRIVATE);
-        return preferences.getAll();
+    public static String readText(String filePath) throws IOException {
+        return readText(new File(filePath));
     }
 
-    public static void write(Context context, String fileNameNoExt, Map<String, ?> values) {
-        try {
-            SharedPreferences preferences = context.getSharedPreferences(fileNameNoExt, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            for (Iterator iterator = values.entrySet().iterator(); iterator.hasNext(); ) {
-                Map.Entry<String, ?> entry = (Map.Entry<String, ?>) iterator.next();
-                if (entry.getValue() instanceof String) {
-                    editor.putString(entry.getKey(), (String) entry.getValue());
-                } else if (entry.getValue() instanceof Boolean) {
-                    editor.putBoolean(entry.getKey(), (Boolean) entry.getValue());
-                } else if (entry.getValue() instanceof Float) {
-                    editor.putFloat(entry.getKey(), (Float) entry.getValue());
-                } else if (entry.getValue() instanceof Long) {
-                    editor.putLong(entry.getKey(), (Long) entry.getValue());
-                } else if (entry.getValue() instanceof Integer) {
-                    editor.putInt(entry.getKey(), (Integer) entry.getValue());
-                }
-            }
-            editor.apply();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void write(Context context, String fileName, byte[] bytes, int modeType) {
-        try {
-            FileOutputStream outStream = context.openFileOutput(fileName, modeType);
-            outStream.write(bytes);
-            outStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void write(Context context, String fileName, byte[] bytes, int modeType) throws FileNotFoundException {
+        FileOutputStream outStream = context.openFileOutput(fileName, modeType);
+        close(outStream);
     }
 
     public static void write(byte[] bytes, String filePath) throws IOException {
@@ -295,9 +263,7 @@ public class IoUtils {
             fos.write(bytes);
             fos.flush();
         } finally {
-            if (fos != null) {
-                fos.close();
-            }
+            close(fos);
         }
     }
 
@@ -318,12 +284,8 @@ public class IoUtils {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                inputStream.close();
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            close(inputStream);
+            close(outputStream);
         }
         return mFile;
     }
@@ -432,7 +394,15 @@ public class IoUtils {
         return path.substring(0, start);
     }
 
-    public static String getFileNameFromPath(String path, boolean withSuffix) {
+    public static String getFileNameFromPath(String path) {
+        return getFileNameFromPath(path, true);
+    }
+
+    public static String getNameFromPath(String path) {
+        return getFileNameFromPath(path, false);
+    }
+
+    private static String getFileNameFromPath(String path, boolean withSuffix) {
         int start = path.lastIndexOf(File.separator) + 1;
         int end = path.lastIndexOf(".");
         if (withSuffix) {
@@ -467,12 +437,34 @@ public class IoUtils {
         throw new NullPointerException("File can\'t be null.");
     }
 
-    /* package */ static String transferCharset(String str, String newCharset)
-            throws UnsupportedEncodingException {
-        if (str != null) {
-            byte[] bs = str.getBytes();
-            return new String(bs, newCharset);
+    public static String getMD5(File file) {
+        FileInputStream fis = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            fis = new FileInputStream(file);
+            byte[] buffer = new byte[2048];
+            int length;
+            while ((length = fis.read(buffer)) != -1) {
+                md.update(buffer, 0, length);
+            }
+            byte[] bytes = md.digest();
+            return Math.bs2H(bytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            close(fis);
         }
-        return null;
+    }
+
+    public static void close(Closeable... closeableList) {
+        try {
+            for (Closeable closeable : closeableList) {
+                if (closeable != null){
+                    closeable.close();
+                }
+            }
+        } catch (IOException ignore) {
+        }
     }
 }

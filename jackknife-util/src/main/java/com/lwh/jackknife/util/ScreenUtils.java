@@ -20,38 +20,36 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-final class ScreenUtils {
+public final class ScreenUtils {
 
     private static ScreenUtils sInstance;
-    private static int[] sMetrics;
 
     private ScreenUtils() {
     }
 
-    /* package */ static ScreenUtils getInstance(Context context) {
+    private static ScreenUtils getInstance() {
         if (sInstance == null) {
             synchronized (ScreenUtils.class) {
                 if (sInstance == null) {
                     sInstance = new ScreenUtils();
-                    sMetrics = _getScreenWH(context);
                 }
             }
         }
         return sInstance;
     }
 
-    private static int[] _getScreenWH(Context context) {
+    private int[] _getScreenWH(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
         return new int[]{outMetrics.widthPixels, outMetrics.heightPixels};
     }
 
-    /* package */ int getScreenWidth() {
-        return sMetrics[0];
+    public static int getScreenWidth(Context context) {
+        return getInstance()._getScreenWH(context)[0];
     }
 
-    /* package */ int getScreenHeight() {
-        return sMetrics[1];
+    public static int getScreenHeight(Context context) {
+        return getInstance()._getScreenWH(context)[1];
     }
 }

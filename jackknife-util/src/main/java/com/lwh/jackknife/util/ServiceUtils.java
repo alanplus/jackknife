@@ -16,6 +16,7 @@
 
 package com.lwh.jackknife.util;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -26,37 +27,44 @@ import android.os.Vibrator;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-public class ServiceUtils {
+public final class ServiceUtils {
 
-    public InputMethodManager getInputMethodManager(Context context) {
+    private ServiceUtils() {
+    }
+
+    public static InputMethodManager getInputMethodManager(Context context) {
         return (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
-    public WindowManager getWindowManager(Context context) {
+    public static ActivityManager getActivityManager(Context context) {
+        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    }
+
+    public static WindowManager getWindowManager(Context context) {
         return (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     }
 
-    public NotificationManager getNotificationManager(Context context) {
+    public static NotificationManager getNotificationManager(Context context) {
         return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public ConnectivityManager getConnectivityManager(Context context) {
+    public static ConnectivityManager getConnectivityManager(Context context) {
         return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
-    public AudioManager getAudioManager(Context context) {
+    public static AudioManager getAudioManager(Context context) {
         return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
-    public PowerManager getPowerManager(Context context) {
+    public static PowerManager getPowerManager(Context context) {
         return (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     }
 
-    public AlarmManager getAlarmManager(Context context) {
+    public static AlarmManager getAlarmManager(Context context) {
         return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public Vibrator getVibrator(Context context) {
+    public static Vibrator getVibrator(Context context) {
         return (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 }

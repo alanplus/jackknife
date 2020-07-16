@@ -23,14 +23,14 @@ import java.util.List;
 /**
  * A tool that can transform arrays and collections.
  */
-public class AC {
+public final class AC {
 
     private static AC sInstance;
 
     private AC() {
     }
 
-    public static AC getInstance() {
+    public static AC get() {
         if (sInstance == null) {
             synchronized (AC.class) {
                 if (sInstance == null) {

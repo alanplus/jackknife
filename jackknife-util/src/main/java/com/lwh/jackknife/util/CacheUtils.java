@@ -17,26 +17,23 @@
 package com.lwh.jackknife.util;
 
 import android.content.Context;
-import android.os.Environment;
 
-final class CacheUtils {
+public final class CacheUtils {
 
     private CacheUtils() {
     }
 
-    /* package */ static String getCacheSize(Context context) {
+    public static String getCacheSize(Context context) {
         long cacheSize = IoUtils.getFolderTotalSize(context.getCacheDir());
-        if (Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
+        if (IoUtils.checkMediaMounted()) {
             cacheSize += IoUtils.getFolderTotalSize(context.getExternalCacheDir());
         }
         return IoUtils.formatFileSize(cacheSize);
     }
 
-    /* package */ static void clearAllCaches(Context context) {
+    public static void clearAllCaches(Context context) {
         IoUtils.delete(context.getCacheDir());
-        if (Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
+        if (IoUtils.checkMediaMounted()) {
             IoUtils.delete(context.getExternalCacheDir());
         }
     }

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public class Math implements Number {
+public final class Math implements Number {
 
     private Math() {
     }
@@ -151,10 +151,6 @@ public class Math implements Number {
 
     // </editor-folder>
 
-    public static float clamp(float value, float max, float min) {
-        return java.lang.Math.max(java.lang.Math.min(value, max), min);
-    }
-
     // <editor-folder desc="随机数生成">
 
     public static int getRandom(int min, int max) {
@@ -191,10 +187,14 @@ public class Math implements Number {
         return randoms;
     }
 
-    /* package */ static String getUUID() {
+    public static String getUUID() {
         String uuid = UUID.randomUUID().toString();
         return uuid.replaceAll("-", "");
     }
 
     // </editor-folder>
+
+    public static float clamp(float value, float max, float min) {
+        return java.lang.Math.max(java.lang.Math.min(value, max), min);
+    }
 }

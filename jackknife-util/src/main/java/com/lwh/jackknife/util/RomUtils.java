@@ -24,7 +24,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-public class RomUtils {
+public final class RomUtils {
+
+    private RomUtils() {
+    }
 
     static class AvailableRomType {
         public static final int MIUI = 1;

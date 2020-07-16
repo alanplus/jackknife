@@ -49,7 +49,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ImageUtils {
+public final class ImageUtils {
+
+    private ImageUtils() {
+    }
 
     // <editor-folder desc="像素单位转换">
 
@@ -394,7 +397,7 @@ public class ImageUtils {
         view.getWindowVisibleDisplayFrame(rect);
         int statusBarHeight = rect.top;
         Bitmap outputBitmap = Bitmap.createBitmap(bitmap, 0, statusBarHeight,
-                SystemUtils.getScreenWidth(activity), SystemUtils.getScreenHeight(activity) - statusBarHeight);
+                ScreenUtils.getScreenWidth(activity), ScreenUtils.getScreenHeight(activity) - statusBarHeight);
         view.destroyDrawingCache();
         return outputBitmap;
     }
