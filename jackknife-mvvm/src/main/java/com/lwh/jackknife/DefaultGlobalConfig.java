@@ -7,18 +7,18 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
-public class JKNFGlobalConfig implements GlobalConfig {
+public class DefaultGlobalConfig implements GlobalConfig {
 
     @Override
     public void applyOptions(Context context, Builder builder) {
-
+        builder.build();
     }
 
     @Override
-    public void injectAppLifecycle(Context context, List<AppLifecycle> lifecycles) {
+    public void injectApplicationLifecycle(Context context, List<ApplicationLifecycleCallbacks> lifecycles) {
         //AppLifecycles 中的所有方法都会在基类 Application 的对应生命周期中被调用, 所以在对应的方法中可以扩展一些自己需要的逻辑
         //可以根据不同的逻辑添加多个实现类
-        lifecycles.add(new AppLifecycleImpl());
+        lifecycles.add(new ApplicationLifecycleCallbacksImpl());
     }
 
     @Override

@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020 The JackKnife Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lwh.jackknife;
 
 import android.app.Application;
@@ -9,39 +25,28 @@ import java.util.List;
 
 public interface GlobalConfig {
 
-    /**
-     * 使用 {@link GlobalConfig.Builder} 给框架配置一些配置参数
-     *
-     * @param context {@link Context}
-     * @param builder {@link GlobalConfig.Builder}
-     */
     void applyOptions(Context context, GlobalConfig.Builder builder);
 
-    /**
-     * 使用 {@link AppLifecycle} 在 {@link Application} 的生命周期中注入一些操作
-     *
-     * @param context    {@link Context}
-     * @param lifecycles {@link Application} 的生命周期容器, 可向框架中添加多个 {@link Application} 的生命周期类
-     */
-    void injectAppLifecycle(Context context, List<AppLifecycle> lifecycles);
+    void injectApplicationLifecycle(Context context, List<ApplicationLifecycleCallbacks> lifecycles);
 
-    /**
-     * 使用 {@link Application.ActivityLifecycleCallbacks} 在 {@link androidx.appcompat.app.AppCompatActivity} 的生命周期中注入一些操作
-     *
-     * @param context    {@link Context}
-     * @param lifecycles {@link androidx.appcompat.app.AppCompatActivity} 的生命周期容器, 可向框架中添加多个 {@link androidx.appcompat.app.AppCompatActivity} 的生命周期类
-     */
     void injectActivityLifecycle(Context context, List<Application.ActivityLifecycleCallbacks> lifecycles);
 
-    /**
-     * 使用 {@link FragmentManager.FragmentLifecycleCallbacks} 在 {@link androidx.fragment.app.Fragment} 的生命周期中注入一些操作
-     *
-     * @param context    {@link Context}
-     * @param lifecycles {@link androidx.fragment.app.Fragment} 的生命周期容器, 可向框架中添加多个 {@link androidx.fragment.app.Fragment} 的生命周期类
-     */
     void injectFragmentLifecycle(Context context, List<FragmentManager.FragmentLifecycleCallbacks> lifecycles);
 
     public static class Builder {
+
+        private String url;
+        private String cachePath;
+
+        Builder baseUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        Builder cachePath(String path) {
+            this.cachePath = path;
+            return this;
+        }
 
         GlobalConfig build() {
             return null;

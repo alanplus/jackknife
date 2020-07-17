@@ -31,7 +31,7 @@ import com.lwh.jackknife.cache.CacheType;
 
 import java.util.Objects;
 
-public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment implements IFragment {
+public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment implements FragmentCache {
 
     protected T mBinding;
     protected final String TAG = this.getClass().getSimpleName();
@@ -48,8 +48,7 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
     @Override
     public synchronized Cache<String, Object> loadCache() {
         if (mCache == null) {
-            mCache = ((App)getActivity().getApplicationContext()).getAppComponent()
-                    .cacheFactory().build(CacheType.ACTIVITY_CACHE);
+            mCache = cacheFactory().build(CacheType.ACTIVITY_CACHE);
         }
         return mCache;
     }

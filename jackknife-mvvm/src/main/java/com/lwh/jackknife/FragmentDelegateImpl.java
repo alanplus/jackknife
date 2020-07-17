@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020 The JackKnife Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lwh.jackknife;
 
 import android.content.Context;
@@ -13,12 +29,12 @@ public class FragmentDelegateImpl implements FragmentDelegate {
 
     private FragmentManager mFragmentManager;
     private Fragment mFragment;
-    private IFragment iFragment;
+    private FragmentCache mFragmentCache;
 
     public FragmentDelegateImpl(@NonNull FragmentManager fragmentManager, @NonNull Fragment fragment) {
         this.mFragmentManager = fragmentManager;
         this.mFragment = fragment;
-        this.iFragment = (IFragment) fragment;
+        this.mFragmentCache = (FragmentCache) fragment;
     }
 
     @Override
@@ -36,7 +52,7 @@ public class FragmentDelegateImpl implements FragmentDelegate {
 
     @Override
     public void onActivityCreate(@Nullable Bundle savedInstanceState) {
-        iFragment.initData(savedInstanceState);
+        mFragmentCache.initData(savedInstanceState);
     }
 
     @Override
@@ -67,7 +83,7 @@ public class FragmentDelegateImpl implements FragmentDelegate {
     public void onDestroy() {
         this.mFragmentManager = null;
         this.mFragment = null;
-        this.iFragment = null;
+        this.mFragmentCache = null;
     }
 
     @Override

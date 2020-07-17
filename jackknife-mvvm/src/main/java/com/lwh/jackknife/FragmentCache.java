@@ -16,35 +16,26 @@
 
 package com.lwh.jackknife;
 
-import android.content.Context;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 
-public interface FragmentDelegate {
+import androidx.annotation.NonNull;
 
-    void onAttach(Context context);
+import com.lwh.jackknife.cache.Cache;
 
-    void onCreate(Bundle savedInstanceState);
+public interface FragmentCache {
 
-    void onCreateView(View view, Bundle savedInstanceState);
+    /**
+     * 提供在 {@link Activity} 生命周期内的缓存容器, 可向此 {@link Activity} 存取一些必要的数据
+     * 此缓存容器和 {@link Activity} 的生命周期绑定, 如果 {@link Activity} 在屏幕旋转或者配置更改的情况下
+     * 重新创建, 那此缓存容器中的数据也会被清空
+     *
+     * @return like {@link android.util.LruCache}
+     */
+    @NonNull
+    Cache<String, Object> loadCache();
 
-    void onActivityCreate(Bundle savedInstanceState);
+    Cache.Factory cacheFactory();
 
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroyView();
-
-    void onDestroy();
-
-    void onDetach();
-
-    boolean isAdded();
+    void initData(Bundle savedInstanceState);
 }

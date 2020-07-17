@@ -27,7 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.lwh.jackknife.cache.Cache;
 import com.lwh.jackknife.cache.CacheType;
 
-public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity implements IActivity {
+public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity
+        implements ActivityCache {
 
     protected T mBinding;
     protected final String TAG = this.getClass().getSimpleName();
@@ -45,7 +46,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     @Override
     public Cache<String, Object> loadCache() {
         if (mCache == null) {
-            mCache = ((App)getApplicationContext()).getAppComponent().cacheFactory().build(CacheType.ACTIVITY_CACHE);
+            mCache = cacheFactory().build(CacheType.FRAGMENT_CACHE);
         }
         return mCache;
     }

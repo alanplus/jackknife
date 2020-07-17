@@ -16,35 +16,14 @@
 
 package com.lwh.jackknife;
 
+import android.app.Application;
 import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
 
-public interface FragmentDelegate {
+public interface ApplicationLifecycleCallbacks {
 
-    void onAttach(Context context);
+    void attachBaseContext(Context base);
 
-    void onCreate(Bundle savedInstanceState);
+    void onCreate(Application application);
 
-    void onCreateView(View view, Bundle savedInstanceState);
-
-    void onActivityCreate(Bundle savedInstanceState);
-
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroyView();
-
-    void onDestroy();
-
-    void onDetach();
-
-    boolean isAdded();
+    void onTerminate(Application application);
 }

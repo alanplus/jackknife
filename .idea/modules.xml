@@ -43,6 +43,7 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife-xskin/jackknife-jackknife-xskin.iml" filepath="$PROJECT_DIR$/jackknife-xskin/jackknife-jackknife-xskin.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" filepath="$PROJECT_DIR$/jackknife-multiproxy/jackknife-multiproxy.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" filepath="$PROJECT_DIR$/jackknife-mvp/jackknife-mvp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-mvvm/jackknife-mvvm.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-mvvm/jackknife-mvvm.iml" group="jackknife/jackknife-mvvm" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-orm/jackknife-orm.iml" filepath="$PROJECT_DIR$/jackknife-orm/jackknife-orm.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-util/jackknife-util.iml" filepath="$PROJECT_DIR$/jackknife-util/jackknife-util.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-viewinject/jackknife-viewinject.iml" filepath="$PROJECT_DIR$/jackknife-viewinject/jackknife-viewinject.iml" />
@@ -53,7 +54,6 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife-xskin/jackknife-xskin.iml" filepath="$PROJECT_DIR$/jackknife-xskin/jackknife-xskin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-av/liuwenhao-Desktop-jackknife-jackknife-av.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-av/liuwenhao-Desktop-jackknife-jackknife-av.iml" group="jackknife/jackknife-av" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-orm/liuwenhao-Desktop-jackknife-jackknife-orm.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-orm/liuwenhao-Desktop-jackknife-jackknife-orm.iml" group="jackknife/jackknife-orm" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-util/liuwenhao-Desktop-jackknife-jackknife-util.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-util/liuwenhao-Desktop-jackknife-jackknife-util.iml" group="jackknife/jackknife-util" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-widget/liuwenhao-Desktop-jackknife-jackknife-widget.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-widget/liuwenhao-Desktop-jackknife-jackknife-widget.iml" group="jackknife/jackknife-widget" />
     </modules>
   </component>

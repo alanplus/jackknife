@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2020 The JackKnife Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.lwh.jackknife;
 
 import android.content.Context;
@@ -14,14 +30,14 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
 
     @Override
     public void onFragmentAttached(FragmentManager fm, Fragment f, Context context) {
-        if (f instanceof IFragment) {
+        if (f instanceof FragmentCache) {
             FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
             if (fragmentDelegate == null || !fragmentDelegate.isAdded()) {
-                Cache<String, Object> cache = getCacheFromFragment((IFragment) f);
+                Cache<String, Object> cache = getCacheFromFragment((FragmentCache) f);
                 fragmentDelegate = new FragmentDelegateImpl(fm, f);
                 //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
                 //否则存储在 LRU 算法的存储空间中, 前提是 Fragment 使用的是 IntelligentCache (框架默认使用)
-                cache.put(IntelligentCache.getKeyOfKeep(FragmentDelegate.FRAGMENT_DELEGATE), fragmentDelegate);
+                cache.put(IntelligentCache.getKeyOfKeep("FragmentDelegate.FRAGMENT_DELEGATE"), fragmentDelegate);
             }
             fragmentDelegate.onAttach(context);
         }
@@ -116,14 +132,14 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
     }
 
     private FragmentDelegate fetchFragmentDelegate(Fragment fragment) {
-        if (fragment instanceof IFragment) {
-            Cache<String, Object> cache = getCacheFromFragment((IFragment) fragment);
-            return (FragmentDelegate) cache.get(IntelligentCache.getKeyOfKeep(FragmentDelegate.FRAGMENT_DELEGATE));
+        if (fragment instanceof FragmentCache) {
+            Cache<String, Object> cache = getCacheFromFragment((FragmentCache) fragment);
+            return (FragmentDelegate) cache.get(IntelligentCache.getKeyOfKeep("FragmentDelegate.FRAGMENT_DELEGATE"));
         }
         return null;
     }
 
-    private Cache<String, Object> getCacheFromFragment(IFragment fragment) {
+    private Cache<String, Object> getCacheFromFragment(FragmentCache fragment) {
         Cache<String, Object> cache = fragment.loadCache();
         return cache;
     }
