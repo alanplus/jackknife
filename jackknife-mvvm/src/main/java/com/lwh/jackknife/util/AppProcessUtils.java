@@ -18,6 +18,7 @@ package com.lwh.jackknife.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
+
 import java.util.List;
 
 public final class AppProcessUtils {

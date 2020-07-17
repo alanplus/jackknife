@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.util;
+package com.lwh.jackknife.socket;
 
-import okhttp3.WebSocket;
-import okio.ByteString;
+public class WebSocketStatus {
 
-interface IWebSocketManager {
+  public final static int CONNECTED = 1;
+  public final static int CONNECTING = 0;
+  public final static int RECONNECT = 2;
+  public final static int DISCONNECTED = -1;
 
-  WebSocket getWebSocket();
+  class CODE {
 
-  void startConnect();
+    public final static int NORMAL_CLOSE = 1000;
+    public final static int ABNORMAL_CLOSE = 1001;
+  }
 
-  void stopConnect();
+  class TIP {
 
-  boolean isWsConnected();
-
-  int getCurrentStatus();
-
-  void setCurrentStatus(int currentStatus);
-
-  boolean sendMessage(String msg);
-
-  boolean sendMessage(ByteString byteString);
+    public final static String NORMAL_CLOSE = "normal close";
+    public final static String ABNORMAL_CLOSE = "abnormal close";
+  }
 }

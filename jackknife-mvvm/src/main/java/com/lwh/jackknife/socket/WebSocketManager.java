@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.util;
+package com.lwh.jackknife.socket;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
