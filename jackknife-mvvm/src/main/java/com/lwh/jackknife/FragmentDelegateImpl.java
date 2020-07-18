@@ -55,7 +55,7 @@ public class FragmentDelegateImpl implements FragmentDelegate {
     }
 
     @Override
-    public void onActivityCreate(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         Logger.info("%s - onActivityCreate", mFragment.toString());
         mFragmentCache.initData(savedInstanceState);
     }

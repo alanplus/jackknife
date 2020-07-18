@@ -35,6 +35,7 @@ public class ActivityDelegateImpl implements ActivityDelegate {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Logger.info("%s - onCreate", mActivity.getLocalClassName());
+        mActivityCache.initData(savedInstanceState);
     }
 
     @Override

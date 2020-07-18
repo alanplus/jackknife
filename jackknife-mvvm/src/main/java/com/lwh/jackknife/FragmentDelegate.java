@@ -30,7 +30,7 @@ public interface FragmentDelegate {
 
     void onCreateView(View view, Bundle savedInstanceState);
 
-    void onActivityCreate(Bundle savedInstanceState);
+    void onActivityCreated(Bundle savedInstanceState);
 
     void onStart();
 

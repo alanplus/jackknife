@@ -19,6 +19,7 @@ package com.lwh.jackknife;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.util.LruCache;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.lwh.jackknife.cache.Cache;
 import com.lwh.jackknife.cache.CacheType;
+
+import java.util.Set;
 
 public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity
         implements ActivityCache {
@@ -41,6 +44,16 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     }
 
     protected abstract int getLayoutId();
+
+    @Override
+    public Cache.Factory cacheFactory() {
+        return new Cache.Factory() {
+            @Override
+            public Cache build(CacheType type) {
+                return null;
+            }
+        };
+    }
 
     @NonNull
     @Override

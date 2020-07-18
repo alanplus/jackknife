@@ -61,7 +61,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
     public void onFragmentActivityCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
         FragmentDelegate fragmentDelegate = fetchFragmentDelegate(f);
         if (fragmentDelegate != null) {
-            fragmentDelegate.onActivityCreate(savedInstanceState);
+            fragmentDelegate.onActivityCreated(savedInstanceState);
         }
     }
 
