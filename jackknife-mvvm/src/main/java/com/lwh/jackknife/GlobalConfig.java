@@ -21,6 +21,7 @@ import android.content.Context;
 
 import androidx.fragment.app.FragmentManager;
 
+import java.io.File;
 import java.util.List;
 
 public interface GlobalConfig {
@@ -33,18 +34,18 @@ public interface GlobalConfig {
 
     void injectFragmentLifecycle(Context context, List<FragmentManager.FragmentLifecycleCallbacks> lifecycles);
 
-    public static class Builder {
+    class Builder {
 
         private String url;
-        private String cachePath;
+        private File cache;
 
         Builder baseUrl(String url) {
             this.url = url;
             return this;
         }
 
-        Builder cachePath(String path) {
-            this.cachePath = path;
+        Builder cacheFile(File cache) {
+            this.cache = cache;
             return this;
         }
 

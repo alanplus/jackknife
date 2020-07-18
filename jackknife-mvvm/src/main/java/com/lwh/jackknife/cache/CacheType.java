@@ -30,30 +30,11 @@ import androidx.fragment.app.Fragment;
  * @see Cache.Factory#build(CacheType)
  */
 public interface CacheType {
+
     int CACHE_SERVICE_CACHE_TYPE_ID = 1;
     int EXTRAS_TYPE_ID = 2;
     int ACTIVITY_CACHE_TYPE_ID = 3;
     int FRAGMENT_CACHE_TYPE_ID = 4;
-
-    CacheType RETROFIT_SERVICE_CACHE = new CacheType() {
-        private static final int MAX_SIZE = 150;
-        private static final float MAX_SIZE_MULTIPLIER = 0.002f;
-
-        @Override
-        public int getCacheTypeId() {
-            return CACHE_SERVICE_CACHE_TYPE_ID;
-        }
-
-        @Override
-        public int calculateCacheSize(Context context) {
-            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            int targetMemoryCacheSize = (int) (activityManager.getMemoryClass() * MAX_SIZE_MULTIPLIER * 1024);
-            if (targetMemoryCacheSize >= MAX_SIZE) {
-                return MAX_SIZE;
-            }
-            return targetMemoryCacheSize;
-        }
-    };
 
     CacheType CACHE_SERVICE_CACHE = new CacheType() {
         private static final int MAX_SIZE = 150;

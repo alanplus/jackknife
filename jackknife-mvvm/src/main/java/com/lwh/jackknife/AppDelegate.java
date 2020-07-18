@@ -39,20 +39,15 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
     private ComponentCallbacks2 mComponentCallback;
 
     public AppDelegate(Context context) {
-        //用反射, 将 AndroidManifest.xml 中带有 ConfigModule 标签的 class 转成对象集合（List<ConfigModule>）
         this.mConfigs = new ManifestParser(context).parse();
-        //遍历之前获得的集合, 执行每一个 ConfigModule 实现类的某些方法
         for (GlobalConfig config : mConfigs) {
-            //将框架外部, 开发者实现的 Application 的生命周期回调 (AppLifecycles) 存入 mAppLifecycles 集合 (此时还未注册回调)
             config.injectApplicationLifecycle(context, mApplicationLifecycles);
-            //将框架外部, 开发者实现的 Activity 的生命周期回调 (ActivityLifecycleCallbacks) 存入 mActivityLifecycles 集合 (此时还未注册回调)
             config.injectActivityLifecycle(context, mActivityLifecycles);
         }
     }
 
     @Override
     public void attachBaseContext(@NonNull Context base) {
-        //遍历 mAppLifecycles, 执行所有已注册的 AppLifecycles 的 attachBaseContext() 方法 (框架外部, 开发者扩展的逻辑)
         for (ApplicationLifecycleCallbacks lifecycle : mApplicationLifecycles) {
             lifecycle.attachBaseContext(base);
         }
@@ -61,20 +56,17 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
     @Override
     public void onCreate(@NonNull Application application) {
         this.mApplication = application;
-        //注册框架外部, 开发者扩展的 Activity 生命周期逻辑
-        //每个 ConfigModule 的实现类可以声明多个 Activity 的生命周期回调
-        //也可以有 N 个 ConfigModule 的实现类 (完美支持组件化项目 各个 Module 的各种独特需求)
         for (Application.ActivityLifecycleCallbacks lifecycle : mActivityLifecycles) {
             mApplication.registerActivityLifecycleCallbacks(lifecycle);
         }
         mComponentCallback = new AppComponentCallbacks(mApplication);
-        //注册回掉: 内存紧张时释放部分内存
+        //注册回调，内存紧张时释放部分内存
         mApplication.registerComponentCallbacks(mComponentCallback);
-        //执行框架外部, 开发者扩展的 App onCreate 逻辑
+        //执行框架外部，开发者扩展的 App onCreate 逻辑
         for (ApplicationLifecycleCallbacks lifecycle : mApplicationLifecycles) {
             lifecycle.onCreate(mApplication);
         }
-        getGlobalConfigModule(mApplication, mConfigs);
+        mergeGlobalConfig(mApplication, mConfigs);
     }
 
     @Override
@@ -104,7 +96,7 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
      *
      * @return GlobalConfig
      */
-    private GlobalConfig getGlobalConfigModule(Context context, List<GlobalConfig> configs) {
+    private GlobalConfig mergeGlobalConfig(Context context, List<GlobalConfig> configs) {
         GlobalConfig.Builder builder = new GlobalConfig.Builder();
         for (GlobalConfig config : configs) {
             config.applyOptions(context, builder);

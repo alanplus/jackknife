@@ -28,6 +28,24 @@ public final class ReflectionUtils {
     private ReflectionUtils() {
     }
 
+    public static Class<?> newClass(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Object newInstance(String className) {
+        Class<?> clazz = newClass(className);
+        if (clazz != null) {
+            return newInstance(clazz);
+        }
+        return null;
+    }
+
+
     public static <T> T newInstance(Class<T> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
         for (Constructor<?> c : constructors) {

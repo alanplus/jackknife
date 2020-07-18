@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.lwh.jackknife.cache.Cache;
-import com.lwh.jackknife.cache.IntelligentCache;
 
 public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallbacks {
 
@@ -140,7 +139,6 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
     }
 
     private Cache<String, Object> getCacheFromFragment(FragmentCache fragment) {
-        Cache<String, Object> cache = fragment.loadCache();
-        return cache;
+        return fragment.loadCache();
     }
 }

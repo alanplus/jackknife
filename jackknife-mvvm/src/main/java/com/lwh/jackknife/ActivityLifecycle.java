@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.lwh.jackknife.cache.Cache;
-import com.lwh.jackknife.cache.IntelligentCache;
 
 import java.util.List;
 
