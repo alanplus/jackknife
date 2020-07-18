@@ -4,7 +4,7 @@ JackKnife SDK文档
 ##### 最新版本![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg) 
 请尽量使用最新版本，使用过程中如有任何问题可以给我发送邮件924666990@qq.com
 
-##### 支持最低Android SDK版本 [![API](https://img.shields.io/badge/API-11%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+##### 支持最低Android SDK版本 [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
 ![avatar](http://47.111.72.9/jackknife/banner.jpg)
 
