@@ -18,8 +18,8 @@ ext {
     min_sdk = 14
     target_sdk = 28
     build_tools_version = '27.0.3'
-    release_version_code = 302
-    release_version_name = '4.9.2'
+    release_version_code = 303
+    release_version_name = '4.9.3'
 }
 
 buildscript {

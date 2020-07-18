@@ -57,7 +57,7 @@ public class Logger {
     // <editor-folder desc="日志输出">
 
     public static void info(String msg) {
-        info(TAG, msg);
+        infoWithTag(TAG, msg);
     }
 
     public static void infoWithTag(String tag, String msg) {
@@ -71,11 +71,11 @@ public class Logger {
     }
 
     public static void infoWithTag(String tag, String format, String... values) {
-        info(tag, String.format(format, values));
+        infoWithTag(tag, String.format(format, values));
     }
 
     public static void error(String msg) {
-        error(TAG, msg);
+        errorWithTag(TAG, msg);
     }
 
     public static void errorWithTag(String tag, String msg) {
@@ -89,11 +89,11 @@ public class Logger {
     }
 
     public static void errorWithTag(String tag, String format, String... values) {
-        error(tag, String.format(format, values));
+        errorWithTag(tag, String.format(format, values));
     }
 
     public static void debug(String msg) {
-        debug(TAG, msg);
+        debugWithTag(TAG, msg);
     }
 
     public static void debugWithTag(String tag, String msg) {
@@ -107,11 +107,11 @@ public class Logger {
     }
 
     public static void debugWithTag(String tag, String format, String... values) {
-        debug(tag, String.format(format, values));
+        debugWithTag(tag, String.format(format, values));
     }
 
     public static void warn(String msg) {
-        warn(TAG, msg);
+        warnWithTag(TAG, msg);
     }
 
     public static void warnWithTag(String tag, String msg) {
@@ -125,11 +125,11 @@ public class Logger {
     }
 
     public static void warnWithTag(String tag, String format, String... values) {
-        warn(tag, String.format(format, values));
+        warnWithTag(tag, String.format(format, values));
     }
 
     public static void verbose(String msg) {
-        verbose(TAG, msg);
+        verboseWithTag(TAG, msg);
     }
 
     public static void verboseWithTag(String tag, String msg) {
