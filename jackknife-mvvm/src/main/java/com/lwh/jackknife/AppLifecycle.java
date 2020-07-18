@@ -19,7 +19,7 @@ package com.lwh.jackknife;
 import android.app.Application;
 import android.content.Context;
 
-public class ApplicationLifecycleCallbacksImpl implements ApplicationLifecycleCallbacks {
+public class AppLifecycle implements ApplicationLifecycleCallbacks {
 
     @Override
     public void attachBaseContext(Context base) {

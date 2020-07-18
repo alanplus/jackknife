@@ -32,7 +32,7 @@ import androidx.fragment.app.Fragment;
 public interface CacheType {
 
     int CACHE_SERVICE_CACHE_TYPE_ID = 1;
-    int EXTRAS_TYPE_ID = 2;
+    int CONFIG_CACHE_TYPE_ID = 2;
     int ACTIVITY_CACHE_TYPE_ID = 3;
     int FRAGMENT_CACHE_TYPE_ID = 4;
 
@@ -56,13 +56,13 @@ public interface CacheType {
         }
     };
 
-    CacheType EXTRAS = new CacheType() {
+    CacheType CONFIG_CACHE = new CacheType() {
         private static final int MAX_SIZE = 500;
         private static final float MAX_SIZE_MULTIPLIER = 0.005f;
 
         @Override
         public int getCacheTypeId() {
-            return EXTRAS_TYPE_ID;
+            return CONFIG_CACHE_TYPE_ID;
         }
 
         @Override

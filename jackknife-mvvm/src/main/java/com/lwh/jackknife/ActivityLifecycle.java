@@ -24,13 +24,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.lwh.jackknife.cache.Cache;
+import com.lwh.jackknife.cache.IntelligentCache;
 
 import java.util.List;
 
 public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks {
 
     Application mApplication;
-    Cache<String, Object> mExtras;
+    Cache<String, Object> mConfigCache;
     FragmentManager.FragmentLifecycleCallbacks mFragmentLifecycle;
     List<FragmentManager.FragmentLifecycleCallbacks> mFragmentLifecycles;
 
@@ -40,11 +41,11 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
         if (activity instanceof ActivityCache) {
             ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
             if (activityDelegate == null) {
-                Cache<String, Object> cache = getCacheFromActivity((ActivityCache) activity);
+                Cache<String, Object> cache = ((ActivityCache) activity).loadCache();
                 activityDelegate = new ActivityDelegateImpl(activity);
                 //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
                 //否则存储在 LRU 算法的存储空间中, 前提是 Activity 使用的是 IntelligentCache (框架默认使用)
-                cache.put(IntelligentCache.getKeyOfKeep("ActivityDelegate.ACTIVITY_DELEGATE"), activityDelegate);
+                cache.put(IntelligentCache.getKeyOfKeep(ActivityDelegate.CACHE_KEY), activityDelegate);
             }
             activityDelegate.onCreate(savedInstanceState);
         }
@@ -96,34 +97,24 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
         ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
         if (activityDelegate != null) {
             activityDelegate.onDestroy();
-            getCacheFromActivity((ActivityCache) activity).clear();
+            if (activity instanceof ActivityCache) {
+                ((ActivityCache) activity).loadCache().clear();
+            }
         }
     }
 
-    /**
-     * 给每个 Activity 的所有 Fragment 设置监听其生命周期, Activity 可以通过 {@link ActivityCache#useFragment()}
-     * 设置是否使用监听,如果这个 Activity 返回 false 的话,这个 Activity 下面的所有 Fragment 将不能使用 {@link FragmentDelegate}
-     * 意味着 {@link BaseFragment} 也不能使用
-     *
-     * @param activity
-     */
     private void registerFragmentCallbacks(Activity activity) {
         if (activity instanceof AppCompatActivity) {
-            //mFragmentLifecycle 为 Fragment 生命周期实现类, 用于框架内部对每个 Fragment 的必要操作, 如给每个 Fragment 配置 FragmentDelegate
-            //注册框架内部已实现的 Fragment 生命周期逻辑
             ((AppCompatActivity) activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(mFragmentLifecycle, true);
-
-            if (mExtras.containsKey(IntelligentCache.getKeyOfKeep(GlobalConfig.class.getName()))) {
-                List<GlobalConfig> modules = (List<GlobalConfig>) mExtras.get(IntelligentCache.getKeyOfKeep(GlobalConfig.class.getName()));
+            if (mConfigCache.containsKey(IntelligentCache.getKeyOfKeep(GlobalConfig.CACHE_KEY))) {
+                List<GlobalConfig> modules = (List<GlobalConfig>) mConfigCache.get(IntelligentCache.getKeyOfKeep(GlobalConfig.CACHE_KEY));
                 if (modules != null) {
                     for (GlobalConfig module : modules) {
                         module.injectFragmentLifecycle(mApplication, mFragmentLifecycles);
                     }
                 }
-                mExtras.remove(IntelligentCache.getKeyOfKeep(GlobalConfig.class.getName()));
+                mConfigCache.remove(IntelligentCache.getKeyOfKeep(GlobalConfig.CACHE_KEY));
             }
-
-            //注册框架外部, 开发者扩展的 Fragment 生命周期逻辑
             for (FragmentManager.FragmentLifecycleCallbacks fragmentLifecycle : mFragmentLifecycles) {
                 ((AppCompatActivity) activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(fragmentLifecycle, true);
             }
@@ -133,13 +124,9 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
     private ActivityDelegate fetchActivityDelegate(Activity activity) {
         ActivityDelegate activityDelegate = null;
         if (activity instanceof ActivityCache) {
-            Cache<String, Object> cache = getCacheFromActivity((ActivityCache) activity);
-            activityDelegate = (ActivityDelegate) cache.get(IntelligentCache.getKeyOfKeep("ActivityDelegate.ACTIVITY_DELEGATE"));
+            Cache<String, Object> cache = ((ActivityCache) activity).loadCache();
+            activityDelegate = (ActivityDelegate) cache.get(IntelligentCache.getKeyOfKeep(ActivityDelegate.CACHE_KEY));
         }
         return activityDelegate;
-    }
-
-    private Cache<String, Object> getCacheFromActivity(ActivityCache activity) {
-        return activity.loadCache();
     }
 }

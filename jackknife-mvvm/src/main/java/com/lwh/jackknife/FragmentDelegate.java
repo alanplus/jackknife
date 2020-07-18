@@ -22,6 +22,8 @@ import android.view.View;
 
 public interface FragmentDelegate {
 
+    String CACHE_KEY = "FragmentDelegate";
+
     void onAttach(Context context);
 
     void onCreate(Bundle savedInstanceState);

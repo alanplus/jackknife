@@ -21,36 +21,15 @@ import android.content.Context;
 
 import androidx.fragment.app.FragmentManager;
 
-import java.io.File;
 import java.util.List;
 
 public interface GlobalConfig {
 
-    void applyOptions(Context context, GlobalConfig.Builder builder);
+    String CACHE_KEY = "GlobalConfig";
 
     void injectApplicationLifecycle(Context context, List<ApplicationLifecycleCallbacks> lifecycles);
 
     void injectActivityLifecycle(Context context, List<Application.ActivityLifecycleCallbacks> lifecycles);
 
     void injectFragmentLifecycle(Context context, List<FragmentManager.FragmentLifecycleCallbacks> lifecycles);
-
-    class Builder {
-
-        private String url;
-        private File cache;
-
-        Builder baseUrl(String url) {
-            this.url = url;
-            return this;
-        }
-
-        Builder cacheFile(File cache) {
-            this.cache = cache;
-            return this;
-        }
-
-        GlobalConfig build() {
-            return null;
-        }
-    }
 }

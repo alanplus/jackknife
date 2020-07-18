@@ -16,9 +16,12 @@
 
 package com.lwh.jackknife;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 public interface ActivityDelegate {
+
+    String CACHE_KEY = "ActivityDelegate";
 
     void onCreate(Bundle savedInstanceState);
 
@@ -33,4 +36,8 @@ public interface ActivityDelegate {
     void onSaveInstanceState(Bundle outState);
 
     void onDestroy();
+
+    void onPutExtras(Intent intent);
+
+    void onRemoveExtras(Intent intent);
 }

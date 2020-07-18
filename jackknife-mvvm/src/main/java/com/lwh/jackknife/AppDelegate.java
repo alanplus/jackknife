@@ -66,7 +66,6 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
         for (ApplicationLifecycleCallbacks lifecycle : mApplicationLifecycles) {
             lifecycle.onCreate(mApplication);
         }
-        mergeGlobalConfig(mApplication, mConfigs);
     }
 
     @Override
@@ -91,20 +90,6 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
     }
 
     /**
-     * 将app的全局配置信息封装进module(使用Dagger注入到需要配置信息的地方)
-     * 需要在AndroidManifest中声明{@link GlobalConfig}的实现类,和Glide的配置方式相似
-     *
-     * @return GlobalConfig
-     */
-    private GlobalConfig mergeGlobalConfig(Context context, List<GlobalConfig> configs) {
-        GlobalConfig.Builder builder = new GlobalConfig.Builder();
-        for (GlobalConfig config : configs) {
-            config.applyOptions(context, builder);
-        }
-        return builder.build();
-    }
-
-    /**
      * {@link ComponentCallbacks2} 是一个细粒度的内存回收管理回调
      * {@link Application}、{@link Activity}、{@link Service}、{@link ContentProvider}、{@link Fragment} 实现了 {@link ComponentCallbacks2} 接口
      * 开发者应该实现 {@link ComponentCallbacks2#onTrimMemory(int)} 方法, 细粒度 release 内存, 参数的值不同可以体现出不同程度的内存可用情况
@@ -113,7 +98,10 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
      */
     private static class AppComponentCallbacks implements ComponentCallbacks2 {
 
-        AppComponentCallbacks(Application application) {
+        private Application mApp;
+
+        AppComponentCallbacks(Application app) {
+            this.mApp = app;
         }
 
         /**
