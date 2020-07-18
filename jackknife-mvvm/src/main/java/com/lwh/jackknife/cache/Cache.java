@@ -16,6 +16,8 @@
 
 package com.lwh.jackknife.cache;
 
+import android.content.Context;
+
 import java.util.Set;
 
 public interface Cache<K, V> {
@@ -89,6 +91,6 @@ public interface Cache<K, V> {
          * @param type 框架中需要缓存的模块类型
          * @return {@link Cache}
          */
-        Cache build(CacheType type);
+        Cache build(CacheType type, Context context);
     }
 }

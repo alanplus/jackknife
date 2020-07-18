@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.lwh.jackknife.cache.Cache;
-import com.lwh.jackknife.cache.IntelligentCache;
 
 public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallbacks {
 
@@ -35,7 +34,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
             if (fragmentDelegate == null || !fragmentDelegate.isAdded()) {
                 Cache<String, Object> cache = ((FragmentCache) f).loadCache();
                 fragmentDelegate = new FragmentDelegateImpl(f);
-                cache.put(IntelligentCache.getKeyOfKeep(FragmentDelegate.CACHE_KEY), fragmentDelegate);
+                cache.put(FragmentDelegate.CACHE_KEY, fragmentDelegate);
             }
             fragmentDelegate.onAttach(context);
         }
@@ -132,7 +131,7 @@ public class FragmentLifecycle extends FragmentManager.FragmentLifecycleCallback
     private FragmentDelegate fetchFragmentDelegate(Fragment fragment) {
         if (fragment instanceof FragmentCache) {
             Cache<String, Object> cache = ((FragmentCache) fragment).loadCache();
-            return (FragmentDelegate) cache.get(IntelligentCache.getKeyOfKeep(FragmentDelegate.CACHE_KEY));
+            return (FragmentDelegate) cache.get(FragmentDelegate.CACHE_KEY);
         }
         return null;
     }

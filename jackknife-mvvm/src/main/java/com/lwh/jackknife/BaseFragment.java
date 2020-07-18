@@ -16,6 +16,7 @@
 
 package com.lwh.jackknife;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Build;
@@ -28,6 +29,7 @@ import androidx.fragment.app.Fragment;
 
 import com.lwh.jackknife.cache.Cache;
 import com.lwh.jackknife.cache.CacheType;
+import com.lwh.jackknife.cache.LruCache;
 
 import java.util.Objects;
 
@@ -48,8 +50,18 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
     @Override
     public synchronized Cache<String, Object> loadCache() {
         if (mCache == null) {
-            mCache = cacheFactory().build(CacheType.ACTIVITY_CACHE);
+            mCache = cacheFactory().build(CacheType.FRAGMENT_CACHE, getContext());
         }
         return mCache;
+    }
+
+    @Override
+    public Cache.Factory cacheFactory() {
+        return new Cache.Factory() {
+            @Override
+            public Cache build(CacheType type, Context context) {
+                return new LruCache(type.calculateCacheSize(context));
+            }
+        };
     }
 }

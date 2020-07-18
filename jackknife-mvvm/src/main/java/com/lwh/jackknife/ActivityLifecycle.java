@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.lwh.jackknife.cache.Cache;
-import com.lwh.jackknife.cache.IntelligentCache;
 
 import java.util.List;
 
@@ -43,9 +42,6 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
             if (activityDelegate == null) {
                 Cache<String, Object> cache = ((ActivityCache) activity).loadCache();
                 activityDelegate = new ActivityDelegateImpl(activity);
-                //使用 IntelligentCache.KEY_KEEP 作为 key 的前缀, 可以使储存的数据永久存储在内存中
-                //否则存储在 LRU 算法的存储空间中, 前提是 Activity 使用的是 IntelligentCache (框架默认使用)
-                cache.put(IntelligentCache.getKeyOfKeep(ActivityDelegate.CACHE_KEY), activityDelegate);
             }
             activityDelegate.onCreate(savedInstanceState);
         }
@@ -106,15 +102,6 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
     private void registerFragmentCallbacks(Activity activity) {
         if (activity instanceof AppCompatActivity) {
             ((AppCompatActivity) activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(mFragmentLifecycle, true);
-            if (mConfigCache.containsKey(IntelligentCache.getKeyOfKeep(GlobalConfig.CACHE_KEY))) {
-                List<GlobalConfig> modules = (List<GlobalConfig>) mConfigCache.get(IntelligentCache.getKeyOfKeep(GlobalConfig.CACHE_KEY));
-                if (modules != null) {
-                    for (GlobalConfig module : modules) {
-                        module.injectFragmentLifecycle(mApplication, mFragmentLifecycles);
-                    }
-                }
-                mConfigCache.remove(IntelligentCache.getKeyOfKeep(GlobalConfig.CACHE_KEY));
-            }
             for (FragmentManager.FragmentLifecycleCallbacks fragmentLifecycle : mFragmentLifecycles) {
                 ((AppCompatActivity) activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(fragmentLifecycle, true);
             }
@@ -125,7 +112,7 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
         ActivityDelegate activityDelegate = null;
         if (activity instanceof ActivityCache) {
             Cache<String, Object> cache = ((ActivityCache) activity).loadCache();
-            activityDelegate = (ActivityDelegate) cache.get(IntelligentCache.getKeyOfKeep(ActivityDelegate.CACHE_KEY));
+            activityDelegate = (ActivityDelegate) cache.get(ActivityDelegate.CACHE_KEY);
         }
         return activityDelegate;
     }

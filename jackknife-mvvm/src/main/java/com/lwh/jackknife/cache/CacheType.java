@@ -27,7 +27,7 @@ import androidx.fragment.app.Fragment;
  * 构建 {@link Cache} 时,使用 {@link CacheType} 中声明的类型,来区分不同的模块
  * 从而为不同的模块构建不同的缓存策略
  *
- * @see Cache.Factory#build(CacheType)
+ * @see Cache.Factory#build(CacheType, Context)
  */
 public interface CacheType {
 
