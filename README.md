@@ -20,10 +20,10 @@ allprojects {
 
 ```
 dependencies {
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-orm:4.9.3'   //jackknife数据存储库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.9.3' //jackknife自定义控件库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.9.3'//jackknife MVVM库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.9.3'// jackknife音视频库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-orm:4.9.4'   //jackknife数据存储库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.9.4' //jackknife自定义控件库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.9.4'//jackknife MVVM库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.9.4'// jackknife音视频库
 }
 ```
 

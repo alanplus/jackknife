@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.lwh.jackknife.cache.Cache;
@@ -28,11 +27,6 @@ import com.lwh.jackknife.cache.Cache;
 import java.util.List;
 
 public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks {
-
-    Application mApplication;
-    Cache<String, Object> mConfigCache;
-    FragmentManager.FragmentLifecycleCallbacks mFragmentLifecycle;
-    List<FragmentManager.FragmentLifecycleCallbacks> mFragmentLifecycles;
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -45,7 +39,6 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
             }
             activityDelegate.onCreate(savedInstanceState);
         }
-        registerFragmentCallbacks(activity);
     }
 
     @Override
@@ -95,15 +88,6 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
             activityDelegate.onDestroy();
             if (activity instanceof ActivityCache) {
                 ((ActivityCache) activity).loadCache().clear();
-            }
-        }
-    }
-
-    private void registerFragmentCallbacks(Activity activity) {
-        if (activity instanceof AppCompatActivity) {
-            ((AppCompatActivity) activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(mFragmentLifecycle, true);
-            for (FragmentManager.FragmentLifecycleCallbacks fragmentLifecycle : mFragmentLifecycles) {
-                ((AppCompatActivity) activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(fragmentLifecycle, true);
             }
         }
     }
