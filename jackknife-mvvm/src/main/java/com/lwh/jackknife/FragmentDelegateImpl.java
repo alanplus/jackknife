@@ -27,11 +27,9 @@ import com.lwh.jackknife.log.Logger;
 public class FragmentDelegateImpl implements FragmentDelegate {
 
     private Fragment mFragment;
-    private FragmentCache mFragmentCache;
 
     public FragmentDelegateImpl(Fragment fragment) {
         this.mFragment = fragment;
-        this.mFragmentCache = (FragmentCache) fragment;
     }
 
     @Override
@@ -57,7 +55,6 @@ public class FragmentDelegateImpl implements FragmentDelegate {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Logger.info("%s - onActivityCreate", mFragment.toString());
-        mFragmentCache.initData(savedInstanceState);
     }
 
     @Override
@@ -94,7 +91,6 @@ public class FragmentDelegateImpl implements FragmentDelegate {
     public void onDestroy() {
         Logger.info("%s - onDestroy", mFragment.toString());
         this.mFragment = null;
-        this.mFragmentCache = null;
     }
 
     @Override

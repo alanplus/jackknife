@@ -44,6 +44,7 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mBinding = DataBindingUtil.bind(Objects.requireNonNull(getView()));
+        initData(savedInstanceState);
     }
 
     @NonNull

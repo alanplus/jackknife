@@ -25,17 +25,14 @@ import com.lwh.jackknife.log.Logger;
 public class ActivityDelegateImpl implements ActivityDelegate {
 
     private Activity mActivity;
-    private ActivityCache mActivityCache;
 
     public ActivityDelegateImpl(Activity activity) {
         this.mActivity = activity;
-        this.mActivityCache = (ActivityCache) activity;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Logger.info("%s - onCreate", mActivity.getLocalClassName());
-        mActivityCache.initData(savedInstanceState);
     }
 
     @Override
