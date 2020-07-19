@@ -23,10 +23,10 @@ ext {
 }
 
 buildscript {
-    repositories {
+    ScriptHandler handler -> repositories {
+        google()
         jcenter()
         mavenCentral()
-        google()
     }
     ext {
         gradle_version = '3.5.3'
