@@ -25,11 +25,6 @@ android {
         targetSdkVersion this.target_sdk
         versionCode this.release_version_code
         versionName this.release_version_name
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath = true
-            }
-        }
     }
     dataBinding {
         enabled = true

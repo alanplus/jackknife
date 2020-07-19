@@ -32,11 +32,13 @@ buildscript {
         gradle_version = '3.5.3'
         gradle_plugin_version = '1.5'
         kotlin_version = '1.3.61'
+        apt_version = "1.8"
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${this.gradle_version}"
         classpath "com.github.dcendents:android-maven-gradle-plugin:${this.gradle_plugin_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${this.kotlin_version}"
+        classpath "com.neenbedankt.gradle.plugins:android-apt:${this.apt_version}"
     }
 }
 
