@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.skin.base;
+package com.lwh.jackknife.skin;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BaseSkinActivity extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory {
+public class SkinActivity extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory {
 
     static final Class<?>[] sConstructorSignature = new Class[]{
             Context.class, AttributeSet.class};

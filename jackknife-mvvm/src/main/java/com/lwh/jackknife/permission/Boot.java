@@ -30,6 +30,7 @@ import com.lwh.jackknife.permission.overlay.OverlayRequest;
 import com.lwh.jackknife.permission.runtime.option.RuntimeOption;
 import com.lwh.jackknife.permission.setting.Setting;
 import com.lwh.jackknife.permission.source.Source;
+import com.lwh.jackknife.permission.runtime.Runtime;
 
 public class Boot implements Option {
 
