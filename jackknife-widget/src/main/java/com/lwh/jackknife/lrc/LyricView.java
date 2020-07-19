@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.widget;
+package com.lwh.jackknife.lrc;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -27,9 +27,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Scroller;
 import android.widget.TextView;
-
-import com.lwh.jackknife.av.bean.Lyric;
-import com.lwh.jackknife.av.bean.Sentence;
 
 import java.util.ArrayList;
 import java.util.List;

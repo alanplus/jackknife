@@ -20,17 +20,12 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
-import androidx.fragment.app.FragmentManager;
-
 import com.lwh.jackknife.cache.Cache;
-
-import java.util.List;
 
 public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        //配置ActivityDelegate
         if (activity instanceof ActivityCache) {
             ActivityDelegate activityDelegate = fetchActivityDelegate(activity);
             if (activityDelegate == null) {

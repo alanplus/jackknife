@@ -48,14 +48,14 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
     }
 
     @Override
-    public void attachBaseContext(@NonNull Context base) {
+    public void attachBaseContext(Context base) {
         for (ApplicationLifecycleCallbacks lifecycle : mApplicationLifecycles) {
             lifecycle.attachBaseContext(base);
         }
     }
 
     @Override
-    public void onCreate(@NonNull Application application) {
+    public void onCreate(Application application) {
         this.mApplication = application;
         for (Application.ActivityLifecycleCallbacks lifecycle : mActivityLifecycles) {
             mApplication.registerActivityLifecycleCallbacks(lifecycle);
@@ -70,7 +70,7 @@ public class AppDelegate implements ApplicationLifecycleCallbacks {
     }
 
     @Override
-    public void onTerminate(@NonNull Application application) {
+    public void onTerminate(Application application) {
         if (mComponentCallback != null) {
             mApplication.unregisterComponentCallbacks(mComponentCallback);
         }

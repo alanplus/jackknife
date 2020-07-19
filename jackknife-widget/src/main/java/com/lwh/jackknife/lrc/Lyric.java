@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.bean;
+package com.lwh.jackknife.lrc;
 
 import java.io.Serializable;
 import java.util.List;

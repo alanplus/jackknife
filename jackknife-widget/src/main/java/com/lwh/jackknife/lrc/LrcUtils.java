@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.util;
-
-import com.lwh.jackknife.av.bean.Sentence;
+package com.lwh.jackknife.lrc;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
