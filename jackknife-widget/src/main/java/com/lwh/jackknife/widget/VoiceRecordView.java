@@ -8,18 +8,17 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class VoiceRecordView extends AppCompatImageView {
 
-    private Context mContext;
-
     public VoiceRecordView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public VoiceRecordView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public VoiceRecordView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setImageDrawable(getResources().getDrawable(R.drawable.jknf_voice_record));
     }
 
 
