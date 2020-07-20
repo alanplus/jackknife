@@ -80,7 +80,7 @@ public final class ReflectionUtils {
         return null;
     }
 
-    public static Object getPrimitiveDefaultValue(Class clazz) {
+    private static Object getPrimitiveDefaultValue(Class clazz) {
         if (clazz.isPrimitive()) {
             return clazz == boolean.class ? false : 0;
         }
