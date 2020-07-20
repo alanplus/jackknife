@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.listener.CoordinatorLayoutListener;
 
-public class DesignUtil {
+public class DesignUtils {
 
     public static void checkCoordinatorLayout(View content, RefreshKernel kernel, final CoordinatorLayoutListener listener) {
         try {//try 不能删除，不然会出现兼容性问题

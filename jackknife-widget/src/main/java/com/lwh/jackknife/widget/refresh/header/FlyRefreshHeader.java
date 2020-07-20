@@ -35,7 +35,7 @@ import com.lwh.jackknife.widget.refresh.header.flyrefresh.MountainSceneView;
 import com.lwh.jackknife.widget.refresh.api.RefreshHeader;
 import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * 纸飞机和山丘
@@ -198,7 +198,7 @@ public class FlyRefreshHeader extends FalsifyHeader implements RefreshHeader {
         mRefreshLayout.finishRefresh(0);
 
         final int offDistX = -mFlyView.getRight();
-        final int offDistY = -SmartUtil.dp2px(10);
+        final int offDistY = -SmartUtils.dp2px(10);
         AnimatorSet flyDownAnim = new AnimatorSet();
         flyDownAnim.setDuration(800);
         ObjectAnimator transX1 = ObjectAnimator.ofFloat(mFlyView, "translationX", mFlyView.getTranslationX(), offDistX);

@@ -20,9 +20,10 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.text.method.NumberKeyListener;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
-public abstract class AutoEditText extends EditText {
+import androidx.appcompat.widget.AppCompatEditText;
+
+public abstract class AutoEditText extends AppCompatEditText {
 
     public AutoEditText(Context context) {
         this(context, null);

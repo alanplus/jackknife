@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.widget.callback;
+package com.lwh.jackknife.widget.bottom;
 
 public interface OnShadeChangeListener {
     void onShadeChanged(int position, float ratio);

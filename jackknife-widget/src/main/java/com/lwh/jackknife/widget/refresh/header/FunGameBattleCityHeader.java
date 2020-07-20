@@ -27,7 +27,7 @@ import android.view.View;
 
 import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.header.fungame.FunGameView;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -158,8 +158,8 @@ public class FunGameBattleCityHeader extends FunGameView {
         status = FunGameView.STATUS_GAME_PREPARE;
         controllerPosition = DIVIDING_LINE_SIZE;
 
-        enemySpeed = SmartUtil.dp2px(1);
-        bulletSpeed = SmartUtil.dp2px(4);
+        enemySpeed = SmartUtils.dp2px(1);
+        bulletSpeed = SmartUtils.dp2px(4);
 
         levelNum = DEFAULT_TANK_MAGIC_TOTAL_NUM;
         wipeOutNum = 0;
@@ -228,8 +228,8 @@ public class FunGameBattleCityHeader extends FunGameView {
      */
     protected void upLevel() {
         levelNum += DEFAULT_TANK_MAGIC_TOTAL_NUM;
-        enemySpeed += SmartUtil.dp2px(1);
-        bulletSpeed += SmartUtil.dp2px(1);
+        enemySpeed += SmartUtils.dp2px(1);
+        bulletSpeed += SmartUtils.dp2px(1);
         wipeOutNum = 0;
 
         if (enemyTankSpace > 12)

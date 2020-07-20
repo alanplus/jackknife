@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.widget;
+package com.lwh.jackknife.widget.bottom;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
-import com.lwh.jackknife.widget.callback.OnShadeChangeListener;
+import com.lwh.jackknife.widget.ShadeView;
 
 import java.util.ArrayList;
 import java.util.List;

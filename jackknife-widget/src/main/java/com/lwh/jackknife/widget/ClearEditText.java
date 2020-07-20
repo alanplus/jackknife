@@ -24,9 +24,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
-import android.widget.EditText;
 
-public class ClearEditText extends EditText implements OnFocusChangeListener, TextWatcher {
+import androidx.appcompat.widget.AppCompatEditText;
+
+public class ClearEditText extends AppCompatEditText implements OnFocusChangeListener, TextWatcher {
 
     private Drawable mClearDrawable;
 

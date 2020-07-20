@@ -4,9 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatImageView;
 
-public class LoadingView extends ImageView {
+public class LoadingView extends AppCompatImageView {
 
     private float mRotateDegrees;
     private int mFrameTime;

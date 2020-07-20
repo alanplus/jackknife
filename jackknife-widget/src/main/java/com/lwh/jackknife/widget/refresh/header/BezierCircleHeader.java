@@ -35,7 +35,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * CircleRefresh
@@ -78,7 +78,7 @@ public class BezierCircleHeader extends InternalAbstract implements RefreshHeade
 
         mSpinnerStyle = SpinnerStyle.FixedBehind;
         final View thisView = this;
-        thisView.setMinimumHeight(SmartUtil.dp2px(100));
+        thisView.setMinimumHeight(SmartUtils.dp2px(100));
         mBackPaint = new Paint();
         mBackPaint.setColor(0xff11bbff);
         mBackPaint.setAntiAlias(true);
@@ -89,7 +89,7 @@ public class BezierCircleHeader extends InternalAbstract implements RefreshHeade
         mOuterPaint.setAntiAlias(true);
         mOuterPaint.setColor(0xffffffff);
         mOuterPaint.setStyle(Paint.Style.STROKE);
-        mOuterPaint.setStrokeWidth(SmartUtil.dp2px(2f));
+        mOuterPaint.setStrokeWidth(SmartUtils.dp2px(2f));
         mPath = new Path();
     }
     //</editor-fold>

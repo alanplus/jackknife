@@ -33,7 +33,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.RefreshState;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * Refresh your delivery!
@@ -114,7 +114,7 @@ public class DeliveryHeader extends InternalAbstract implements RefreshHeader {
         mSpinnerStyle = SpinnerStyle.FixedBehind;
 
         final View thisView = this;
-        thisView.setMinimumHeight(SmartUtil.dp2px(150));
+        thisView.setMinimumHeight(SmartUtils.dp2px(150));
 
         PathsDrawable cloudDrawable = new PathsDrawable();
         if (!cloudDrawable.parserPaths(cloudPaths)) {
@@ -122,21 +122,21 @@ public class DeliveryHeader extends InternalAbstract implements RefreshHeader {
         }
 //        cloudDrawable.printOriginal("cloudDrawable");
         cloudDrawable.parserColors(cloudColors);
-        cloudDrawable.setGeometricHeight(SmartUtil.dp2px(20));
+        cloudDrawable.setGeometricHeight(SmartUtils.dp2px(20));
         PathsDrawable umbrellaDrawable = new PathsDrawable();
         if (!umbrellaDrawable.parserPaths(umbrellaPaths)) {
             umbrellaDrawable.declareOriginal(2, 4, 265, 355);
         }
 //        umbrellaDrawable.printOriginal("umbrellaDrawable");
         umbrellaDrawable.parserColors(umbrellaColors);
-        umbrellaDrawable.setGeometricWidth(SmartUtil.dp2px(200));
+        umbrellaDrawable.setGeometricWidth(SmartUtils.dp2px(200));
         PathsDrawable boxDrawable = new PathsDrawable();
         if (!boxDrawable.parserPaths(boxPaths)) {
             boxDrawable.declareOriginal(0, 1, 95, 92);
         }
 //        boxDrawable.printOriginal("boxDrawable");
         boxDrawable.parserColors(boxColors);
-        boxDrawable.setGeometricWidth(SmartUtil.dp2px(50));
+        boxDrawable.setGeometricWidth(SmartUtils.dp2px(50));
         mBoxDrawable = boxDrawable;
         mCloudDrawable = cloudDrawable;
         mUmbrellaDrawable = umbrellaDrawable;
@@ -181,7 +181,7 @@ public class DeliveryHeader extends InternalAbstract implements RefreshHeader {
     protected void drawBox(Canvas canvas, int width, int height, int shake) {
         final int centerY = height - mHeaderHeight / 2 + shake;
         final int centerYBox = centerY + (mHeaderHeight / 2 - mBoxDrawable.getBounds().height())
-                - Math.min(mHeaderHeight / 2 - mBoxDrawable.getBounds().height(), SmartUtil.dp2px(mAppreciation * 100));
+                - Math.min(mHeaderHeight / 2 - mBoxDrawable.getBounds().height(), SmartUtils.dp2px(mAppreciation * 100));
         mBoxDrawable.getBounds().offsetTo(width / 2 - mBoxDrawable.getBounds().width() / 2, centerYBox - mBoxDrawable.getBounds().height() / 4);
         mBoxDrawable.draw(canvas);
     }
@@ -191,7 +191,7 @@ public class DeliveryHeader extends InternalAbstract implements RefreshHeader {
                 || mState == RefreshState.RefreshFinish) {
             Rect bounds = mUmbrellaDrawable.getBounds();
             final int centerY = height - mHeaderHeight / 2 + shake;
-            final int centerYUmbrella = centerY - mHeaderHeight + Math.min(mHeaderHeight, SmartUtil.dp2px(mAppreciation * 100));
+            final int centerYUmbrella = centerY - mHeaderHeight + Math.min(mHeaderHeight, SmartUtils.dp2px(mAppreciation * 100));
             mUmbrellaDrawable.getBounds().offsetTo(width / 2 - bounds.width() / 2, centerYUmbrella - bounds.height());
             mUmbrellaDrawable.draw(canvas);
         }
@@ -212,9 +212,9 @@ public class DeliveryHeader extends InternalAbstract implements RefreshHeader {
     }
 
     protected void calculateFrame(int width) {
-        mCloudX1 += SmartUtil.dp2px(9);
-        mCloudX2 += SmartUtil.dp2px(5);
-        mCloudX3 += SmartUtil.dp2px(12);
+        mCloudX1 += SmartUtils.dp2px(9);
+        mCloudX2 += SmartUtils.dp2px(5);
+        mCloudX3 += SmartUtils.dp2px(12);
         int cloudWidth = mCloudDrawable.getBounds().width();
         if (mCloudX1 > width + cloudWidth) {
             mCloudX1 = -cloudWidth;

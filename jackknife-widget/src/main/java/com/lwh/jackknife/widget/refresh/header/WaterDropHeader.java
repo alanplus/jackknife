@@ -36,7 +36,7 @@ import com.lwh.jackknife.widget.refresh.constant.RefreshState;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
 import com.lwh.jackknife.widget.refresh.internal.ProgressDrawable;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -79,7 +79,7 @@ public class WaterDropHeader extends InternalAbstract implements RefreshHeader {
         mProgressDrawable = new ProgressDrawable();
         final Drawable progressDrawable = mProgressDrawable;
         progressDrawable.setCallback(this);
-        progressDrawable.setBounds(0, 0, SmartUtil.dp2px(20), SmartUtil.dp2px(20));
+        progressDrawable.setBounds(0, 0, SmartUtils.dp2px(20), SmartUtils.dp2px(20));
 
         mImageView = new ImageView(context);
         mProgress = new MaterialProgressDrawable(mImageView);
@@ -87,7 +87,7 @@ public class WaterDropHeader extends InternalAbstract implements RefreshHeader {
         mProgress.setAlpha(255);
         mProgress.setColorSchemeColors(0xffffffff, 0xff0099cc, 0xffff4444, 0xff669900, 0xffaa66cc, 0xffff8800);
         mImageView.setImageDrawable(mProgress);
-        thisGroup.addView(mImageView, SmartUtil.dp2px(30), SmartUtil.dp2px(30));
+        thisGroup.addView(mImageView, SmartUtils.dp2px(30), SmartUtils.dp2px(30));
     }
 
     @Override

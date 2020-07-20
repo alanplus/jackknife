@@ -147,7 +147,7 @@
         <attr name="mutex" format="boolean" />
         <attr name="isLeftSwipe" format="boolean" />
     </declare-styleable>
-    <declare-styleable name="LuckyWheelView">
+    <declare-styleable name="LuckyView">
         <attr name="interval_line_width" format="dimension" />
         <attr name="circle_line_width" format="dimension" />
         <attr name="item_title_text_size" format="dimension" />

@@ -42,7 +42,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.RefreshState;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 public class DropBoxHeader extends InternalAbstract implements RefreshHeader {
 
@@ -111,7 +111,7 @@ public class DropBoxHeader extends InternalAbstract implements RefreshHeader {
         mAccentColor = 0xff6ea9ff;
         mBackgroundColor = 0xff283645;
         final View thisView = this;
-        thisView.setMinimumHeight(SmartUtil.dp2px(150));
+        thisView.setMinimumHeight(SmartUtils.dp2px(150));
 
         mSpinnerStyle = SpinnerStyle.FixedBehind;
 

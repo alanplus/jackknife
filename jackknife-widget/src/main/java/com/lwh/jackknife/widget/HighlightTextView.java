@@ -24,9 +24,10 @@ import android.graphics.Matrix;
 import android.graphics.Shader;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
-public class HighlightTextView extends TextView {
+import androidx.appcompat.widget.AppCompatTextView;
+
+public class HighlightTextView extends AppCompatTextView {
 
     private TextPaint mTextPaint;
     private LinearGradient mGradient;

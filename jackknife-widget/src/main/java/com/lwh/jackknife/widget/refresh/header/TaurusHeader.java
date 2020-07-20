@@ -39,7 +39,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -132,7 +132,7 @@ public class TaurusHeader extends InternalAbstract implements RefreshHeader {
 
         final View thisView = this;
 
-        thisView.setMinimumHeight(SmartUtil.dp2px(100));
+        thisView.setMinimumHeight(SmartUtils.dp2px(100));
 
         mMatrix = new Matrix();
         mWinds = new HashMap<>();
@@ -140,7 +140,7 @@ public class TaurusHeader extends InternalAbstract implements RefreshHeader {
 
         mWindPaint = new Paint();
         mWindPaint.setColor(0xffffffff);
-        mWindPaint.setStrokeWidth(SmartUtil.dp2px(3));
+        mWindPaint.setStrokeWidth(SmartUtils.dp2px(3));
         mWindPaint.setAlpha(50);
 
         mSpinnerStyle = SpinnerStyle.FixedBehind;
@@ -177,8 +177,8 @@ public class TaurusHeader extends InternalAbstract implements RefreshHeader {
 
         mAirplane = airplane;
         mCloudCenter = cloudCenter;
-        mAirplane.setBounds(0, 0, SmartUtil.dp2px(65), SmartUtil.dp2px(20));
-        mCloudCenter.setBounds(0, 0, SmartUtil.dp2px(260), SmartUtil.dp2px(45));
+        mAirplane.setBounds(0, 0, SmartUtils.dp2px(65), SmartUtils.dp2px(20));
+        mCloudCenter.setBounds(0, 0, SmartUtils.dp2px(260), SmartUtils.dp2px(45));
         //</editor-fold>
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TaurusHeader);

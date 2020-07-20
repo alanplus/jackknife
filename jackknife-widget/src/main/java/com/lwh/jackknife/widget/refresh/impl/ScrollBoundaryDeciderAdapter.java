@@ -20,7 +20,7 @@ import android.graphics.PointF;
 import android.view.View;
 
 import com.lwh.jackknife.widget.refresh.api.ScrollBoundaryDecider;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * 滚动边界
@@ -54,7 +54,7 @@ public class ScrollBoundaryDeciderAdapter implements ScrollBoundaryDecider {
             return boundary.canRefresh(content);
         }
         //mActionEvent == null 时 canRefresh 不会动态递归搜索
-        return SmartUtil.canRefresh(content, mActionEvent);
+        return SmartUtils.canRefresh(content, mActionEvent);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ScrollBoundaryDeciderAdapter implements ScrollBoundaryDecider {
 //            return !ScrollBoundaryUtil.canScrollDown(content, mActionEvent);
 //        }
         //mActionEvent == null 时 canLoadMore 不会动态递归搜索
-        return SmartUtil.canLoadMore(content, mActionEvent, mEnableLoadMoreWhenContentNotFull);
+        return SmartUtils.canLoadMore(content, mActionEvent, mEnableLoadMoreWhenContentNotFull);
     }
     //</editor-fold>
 }

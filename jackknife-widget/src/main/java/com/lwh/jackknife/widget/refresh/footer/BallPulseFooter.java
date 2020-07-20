@@ -35,7 +35,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshFooter;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * 球脉冲底部加载组件
@@ -69,7 +69,7 @@ public class BallPulseFooter extends InternalAbstract implements RefreshFooter {
         super(context, attrs, 0);
 
         final View thisView = this;
-        thisView.setMinimumHeight(SmartUtil.dp2px(60));
+        thisView.setMinimumHeight(SmartUtils.dp2px(60));
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BallPulseFooter);
 
@@ -90,7 +90,7 @@ public class BallPulseFooter extends InternalAbstract implements RefreshFooter {
 
         ta.recycle();
 
-        mCircleSpacing = SmartUtil.dp2px(4);
+        mCircleSpacing = SmartUtils.dp2px(4);
 
     }
 

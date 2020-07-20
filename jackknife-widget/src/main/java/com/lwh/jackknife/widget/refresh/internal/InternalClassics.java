@@ -37,7 +37,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshInternal;
 import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import static android.view.View.MeasureSpec.EXACTLY;
 
@@ -158,8 +158,8 @@ public abstract class InternalClassics<T extends InternalClassics> extends Inter
             if (mPaddingTop == 0 || mPaddingBottom == 0) {
                 int paddingLeft = thisView.getPaddingLeft();
                 int paddingRight = thisView.getPaddingRight();
-                mPaddingTop = mPaddingTop == 0 ? SmartUtil.dp2px(20) : mPaddingTop;
-                mPaddingBottom = mPaddingBottom == 0 ? SmartUtil.dp2px(20) : mPaddingBottom;
+                mPaddingTop = mPaddingTop == 0 ? SmartUtils.dp2px(20) : mPaddingTop;
+                mPaddingBottom = mPaddingBottom == 0 ? SmartUtils.dp2px(20) : mPaddingBottom;
                 thisView.setPadding(paddingLeft, mPaddingTop, paddingRight, mPaddingBottom);
             }
             ViewGroup thisGroup = this;
@@ -385,7 +385,7 @@ public abstract class InternalClassics<T extends InternalClassics> extends Inter
         final View progressView = mProgressView;
         MarginLayoutParams lpArrow = (MarginLayoutParams) arrowView.getLayoutParams();
         MarginLayoutParams lpProgress = (MarginLayoutParams) progressView.getLayoutParams();
-        lpArrow.rightMargin = lpProgress.rightMargin = SmartUtil.dp2px(dp);
+        lpArrow.rightMargin = lpProgress.rightMargin = SmartUtils.dp2px(dp);
         arrowView.setLayoutParams(lpArrow);
         progressView.setLayoutParams(lpProgress);
         return self();
@@ -405,8 +405,8 @@ public abstract class InternalClassics<T extends InternalClassics> extends Inter
         final View progressView = mProgressView;
         ViewGroup.LayoutParams lpArrow = arrowView.getLayoutParams();
         ViewGroup.LayoutParams lpProgress = progressView.getLayoutParams();
-        lpArrow.width = lpProgress.width = SmartUtil.dp2px(dp);
-        lpArrow.height = lpProgress.height = SmartUtil.dp2px(dp);
+        lpArrow.width = lpProgress.width = SmartUtils.dp2px(dp);
+        lpArrow.height = lpProgress.height = SmartUtils.dp2px(dp);
         arrowView.setLayoutParams(lpArrow);
         progressView.setLayoutParams(lpProgress);
         return self();
@@ -425,7 +425,7 @@ public abstract class InternalClassics<T extends InternalClassics> extends Inter
     public T setDrawableArrowSize(float dp) {
         final View arrowView = mArrowView;
         ViewGroup.LayoutParams lpArrow = arrowView.getLayoutParams();
-        lpArrow.height = lpArrow.width = SmartUtil.dp2px(dp);
+        lpArrow.height = lpArrow.width = SmartUtils.dp2px(dp);
         arrowView.setLayoutParams(lpArrow);
         return self();
     }
@@ -441,7 +441,7 @@ public abstract class InternalClassics<T extends InternalClassics> extends Inter
     public T setDrawableProgressSize(float dp) {
         final View progressView = mProgressView;
         ViewGroup.LayoutParams lpProgress = progressView.getLayoutParams();
-        lpProgress.height = lpProgress.width = SmartUtil.dp2px(dp);
+        lpProgress.height = lpProgress.width = SmartUtils.dp2px(dp);
         progressView.setLayoutParams(lpProgress);
         return self();
     }

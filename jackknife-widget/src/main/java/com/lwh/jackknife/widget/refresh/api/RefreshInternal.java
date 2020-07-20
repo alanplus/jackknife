@@ -18,16 +18,16 @@ package com.lwh.jackknife.widget.refresh.api;
 
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.annotation.RestrictTo;
 import android.view.View;
+
+import androidx.annotation.RestrictTo;
 
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.listener.OnStateChangedListener;
 
-import static android.support.annotation.RestrictTo.Scope.LIBRARY;
-import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
-import static android.support.annotation.RestrictTo.Scope.SUBCLASSES;
-
+import static androidx.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
+import static androidx.annotation.RestrictTo.Scope.SUBCLASSES;
 
 /**
  * 刷新内部组件

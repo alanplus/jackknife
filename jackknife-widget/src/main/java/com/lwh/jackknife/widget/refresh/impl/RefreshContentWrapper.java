@@ -35,18 +35,18 @@ import com.lwh.jackknife.widget.refresh.api.RefreshContent;
 import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.api.ScrollBoundaryDecider;
 import com.lwh.jackknife.widget.refresh.listener.CoordinatorLayoutListener;
-import com.lwh.jackknife.widget.refresh.util.DesignUtil;
+import com.lwh.jackknife.widget.refresh.util.DesignUtils;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.canScrollVertically;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.isContentView;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.isTransformedTouchPointInView;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.measureViewHeight;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.scrollListBy;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.canScrollVertically;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.isContentView;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.isTransformedTouchPointInView;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.measureViewHeight;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.scrollListBy;
 
 /**
  * 刷新内容包装
@@ -82,7 +82,7 @@ public class RefreshContentWrapper implements RefreshContent, CoordinatorLayoutL
                 break;
             }
             if (!isInEditMode) {
-                DesignUtil.checkCoordinatorLayout(content, kernel, this);
+                DesignUtils.checkCoordinatorLayout(content, kernel, this);
             }
             scrollableView = content;
         }
