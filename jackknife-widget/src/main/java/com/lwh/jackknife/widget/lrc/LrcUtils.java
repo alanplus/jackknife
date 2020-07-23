@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.lrc;
+package com.lwh.jackknife.widget.lrc;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

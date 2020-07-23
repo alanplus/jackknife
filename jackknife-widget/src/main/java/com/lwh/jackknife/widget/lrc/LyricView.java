@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.lrc;
+package com.lwh.jackknife.widget.lrc;
 
 import android.content.Context;
 import android.graphics.Color;
