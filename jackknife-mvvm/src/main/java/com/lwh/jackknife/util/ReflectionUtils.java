@@ -19,6 +19,7 @@ package com.lwh.jackknife.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -27,6 +28,8 @@ public final class ReflectionUtils {
 
     private ReflectionUtils() {
     }
+
+    // <editor-folder desc="Java类、方法、属性的创建和基本操作">
 
     public static Class<?> newClass(String className) {
         try {
@@ -44,7 +47,6 @@ public final class ReflectionUtils {
         }
         return null;
     }
-
 
     public static <T> T newInstance(Class<T> clazz) {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
@@ -80,58 +82,41 @@ public final class ReflectionUtils {
         return null;
     }
 
-    private static Object getPrimitiveDefaultValue(Class clazz) {
-        if (clazz.isPrimitive()) {
-            return clazz == boolean.class ? false : 0;
-        }
-        return null;
-    }
-
-    public static Class<?> getGenericType(Object obj) {
-        if(obj.getClass().getGenericSuperclass() instanceof ParameterizedType &&
-                ((ParameterizedType) (obj.getClass().getGenericSuperclass())).getActualTypeArguments().length > 0) {
-            Class tClass = (Class) ((ParameterizedType) (obj.getClass()
-                    .getGenericSuperclass())).getActualTypeArguments()[0];
-            return tClass;
-        }
-        return (Class<?>) ((ParameterizedType)obj.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
-
-    public static Class<?> getGenericType(Field field) {
-        Type type = field.getGenericType();
-        if (type instanceof ParameterizedType) {
-            type = ((ParameterizedType) type).getActualTypeArguments()[0];
-            if (type instanceof Class<?>) {
-                return (Class<?>) type;
+    public static Method newMethod(Class<?> clazz, boolean isDeclared, String methodName, Class<?>... parameterTypes) {
+        try {
+            if (isDeclared) {
+                return clazz.getDeclaredMethod(methodName, parameterTypes);
+            } else {
+                return clazz.getMethod(methodName, parameterTypes);
             }
-        } else if (type instanceof Class<?>) {
-            return (Class<?>) type;
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public static Class<?> getNestedGenericType(Field f, int genericTypeIndex) {
-        Type type = f.getGenericType();
-        if (type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            type = parameterizedType.getActualTypeArguments()[genericTypeIndex];
-            return (Class<?>) type;
-        }
-        if (type instanceof Class<?>) {
-            return (Class<?>) type;
+    public static Object invokeMethod(Object obj, Method method, Object... objects) {
+        try {
+            return method.invoke(obj, objects);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public static boolean isNumber(Class<?> numberCls) {
-        return numberCls == long.class
-                || numberCls == Long.class
-                || numberCls == int.class
-                || numberCls == Integer.class
-                || numberCls == short.class
-                || numberCls == Short.class
-                || numberCls == byte.class
-                || numberCls == Byte.class;
+    public static Field newField(Class<?> clazz, boolean isDeclared, String fieldName) {
+        try {
+            if (isDeclared) {
+                return clazz.getDeclaredField(fieldName);
+            } else {
+                return clazz.getField(fieldName);
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static Object getFieldValue(Field field, Object obj) {
@@ -177,6 +162,8 @@ public final class ReflectionUtils {
         throw new RuntimeException("Field is not static.");
     }
 
+    // </editor-folder>
+
     // <editor-folder desc="判断属性是否有某关键字">
 
     public static boolean isStaticField(Field f) {
@@ -208,4 +195,58 @@ public final class ReflectionUtils {
     }
 
     // </editor-folder>
+
+    public static Class<?> getGenericType(Object obj) {
+        if (obj.getClass().getGenericSuperclass() instanceof ParameterizedType &&
+                ((ParameterizedType) (obj.getClass().getGenericSuperclass())).getActualTypeArguments().length > 0) {
+            Class tClass = (Class) ((ParameterizedType) (obj.getClass()
+                    .getGenericSuperclass())).getActualTypeArguments()[0];
+            return tClass;
+        }
+        return (Class<?>) ((ParameterizedType) obj.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    public static Class<?> getGenericType(Field field) {
+        Type type = field.getGenericType();
+        if (type instanceof ParameterizedType) {
+            type = ((ParameterizedType) type).getActualTypeArguments()[0];
+            if (type instanceof Class<?>) {
+                return (Class<?>) type;
+            }
+        } else if (type instanceof Class<?>) {
+            return (Class<?>) type;
+        }
+        return null;
+    }
+
+    public static Class<?> getNestedGenericType(Field f, int genericTypeIndex) {
+        Type type = f.getGenericType();
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            type = parameterizedType.getActualTypeArguments()[genericTypeIndex];
+            return (Class<?>) type;
+        }
+        if (type instanceof Class<?>) {
+            return (Class<?>) type;
+        }
+        return null;
+    }
+
+    public static boolean isNumber(Class<?> numberCls) {
+        return numberCls == long.class
+                || numberCls == Long.class
+                || numberCls == int.class
+                || numberCls == Integer.class
+                || numberCls == short.class
+                || numberCls == Short.class
+                || numberCls == byte.class
+                || numberCls == Byte.class;
+    }
+
+    private static Object getPrimitiveDefaultValue(Class clazz) {
+        if (clazz.isPrimitive()) {
+            return clazz == boolean.class ? false : 0;
+        }
+        return null;
+    }
 }
