@@ -207,3 +207,6 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 - 仿安卓微信底部导航条滑动颜色渐变：ShadeView
 - 拖拽开关（带过程）：ToggleButton
 - 语音消息录制：VoiceRecordView
+
+
+fork和star是对我最好的认可！
