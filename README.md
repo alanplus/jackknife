@@ -79,9 +79,9 @@ dependencies {
 
 ##### 2、MVVM使用初阶
 
-Kotlin项目：https://github.com/JackWHLiu/jackknife_kotlin_samples（持续随版本更新的前沿案例）
+Kotlin项目：https://github.com/JackWHLiu/jackknife_kotlin_samples （持续随版本更新的前沿案例）
 
-Java项目：https://github.com/JackWHLiu/jackknife_java_samples（只提供基本使用，适合新手）
+Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基本使用，适合新手）
 
 
 
