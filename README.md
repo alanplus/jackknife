@@ -7,7 +7,15 @@ JackKnife SDK官方文档
     <img src="https://img.shields.io/badge/QQ%E7%BE%A4-249919939-orange.svg?style=flat-square" alt="QQ Group" />
   </a> </a>
 
-##### ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)[jackknife-mvvm][![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)[jackknife-widget][![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)[jackknife-orm][![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)[jackknife-av][![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+##### jackknife最新版本![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
+
+##### jackknife-mvvm[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+
+#### jackknife-widget[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
+
+#### jackknife-orm[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+
+#### jackknife-av[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
 ##### 
 
@@ -24,6 +32,7 @@ allprojects {
 	}
 }	
 </pre>
+
 
 
 ```
@@ -116,3 +125,22 @@ dependencies {
 | createTable(Class&lt;? extends OrmTable&gt; tableClass)  | TableManager | 创建一张表               |
 | dropTable(Class&lt;? extends OrmTable&gt; tableClass)    | TableManager | 删除一张表               |
 | upgradeTable(Class&lt;? extends OrmTable&gt; tableClass) | TableManager | 升级一张表               |
+
+|      |      |      |
+| ---- | :--: | ---- |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
+|      |      |      |
