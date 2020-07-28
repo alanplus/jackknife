@@ -94,7 +94,7 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 ##### 2、完成实体类的编写
 
 > 如果你想使用jackknife-orm自动创表，你只需要实现OrmTable接口再配置一些基本信息即可。
-> 需要注意的是，在一个OrmTable的实现类中，至少要有一个配置主键或外键的属性。
+> 需要注意的是，在一个OrmTable的实现类中，必须有一个配置主键的属性，如果为id，一般命名为_id。
 
 ##### （1）@Table
 
