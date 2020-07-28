@@ -1,10 +1,25 @@
-JackKnife SDK文档
+JackKnife SDK官方文档
 --------------------------------
 
-##### 最新版本![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg) 
-请尽量使用最新版本，使用过程中如有任何问题可以给我发送邮件924666990@qq.com
+ <a href="http://www.apache.org/licenses/LICENSE-2.0">    <img src="http://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square" alt="License"/>  <a href="https://www.jianshu.com/u/1d0c0bc634db">
+    <img src="https://img.shields.io/badge/Author-JackWHLiu-orange.svg?style=flat-square" alt="Author" />
+  </a> <a href="https://shang.qq.com/wpa/qunwpa?idkey=7e59e59145e6c7c68932ace10f52790636451f01d1ecadb6a652b1df234df753">
+    <img src="https://img.shields.io/badge/QQ%E7%BE%A4-249919939-orange.svg?style=flat-square" alt="QQ Group" />
+  </a> </a>
 
-##### 支持最低Android SDK版本 [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+##### ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
+
+jackknife-mvvm[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+
+jackknife-widget[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
+
+jackknife-orm[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+
+jackknife-av[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+
+##### 
+
+##### 
 
 ![avatar](http://47.111.72.9/jackknife/banner.jpg)
 
@@ -17,6 +32,7 @@ allprojects {
 	}
 }	
 </pre>
+
 
 ```
 dependencies {
