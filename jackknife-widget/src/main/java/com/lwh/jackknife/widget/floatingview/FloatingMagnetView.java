@@ -181,7 +181,7 @@ public class FloatingMagnetView extends FrameLayout {
     }
 
     public void moveToEdge() {
-        moveToEdge(mNearestLeft);
+        moveToEdge(isNearestLeft());
     }
 
     public void moveToEdge(boolean isLeft) {
@@ -189,7 +189,7 @@ public class FloatingMagnetView extends FrameLayout {
         mMoveAnimator.start(moveDistance, getY());
     }
 
-    public boolean isNearestLeft() {
+    private boolean isNearestLeft() {
         int middle = mScreenWidth / 2;
         mNearestLeft = getX() < middle;
         return mNearestLeft;
