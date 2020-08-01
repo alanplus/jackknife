@@ -19,6 +19,8 @@ package com.lwh.jackknife;
 import android.app.Application;
 import android.content.Context;
 
+import com.lwh.jackknife.net.NetworkStateReceiver;
+
 public class AppLifecycle implements ApplicationLifecycleCallbacks {
 
     @Override
@@ -27,9 +29,11 @@ public class AppLifecycle implements ApplicationLifecycleCallbacks {
 
     @Override
     public void onCreate(Application application) {
+        NetworkStateReceiver.registerNetworkStateReceiver(application);
     }
 
     @Override
     public void onTerminate(Application application) {
+        NetworkStateReceiver.unregisterNetworkStateReceiver(application);
     }
 }

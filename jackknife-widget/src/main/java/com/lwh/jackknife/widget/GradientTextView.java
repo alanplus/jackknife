@@ -25,9 +25,10 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.TextView;
 
-public class GradientTextView extends TextView {
+import androidx.appcompat.widget.AppCompatTextView;
+
+public class GradientTextView extends AppCompatTextView {
 
     private LinearGradient linearGradient;
     private Paint mPaint;

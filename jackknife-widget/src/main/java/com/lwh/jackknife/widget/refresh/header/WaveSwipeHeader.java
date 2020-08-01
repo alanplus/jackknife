@@ -43,7 +43,7 @@ import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.header.internal.MaterialProgressDrawable;
 import com.lwh.jackknife.widget.refresh.header.waveswipe.WaveView;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import static android.view.View.MeasureSpec.EXACTLY;
 import static android.view.View.MeasureSpec.getSize;
@@ -132,7 +132,7 @@ public class WaveSwipeHeader extends InternalAbstract implements RefreshHeader {
         circleView.layout((thisWidth - circleWidth) / 2, -circleHeight, (thisWidth + circleWidth) / 2, 0);
 
         if (thisView.isInEditMode()) {
-            onMoving(true, 0.99f, SmartUtil.dp2px(99), SmartUtil.dp2px(100), SmartUtil.dp2px(100));
+            onMoving(true, 0.99f, SmartUtils.dp2px(99), SmartUtils.dp2px(100), SmartUtils.dp2px(100));
         }
     }
     //</editor-fold>

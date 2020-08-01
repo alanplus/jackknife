@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.widget.model;
+package com.lwh.jackknife.widget.luckyview.model;
 
 public class AwardModel {
     private String title;

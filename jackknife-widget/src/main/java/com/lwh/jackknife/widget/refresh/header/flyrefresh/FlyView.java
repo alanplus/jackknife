@@ -20,7 +20,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 
 import com.lwh.jackknife.widget.refresh.header.internal.pathview.PathsView;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * 纸飞机视图
@@ -37,7 +37,7 @@ public class FlyView extends PathsView {
         if (!mPathsDrawable.parserPaths("M2.01,21L23,12 2.01,3 2,10l15,2 -15,2z")) {
             mPathsDrawable.declareOriginal(2, 3, 20, 18);
         }
-        int side = SmartUtil.dp2px(25);
+        int side = SmartUtils.dp2px(25);
         mPathsDrawable.setBounds(0, 0, side, side);
     }
 }

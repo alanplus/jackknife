@@ -41,7 +41,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.RefreshState;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import static android.view.View.MeasureSpec.getSize;
 
@@ -92,7 +92,7 @@ public class MaterialHeader extends InternalAbstract implements RefreshHeader {
         mSpinnerStyle = SpinnerStyle.MatchLayout;
         final View thisView = this;
         final ViewGroup thisGroup = this;
-        thisView.setMinimumHeight(SmartUtil.dp2px(100));
+        thisView.setMinimumHeight(SmartUtils.dp2px(100));
 
         mProgress = new MaterialProgressDrawable(this);
         mProgress.setBackgroundColor(CIRCLE_BG_LIGHT);

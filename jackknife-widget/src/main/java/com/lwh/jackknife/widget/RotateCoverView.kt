@@ -21,9 +21,9 @@ import android.animation.ValueAnimator.INFINITE
 import android.animation.ValueAnimator.RESTART
 import android.content.Context
 import android.os.Build
-import android.support.annotation.RequiresApi
 import android.util.AttributeSet
 import android.view.animation.LinearInterpolator
+import androidx.annotation.RequiresApi
 
 @RequiresApi(Build.VERSION_CODES.KITKAT)
 class RotateCoverView @JvmOverloads constructor(internal var context: Context, attrs: AttributeSet? = null,

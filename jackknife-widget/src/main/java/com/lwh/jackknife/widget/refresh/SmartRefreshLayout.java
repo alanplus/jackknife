@@ -75,7 +75,7 @@ import com.lwh.jackknife.widget.refresh.listener.OnMultiPurposeListener;
 import com.lwh.jackknife.widget.refresh.listener.OnRefreshListener;
 import com.lwh.jackknife.widget.refresh.listener.OnRefreshLoadMoreListener;
 import com.lwh.jackknife.widget.refresh.listener.OnStateChangedListener;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import static android.view.MotionEvent.obtain;
 import static android.view.View.MeasureSpec.AT_MOST;
@@ -84,9 +84,9 @@ import static android.view.View.MeasureSpec.getSize;
 import static android.view.View.MeasureSpec.makeMeasureSpec;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.dp2px;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.fling;
-import static com.lwh.jackknife.widget.refresh.util.SmartUtil.isContentView;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.dp2px;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.fling;
+import static com.lwh.jackknife.widget.refresh.util.SmartUtils.isContentView;
 import static java.lang.System.currentTimeMillis;
 
 /**
@@ -242,13 +242,13 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
         mScroller = new Scroller(context);
         mVelocityTracker = VelocityTracker.obtain();
         mScreenHeightPixels = context.getResources().getDisplayMetrics().heightPixels;
-        mReboundInterpolator = new SmartUtil(SmartUtil.INTERPOLATOR_VISCOUS_FLUID);
+        mReboundInterpolator = new SmartUtils(SmartUtils.INTERPOLATOR_VISCOUS_FLUID);
         mTouchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 
-        mFooterHeight = SmartUtil.dp2px(60);
-        mHeaderHeight = SmartUtil.dp2px(100);
+        mFooterHeight = SmartUtils.dp2px(60);
+        mHeaderHeight = SmartUtils.dp2px(100);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SmartRefreshLayout);
 
@@ -434,7 +434,7 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
                 }
             }
             if (mRefreshContent == null) {
-                final int padding = SmartUtil.dp2px(20);
+                final int padding = SmartUtils.dp2px(20);
                 final TextView errorView = new TextView(thisView.getContext());
                 errorView.setTextColor(0xffff6600);
                 errorView.setGravity(Gravity.CENTER);
@@ -1524,7 +1524,7 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
                     }
                     animationRunnable = null;
                     if (Math.abs(mSpinner) >= Math.abs(mSmoothDistance)) {
-                        int duration = 10 * Math.min(Math.max((int) SmartUtil.px2dp(Math.abs(mSpinner - mSmoothDistance)), 30), 100);
+                        int duration = 10 * Math.min(Math.max((int) SmartUtils.px2dp(Math.abs(mSpinner - mSmoothDistance)), 30), 100);
                         animSpinner(mSmoothDistance, 0, mReboundInterpolator, duration);
                     }
                 }
@@ -3241,7 +3241,7 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
 
                     reboundAnimator = ValueAnimator.ofInt(mSpinner, (int) (mHeaderHeight * dragRate));
                     reboundAnimator.setDuration(duration);
-                    reboundAnimator.setInterpolator(new SmartUtil(SmartUtil.INTERPOLATOR_VISCOUS_FLUID));
+                    reboundAnimator.setInterpolator(new SmartUtils(SmartUtils.INTERPOLATOR_VISCOUS_FLUID));
                     reboundAnimator.addUpdateListener(new AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {
@@ -3344,7 +3344,7 @@ public class SmartRefreshLayout extends ViewGroup implements RefreshLayout, Nest
 
                     reboundAnimator = ValueAnimator.ofInt(mSpinner, -(int) (mFooterHeight * dragRate));
                     reboundAnimator.setDuration(duration);
-                    reboundAnimator.setInterpolator(new SmartUtil(SmartUtil.INTERPOLATOR_VISCOUS_FLUID));
+                    reboundAnimator.setInterpolator(new SmartUtils(SmartUtils.INTERPOLATOR_VISCOUS_FLUID));
                     reboundAnimator.addUpdateListener(new AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator animation) {

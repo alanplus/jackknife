@@ -37,11 +37,12 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
-public class CircleTextImageView extends ImageView {
+import androidx.appcompat.widget.AppCompatImageView;
 
-    private static final ImageView.ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
+public class CircleTextImageView extends AppCompatImageView {
+
+    private static final AppCompatImageView.ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 2;

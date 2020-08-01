@@ -20,7 +20,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.util.Locale;
+
 public final class NetworkUtils {
+
+    public static enum ApnType {
+        WIFI, CMNET, CMWAP, NONE
+    }
 
     private NetworkUtils() {
     }
@@ -56,5 +62,24 @@ public final class NetworkUtils {
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         return connectivityManager.getActiveNetworkInfo();
+    }
+
+    public static ApnType getApnType(Context context) {
+        ConnectivityManager connectivityManager = ServiceUtils.getConnectivityManager(context);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo == null) {
+            return ApnType.NONE;
+        }
+        int type = networkInfo.getType();
+        if (type == ConnectivityManager.TYPE_MOBILE) {
+            if (networkInfo.getExtraInfo().toLowerCase(Locale.getDefault()).equals("cmnet")) {
+                return ApnType.CMNET;
+            } else {
+                return ApnType.CMWAP;
+            }
+        } else if (type == ConnectivityManager.TYPE_WIFI) {
+            return ApnType.WIFI;
+        }
+        return ApnType.NONE;
     }
 }

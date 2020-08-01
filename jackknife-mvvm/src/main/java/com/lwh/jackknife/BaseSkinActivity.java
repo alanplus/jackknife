@@ -27,7 +27,10 @@ import androidx.annotation.Nullable;
 import com.lwh.jackknife.cache.Cache;
 import com.lwh.jackknife.cache.CacheType;
 import com.lwh.jackknife.cache.LruCache;
+import com.lwh.jackknife.net.NetworkChangeObserver;
+import com.lwh.jackknife.net.NetworkStateReceiver;
 import com.lwh.jackknife.skin.SkinActivity;
+import com.lwh.jackknife.util.NetworkUtils;
 
 public abstract class BaseSkinActivity<T extends ViewDataBinding> extends SkinActivity
         implements ActivityCache {
@@ -35,15 +38,27 @@ public abstract class BaseSkinActivity<T extends ViewDataBinding> extends SkinAc
     protected T mBinding;
     protected final String TAG = this.getClass().getSimpleName();
     private Cache<String, Object> mCache;
+    protected NetworkChangeObserver mNetworkChangeObserver = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
         initData(savedInstanceState);
+        NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
     }
 
+    protected abstract void onNetworkConnected(NetworkUtils.ApnType type);
+
+    protected abstract void onNetworkDisconnected();
+
     protected abstract int getLayoutId();
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NetworkStateReceiver.unregisterObserver(mNetworkChangeObserver);
+    }
 
     @Override
     public Cache.Factory cacheFactory() {

@@ -4,4 +4,11 @@
     <dimen name="wheelview_topbar_btn_textsize">17sp</dimen>
     <dimen name="wheelview_topbar_title_textsize">18sp</dimen>
     <dimen name="wheelview_textsize">20sp</dimen>
+
+    <dimen name="book_reader_view_board_battery_border_width">1dp</dimen>
+    <dimen name="book_reader_view_margin_width">10dp</dimen>
+    <dimen name="book_reader_view_margin_height">10dp</dimen>
+    <dimen name="book_reader_view_default_text_size">14sp</dimen>
+    <dimen name="book_reader_view_min_text_size">10sp</dimen>
+    <dimen name="book_reader_view_max_text_size">30sp</dimen>
 </resources>

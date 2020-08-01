@@ -40,7 +40,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.RefreshState;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * 贝塞尔曲线类雷达风格刷新组件
@@ -93,12 +93,12 @@ public class BezierRadarHeader extends InternalAbstract implements RefreshHeader
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
 
-        mDotRadius = SmartUtil.dp2px(7);
-        mRadarRadius = SmartUtil.dp2px(20);
-        mRadarCircle = SmartUtil.dp2px(7);
-        mPaint.setStrokeWidth(SmartUtil.dp2px(3));
+        mDotRadius = SmartUtils.dp2px(7);
+        mRadarRadius = SmartUtils.dp2px(20);
+        mRadarCircle = SmartUtils.dp2px(7);
+        mPaint.setStrokeWidth(SmartUtils.dp2px(3));
 
-        thisView.setMinimumHeight(SmartUtil.dp2px(100));
+        thisView.setMinimumHeight(SmartUtils.dp2px(100));
 
         if (thisView.isInEditMode()) {
             mWaveTop = 1000;
@@ -171,7 +171,7 @@ public class BezierRadarHeader extends InternalAbstract implements RefreshHeader
         if (mDotAlpha > 0) {
             mPaint.setColor(mAccentColor);
             final int num = 7;
-            float x = SmartUtil.px2dp(height);
+            float x = SmartUtils.px2dp(height);
             float wide = (1f * width / num) * mDotFraction - ((mDotFraction > 1) ? ((mDotFraction - 1) * (1f * width / num) / mDotFraction) : 0);//y1 = t*(w/n)-(t>1)*((t-1)*(w/n)/t)
             float high = height - ((mDotFraction > 1) ? ((mDotFraction - 1) * height / 2 / mDotFraction) : 0);//y2 = x - (t>1)*((t-1)*x/t);
             for (int i = 0; i < num; i++) {
@@ -254,7 +254,7 @@ public class BezierRadarHeader extends InternalAbstract implements RefreshHeader
         mWaveTop = height - 1;//减1，是为了消除边缘绘制，冒出线条问题
         mWavePulling = false;
 
-        Interpolator interpolatorDecelerate = new SmartUtil(SmartUtil.INTERPOLATOR_DECELERATE);//new DecelerateInterpolator();
+        Interpolator interpolatorDecelerate = new SmartUtils(SmartUtils.INTERPOLATOR_DECELERATE);//new DecelerateInterpolator();
         //圆点消失动画
         ValueAnimator animatorDotAlpha = ValueAnimator.ofFloat(1, 0);
         animatorDotAlpha.setInterpolator(interpolatorDecelerate);
@@ -279,7 +279,7 @@ public class BezierRadarHeader extends InternalAbstract implements RefreshHeader
                 -(int) (mWaveHeight * 0.8f), 0,
                 -(int) (mWaveHeight * 0.4f), 0);
         animatorWave.addUpdateListener(new AnimatorUpdater(PROPERTY_WAVE_HEIGHT));
-        animatorWave.setInterpolator(new SmartUtil(SmartUtil.INTERPOLATOR_DECELERATE));
+        animatorWave.setInterpolator(new SmartUtils(SmartUtils.INTERPOLATOR_DECELERATE));
         animatorWave.setDuration(800);
         animatorWave.start();
 

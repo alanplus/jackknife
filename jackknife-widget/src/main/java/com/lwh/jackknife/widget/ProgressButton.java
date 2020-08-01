@@ -32,12 +32,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.widget.Button;
+
+import androidx.appcompat.widget.AppCompatButton;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class ProgressButton extends Button {
+public class ProgressButton extends AppCompatButton {
 
     /**
      * The paint to draw background.

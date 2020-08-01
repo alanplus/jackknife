@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.widget;
+package com.lwh.jackknife.widget.luckyview;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,11 +30,12 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.lwh.jackknife.widget.model.AwardModel;
+import com.lwh.jackknife.widget.R;
+import com.lwh.jackknife.widget.luckyview.model.AwardModel;
 
 import java.util.ArrayList;
 
-public class LuckyWheelView extends View {
+public class LuckyView extends View {
 
     private ArrayList<AwardModel> mAwards = new ArrayList<>();
 
@@ -110,34 +111,34 @@ public class LuckyWheelView extends View {
         this.mRotationSpeed = rotationSpeed;
     }
 
-    public LuckyWheelView(Context context) {
+    public LuckyView(Context context) {
         super(context);
         init();
     }
 
-    public LuckyWheelView(Context context, AttributeSet attrs) {
+    public LuckyView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(attrs);
         init();
     }
 
-    public LuckyWheelView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LuckyView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttrs(attrs);
         init();
     }
 
     private void initAttrs(AttributeSet attrs) {
-        TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.LuckyWheelView);
-        mIntervalStrokeWidth = (int) array.getDimension(R.styleable.LuckyWheelView_interval_line_width, dp2px(getContext(), 5));
-        mCircleStrokeWidth = (int) array.getDimension(R.styleable.LuckyWheelView_circle_line_width, dp2px(getContext(), 10));
-        mItemTitleTextSize = (int) array.getDimension(R.styleable.LuckyWheelView_item_title_text_size, sp2px(getContext(), 15));
-        mItemContentTextSize = (int) array.getDimension(R.styleable.LuckyWheelView_item_content_text_size, sp2px(getContext(), 15));
-        mItemTitleColor = array.getColor(R.styleable.LuckyWheelView_item_title_color, Color.BLACK);
-        mItemContentColor = array.getColor(R.styleable.LuckyWheelView_item_content_color, Color.BLACK);
-        mLineColor = array.getColor(R.styleable.LuckyWheelView_line_color, Color.BLACK);
-        mPieceUnSelectColor = array.getColor(R.styleable.LuckyWheelView_un_select_color, Color.YELLOW);
-        mPieceSelectedColor = array.getColor(R.styleable.LuckyWheelView_selected_color, Color.WHITE);
+        TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.LuckyView);
+        mIntervalStrokeWidth = (int) array.getDimension(R.styleable.LuckyView_interval_line_width, dp2px(getContext(), 5));
+        mCircleStrokeWidth = (int) array.getDimension(R.styleable.LuckyView_circle_line_width, dp2px(getContext(), 10));
+        mItemTitleTextSize = (int) array.getDimension(R.styleable.LuckyView_item_title_text_size, sp2px(getContext(), 15));
+        mItemContentTextSize = (int) array.getDimension(R.styleable.LuckyView_item_content_text_size, sp2px(getContext(), 15));
+        mItemTitleColor = array.getColor(R.styleable.LuckyView_item_title_color, Color.BLACK);
+        mItemContentColor = array.getColor(R.styleable.LuckyView_item_content_color, Color.BLACK);
+        mLineColor = array.getColor(R.styleable.LuckyView_line_color, Color.BLACK);
+        mPieceUnSelectColor = array.getColor(R.styleable.LuckyView_un_select_color, Color.YELLOW);
+        mPieceSelectedColor = array.getColor(R.styleable.LuckyView_selected_color, Color.WHITE);
         array.recycle();
     }
 

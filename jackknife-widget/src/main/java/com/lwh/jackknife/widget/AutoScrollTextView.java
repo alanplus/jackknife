@@ -27,12 +27,13 @@ import android.util.AttributeSet;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoScrollTextView extends TextView {
+public class AutoScrollTextView extends AppCompatTextView {
 
     private float textLength = 0f;
     private float viewWidth = 0f;

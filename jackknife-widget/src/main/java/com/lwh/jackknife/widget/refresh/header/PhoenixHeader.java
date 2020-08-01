@@ -39,7 +39,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.constant.SpinnerStyle;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 /**
  * Phoenix
@@ -136,10 +136,10 @@ public class PhoenixHeader extends InternalAbstract implements RefreshHeader/*, 
     public PhoenixHeader(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
         mMatrix = new Matrix();
-        mSunSize = SmartUtil.dp2px(40);
+        mSunSize = SmartUtils.dp2px(40);
         mBackgroundColor = skyColors[0];
         final View thisView = this;
-        thisView.setMinimumHeight(SmartUtil.dp2px(100));
+        thisView.setMinimumHeight(SmartUtils.dp2px(100));
 
         mSpinnerStyle = SpinnerStyle.FixedBehind;
 

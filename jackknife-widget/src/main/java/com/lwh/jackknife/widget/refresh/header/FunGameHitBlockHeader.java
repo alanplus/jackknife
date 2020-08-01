@@ -29,7 +29,7 @@ import android.view.View;
 import com.lwh.jackknife.widget.R;
 import com.lwh.jackknife.widget.refresh.header.fungame.FunGameView;
 import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,13 +113,13 @@ public class FunGameHitBlockHeader extends FunGameView {
         super(context, attrs, 0);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.FunGameHitBlockHeader);
-        speed = ta.getInt(R.styleable.FunGameHitBlockHeader_fghBallSpeed, SmartUtil.dp2px(SPEED));
+        speed = ta.getInt(R.styleable.FunGameHitBlockHeader_fghBallSpeed, SmartUtils.dp2px(SPEED));
         blockHorizontalNum = ta.getInt(R.styleable.FunGameHitBlockHeader_fghBlockHorizontalNum, BLOCK_HORIZONTAL_NUM);
         ta.recycle();
 
         blockPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         blockPaint.setStyle(Paint.Style.FILL);
-        BALL_RADIUS = SmartUtil.dp2px(4);
+        BALL_RADIUS = SmartUtils.dp2px(4);
     }
 
     @Override

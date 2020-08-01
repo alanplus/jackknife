@@ -28,6 +28,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.lwh.jackknife.cache.Cache;
 import com.lwh.jackknife.cache.CacheType;
 import com.lwh.jackknife.cache.LruCache;
+import com.lwh.jackknife.net.NetworkChangeObserver;
+import com.lwh.jackknife.net.NetworkStateReceiver;
+import com.lwh.jackknife.util.NetworkUtils;
 
 public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity
         implements ActivityCache {
@@ -35,13 +38,36 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     protected T mBinding;
     protected final String TAG = this.getClass().getSimpleName();
     private Cache<String, Object> mCache;
+    protected NetworkChangeObserver mNetworkChangeObserver = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        mNetworkChangeObserver = new NetworkChangeObserver() {
+            @Override
+            public void onNetworkConnect(NetworkUtils.ApnType type) {
+                onNetworkConnected(type);
+            }
+
+            @Override
+            public void onNetworkDisconnect() {
+                onNetworkDisconnected();
+            }
+        };
+        NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
         initData(savedInstanceState);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        NetworkStateReceiver.unregisterObserver(mNetworkChangeObserver);
+    }
+
+    protected abstract void onNetworkConnected(NetworkUtils.ApnType type);
+
+    protected abstract void onNetworkDisconnected();
 
     protected abstract int getLayoutId();
 

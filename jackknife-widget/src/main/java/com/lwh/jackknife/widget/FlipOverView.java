@@ -22,9 +22,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
-public class FlipOverView extends ImageView {
+import androidx.appcompat.widget.AppCompatImageView;
+
+public class FlipOverView extends AppCompatImageView {
 
     private int mFlipState;
     private int mAnimationDuration = 2000;

@@ -37,14 +37,14 @@ import android.widget.ScrollView;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public class SmartUtil implements Interpolator {
+public class SmartUtils implements Interpolator {
 
     public static int INTERPOLATOR_VISCOUS_FLUID = 0;
     public static int INTERPOLATOR_DECELERATE = 1;
 
     private int type;
 
-    public SmartUtil(int type) {
+    public SmartUtils(int type) {
         this.type = type;
     }
 
@@ -168,7 +168,7 @@ public class SmartUtil implements Interpolator {
             return false;
         }
         //touch == null 时 canLoadMore 不会动态递归搜索
-        if (targetView instanceof ViewGroup && touch != null && !SmartUtil.isScrollableView(targetView)) {
+        if (targetView instanceof ViewGroup && touch != null && !SmartUtils.isScrollableView(targetView)) {
             ViewGroup viewGroup = (ViewGroup) targetView;
             final int childCount = viewGroup.getChildCount();
             PointF point = new PointF();

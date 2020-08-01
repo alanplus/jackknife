@@ -38,7 +38,7 @@ import com.lwh.jackknife.widget.refresh.api.RefreshKernel;
 import com.lwh.jackknife.widget.refresh.api.RefreshLayout;
 import com.lwh.jackknife.widget.refresh.header.storehouse.StoreHousePath;
 import com.lwh.jackknife.widget.refresh.internal.InternalAbstract;
-import com.lwh.jackknife.widget.refresh.util.SmartUtil;
+import com.lwh.jackknife.widget.refresh.util.SmartUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,8 +87,8 @@ public class StoreHouseHeader extends InternalAbstract implements RefreshHeader 
     public StoreHouseHeader(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
 
-        mLineWidth = SmartUtil.dp2px(1);
-        mDropHeight = SmartUtil.dp2px(40);
+        mLineWidth = SmartUtils.dp2px(1);
+        mDropHeight = SmartUtils.dp2px(40);
         mHorizontalRandomness = Resources.getSystem().getDisplayMetrics().widthPixels / 2;
         mBackgroundColor = 0xff333333;
         setTextColor(0xffcccccc);
@@ -105,7 +105,7 @@ public class StoreHouseHeader extends InternalAbstract implements RefreshHeader 
         ta.recycle();
 
         final View thisView = this;
-        thisView.setMinimumHeight(mDrawZoneHeight + SmartUtil.dp2px(40));
+        thisView.setMinimumHeight(mDrawZoneHeight + SmartUtils.dp2px(40));
     }
 
     @Override
@@ -249,8 +249,8 @@ public class StoreHouseHeader extends InternalAbstract implements RefreshHeader 
         mItemList.clear();
         for (int i = 0; i < pointList.size(); i++) {
             float[] line = pointList.get(i);
-            PointF startPoint = new PointF(SmartUtil.dp2px(line[0]) * mScale, SmartUtil.dp2px(line[1]) * mScale);
-            PointF endPoint = new PointF(SmartUtil.dp2px(line[2]) * mScale, SmartUtil.dp2px(line[3]) * mScale);
+            PointF startPoint = new PointF(SmartUtils.dp2px(line[0]) * mScale, SmartUtils.dp2px(line[1]) * mScale);
+            PointF endPoint = new PointF(SmartUtils.dp2px(line[2]) * mScale, SmartUtils.dp2px(line[3]) * mScale);
 
             drawWidth = Math.max(drawWidth, startPoint.x);
             drawWidth = Math.max(drawWidth, endPoint.x);
