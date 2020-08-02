@@ -117,7 +117,7 @@ public final class PermissionBridgeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_jknf_permission_bridge);
+        setContentView(R.layout.jk_activity_permission_bridge);
         if (savedInstanceState != null) {
             return;
         }

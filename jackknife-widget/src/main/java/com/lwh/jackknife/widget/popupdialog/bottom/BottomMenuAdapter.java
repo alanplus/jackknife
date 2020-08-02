@@ -85,7 +85,7 @@ public class BottomMenuAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (holder == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.jknf_item_popup_menu, null);
+            convertView = mInflater.inflate(R.layout.jk_item_popup_menu, null);
             holder.tv_popupmenu_name = (TextView) convertView.findViewById(R.id.tv_popupmenu_name);
             convertView.setTag(holder);
         } else {

@@ -19,7 +19,6 @@ package com.lwh.jackknife.widget.recyclerview;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.ColorRes;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +26,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lwh.jackknife.widget.R;
 import com.lwh.jackknife.widget.recyclerview.adapter.RecyclerArrayAdapter;
@@ -111,7 +112,7 @@ public class XRecyclerView extends FrameLayout {
             return;
         }
         //生成主View
-        View v = LayoutInflater.from(getContext()).inflate(R.layout.jknf_progress_recyclerview, this);
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.jk_progress_recyclerview, this);
         mPtrLayout = (SwipeRefreshLayout) v.findViewById(R.id.ptr_layout);
         mPtrLayout.setEnabled(false);
 

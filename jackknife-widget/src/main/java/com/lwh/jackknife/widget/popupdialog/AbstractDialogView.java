@@ -80,7 +80,7 @@ public abstract class AbstractDialogView {
      * @return content view
      */
     protected View performInflateView(LayoutInflater inflater, FrameLayout parent) {
-        View dialogView = inflater.inflate(R.layout.jknf_dialog_view, parent, false);
+        View dialogView = inflater.inflate(R.layout.jk_dialog_view, parent, false);
         LinearLayout dialogViewRoot = (LinearLayout) dialogView.findViewById(R.id
                 .jknf_dialog_view_content);
         if (mGravity != Gravity.NO_GRAVITY) {

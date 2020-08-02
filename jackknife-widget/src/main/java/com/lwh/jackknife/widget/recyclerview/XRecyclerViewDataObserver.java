@@ -16,7 +16,7 @@
 
 package com.lwh.jackknife.widget.recyclerview;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lwh.jackknife.widget.recyclerview.adapter.RecyclerArrayAdapter;
 

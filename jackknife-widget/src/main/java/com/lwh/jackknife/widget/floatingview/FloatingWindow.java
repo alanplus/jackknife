@@ -44,7 +44,7 @@ public class FloatingWindow implements IFloatingWindow {
     private static volatile FloatingWindow mInstance;
     private WeakReference<FrameLayout> mContainer;
     @LayoutRes
-    private int mLayoutId = R.layout.jknf_floating_magnet_view;
+    private int mLayoutId = R.layout.jk_floating_magnet_view;
     private ViewGroup.LayoutParams mLayoutParams = getDefaultLayoutParams();
     MagnetViewListener mMagnetViewListener;
     private int mIconRes;

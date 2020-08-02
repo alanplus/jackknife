@@ -16,11 +16,7 @@
 
 package com.lwh.jackknife.widget.recyclerview.adapter;
 
-import android.support.v7.widget.RecyclerView;
-
-/**
- * Created by zhuchenxi on 2016/12/22.
- */
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FixDataObserver extends RecyclerView.AdapterDataObserver {
 
@@ -29,8 +25,6 @@ public class FixDataObserver extends RecyclerView.AdapterDataObserver {
     public FixDataObserver(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
     }
-
-
 
     @Override
     public void onItemRangeInserted(int positionStart, int itemCount) {

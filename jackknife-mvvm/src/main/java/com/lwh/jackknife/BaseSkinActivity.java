@@ -48,9 +48,11 @@ public abstract class BaseSkinActivity<T extends ViewDataBinding> extends SkinAc
         NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
     }
 
-    protected abstract void onNetworkConnected(NetworkUtils.ApnType type);
+    protected void onNetworkConnected(NetworkUtils.ApnType type) {
+    }
 
-    protected abstract void onNetworkDisconnected();
+    protected void onNetworkDisconnected() {
+    }
 
     protected abstract int getLayoutId();
 

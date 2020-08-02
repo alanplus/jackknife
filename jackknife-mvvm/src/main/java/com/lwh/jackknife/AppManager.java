@@ -35,11 +35,22 @@ public final class AppManager {
         return sAppManager;
     }
 
+    /**
+     * 依附到application。
+     *
+     * @param application
+     * @return
+     */
     public AppManager init(Application application) {
         this.mApplication = application;
         return sAppManager;
     }
 
+    /**
+     * 保存activity信息到栈。
+     *
+     * @param activity
+     */
     public void pushTask(Activity activity) {
         synchronized (AppManager.class) {
             mActivityStacks.add(new WeakReference<>(activity));
@@ -47,7 +58,24 @@ public final class AppManager {
     }
 
     /**
-     * Destroy and remove activity from the top of the task stack.
+     * 检测销毁栈顶的activity。
+     *
+     * @param activityClazz
+     */
+    void popTaskWithChecking(Class<? extends Activity> activityClazz) {
+        synchronized (AppManager.class) {
+            WeakReference<? extends Activity> ref = mActivityStacks.peek(); //只查看不移除
+            if (ref != null) {
+                Activity activity = ref.get();
+                if (activityClazz.isAssignableFrom(activity.getClass())) {
+                    mActivityStacks.pop();
+                }
+            }
+        }
+    }
+
+    /**
+     * 销毁栈顶的activity。
      */
     public void popTask() {
         synchronized (AppManager.class) {
@@ -59,7 +87,7 @@ public final class AppManager {
     }
 
     /**
-     * 让在栈顶的 {@link Activity} ,打开指定的 {@link Activity}
+     * 让在栈顶的activity ,打开指定的activity。
      *
      * @param activityClass
      */
@@ -67,6 +95,11 @@ public final class AppManager {
         startActivity(new Intent(mApplication, activityClass));
     }
 
+    /**
+     * 开启一个新的activity。
+     *
+     * @param intent
+     */
     private void startActivity(Intent intent) {
         if (getTopActivity() == null) {
             //如果没有前台的activity就使用new_task模式启动activity
@@ -77,6 +110,11 @@ public final class AppManager {
         getTopActivity().startActivity(intent);
     }
 
+    /**
+     * 获取栈顶activity。
+     *
+     * @return
+     */
     public Activity getTopActivity() {
         if (mActivityStacks.peek() != null) {
             return mActivityStacks.peek().get();
@@ -84,6 +122,11 @@ public final class AppManager {
         return null;
     }
 
+    /**
+     * 销毁指定activity。
+     *
+     * @param activityClazz
+     */
     public void finishActivity(Class<?> activityClazz) {
         synchronized (AppManager.class) {
             Iterator<WeakReference<? extends Activity>> iterator = mActivityStacks.iterator();
@@ -97,6 +140,9 @@ public final class AppManager {
         }
     }
 
+    /**
+     * 销毁本app所有activity，只保留栈底的activity。
+     */
     public void finishActivityUntilBottom() {
         synchronized (AppManager.class) {
             int size = mActivityStacks.size();
@@ -112,6 +158,9 @@ public final class AppManager {
         }
     }
 
+    /**
+     * 销毁本app所有activity。
+     */
     public void finishAllActivities() {
         synchronized (AppManager.class) {
             Iterator<WeakReference<? extends Activity>> iterator = mActivityStacks.iterator();
@@ -125,6 +174,9 @@ public final class AppManager {
         }
     }
 
+    /**
+     * 完全杀死本app，包括所有activity和其进程。
+     */
     public void killAll() {
         synchronized (AppManager.class) {
             finishAllActivities();

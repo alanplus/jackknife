@@ -1,4 +1,3 @@
 include ':jackknife-av',
-        ':jackknife-orm',
         ':jackknife-widget',
         ':jackknife-mvvm'

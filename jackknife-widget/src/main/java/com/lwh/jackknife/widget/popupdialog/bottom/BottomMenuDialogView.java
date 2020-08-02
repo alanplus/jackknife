@@ -56,7 +56,7 @@ public class BottomMenuDialogView extends DialogView {
         mMenuAdapter.setMenuTextSize(mMenuTextSize);
         mMenuAdapter.setMenuTextColor(mMenuTextColor);
         mMenuAdapter.setMenuBackground(mMenuBackground);
-        mContentView = LayoutInflater.from(context).inflate(R.layout.jknf_item_dialog_menu, null);
+        mContentView = LayoutInflater.from(context).inflate(R.layout.jk_item_dialog_menu, null);
         NestedScrollingListView listView = (NestedScrollingListView) mContentView.findViewById(R.id.lv_dialogmenu_menu);
         listView.setAdapter(mMenuAdapter);
         listView.requestFocus();

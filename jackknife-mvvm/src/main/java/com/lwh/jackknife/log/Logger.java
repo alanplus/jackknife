@@ -71,7 +71,7 @@ public class Logger {
     }
 
     public static void infoWithTag(String tag, String format, String... values) {
-        infoWithTag(tag, String.format(format, values));
+        infoWithTag(tag, String.format(format, new Object[]{values}));
     }
 
     public static void error(String msg) {
@@ -89,7 +89,7 @@ public class Logger {
     }
 
     public static void errorWithTag(String tag, String format, String... values) {
-        errorWithTag(tag, String.format(format, values));
+        errorWithTag(tag, String.format(format, new Object[]{values}));
     }
 
     public static void debug(String msg) {
@@ -107,7 +107,7 @@ public class Logger {
     }
 
     public static void debugWithTag(String tag, String format, String... values) {
-        debugWithTag(tag, String.format(format, values));
+        debugWithTag(tag, String.format(format, new Object[]{values}));
     }
 
     public static void warn(String msg) {
@@ -125,7 +125,7 @@ public class Logger {
     }
 
     public static void warnWithTag(String tag, String format, String... values) {
-        warnWithTag(tag, String.format(format, values));
+        warnWithTag(tag, String.format(format, new Object[]{values}));
     }
 
     public static void verbose(String msg) {
@@ -143,7 +143,7 @@ public class Logger {
     }
 
     public static void verboseWithTag(String tag, String format, String... values) {
-        verboseWithTag(tag, String.format(format, values));
+        verboseWithTag(tag, String.format(format, new Object[]{values}));
     }
 
     // </editor-folder>

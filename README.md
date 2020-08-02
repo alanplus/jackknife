@@ -15,8 +15,6 @@ JackKnife SDK官方文档
 
 #### jackknife-widget[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
-#### jackknife-orm[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
-
 #### jackknife-av[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
 
@@ -33,10 +31,9 @@ allprojects {
 }
 
 dependencies {
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-orm:4.9.14'   //jackknife数据存储库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.9.14' //jackknife自定义控件库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.9.14'//jackknife MVVM库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.9.14'// jackknife音视频库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.10.0'//jackknife MVVM库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.10.0' //jackknife自定义控件库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.10.0'// jackknife音视频库
 }
 ```
 
@@ -85,7 +82,7 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 
 
 
-##### 数据库ORM模块（jackknife-orm）
+##### 数据库ORM模块（jackknife-orm），自4.10.0开始并入jackknife-mvvm
 
 ##### 1、初始化配置
 
@@ -209,4 +206,4 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 - 语音消息录制：VoiceRecordView
 
 
-fork和star是对我最好的认可！
+star和fork https://github.com/JackWHLiu/jackknife！

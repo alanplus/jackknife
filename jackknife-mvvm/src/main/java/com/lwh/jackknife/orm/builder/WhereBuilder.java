@@ -127,19 +127,19 @@ public class WhereBuilder {
     public WhereBuilder and(WhereBuilder builder) {
         String selection = builder.getSelection();
         String[] selectionArgs = builder.getSelectionArgs();
-        return and(selection, selectionArgs);
+        return and(selection, new Object[]{selectionArgs});
     }
 
     public WhereBuilder or(WhereBuilder builder) {
         String selection = builder.getSelection();
         String[] selectionArgs = builder.getSelectionArgs();
-        return or(selection, selectionArgs);
+        return or(selection, new Object[]{selectionArgs});
     }
 
     public WhereBuilder not(WhereBuilder builder) {
         String selection = builder.getSelection();
         String[] selectionArgs = builder.getSelectionArgs();
-        return not(selection, selectionArgs);
+        return not(selection, new Object[]{selectionArgs});
     }
 
     public WhereBuilder andNot(WhereBuilder builder) {
@@ -190,7 +190,7 @@ public class WhereBuilder {
         return append(null, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
-    public WhereBuilder addWhereIn(String column, Object... values) {
+    public WhereBuilder addWhereIn(String column, String... values) {
         return appendWhereIn(null, column, values);
     }
 
@@ -218,7 +218,7 @@ public class WhereBuilder {
         return append(AND, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
-    public WhereBuilder andWhereIn(String column, Object... values) {
+    public WhereBuilder andWhereIn(String column, String... values) {
         return appendWhereIn(AND, column, values);
     }
 
@@ -246,7 +246,7 @@ public class WhereBuilder {
         return append(OR, column + LESS_THAN_OR_EQUAL_TO_HOLDER, value);
     }
 
-    public WhereBuilder orWhereIn(String column, Object... values) {
+    public WhereBuilder orWhereIn(String column, String... values) {
         return appendWhereIn(OR, column, values);
     }
 
@@ -279,9 +279,9 @@ public class WhereBuilder {
         return this;
     }
 
-    private WhereBuilder appendWhereIn(String connect, String column, Object[] values) {
+    private WhereBuilder appendWhereIn(String connect, String column, String[] values) {
         String whereIn = buildWhereIn(column, values.length);
-        return append(connect, whereIn, toStringArgs(values));
+        return append(connect, whereIn, new Object[]{values});
     }
 
     private String buildWhereIn(String column, int num) {

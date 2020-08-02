@@ -66,7 +66,7 @@ public class ClassicsFooter extends InternalClassics<ClassicsFooter> implements 
     public ClassicsFooter(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
 
-        View.inflate(context, R.layout.jknf_classics_footer, this);
+        View.inflate(context, R.layout.jk_classics_footer, this);
 
         final View thisView = this;
         final View arrowView = mArrowView = thisView.findViewById(R.id.srl_classics_arrow);

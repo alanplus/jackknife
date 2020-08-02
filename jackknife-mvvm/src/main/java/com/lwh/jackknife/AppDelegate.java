@@ -24,7 +24,6 @@ import android.content.ContentProvider;
 import android.content.Context;
 import android.content.res.Configuration;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.lwh.jackknife.net.NetworkStateReceiver;

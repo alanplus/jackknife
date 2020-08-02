@@ -19,9 +19,10 @@ package com.lwh.jackknife.widget.recyclerview.decoration;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lwh.jackknife.widget.recyclerview.adapter.RecyclerArrayAdapter;
 

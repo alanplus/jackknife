@@ -65,9 +65,11 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         NetworkStateReceiver.unregisterObserver(mNetworkChangeObserver);
     }
 
-    protected abstract void onNetworkConnected(NetworkUtils.ApnType type);
+    protected void onNetworkConnected(NetworkUtils.ApnType type) {
+    }
 
-    protected abstract void onNetworkDisconnected();
+    protected void onNetworkDisconnected() {
+    }
 
     protected abstract int getLayoutId();
 
