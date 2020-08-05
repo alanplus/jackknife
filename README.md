@@ -206,4 +206,4 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 - 语音消息录制：VoiceRecordView
 
 
-star和fork https://github.com/JackWHLiu/jackknife！
+star和fork https://github.com/JackWHLiu/jackknife
