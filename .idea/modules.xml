@@ -53,7 +53,6 @@
       <module fileurl="file://$PROJECT_DIR$/jackknife-xpermission/jackknife-xpermission.iml" filepath="$PROJECT_DIR$/jackknife-xpermission/jackknife-xpermission.iml" />
       <module fileurl="file://$PROJECT_DIR$/jackknife-xskin/jackknife-xskin.iml" filepath="$PROJECT_DIR$/jackknife-xskin/jackknife-xskin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-av/liuwenhao-Desktop-jackknife-jackknife-av.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-av/liuwenhao-Desktop-jackknife-jackknife-av.iml" group="jackknife/jackknife-av" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-orm/liuwenhao-Desktop-jackknife-jackknife-orm.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-orm/liuwenhao-Desktop-jackknife-jackknife-orm.iml" group="jackknife/jackknife-orm" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/jackknife-widget/liuwenhao-Desktop-jackknife-jackknife-widget.iml" filepath="$PROJECT_DIR$/.idea/modules/jackknife-widget/liuwenhao-Desktop-jackknife-jackknife-widget.iml" group="jackknife/jackknife-widget" />
     </modules>
   </component>

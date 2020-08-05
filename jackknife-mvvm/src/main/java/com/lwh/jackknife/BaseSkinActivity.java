@@ -17,6 +17,7 @@
 package com.lwh.jackknife;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -44,22 +45,47 @@ public abstract class BaseSkinActivity<T extends ViewDataBinding> extends SkinAc
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
-        initData(savedInstanceState);
+        mNetworkChangeObserver = new NetworkChangeObserver() {
+            @Override
+            public void onNetworkConnect(NetworkUtils.ApnType type) {
+                onNetworkConnected(type);
+            }
+
+            @Override
+            public void onNetworkDisconnect() {
+                onNetworkDisconnected();
+            }
+        };
         NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
+        initData(savedInstanceState);
+    }
+
+    protected abstract int getLayoutId();
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        onPutExtras(getIntent());
+    }
+
+    @Override
+    protected void onDestroy() {
+        //横竖屏切换或配置改变时, Activity 会被重新创建实例, 但 Bundle 中的基础数据会被保存下来,移除该数据是为了保证重新创建的实例可以正常工作
+        onRemoveExtras(getIntent());
+        NetworkStateReceiver.unregisterObserver(mNetworkChangeObserver);
+        super.onDestroy();
+    }
+
+    protected void onPutExtras(Intent intent) {
+    }
+
+    protected void onRemoveExtras(Intent intent) {
     }
 
     protected void onNetworkConnected(NetworkUtils.ApnType type) {
     }
 
     protected void onNetworkDisconnected() {
-    }
-
-    protected abstract int getLayoutId();
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        NetworkStateReceiver.unregisterObserver(mNetworkChangeObserver);
     }
 
     @Override

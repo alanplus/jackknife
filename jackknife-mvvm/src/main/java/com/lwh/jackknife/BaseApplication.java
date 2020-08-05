@@ -20,7 +20,7 @@ import android.app.Application;
 import android.content.Context;
 
 /**
- * 继承这个类就要在AndroidManifest.xml中的application节点添加
+ * 继承这个类就相当于在AndroidManifest.xml中的application节点自动添加了
  * <metadata name="com.lwh.jackknife.DefaultGlobalConfig" value="GlobalConfig"/>
  */
 public class BaseApplication extends Application {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The JackKnife Open Source Project
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife;
+package com.lwh.jackknife.db.constraint;
 
-import android.os.Bundle;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface ActivityDelegate {
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface PrimaryKey {
 
-    String CACHE_KEY = "ActivityDelegate";
-
-    void onCreate(Bundle savedInstanceState);
-
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroy();
+    AssignType value();
 }

@@ -32,48 +32,37 @@ public class ActivityDelegateImpl implements ActivityDelegate {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Logger.info("%s - onCreate", mActivity.getLocalClassName());
+        Logger.info("%s - onCreate", mActivity.getClass().getSimpleName());
     }
 
     @Override
     public void onStart() {
-        Logger.info("%s - onStart", mActivity.getLocalClassName());
-        onPutExtras(mActivity.getIntent());
+        Logger.info("%s - onStart", mActivity.getClass().getSimpleName());
     }
 
     @Override
     public void onResume() {
-        Logger.info("%s - onResume", mActivity.getLocalClassName());
+        Logger.info("%s - onResume", mActivity.getClass().getSimpleName());
     }
 
     @Override
     public void onPause() {
-        Logger.info("%s - onPause", mActivity.getLocalClassName());
+        Logger.info("%s - onPause", mActivity.getClass().getSimpleName());
     }
 
     @Override
     public void onStop() {
-        Logger.info("%s - onStop", mActivity.getLocalClassName());
+        Logger.info("%s - onStop", mActivity.getClass().getSimpleName());
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Logger.info("%s - onSaveInstanceState", mActivity.getLocalClassName());
+        Logger.info("%s - onSaveInstanceState", mActivity.getClass().getSimpleName());
     }
 
     @Override
     public void onDestroy() {
-        Logger.info("%s - onDestroy", mActivity.getLocalClassName());
-        //横竖屏切换或配置改变时, Activity 会被重新创建实例, 但 Bundle 中的基础数据会被保存下来,移除该数据是为了保证重新创建的实例可以正常工作
-        onRemoveExtras(mActivity.getIntent());
+        Logger.info("%s - onDestroy", mActivity.getClass().getSimpleName());
         this.mActivity = null;
-    }
-
-    @Override
-    public void onPutExtras(Intent intent) {
-    }
-
-    @Override
-    public void onRemoveExtras(Intent intent) {
     }
 }

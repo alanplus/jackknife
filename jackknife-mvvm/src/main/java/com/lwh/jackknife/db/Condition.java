@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The JackKnife Open Source Project
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife;
+package com.lwh.jackknife.db;
 
-import android.os.Bundle;
+public class Condition {
 
-public interface ActivityDelegate {
+    private String selection;
+    private String[] selectionArgs;
 
-    String CACHE_KEY = "ActivityDelegate";
+    public Condition(String selection, String[] selectionArgs) {
+        this.selection = selection;
+        this.selectionArgs = selectionArgs;
+    }
 
-    void onCreate(Bundle savedInstanceState);
+    public String getSelection() {
+        return selection;
+    }
 
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroy();
+    public String[] getSelectionArgs() {
+        return selectionArgs;
+    }
 }

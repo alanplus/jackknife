@@ -21,6 +21,9 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +49,15 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
         mBinding = DataBindingUtil.bind(Objects.requireNonNull(getView()));
         initData(savedInstanceState);
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(getLayoutId(), container, false);
+    }
+
+    protected abstract int getLayoutId();
 
     @NonNull
     @Override

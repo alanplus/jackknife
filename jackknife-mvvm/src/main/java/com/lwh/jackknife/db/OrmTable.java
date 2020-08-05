@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The JackKnife Open Source Project
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife;
+package com.lwh.jackknife.db;
 
-import android.os.Bundle;
+public interface OrmTable {
 
-public interface ActivityDelegate {
+    /**
+     * Gets the unique identifier's value.
+     *
+     * @return The primary key value.
+     */
+    PrimaryKeyEntity getPrimaryKey();
 
-    String CACHE_KEY = "ActivityDelegate";
-
-    void onCreate(Bundle savedInstanceState);
-
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroy();
+    /**
+     * @return If true, it will drop table first and recreate the table when the table is
+     * upgraded.Instead,it will expand directly on the previous table.
+     */
+    boolean isUpgradeRecreated();
 }

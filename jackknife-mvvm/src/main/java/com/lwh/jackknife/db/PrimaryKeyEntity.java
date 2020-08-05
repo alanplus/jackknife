@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife;
+package com.lwh.jackknife.db;
 
-import android.os.Bundle;
+public class PrimaryKeyEntity {
 
-public interface ActivityDelegate {
+    private String name;
+    private String value;
 
-    String CACHE_KEY = "ActivityDelegate";
+    public PrimaryKeyEntity(String primaryKeyName, Number primaryKeyValue) {
+        this.name = primaryKeyName;
+        this.value = String.valueOf(primaryKeyValue);
+    }
 
-    void onCreate(Bundle savedInstanceState);
+    public PrimaryKeyEntity(String primaryKeyName, String primaryKeyValue) {
+        this.name = primaryKeyName;
+        this.value = primaryKeyValue;
+    }
 
-    void onStart();
+    public String getName() {
+        return name;
+    }
 
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroy();
+    public String getValue() {
+        return value;
+    }
 }

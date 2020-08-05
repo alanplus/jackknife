@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The JackKnife Open Source Project
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,13 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife;
+package com.lwh.jackknife.db;
 
-import android.os.Bundle;
+import java.lang.reflect.Field;
 
-public interface ActivityDelegate {
+public interface DataMatcher {
 
-    String CACHE_KEY = "ActivityDelegate";
+    Class<?>[] getTypes();
 
-    void onCreate(Bundle savedInstanceState);
-
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroy();
+    boolean matches(Field field);
 }

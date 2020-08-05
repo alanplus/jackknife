@@ -17,6 +17,7 @@
 package com.lwh.jackknife;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -60,9 +61,23 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        onPutExtras(getIntent());
+    }
+
+    @Override
     protected void onDestroy() {
-        super.onDestroy();
+        //横竖屏切换或配置改变时, Activity 会被重新创建实例, 但 Bundle 中的基础数据会被保存下来,移除该数据是为了保证重新创建的实例可以正常工作
+        onRemoveExtras(getIntent());
         NetworkStateReceiver.unregisterObserver(mNetworkChangeObserver);
+        super.onDestroy();
+    }
+
+    protected void onPutExtras(Intent intent) {
+    }
+
+    protected void onRemoveExtras(Intent intent) {
     }
 
     protected void onNetworkConnected(NetworkUtils.ApnType type) {

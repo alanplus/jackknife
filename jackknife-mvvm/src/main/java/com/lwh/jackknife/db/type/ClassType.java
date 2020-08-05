@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The JackKnife Open Source Project
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife;
+package com.lwh.jackknife.db.type;
 
-import android.os.Bundle;
+public class ClassType extends BaseDataType {
 
-public interface ActivityDelegate {
+    private static final ClassType mInstance = new ClassType();
 
-    String CACHE_KEY = "ActivityDelegate";
+    public ClassType() {
+        super(SqlType.TEXT);
+    }
 
-    void onCreate(Bundle savedInstanceState);
+    public static ClassType getInstance() {
+        return mInstance;
+    }
 
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroy();
+    @Override
+    public Class<?>[] getTypes() {
+        return new Class<?>[]{Class.class};
+    }
 }

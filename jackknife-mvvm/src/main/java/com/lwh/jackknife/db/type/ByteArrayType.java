@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The JackKnife Open Source Project
+ * Copyright (C) 2017 The JackKnife Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife;
+package com.lwh.jackknife.db.type;
 
-import android.os.Bundle;
+public class ByteArrayType extends BaseDataType {
 
-public interface ActivityDelegate {
+    private static final ByteArrayType mInstance = new ByteArrayType();
 
-    String CACHE_KEY = "ActivityDelegate";
+    public ByteArrayType() {
+        super(SqlType.BLOB);
+    }
 
-    void onCreate(Bundle savedInstanceState);
+    public static ByteArrayType getInstance() {
+        return mInstance;
+    }
 
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onSaveInstanceState(Bundle outState);
-
-    void onDestroy();
+    @Override
+    public Class<?>[] getTypes() {
+        return new Class<?>[]{byte[].class};
+    }
 }
