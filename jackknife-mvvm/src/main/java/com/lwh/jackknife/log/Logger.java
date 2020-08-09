@@ -60,7 +60,17 @@ public class Logger {
         infoWithTag(TAG, msg);
     }
 
+    public static void i(String msg) {
+        infoWithTag(TAG, msg);
+    }
+
     public static void infoWithTag(String tag, String msg) {
+        if (DEBUG) {
+            Log.i(tag, msg);
+        }
+    }
+
+    public static void iwt(String tag, String msg) {
         if (DEBUG) {
             Log.i(tag, msg);
         }
@@ -70,11 +80,23 @@ public class Logger {
         infoWithTag(TAG, format, values);
     }
 
+    public static void i(String format, String... values) {
+        infoWithTag(TAG, format, values);
+    }
+
     public static void infoWithTag(String tag, String format, String... values) {
         infoWithTag(tag, String.format(format, new Object[]{values}));
     }
 
+    public static void iwt(String tag, String format, String... values) {
+        infoWithTag(tag, String.format(format, new Object[]{values}));
+    }
+
     public static void error(String msg) {
+        errorWithTag(TAG, msg);
+    }
+
+    public static void e(String msg) {
         errorWithTag(TAG, msg);
     }
 
@@ -84,7 +106,17 @@ public class Logger {
         }
     }
 
+    public static void ewt(String tag, String msg) {
+        if (DEBUG) {
+            Log.e(tag, msg);
+        }
+    }
+
     public static void error(String format, String... values) {
+        errorWithTag(TAG, format, values);
+    }
+
+    public static void e(String format, String... values) {
         errorWithTag(TAG, format, values);
     }
 
@@ -92,7 +124,15 @@ public class Logger {
         errorWithTag(tag, String.format(format, new Object[]{values}));
     }
 
+    public static void ewt(String tag, String format, String... values) {
+        errorWithTag(tag, String.format(format, new Object[]{values}));
+    }
+
     public static void debug(String msg) {
+        debugWithTag(TAG, msg);
+    }
+
+    public static void d(String msg) {
         debugWithTag(TAG, msg);
     }
 
@@ -102,7 +142,17 @@ public class Logger {
         }
     }
 
+    public static void dwt(String tag, String msg) {
+        if (DEBUG) {
+            Log.d(tag, msg);
+        }
+    }
+
     public static void debug(String format, String... values) {
+        debugWithTag(TAG, format, values);
+    }
+
+    public static void d(String format, String... values) {
         debugWithTag(TAG, format, values);
     }
 
@@ -110,7 +160,15 @@ public class Logger {
         debugWithTag(tag, String.format(format, new Object[]{values}));
     }
 
+    public static void dwt(String tag, String format, String... values) {
+        debugWithTag(tag, String.format(format, new Object[]{values}));
+    }
+
     public static void warn(String msg) {
+        warnWithTag(TAG, msg);
+    }
+
+    public static void w(String msg) {
         warnWithTag(TAG, msg);
     }
 
@@ -120,7 +178,17 @@ public class Logger {
         }
     }
 
+    public static void wwt(String tag, String msg) {
+        if (DEBUG) {
+            Log.w(tag, msg);
+        }
+    }
+
     public static void warn(String format, String... values) {
+        warnWithTag(TAG, format, values);
+    }
+
+    public static void w(String format, String... values) {
         warnWithTag(TAG, format, values);
     }
 
@@ -128,7 +196,15 @@ public class Logger {
         warnWithTag(tag, String.format(format, new Object[]{values}));
     }
 
+    public static void wwt(String tag, String format, String... values) {
+        warnWithTag(tag, String.format(format, new Object[]{values}));
+    }
+
     public static void verbose(String msg) {
+        verboseWithTag(TAG, msg);
+    }
+
+    public static void v(String msg) {
         verboseWithTag(TAG, msg);
     }
 
@@ -138,11 +214,25 @@ public class Logger {
         }
     }
 
+    public static void vwt(String tag, String msg) {
+        if (DEBUG) {
+            Log.v(tag, msg);
+        }
+    }
+
     public static void verbose(String format, String... values) {
         verboseWithTag(TAG, format, values);
     }
 
+    public static void v(String format, String... values) {
+        verboseWithTag(TAG, format, values);
+    }
+
     public static void verboseWithTag(String tag, String format, String... values) {
+        verboseWithTag(tag, String.format(format, new Object[]{values}));
+    }
+
+    public static void vwt(String tag, String format, String... values) {
         verboseWithTag(tag, String.format(format, new Object[]{values}));
     }
 

@@ -17,7 +17,10 @@
 package com.lwh.jackknife.util;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.os.Build;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.WindowManager;
 
 public final class ScreenUtils {
@@ -38,18 +41,63 @@ public final class ScreenUtils {
         return sInstance;
     }
 
-    private int[] _getScreenWH(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        return new int[]{outMetrics.widthPixels, outMetrics.heightPixels};
-    }
-
     public static int getScreenWidth(Context context) {
-        return getInstance()._getScreenWH(context)[0];
+        return getInstance().getScreenSize(context)[0];
     }
 
     public static int getScreenHeight(Context context) {
-        return getInstance()._getScreenWH(context)[1];
+        return getInstance().getScreenSize(context)[1];
+    }
+
+    public static int getContentWidth(Context context) {
+        return getInstance().getScreenSize(context, true)[0];
+    }
+
+    public static int getContentHeight(Context context) {
+        return getInstance().getScreenSize(context, true)[1];
+    }
+
+    private int[] getScreenSize(Context context) {
+        return getScreenSize(context, false);
+    }
+
+    private int[] getScreenSize(Context context, boolean useContentSize) {
+
+        int[] size = new int[2];
+
+        WindowManager w = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display d = w.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        d.getMetrics(metrics);
+// since SDK_INT = 1;
+        int widthPixels = metrics.widthPixels;
+        int heightPixels = metrics.heightPixels;
+
+        if (!useContentSize) {
+            size[0] = widthPixels;
+            size[1] = heightPixels - StatusBarUtils.getStatusBarHeight(context);
+
+            return size;
+        }
+
+// includes window decorations (statusbar bar/menu bar)
+        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
+            try {
+                widthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(d);
+                heightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(d);
+            } catch (Exception ignored) {
+            }
+// includes window decorations (statusbar bar/menu bar)
+        if (Build.VERSION.SDK_INT >= 17)
+            try {
+                Point realSize = new Point();
+                Display.class.getMethod("getRealSize", Point.class).invoke(d, realSize);
+                widthPixels = realSize.x;
+                heightPixels = realSize.y;
+            } catch (Exception ignored) {
+            }
+        size[0] = widthPixels;
+        size[1] = heightPixels;
+        return size;
     }
 }
