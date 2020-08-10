@@ -17,9 +17,8 @@
 package com.lwh.jackknife.bugskiller;
 
 import android.app.Activity;
+import android.support.design.widget.Snackbar;
 import android.view.View;
-
-import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Write log information to the top process of the phone.
