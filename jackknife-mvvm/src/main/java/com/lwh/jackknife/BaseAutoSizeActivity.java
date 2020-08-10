@@ -18,12 +18,12 @@ package com.lwh.jackknife;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 import com.lwh.jackknife.autosize.AutoSizeActivity;
 import com.lwh.jackknife.cache.Cache;

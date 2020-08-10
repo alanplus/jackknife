@@ -31,9 +31,9 @@ allprojects {
 }
 
 dependencies {
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.10.7'//jackknife MVVM库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.10.7' //jackknife自定义控件库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.10.7'// jackknife音视频库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.10.8'//jackknife MVVM库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.10.8' //jackknife自定义控件库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.10.8'// jackknife音视频库
 }
 ```
 
