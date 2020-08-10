@@ -23,8 +23,16 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <application>
-        <activity android:name="com.lwh.jackknife.permission.bridge.PermissionBridgeActivity"
+        <activity
+            android:name=".permission.bridge.PermissionBridgeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.JackKnife.Permission"/>
+            android:theme="@style/Theme.JackKnife.Permission" />
+        <service
+            android:name=".bugskiller.DoraNotificationService"
+            android:process=":dora">
+            <intent-filter>
+                <action android:name="dora.bugskiller.action.ACTION_NOTIFICATION_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

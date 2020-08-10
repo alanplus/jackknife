@@ -1,3 +1,3 @@
-include ':jackknife-av',
+include ':jackknife-mvvm',
         ':jackknife-widget',
-        ':jackknife-mvvm'
+        ':jackknife-av'

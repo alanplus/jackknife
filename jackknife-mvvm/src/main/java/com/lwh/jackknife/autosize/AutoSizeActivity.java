@@ -22,6 +22,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.lwh.jackknife.autosize.widget.AutoFrameLayout;
+import com.lwh.jackknife.autosize.widget.AutoLinearLayout;
+import com.lwh.jackknife.autosize.widget.AutoRelativeLayout;
+
 public class AutoSizeActivity extends AppCompatActivity {
 
     private static final String LAYOUT_LINEAR_LAYOUT = "LinearLayout";
