@@ -92,11 +92,17 @@ public interface AppRTCClient {
     class RoomConnectionParameters {
         public final String roomUrl;
         public final String roomId;
+        public final boolean useWss;
         public final boolean loopback;
 
         public RoomConnectionParameters(String roomUrl, String roomId, boolean loopback) {
+            this(roomUrl, roomId, true, loopback);
+        }
+
+        public RoomConnectionParameters(String roomUrl, String roomId, boolean useWss, boolean loopback) {
             this.roomUrl = roomUrl;
             this.roomId = roomId;
+            this.useWss = useWss;
             this.loopback = loopback;
         }
     }
@@ -108,17 +114,20 @@ public interface AppRTCClient {
         public final List<PeerConnection.IceServer> iceServers;
         public final boolean initiator;
         public final String clientId;
-        public final String wssUrl;
+        public String wssUrl;
         public final String wssPostUrl;
         public final SessionDescription offerSdp;
         public final List<IceCandidate> iceCandidates;
 
         public SignalingParameters(List<PeerConnection.IceServer> iceServers, boolean initiator,
-                                   String clientId, String wssUrl, String wssPostUrl, SessionDescription offerSdp,
+                                   String clientId, boolean useWss, String wssUrl, String wssPostUrl, SessionDescription offerSdp,
                                    List<IceCandidate> iceCandidates) {
             this.iceServers = iceServers;
             this.initiator = initiator;
             this.clientId = clientId;
+            if (!useWss) {
+                wssUrl.replace("wss://", "ws://");
+            }
             if (wssUrl.startsWith("ssw")) {
                 wssUrl.replace("ssw", "sw");
             }
