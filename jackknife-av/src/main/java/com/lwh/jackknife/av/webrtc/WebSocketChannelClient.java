@@ -73,7 +73,6 @@ public class WebSocketChannelClient {
     }
 
     public void connect(String wsUrl, final String postUrl) {
-        Log.d(TAG, "wsUrl=" + wsUrl + ",postUrl=" + postUrl);
         wsServerUrl = wsUrl;
         postServerUrl = postUrl;
         postServerUrl = postUrl;
@@ -81,6 +80,7 @@ public class WebSocketChannelClient {
         ws = new WebSocketConnection();
         wsObserver = new WebSocketObserver();
         try {
+            Log.d(TAG, "connect wsUrl=" + wsUrl + ", postUrl=" + postUrl);
             ws.connect(new URI(wsServerUrl), wsObserver);
         } catch (URISyntaxException e) {
             reportError("URI error: " + e.getMessage());

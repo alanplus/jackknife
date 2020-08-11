@@ -126,7 +126,7 @@ public interface AppRTCClient {
             this.initiator = initiator;
             this.clientId = clientId;
             if (wssUrl.startsWith("wss://")) {
-                wssUrl.replace("wss://", "ws://");
+                wssUrl = wssUrl.replace("wss://", "ws://");
             }
             this.wssUrl = wssUrl;
             this.wssPostUrl = wssPostUrl;
