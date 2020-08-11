@@ -128,9 +128,6 @@ public interface AppRTCClient {
             if (wssUrl.startsWith("wss://")) {
                 wssUrl.replace("wss://", "ws://");
             }
-            if (wssUrl.startsWith("ssw")) {
-                wssUrl.replace("ssw", "sw");
-            }
             this.wssUrl = wssUrl;
             this.wssPostUrl = wssPostUrl;
             this.offerSdp = offerSdp;

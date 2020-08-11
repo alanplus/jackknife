@@ -73,6 +73,7 @@ public class WebSocketChannelClient {
     }
 
     public void connect(String wsUrl, final String postUrl) {
+        Log.d(TAG, "wsUrl=" + wsUrl + ",postUrl=" + postUrl);
         wsServerUrl = wsUrl;
         postServerUrl = postUrl;
         postServerUrl = postUrl;
