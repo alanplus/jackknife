@@ -26,8 +26,8 @@ android {
         versionCode this.release_version_code
         versionName this.release_version_name
     }
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
     }
     buildTypes {
         release {
