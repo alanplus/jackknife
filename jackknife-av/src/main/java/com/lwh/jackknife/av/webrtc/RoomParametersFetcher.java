@@ -45,14 +45,12 @@ public class RoomParametersFetcher {
     private final RoomParametersFetcherEvents events;
     private final String roomUrl;
     private final String roomMessage;
-    private final boolean useWss;
     private AsyncHttpURLConnection httpConnection;
 
     public RoomParametersFetcher(
             String roomUrl, String roomMessage, boolean useWss, final RoomParametersFetcherEvents events) {
         this.roomUrl = roomUrl;
         this.roomMessage = roomMessage;
-        this.useWss = useWss;
         this.events = events;
     }
 
@@ -146,7 +144,7 @@ public class RoomParametersFetcher {
             }
 
             AppRTCClient.SignalingParameters params = new AppRTCClient.SignalingParameters(
-                    iceServers, initiator, clientId, useWss, wssUrl, wssPostUrl, offerSdp, iceCandidates);
+                    iceServers, initiator, clientId, wssUrl, wssPostUrl, offerSdp, iceCandidates);
             events.onSignalingParametersReady(params);
         } catch (JSONException e) {
             events.onSignalingParametersError("Room JSON parsing error: " + e.toString());

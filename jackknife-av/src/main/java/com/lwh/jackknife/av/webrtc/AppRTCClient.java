@@ -120,12 +120,12 @@ public interface AppRTCClient {
         public final List<IceCandidate> iceCandidates;
 
         public SignalingParameters(List<PeerConnection.IceServer> iceServers, boolean initiator,
-                                   String clientId, boolean useWss, String wssUrl, String wssPostUrl, SessionDescription offerSdp,
+                                   String clientId, String wssUrl, String wssPostUrl, SessionDescription offerSdp,
                                    List<IceCandidate> iceCandidates) {
             this.iceServers = iceServers;
             this.initiator = initiator;
             this.clientId = clientId;
-            if (!useWss) {
+            if (wssUrl.startsWith("wss://")) {
                 wssUrl.replace("wss://", "ws://");
             }
             if (wssUrl.startsWith("ssw")) {
