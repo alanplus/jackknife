@@ -18,7 +18,10 @@ package com.lwh.jackknife.permission.checker;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
+
+import androidx.core.app.ActivityCompat;
 
 import com.lwh.jackknife.permission.runtime.Permission;
 
@@ -102,9 +105,9 @@ public final class StrictChecker implements PermissionChecker {
                 case Permission.RECEIVE_SMS:
                     return true;
                 case Permission.READ_EXTERNAL_STORAGE:
-                    return checkReadStorage();
+                    return checkReadStorage(context);
                 case Permission.WRITE_EXTERNAL_STORAGE:
-                    return checkWriteStorage();
+                    return checkWriteStorage(context);
             }
         } catch (Throwable e) {
             return false;
@@ -188,13 +191,11 @@ public final class StrictChecker implements PermissionChecker {
         return test.test();
     }
 
-    private static boolean checkReadStorage() throws Throwable {
-        PermissionTest test = new StorageReadTest();
-        return test.test();
+    private static boolean checkReadStorage(Context context) throws Throwable {
+        return ActivityCompat.checkSelfPermission(context, Permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private static boolean checkWriteStorage() throws Throwable {
-        PermissionTest test = new StorageWriteTest();
-        return test.test();
+    private static boolean checkWriteStorage(Context context) throws Throwable {
+        return ActivityCompat.checkSelfPermission(context, Permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 }

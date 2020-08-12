@@ -29,9 +29,14 @@ import androidx.databinding.ViewDataBinding;
 import com.lwh.jackknife.cache.Cache;
 import com.lwh.jackknife.cache.CacheType;
 import com.lwh.jackknife.cache.LruCache;
+import com.lwh.jackknife.log.Logger;
 import com.lwh.jackknife.net.NetworkChangeObserver;
 import com.lwh.jackknife.net.NetworkStateReceiver;
+import com.lwh.jackknife.permission.Action;
+import com.lwh.jackknife.permission.PermissionManager;
 import com.lwh.jackknife.util.NetworkUtils;
+
+import java.util.List;
 
 public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity
         implements ActivityCache {
@@ -42,7 +47,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     protected NetworkChangeObserver mNetworkChangeObserver = null;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
         mNetworkChangeObserver = new NetworkChangeObserver() {
@@ -57,7 +62,32 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
             }
         };
         NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
-        initData(savedInstanceState);
+        if (requirePermissions().length > 0) {
+            PermissionManager.with(this)
+                    .runtime()
+                    .permission(requirePermissions())
+                    .onGranted(new Action<List<String>>() {
+                        @Override
+                        public void onAction(List<String> permissions) {
+                            initData(savedInstanceState);
+                        }
+                    })
+                    .onDenied(new Action<List<String>>() {
+                        @Override
+                        public void onAction(List<String> permissions) {
+                            for (String permission : permissions) {
+                                Logger.error("未授予权限" + permission);
+                            }
+                        }
+                    })
+                    .start();
+        } else {
+            initData(savedInstanceState);
+        }
+    }
+
+    protected String[] requirePermissions() {
+        return new String[0];
     }
 
     @Override
