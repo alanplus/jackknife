@@ -1,6 +1,4 @@
-
-
-JackKnife SDK官方文档
+JackKnife SDK官方文档 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
 --------------------------------
 
  <a href="http://www.apache.org/licenses/LICENSE-2.0">    <img src="http://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square" alt="License"/>  <a href="https://www.jianshu.com/u/1d0c0bc634db">
@@ -9,7 +7,7 @@ JackKnife SDK官方文档
     <img src="https://img.shields.io/badge/QQ%E7%BE%A4-249919939-orange.svg?style=flat-square" alt="QQ Group" />
   </a> </a>
 
-#### jackknife![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
+
 
 #### jackknife-mvvm[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
@@ -31,9 +29,9 @@ allprojects {
 }
 
 dependencies {
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.10.17'//jackknife MVVM库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.10.17' //jackknife自定义控件库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.10.17'// jackknife音视频库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.10.18'//jackknife MVVM库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.10.18' //jackknife自定义控件库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.10.18'// jackknife音视频库
 }
 ```
 
