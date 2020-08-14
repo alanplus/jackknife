@@ -185,15 +185,16 @@ public final class StatusBarUtils {
         }
     }
 
-    /**
-     * 修改状态栏颜色。
-     */
-    public static void setStatusBarColor(Activity activity, int colorId) {
+    public static void setStatusBarColorRes(Activity activity, int colorResId) {
+        setStatusBarColor(activity, activity.getResources().getColor(colorResId));
+    }
+
+    public static void setStatusBarColor(Activity activity, int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = activity.getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(activity.getResources().getColor(colorId));
+            window.setStatusBarColor(color);
         }
     }
 
