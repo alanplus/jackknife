@@ -29,11 +29,12 @@ allprojects {
 }
 
 dependencies {
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:4.10.21'//jackknife MVVM库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:4.10.21' //jackknife自定义控件库
-	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:4.10.21'// jackknife音视频库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:latest'//jackknife MVVM库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:latest' //jackknife自定义控件库
+	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:latest'// jackknife音视频库
 }
 ```
+latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
 
 #### 二、如何使用
 

@@ -27,4 +27,6 @@
     <string name="permission_name_sensors">Body Sensors</string>
     <string name="permission_name_sms">SMS</string>
     <string name="permission_name_storage">Storage</string>
+    <string name="jk_tips">系统消息</string>
+    <string name="jk_ok">确认</string>
 </resources>

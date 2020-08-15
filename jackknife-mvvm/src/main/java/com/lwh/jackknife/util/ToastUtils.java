@@ -20,9 +20,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
-public class ToastUtils {
+public final class ToastUtils {
 
     private static Toast mToast;
+
+    private ToastUtils() {
+    }
 
     public static void showShort(final String msg) {
         if (!ThreadUtils.isMainThread()) {

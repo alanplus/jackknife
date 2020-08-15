@@ -18,7 +18,10 @@ package com.lwh.jackknife.util;
 
 import android.os.Looper;
 
-public class ThreadUtils {
+public final class ThreadUtils {
+
+    private ThreadUtils() {
+    }
 
     public static boolean isMainThread() {
         return Looper.getMainLooper() == Looper.myLooper();
