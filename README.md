@@ -34,7 +34,8 @@ dependencies {
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:latest'// jackknife音视频库
 }
 ```
-latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
+latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)中绿色区域内的版本号，如果为红色，表示最新版本构建失败，这种情况请查看release，找到可用版本使用。
+
 
 #### 二、如何使用
 
