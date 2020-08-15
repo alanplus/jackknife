@@ -34,7 +34,8 @@ dependencies {
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:latest'// jackknife音视频库
 }
 ```
-latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
+latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)中绿色区域内的版本号，如果为红色，表示最新版本构建失败，这种情况请查看release，找到可用版本使用。
+
 
 #### 二、如何使用
 
@@ -72,6 +73,9 @@ latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
   - ServiceUtils：系统服务获取
   - TextUtils：文字操作
   - TimeUtils：时间格式化
+  - ToastUtils：自动线程切换Toast
+  - ThreadUtils：线程相关
+  - DialogUtils：对话框
 
 ##### 2、MVVM使用初阶
 
