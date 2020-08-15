@@ -73,6 +73,9 @@ latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)中绿�
   - ServiceUtils：系统服务获取
   - TextUtils：文字操作
   - TimeUtils：时间格式化
+  - ToastUtils：自动线程切换Toast
+  - ThreadUtils：线程相关
+  - DialogUtils：对话框
 
 ##### 2、MVVM使用初阶
 
