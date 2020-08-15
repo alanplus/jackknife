@@ -20,7 +20,7 @@ import android.util.Log;
 
 /**
  * A system that controls log output globally. When flag is closed, you can't output logs anywhere.
- * Instead, you can output logs anywhere.<note>The log system is closed by default.</note>
+ * Instead, you can output logs anywhere.<note>The log system is opened by default.</note>
  */
 public class Logger {
 

@@ -27,7 +27,11 @@ public final class DialogUtils {
     private DialogUtils() {
     }
 
-    public static void showTips(String tips) {
+    public interface Callback {
+        void onConfirm(String tips);
+    }
+
+    public static void showTips(final String tips, final Callback callback) {
         Context context = GlobalContext.get().getApplicationContext();
         new AlertDialog.Builder(context)
                 .setTitle(context.getString(R.string.jk_tips))
@@ -38,9 +42,16 @@ public final class DialogUtils {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                if (callback != null) {
+                                    callback.onConfirm(tips);
+                                }
                             }
                         })
                 .create()
                 .show();
+    }
+
+    public static void showTips(String tips) {
+        showTips(tips, null);
     }
 }
