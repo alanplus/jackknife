@@ -46,6 +46,10 @@ public abstract class BaseSkinActivity<T extends ViewDataBinding> extends SkinAc
     private Cache<String, Object> mCache;
     protected NetworkChangeObserver mNetworkChangeObserver = null;
 
+    public Context getContext() {
+        return this;
+    }
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

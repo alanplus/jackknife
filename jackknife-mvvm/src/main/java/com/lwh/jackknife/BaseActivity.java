@@ -23,6 +23,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingComponent;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
@@ -45,6 +46,10 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     protected final String TAG = this.getClass().getSimpleName();
     private Cache<String, Object> mCache;
     protected NetworkChangeObserver mNetworkChangeObserver = null;
+
+    public Context getContext() {
+        return this;
+    }
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {

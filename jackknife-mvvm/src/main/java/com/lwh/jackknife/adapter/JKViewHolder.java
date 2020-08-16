@@ -21,14 +21,17 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class JKViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
+public abstract class JKViewHolder<T, B> extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
     protected final String TAG = this.getClass().getSimpleName();
     protected OnViewClickListener mOnViewClickListener = null;
+    protected OnViewLongClickListener mOnViewLongClickListener = null;
+    protected B mBinding;
 
-    public JKViewHolder(View itemView) {
+    public JKViewHolder(View itemView, B binding) {
         super(itemView);
-        //点击事件
+        this.mBinding = binding;
         itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
     }
 
     /**
@@ -37,7 +40,7 @@ public abstract class JKViewHolder<T> extends RecyclerView.ViewHolder implements
      * @param data     数据
      * @param position 在 RecyclerView 中的位置
      */
-    public abstract void setData(@NonNull T data, int position);
+    public abstract void setData(B binding, @NonNull T data, int position);
 
     /**
      * 在 Activity 的 onDestroy 中使用 {@link JKAdapter#releaseAllHolder(RecyclerView)} 方法 (super.onDestroy() 之前)
@@ -54,8 +57,20 @@ public abstract class JKViewHolder<T> extends RecyclerView.ViewHolder implements
         }
     }
 
+    @Override
+    public boolean onLongClick(View view) {
+        if (mOnViewLongClickListener != null) {
+            return mOnViewLongClickListener.onViewLongClick(view, this.getPosition());
+        }
+        return false;
+    }
+
     public void setOnItemClickListener(OnViewClickListener listener) {
         this.mOnViewClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnViewLongClickListener listener) {
+        this.mOnViewLongClickListener = listener;
     }
 
     /**
@@ -70,5 +85,19 @@ public abstract class JKViewHolder<T> extends RecyclerView.ViewHolder implements
          * @param position 在 RecyclerView 中的位置
          */
         void onViewClick(View view, int position);
+    }
+
+    /**
+     * item 长按事件
+     */
+    public interface OnViewLongClickListener {
+
+        /**
+         * item 被长按
+         *
+         * @param view     被长按的 {@link View}
+         * @param position 在 RecyclerView 中的位置
+         */
+        boolean onViewLongClick(View view, int position);
     }
 }

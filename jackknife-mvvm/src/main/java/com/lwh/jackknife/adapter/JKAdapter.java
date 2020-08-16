@@ -21,18 +21,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>> {
+public abstract class JKAdapter<T, B extends ViewDataBinding> extends RecyclerView.Adapter<JKViewHolder<T, B>> {
 
-    protected List<T> mInfos;
+    protected List<T> mItems;
     protected OnRecyclerViewItemClickListener mOnItemClickListener = null;
+    protected OnRecyclerViewItemLongClickListener mOnItemLongClickListener = null;
 
-    public JKAdapter(List<T> infos) {
+    public JKAdapter(List<T> items) {
         super();
-        this.mInfos = infos;
+        this.mItems = items;
     }
 
     /**
@@ -61,17 +64,26 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
      * @return {@link JKViewHolder}
      */
     @Override
-    public JKViewHolder<T> onCreateViewHolder(ViewGroup parent, final int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(getLayoutId(viewType), parent, false);
-        JKViewHolder<T> mHolder = getHolder(view, viewType);
-        //设置Item点击事件
+    public JKViewHolder<T, B> onCreateViewHolder(ViewGroup parent, final int viewType) {
+        B binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+                getLayoutId(viewType), parent, false);
+        View view = binding.getRoot();
+        JKViewHolder<T, B> mHolder = getHolder(view, viewType);
         mHolder.setOnItemClickListener(new JKViewHolder.OnViewClickListener() {
             @Override
             public void onViewClick(View view, int position) {
-                if (mOnItemClickListener != null && mInfos.size() > 0) {
-                    //noinspection unchecked
-                    mOnItemClickListener.onItemClick(view, viewType, mInfos.get(position), position);
+                if (mOnItemClickListener != null && mItems.size() > 0) {
+                    mOnItemClickListener.onItemClick(view, viewType, mItems.get(position), position);
                 }
+            }
+        });
+        mHolder.setOnItemLongClickListener(new JKViewHolder.OnViewLongClickListener() {
+            @Override
+            public boolean onViewLongClick(View view, int position) {
+                if (mOnItemLongClickListener != null && mItems.size() > 0) {
+                    mOnItemLongClickListener.onItemLongClick(view, viewType, mItems.get(position), position);
+                }
+                return false;
             }
         });
         return mHolder;
@@ -84,8 +96,8 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
      * @param position 在 RecyclerView 中的位置
      */
     @Override
-    public void onBindViewHolder(JKViewHolder<T> holder, int position) {
-        holder.setData(mInfos.get(position), position);
+    public void onBindViewHolder(JKViewHolder<T, B> holder, int position) {
+        holder.setData(holder.mBinding, mItems.get(position), position);
     }
 
     /**
@@ -95,7 +107,7 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
      */
     @Override
     public int getItemCount() {
-        return mInfos.size();
+        return mItems.size();
     }
 
     /**
@@ -104,7 +116,7 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
      * @return 数据集合
      */
     public List<T> getInfos() {
-        return mInfos;
+        return mItems;
     }
 
     /**
@@ -114,7 +126,7 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
      * @return 数据
      */
     public T getItem(int position) {
-        return mInfos == null ? null : mInfos.get(position);
+        return mItems == null ? null : mItems.get(position);
     }
 
     /**
@@ -125,7 +137,7 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
      * @return {@link JKViewHolder}
      */
     @NonNull
-    public abstract JKViewHolder<T> getHolder(@NonNull View v, int viewType);
+    public abstract JKViewHolder<T, B> getHolder(@NonNull View v, int viewType);
 
     /**
      * 提供用于 item 布局的 {@code layoutId}
@@ -145,6 +157,15 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
     }
 
     /**
+     * 设置 item 点击事件
+     *
+     * @param listener
+     */
+    public void setOnItemLongClickListener(OnRecyclerViewItemLongClickListener listener) {
+        this.mOnItemLongClickListener = listener;
+    }
+
+    /**
      * item 点击事件
      *
      * @param <T>
@@ -160,5 +181,23 @@ public abstract class JKAdapter<T> extends RecyclerView.Adapter<JKViewHolder<T>>
          * @param position 在 RecyclerView 中的位置
          */
         void onItemClick(@NonNull View view, int viewType, @NonNull T data, int position);
+    }
+
+    /**
+     * item 长按事件
+     *
+     * @param <T>
+     */
+    public interface OnRecyclerViewItemLongClickListener<T> {
+
+        /**
+         * item 被点击
+         *
+         * @param view     被点击的 {@link View}
+         * @param viewType 布局类型
+         * @param data     数据
+         * @param position 在 RecyclerView 中的位置
+         */
+        boolean onItemLongClick(@NonNull View view, int viewType, @NonNull T data, int position);
     }
 }

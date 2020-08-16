@@ -46,6 +46,10 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
     protected NetworkChangeObserver mNetworkChangeObserver = null;
     private Cache<String, Object> mCache;
 
+    public Context getContext() {
+        return this;
+    }
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
