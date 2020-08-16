@@ -20,16 +20,24 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.lwh.jackknife.util.ReflectionUtils;
 
-public abstract class JKViewHolder<T, B> extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+public abstract class JKViewHolder<T, B> extends RecyclerView.ViewHolder implements
+        View.OnClickListener, View.OnLongClickListener {
+
     protected final String TAG = this.getClass().getSimpleName();
     protected OnViewClickListener mOnViewClickListener = null;
     protected OnViewLongClickListener mOnViewLongClickListener = null;
+    protected B mBinding;
 
     public JKViewHolder(View itemView) {
         super(itemView);
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
+    }
+
+    public void setBinding(B binding) {
+        this.mBinding = binding;
     }
 
     /**
@@ -38,7 +46,7 @@ public abstract class JKViewHolder<T, B> extends RecyclerView.ViewHolder impleme
      * @param data     数据
      * @param position 在 RecyclerView 中的位置
      */
-    public abstract void setData(B binding, @NonNull T data, int position);
+    public abstract void setData(@NonNull B binding, @NonNull T data, int position);
 
     /**
      * 在 Activity 的 onDestroy 中使用 {@link JKAdapter#releaseAllHolder(RecyclerView)} 方法 (super.onDestroy() 之前)

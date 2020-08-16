@@ -69,6 +69,7 @@ public abstract class JKAdapter<T, B extends ViewDataBinding> extends RecyclerVi
                 getLayoutId(viewType), parent, false);
         View view = binding.getRoot();
         JKViewHolder<T, B> mHolder = getHolder(view, viewType);
+        mHolder.setBinding(binding);
         mHolder.setOnItemClickListener(new JKViewHolder.OnViewClickListener() {
             @Override
             public void onViewClick(View view, int position) {
@@ -115,7 +116,7 @@ public abstract class JKAdapter<T, B extends ViewDataBinding> extends RecyclerVi
      *
      * @return 数据集合
      */
-    public List<T> getInfos() {
+    public List<T> getItems() {
         return mItems;
     }
 
