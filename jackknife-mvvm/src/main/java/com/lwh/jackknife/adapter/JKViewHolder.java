@@ -25,11 +25,9 @@ public abstract class JKViewHolder<T, B> extends RecyclerView.ViewHolder impleme
     protected final String TAG = this.getClass().getSimpleName();
     protected OnViewClickListener mOnViewClickListener = null;
     protected OnViewLongClickListener mOnViewLongClickListener = null;
-    protected B mBinding;
 
-    public JKViewHolder(View itemView, B binding) {
+    public JKViewHolder(View itemView) {
         super(itemView);
-        this.mBinding = binding;
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
     }
