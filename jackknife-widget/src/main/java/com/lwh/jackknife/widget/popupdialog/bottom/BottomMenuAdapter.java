@@ -104,19 +104,19 @@ public class BottomMenuAdapter extends BaseAdapter {
             drawable.setColor(mMenuBackground);
         }
         if (getCount() == 1) {
-            holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jknf_bottom_menu_bg);
+            holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jk_bottom_menu_bg);
         } else if (getCount() == 2) {
             if (position == 0) {
-                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jknf_bottom_menu_top);
+                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jk_bottom_menu_top);
             }
             if (position == 1) {
-                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jknf_bottom_menu_bottom);
+                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jk_bottom_menu_bottom);
             }
         } else {
             if (position == 0) {
-                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jknf_bottom_menu_top);
+                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jk_bottom_menu_top);
             } else if (position == (getCount() - 1)) {
-                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jknf_bottom_menu_bottom);
+                holder.tv_popupmenu_name.setBackgroundResource(R.drawable.jk_bottom_menu_bottom);
             }
         }
         return convertView;

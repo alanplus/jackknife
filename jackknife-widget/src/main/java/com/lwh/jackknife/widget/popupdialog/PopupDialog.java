@@ -183,7 +183,7 @@ public class PopupDialog {
 
         private Animation getPushInAnimation() {
             return (pushInAnim == null) ? AnimationUtils.loadAnimation(context,
-                    R.anim.jknf_bottom_in) : pushInAnim;
+                    R.anim.jk_bottom_in) : pushInAnim;
         }
 
         public Builder setPushInAnimation(int animResId) {
@@ -198,7 +198,7 @@ public class PopupDialog {
 
         private Animation getPushOutAnimation() {
             return (pushOutAnim == null) ? AnimationUtils.loadAnimation(context,
-                    R.anim.jknf_bottom_out) : pushOutAnim;
+                    R.anim.jk_bottom_out) : pushOutAnim;
         }
 
         public Builder setPushOutAnimation(int animResId) {

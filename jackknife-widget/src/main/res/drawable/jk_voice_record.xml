@@ -4,13 +4,13 @@
     android:oneshot="false">
 
     <item
-        android:drawable="@drawable/jknf_voice_record_01"
+        android:drawable="@drawable/jk_voice_record_01"
         android:duration="150" />
     <item
-        android:drawable="@drawable/jknf_voice_record_02"
+        android:drawable="@drawable/jk_voice_record_02"
         android:duration="150" />
     <item
-        android:drawable="@drawable/jknf_voice_record_03"
+        android:drawable="@drawable/jk_voice_record_03"
         android:duration="150" />
 
 </animation-list>

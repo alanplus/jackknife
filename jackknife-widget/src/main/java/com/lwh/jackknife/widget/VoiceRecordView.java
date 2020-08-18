@@ -18,7 +18,7 @@ public class VoiceRecordView extends AppCompatImageView {
 
     public VoiceRecordView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setImageDrawable(getResources().getDrawable(R.drawable.jknf_voice_record));
+        setImageDrawable(getResources().getDrawable(R.drawable.jk_voice_record));
     }
 
 

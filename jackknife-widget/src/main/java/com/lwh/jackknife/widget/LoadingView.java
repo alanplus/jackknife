@@ -23,7 +23,7 @@ public class LoadingView extends AppCompatImageView {
     }
 
     private void init() {
-        setImageResource(R.drawable.jknf_loading_view_rotate);
+        setImageResource(R.drawable.jk_loading_view_rotate);
         mFrameTime = 1000 / 12;
         mUpdateViewRunnable = new Runnable() {
             @Override

@@ -253,7 +253,7 @@ public class FloatingMagnetView extends FrameLayout {
         params.gravity = Gravity.BOTTOM | Gravity.END;
         mSectorView.setLayoutParams(params);
         contentView.addView(mSectorView);
-        mSectorInAnimation = AnimationUtils.loadAnimation(activity, R.anim.jknf_sector_in);
+        mSectorInAnimation = AnimationUtils.loadAnimation(activity, R.anim.jk_sector_in);
         mSectorInAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {

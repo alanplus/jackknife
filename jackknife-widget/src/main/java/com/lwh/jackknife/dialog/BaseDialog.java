@@ -161,10 +161,10 @@ public abstract class BaseDialog extends Dialog {
         bottomLayout.setOrientation(LinearLayout.HORIZONTAL);
         mPositiveButton = new Button(context);
         mPositiveButton.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
-        mPositiveButton.setBackgroundResource(R.drawable.jknf_base_dialog_bottom_button);
+        mPositiveButton.setBackgroundResource(R.drawable.jk_base_dialog_bottom_button);
         mNegativeButton = new Button(context);
         mNegativeButton.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT, 1));
-        mNegativeButton.setBackgroundResource(R.drawable.jknf_base_dialog_bottom_button);
+        mNegativeButton.setBackgroundResource(R.drawable.jk_base_dialog_bottom_button);
         if (mPositiveLabel != null && mPositiveLabel.length() > 0) {
             mPositiveButton.setText(mPositiveLabel);
             mPositiveButton.setTextColor(0xFF00CB7E);

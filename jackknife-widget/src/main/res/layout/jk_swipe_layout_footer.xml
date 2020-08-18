@@ -26,7 +26,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/jknf_swipe_layout_logo"/>
+                        android:src="@drawable/jk_swipe_layout_logo"/>
                 <TextView
                         android:id="@+id/loadstate_tv"
                         android:layout_width="wrap_content"

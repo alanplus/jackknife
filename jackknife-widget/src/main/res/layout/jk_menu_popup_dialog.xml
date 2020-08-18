@@ -22,7 +22,7 @@
             android:layout_marginBottom="12dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/jknf_popup_dialog_menu_single"
+            android:background="@drawable/jk_popup_dialog_menu_single"
             android:textSize="16sp"
             android:textColor="#389CFF"
             android:gravity="center"

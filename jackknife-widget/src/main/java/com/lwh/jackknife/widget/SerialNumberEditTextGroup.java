@@ -105,6 +105,6 @@ public class SerialNumberEditTextGroup extends AutoEditTextGroup<SerialNumberEdi
 
     @Override
     public void applyEditTextTheme(AutoEditText autoEditText) {
-        autoEditText.setBackgroundResource(R.drawable.jknf_edit_text_border);
+        autoEditText.setBackgroundResource(R.drawable.jk_edit_text_border);
     }
 }

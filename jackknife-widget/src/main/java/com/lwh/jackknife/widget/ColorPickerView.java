@@ -110,15 +110,15 @@ public class ColorPickerView extends View {
         mRightColors[2] = Color.BLACK;
         mBitmapPaint = new Paint();
         mLeftNormalBitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.jknf_plus);
+                R.drawable.jk_plus);
         mLeftPressedBitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.jknf_plus_pressed);
+                R.drawable.jk_plus_pressed);
         mLeftBitmapRadius = mLeftNormalBitmap.getWidth() / 2;
         mLeftSelectPoint = new PointF(mSplitWidth, mSplitWidth);
         mRightNormalBitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.jknf_minus);
+                R.drawable.jk_minus);
         mRightPressedBitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                R.drawable.jknf_minus_pressed);
+                R.drawable.jk_minus_pressed);
         mRightSelectPoint = new PointF(mSplitWidth, mSplitWidth);
         mRightBitmapHalfHeight = mRightNormalBitmap.getHeight() / 2;
         mRightBitmapQuarterWidth = mRightNormalBitmap.getWidth() / 4;

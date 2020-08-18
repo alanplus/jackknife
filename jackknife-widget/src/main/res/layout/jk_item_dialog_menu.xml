@@ -24,7 +24,7 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@drawable/jknf_bottom_menu_bg"
+            android:background="@drawable/jk_bottom_menu_bg"
             android:textSize="16sp"
             android:textColor="@android:color/holo_blue_light"
             android:gravity="center"

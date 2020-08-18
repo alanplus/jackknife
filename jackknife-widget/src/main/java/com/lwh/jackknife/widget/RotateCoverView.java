@@ -50,7 +50,7 @@ public class RotateCoverView extends CircleTextImageView {
         rotateAnimator.setRepeatCount(INFINITE);
         setBorderColorResource(R.color.black);
         setBorderWidth(5);
-        setImageResource(R.drawable.jknf_doramusic_logo);
+        setImageResource(R.drawable.jk_doramusic_logo);
         rotateAnimator.setupStartValues();
         rotateAnimator.start();
     }

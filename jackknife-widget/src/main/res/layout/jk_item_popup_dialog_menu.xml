@@ -14,6 +14,5 @@
             android:gravity="center"
             android:textSize="16sp"
             android:textColor="#389CFF"
-            android:background="@drawable/jknf_popup_dialog_menu_single"
-            android:descendantFocusability="blocksDescendants"/>
+            android:background="@drawable/jk_popup_dialog_menu_single"/>
 </LinearLayout>

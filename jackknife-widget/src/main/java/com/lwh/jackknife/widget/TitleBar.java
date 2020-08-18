@@ -74,7 +74,7 @@ public class TitleBar extends FrameLayout {
         }
         a.recycle();
         if (mBackIcon == null) {
-            mBackIcon = getContext().getResources().getDrawable(R.drawable.jknf_title_bar_back);
+            mBackIcon = getContext().getResources().getDrawable(R.drawable.jk_title_bar_back);
         }
         View.inflate(getContext(), R.layout.jk_title_bar, this);
         mTitleView = findViewById(R.id.tv_titlebar_title);
