@@ -73,6 +73,8 @@ latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)中绿�
   - ToastUtils：自动线程切换Toast
   - ThreadUtils：线程相关
   - DialogUtils：对话框
+  - StatusBarUtils：系统状态栏工具
+  - NavigationBarUtils：系统导航栏工具
 
 ##### 2、MVVM使用初阶
 
