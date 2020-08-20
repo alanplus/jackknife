@@ -9,13 +9,16 @@ JackKnife SDK官方文档 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.sv
 
 
 
-#### jackknife-mvvm
+#### jackknife-mvvm（Android开发架构）
+
 ##### [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
-#### jackknife-widget
+#### jackknife-widget（Android开发UI）
+
 ##### [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
-#### jackknife-av
+#### jackknife-av（Android开发NDK）
+
 ##### [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
 
@@ -34,6 +37,7 @@ dependencies {
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-av:latest'// jackknife音视频库
 }
 ```
+
 latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)中绿色区域内的版本号，如果为红色，表示最新版本构建失败，这种情况请查看release，找到可用版本使用。
 
 
@@ -211,4 +215,7 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 - 语音消息录制：VoiceRecordView
 
 
-star和fork https://github.com/JackWHLiu/jackknife
+
+如果你觉得有用的话，不妨**star**和**fork**一下！
+
+https://github.com/JackWHLiu/jackknife
