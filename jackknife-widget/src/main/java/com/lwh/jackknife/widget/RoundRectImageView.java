@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2020 The JackKnife Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.lwh.jackknife.widget;
 
 import android.content.Context;
@@ -32,12 +16,12 @@ import android.util.TypedValue;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.bumptech.glide.Glide;
+
 public class RoundRectImageView extends AppCompatImageView {
-    private Bitmap mBitmap;
-
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
-    private static final int COLORDRAWABLE_DIMENSION = 2;
-
+    private static final int COLOR_DRAWABLE_DIMENSION = 2;
+    private Bitmap mBitmap;
     private Paint mBitmapPaint;
     private BitmapShader mBitmapShader;
     private float mCornerRadius;
@@ -53,6 +37,11 @@ public class RoundRectImageView extends AppCompatImageView {
     public RoundRectImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttrs(context, attrs);
+        initPaints();
+    }
+
+    private void initPaints() {
+        mBitmapPaint = new Paint();
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
@@ -73,11 +62,12 @@ public class RoundRectImageView extends AppCompatImageView {
     }
 
     private void setUp() {
-        mBitmapPaint = new Paint();
-        mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        mBitmapPaint.setAntiAlias(true);
-        mBitmapPaint.setShader(mBitmapShader);
-        invalidate();
+        if (mBitmap != null) {
+            mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            mBitmapPaint.setAntiAlias(true);
+            mBitmapPaint.setShader(mBitmapShader);
+            invalidate();
+        }
     }
 
     @Override
@@ -88,15 +78,25 @@ public class RoundRectImageView extends AppCompatImageView {
     @Override
     public void setImageResource(int resId) {
         super.setImageResource(resId);
-        mBitmap = getBitmapFromDrawable(getDrawable());
-        setUp();
+        Drawable drawable = getDrawable();
+        if (drawable != null) {
+            mBitmap = getBitmapFromDrawable(drawable);
+            setUp();
+        }
+    }
+
+    public void loadUrl(String url) {
+        Glide.with(this).load(url).into(this);
     }
 
     @Override
     public void setImageURI(Uri uri) {
         super.setImageURI(uri);
-        mBitmap = uri != null ? getBitmapFromDrawable(getDrawable()) : null;
-        setUp();
+        Drawable drawable = getDrawable();
+        if (drawable != null) {
+            mBitmap = uri != null ? getBitmapFromDrawable(drawable) : null;
+            setUp();
+        }
     }
 
     @Override
@@ -117,7 +117,7 @@ public class RoundRectImageView extends AppCompatImageView {
             Bitmap bitmap;
 
             if (drawable instanceof ColorDrawable) {
-                bitmap = Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG);
+                bitmap = Bitmap.createBitmap(COLOR_DRAWABLE_DIMENSION, COLOR_DRAWABLE_DIMENSION, BITMAP_CONFIG);
             } else {
                 bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), BITMAP_CONFIG);
             }
