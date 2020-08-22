@@ -23,14 +23,14 @@ JackKnife SDK官方文档 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.sv
 
 
 #### 一、环境配置
-
 ```groovy
+//添加以下代码到项目的build.gradle
 allprojects {
 	repositories {
 		maven { url "https://jitpack.io" }
 	}
 }
-
+//添加以下代码到app模块的build.gradle
 dependencies {
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:latest'//jackknife MVVM库
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:latest' //jackknife自定义控件库
