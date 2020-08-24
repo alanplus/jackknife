@@ -94,7 +94,7 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
     }
 
     protected void onShowStatusBar() {
-        StatusBarUtils.setStatusBarColorRes(this, Color.BLACK);
+        StatusBarUtils.setStatusBarColor(this, Color.BLACK);
     }
 
     protected String[] requirePermissions() {

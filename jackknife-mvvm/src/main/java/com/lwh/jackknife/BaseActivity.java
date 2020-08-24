@@ -94,7 +94,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
     }
 
     protected void onShowStatusBar() {
-        StatusBarUtils.setStatusBarColorRes(this, Color.BLACK);
+        StatusBarUtils.setStatusBarColor(this, Color.BLACK);
     }
 
     protected String[] requirePermissions() {
