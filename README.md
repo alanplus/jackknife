@@ -1,4 +1,4 @@
-JackKnife SDK官方文档 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)
+JackKnife SDK官方文档 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a21d48d466644cdbcb57a1889abea5b)](https://www.codacy.com/app/JackWHLiu/jackknife?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=JackWHLiu/jackknife&amp;utm_campaign=Badge_Grade)
 --------------------------------
 
  <a href="http://www.apache.org/licenses/LICENSE-2.0">    <img src="http://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square" alt="License"/>  <a href="https://www.jianshu.com/u/1d0c0bc634db">
@@ -23,14 +23,14 @@ JackKnife SDK官方文档 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.sv
 
 
 #### 一、环境配置
-
 ```groovy
+//添加以下代码到项目的build.gradle
 allprojects {
 	repositories {
 		maven { url "https://jitpack.io" }
 	}
 }
-
+//添加以下代码到app模块的build.gradle
 dependencies {
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-mvvm:latest'//jackknife MVVM库
 	implementation 'com.github.JackWHLiu.jackknife:jackknife-widget:latest' //jackknife自定义控件库
