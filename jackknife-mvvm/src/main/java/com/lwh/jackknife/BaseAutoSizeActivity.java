@@ -18,6 +18,7 @@ package com.lwh.jackknife;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ import com.lwh.jackknife.net.NetworkStateReceiver;
 import com.lwh.jackknife.permission.Action;
 import com.lwh.jackknife.permission.PermissionManager;
 import com.lwh.jackknife.util.NetworkUtils;
+import com.lwh.jackknife.util.StatusBarUtils;
 
 import java.util.List;
 
@@ -54,6 +56,7 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutId());
+        onShowStatusBar();
         mNetworkChangeObserver = new NetworkChangeObserver() {
             @Override
             public void onNetworkConnect(NetworkUtils.ApnType type) {
@@ -88,6 +91,10 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
         } else {
             initData(savedInstanceState);
         }
+    }
+
+    protected void onShowStatusBar() {
+        StatusBarUtils.setStatusBarColorRes(this, Color.BLACK);
     }
 
     protected String[] requirePermissions() {

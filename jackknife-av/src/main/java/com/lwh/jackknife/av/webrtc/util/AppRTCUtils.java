@@ -62,7 +62,10 @@ public final class AppRTCUtils {
                 if (videoCapturer != null) {
                     return videoCapturer;
                 }
-            } else {
+            }
+        }
+        for (String deviceName : deviceNames) {
+            if (!enumerator.isFrontFacing(deviceName)) {
                 Logging.d(LOG_TAG, "Looking for other cameras.");
                 Logging.d(LOG_TAG, "Creating other camera capturer.");
                 VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);

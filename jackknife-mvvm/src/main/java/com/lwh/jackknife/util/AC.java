@@ -41,8 +41,8 @@ public final class AC {
         return sInstance;
     }
 
-    public <T> T[] toA(List<T> lists, T[] newArrays) {
-        return lists.toArray(newArrays);
+    public <T> T[] toA(List<T> lists, T[] newArray) {
+        return lists.toArray(newArray);
     }
 
     /**
