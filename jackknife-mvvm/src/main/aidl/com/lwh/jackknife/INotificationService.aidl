@@ -1,5 +1,5 @@
 // INotificationService.aidl
-package dora.bugskiller;
+package com.lwh.jackknife;
 
 interface INotificationService {
 

@@ -23,7 +23,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import dora.bugskiller.INotificationService;
+import com.lwh.jackknife.INotificationService;
 
 /**
  * It is used to write log information to the notification bar.

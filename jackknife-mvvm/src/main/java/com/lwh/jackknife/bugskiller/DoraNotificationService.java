@@ -29,9 +29,8 @@ import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
+import com.lwh.jackknife.INotificationService;
 import com.lwh.jackknife.R;
-
-import dora.bugskiller.INotificationService;
 
 /**
  * Writes log information to the notification bar.

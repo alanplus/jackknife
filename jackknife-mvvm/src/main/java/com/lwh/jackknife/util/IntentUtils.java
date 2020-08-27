@@ -42,54 +42,54 @@ public final class IntentUtils {
         return defaultValue;
     }
 
-    public static byte getByteExtra(Intent intent, String name, byte defaultValue) {
+    public static byte getByteExtra(Intent intent, String name) {
         if (intent != null) {
             if (!hasExtra(intent, name)) {
-                return defaultValue;
+                return 0;
             }
-            return intent.getByteExtra(name, defaultValue);
+            return intent.getByteExtra(name, (byte)0);
         }
-        return defaultValue;
+        return 0;
     }
 
-    public static short getShortExtra(Intent intent, String name, short defaultValue) {
+    public static short getShortExtra(Intent intent, String name) {
         if (intent != null) {
             if (!hasExtra(intent, name)) {
-                return defaultValue;
+                return 0;
             }
-            return intent.getShortExtra(name, defaultValue);
+            return intent.getShortExtra(name, (short) 0);
         }
-        return defaultValue;
+        return 0;
     }
 
-    public static char getCharExtra(Intent intent, String name, char defaultValue) {
+    public static char getCharExtra(Intent intent, String name) {
         if (intent != null) {
             if (!hasExtra(intent, name)) {
-                return defaultValue;
+                return '\n';
             }
-            return intent.getCharExtra(name, defaultValue);
+            return intent.getCharExtra(name, '\n');
         }
-        return defaultValue;
+        return '\n';
     }
 
-    public static int getIntExtra(Intent intent, String name, int defaultValue) {
+    public static int getIntExtra(Intent intent, String name) {
         if (intent != null) {
             if (!hasExtra(intent, name)) {
-                return defaultValue;
+                return 0;
             }
-            return intent.getIntExtra(name, defaultValue);
+            return intent.getIntExtra(name, 0);
         }
-        return defaultValue;
+        return 0;
     }
 
-    public long getLongExtra(Intent intent, String name, long defaultValue) {
+    public long getLongExtra(Intent intent, String name) {
         if (intent != null) {
             if (!hasExtra(intent, name)) {
-                return defaultValue;
+                return 0;
             }
-            return intent.getLongExtra(name, defaultValue);
+            return intent.getLongExtra(name, 0);
         }
-        return defaultValue;
+        return 0;
     }
 
     public static float getFloatExtra(Intent intent, String name, float defaultValue) {
@@ -102,14 +102,14 @@ public final class IntentUtils {
         return defaultValue;
     }
 
-    public static double getDoubleExtra(Intent intent, String name, double defaultValue) {
+    public static double getDoubleExtra(Intent intent, String name) {
         if (intent != null) {
             if (!hasExtra(intent, name)) {
-                return defaultValue;
+                return 0;
             }
-            return intent.getDoubleExtra(name, defaultValue);
+            return intent.getDoubleExtra(name, 0);
         }
-        return defaultValue;
+        return 0;
     }
 
     public static String getStringExtra(Intent intent, String name) {

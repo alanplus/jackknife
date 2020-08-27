@@ -91,7 +91,7 @@ public final class Math implements Number {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < src.length; i++) {
             int value = src[i] & 0xFF;
-            String H = Math.D2H(value);
+            String H = D2H(value);
             if (H.length() < 2) {
                 buffer.append(0);
             }
