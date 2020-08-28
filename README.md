@@ -82,6 +82,7 @@ latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)中绿�
   - DialogUtils：对话框
   - StatusBarUtils：系统状态栏工具
   - NavigationBarUtils：系统导航栏工具
+- 崩溃信息收集（仅支持Java项目）
 
 ##### 2、MVVM使用初阶
 
@@ -145,7 +146,7 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 
 ##### 5、表升级
 
-> 从4.3.5版本开始支持数据库表字段重命名，更新OrmTable结构后，务必在初始化配置的时候提升db版本。
+> 支持数据库表字段重命名，更新OrmTable结构后，务必在初始化配置的时候提升db版本。
 
 ##### 6、常用API
 
