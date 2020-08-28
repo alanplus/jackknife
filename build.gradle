@@ -18,8 +18,8 @@ ext {
     min_sdk = 14
     target_sdk = 29
     build_tools_version = '29.0.3'
-    release_version_code = 346
-    release_version_name = '4.10.31'
+    release_version_code = 347
+    release_version_name = '4.10.32'
 }
 
 buildscript {
@@ -35,7 +35,7 @@ buildscript {
         apt_version = "1.8"
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:${this.gradle_version}"
+        classpath "com.android.tools.build:gradle:4.0.0"
         classpath "com.github.dcendents:android-maven-gradle-plugin:${this.gradle_plugin_version}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${this.kotlin_version}"
         classpath "com.neenbedankt.gradle.plugins:android-apt:${this.apt_version}"

@@ -50,6 +50,21 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment i
         initData(savedInstanceState);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        onGetExtras(getArguments());
+    }
+
+    /**
+     * 由于fragment的构造方法不能传参，所以通过调用{@link Fragment#setArguments(Bundle)}传参后，可以在
+     * {@link #onGetExtras(Bundle)}中拿到这些Extras。
+     *
+     * @param bundle
+     */
+    protected void onGetExtras(@Nullable Bundle bundle) {
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

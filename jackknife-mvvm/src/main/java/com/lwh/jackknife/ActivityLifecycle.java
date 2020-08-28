@@ -41,6 +41,7 @@ public class ActivityLifecycle implements Application.ActivityLifecycleCallbacks
             if (activityDelegate == null) {
                 Cache<String, Object> cache = ((ActivityCache) activity).loadCache();
                 activityDelegate = new ActivityDelegateImpl(activity);
+                cache.put(ActivityDelegate.CACHE_KEY, activityDelegate);
             }
             activityDelegate.onCreate(savedInstanceState);
         }

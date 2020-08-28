@@ -31,50 +31,8 @@ import androidx.fragment.app.Fragment;
  */
 public interface CacheType {
 
-    int CACHE_SERVICE_CACHE_TYPE_ID = 1;
-    int CONFIG_CACHE_TYPE_ID = 2;
-    int ACTIVITY_CACHE_TYPE_ID = 3;
-    int FRAGMENT_CACHE_TYPE_ID = 4;
-
-    CacheType CACHE_SERVICE_CACHE = new CacheType() {
-        private static final int MAX_SIZE = 150;
-        private static final float MAX_SIZE_MULTIPLIER = 0.002f;
-
-        @Override
-        public int getCacheTypeId() {
-            return CACHE_SERVICE_CACHE_TYPE_ID;
-        }
-
-        @Override
-        public int calculateCacheSize(Context context) {
-            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            int targetMemoryCacheSize = (int) (activityManager.getMemoryClass() * MAX_SIZE_MULTIPLIER * 1024);
-            if (targetMemoryCacheSize >= MAX_SIZE) {
-                return MAX_SIZE;
-            }
-            return targetMemoryCacheSize;
-        }
-    };
-
-    CacheType CONFIG_CACHE = new CacheType() {
-        private static final int MAX_SIZE = 500;
-        private static final float MAX_SIZE_MULTIPLIER = 0.005f;
-
-        @Override
-        public int getCacheTypeId() {
-            return CONFIG_CACHE_TYPE_ID;
-        }
-
-        @Override
-        public int calculateCacheSize(Context context) {
-            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            int targetMemoryCacheSize = (int) (activityManager.getMemoryClass() * MAX_SIZE_MULTIPLIER * 1024);
-            if (targetMemoryCacheSize >= MAX_SIZE) {
-                return MAX_SIZE;
-            }
-            return targetMemoryCacheSize;
-        }
-    };
+    int ACTIVITY_CACHE_TYPE_ID = 0;
+    int FRAGMENT_CACHE_TYPE_ID = 1;
 
     /**
      * {@link AppCompatActivity} 中存储数据的容器

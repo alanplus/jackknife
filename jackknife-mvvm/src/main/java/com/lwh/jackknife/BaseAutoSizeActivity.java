@@ -102,33 +102,38 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        onPutExtras(getIntent());
-    }
-
-    @Override
     protected void onDestroy() {
-        //横竖屏切换或配置改变时, Activity 会被重新创建实例, 但 Bundle 中的基础数据会被保存下来,移除该数据是为了保证重新创建的实例可以正常工作
-        onRemoveExtras(getIntent());
         NetworkStateReceiver.unregisterObserver(mNetworkChangeObserver);
         super.onDestroy();
     }
 
-    protected void onPutExtras(Intent intent) {
-    }
-
-    protected void onRemoveExtras(Intent intent) {
-    }
-
+    /**
+     * 网络已连接，需要使用到{@link com.lwh.jackknife.BaseApplication}，才会有回调。
+     *
+     * @param type
+     */
     protected void onNetworkConnected(NetworkUtils.ApnType type) {
     }
 
+    /**
+     * 网络连接已断开，需要使用到{@link com.lwh.jackknife.BaseApplication}，才会有回调。
+     *
+     * @param type
+     */
     protected void onNetworkDisconnected() {
     }
 
     protected abstract int getLayoutId();
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Bundle bundle = intent.getExtras();
+        onGetExtras(bundle, intent);
+    }
+
+    protected void onGetExtras(@Nullable Bundle bundle, Intent intent) {
+    }
     @Override
     public Cache.Factory cacheFactory() {
         return new Cache.Factory() {
@@ -141,7 +146,7 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
 
     @NonNull
     @Override
-    public Cache<String, Object> loadCache() {
+    public synchronized Cache<String, Object> loadCache() {
         if (mCache == null) {
             mCache = cacheFactory().build(CacheType.ACTIVITY_CACHE, this);
         }

@@ -40,6 +40,17 @@ public final class ReflectionUtils {
         }
     }
 
+    public static boolean findClass(String className) {
+        boolean hasClass;
+        try {
+            Class.forName(className);
+            hasClass = true;
+        } catch (ClassNotFoundException e) {
+            hasClass = false;
+        }
+        return hasClass;
+    }
+
     public static Object newInstance(String className) {
         Class<?> clazz = newClass(className);
         if (clazz != null) {
