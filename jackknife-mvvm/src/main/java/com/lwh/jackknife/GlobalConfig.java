@@ -25,8 +25,6 @@ import java.util.List;
 
 public interface GlobalConfig {
 
-    String CACHE_KEY = "GlobalConfig";
-
     void injectApplicationLifecycle(Context context, List<ApplicationLifecycleCallbacks> lifecycles);
 
     void injectActivityLifecycle(Context context, List<Application.ActivityLifecycleCallbacks> lifecycles);

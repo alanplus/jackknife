@@ -146,7 +146,7 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 
 ##### 5、表升级
 
-> 支持数据库表字段重命名，更新OrmTable结构后，务必在初始化配置的时候提升db版本。
+> 支持数据库表字段重命名，更新OrmTable结构后，务必在初始化配置的时候提升db版本，原数据不会丢失，但是使用内置查询API会查询不到，把字段名命名回来则又可以查询到。（谨慎使用）
 
 ##### 6、常用API
 

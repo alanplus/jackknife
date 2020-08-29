@@ -69,6 +69,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
             }
         };
         NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
+        onNewIntent(getIntent());
         if (requirePermissions().length > 0) {
             PermissionManager.with(this)
                     .runtime()

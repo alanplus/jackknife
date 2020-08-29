@@ -69,6 +69,7 @@ public abstract class BaseSkinActivity<T extends ViewDataBinding> extends SkinAc
             }
         };
         NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
+        onNewIntent(getIntent());
         if (requirePermissions().length > 0) {
             PermissionManager.with(this)
                     .runtime()

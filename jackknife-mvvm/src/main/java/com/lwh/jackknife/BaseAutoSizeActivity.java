@@ -69,6 +69,7 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
             }
         };
         NetworkStateReceiver.registerObserver(mNetworkChangeObserver);
+        onNewIntent(getIntent());
         if (requirePermissions().length > 0) {
             PermissionManager.with(this)
                     .runtime()
