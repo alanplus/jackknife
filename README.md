@@ -84,7 +84,7 @@ latest替换成 ![Release](https://jitpack.io/v/JackWHLiu/jackknife.svg)中绿�
   - NavigationBarUtils：系统导航栏工具
 - 崩溃信息收集（仅支持Java项目）
 
-##### 2、MVVM使用初阶
+##### 2、MVVM使用示例
 
 Kotlin项目：https://github.com/JackWHLiu/jackknife_kotlin_samples （持续随版本更新的前沿案例）
 
