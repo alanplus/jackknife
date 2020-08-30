@@ -40,7 +40,7 @@ public class CaptureQualityController implements SeekBar.OnSeekBarChangeListener
                     new CaptureFormat(640, 480, 0, 30000), new CaptureFormat(480, 360, 0, 30000),
                     new CaptureFormat(320, 240, 0, 30000), new CaptureFormat(256, 144, 0, 30000));
     private TextView captureFormatText;
-    private OnCallEvents callEvents;
+    private OnVideoCallEvents callEvents;
     private int width = 0;
     private int height = 0;
     private int framerate = 0;
@@ -63,7 +63,7 @@ public class CaptureQualityController implements SeekBar.OnSeekBarChangeListener
     };
 
     public CaptureQualityController(
-            TextView captureFormatText, OnCallEvents callEvents) {
+            TextView captureFormatText, OnVideoCallEvents callEvents) {
         this.captureFormatText = captureFormatText;
         this.callEvents = callEvents;
     }

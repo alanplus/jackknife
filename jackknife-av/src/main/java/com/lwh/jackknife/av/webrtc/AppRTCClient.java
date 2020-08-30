@@ -114,10 +114,10 @@ public interface AppRTCClient {
         public final List<PeerConnection.IceServer> iceServers;
         public final boolean initiator;
         public final String clientId;
-        public String wssUrl;
         public final String wssPostUrl;
         public final SessionDescription offerSdp;
         public final List<IceCandidate> iceCandidates;
+        public String wssUrl;
 
         public SignalingParameters(List<PeerConnection.IceServer> iceServers, boolean initiator,
                                    String clientId, String wssUrl, String wssPostUrl, SessionDescription offerSdp,

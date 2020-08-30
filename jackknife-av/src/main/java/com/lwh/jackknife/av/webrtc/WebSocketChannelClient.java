@@ -1,3 +1,5 @@
+package com.lwh.jackknife.av.webrtc;
+
 /*
  * Copyright (C) 2020 The JackKnife Open Source Project
  *
@@ -13,8 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.lwh.jackknife.av.webrtc;
 
 import android.os.Handler;
 import android.util.Log;

@@ -1277,4 +1277,8 @@ public class PeerConnectionClient {
             reportError("setSDP error: " + error);
         }
     }
+
+    public PeerConnection getPeerConnection() {
+        return peerConnection;
+    }
 }
