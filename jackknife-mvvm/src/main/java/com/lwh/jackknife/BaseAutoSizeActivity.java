@@ -133,8 +133,9 @@ public abstract class BaseAutoSizeActivity<T extends ViewDataBinding> extends Au
         onGetExtras(bundle, intent);
     }
 
-    protected void onGetExtras(@Nullable Bundle bundle, Intent intent) {
+    protected void onGetExtras(@Nullable Bundle bundle, @NonNull Intent intent) {
     }
+
     @Override
     public Cache.Factory cacheFactory() {
         return new Cache.Factory() {

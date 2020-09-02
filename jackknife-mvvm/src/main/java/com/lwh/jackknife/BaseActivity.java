@@ -133,7 +133,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         onGetExtras(bundle, intent);
     }
 
-    protected void onGetExtras(@Nullable Bundle bundle, Intent intent) {
+    protected void onGetExtras(@Nullable Bundle bundle, @NonNull Intent intent) {
     }
 
     @Override

@@ -111,7 +111,7 @@ public abstract class BaseSkinActivity<T extends ViewDataBinding> extends SkinAc
         onGetExtras(bundle, intent);
     }
 
-    protected void onGetExtras(@Nullable Bundle bundle, Intent intent) {
+    protected void onGetExtras(@Nullable Bundle bundle, @NonNull Intent intent) {
     }
 
     @Override
