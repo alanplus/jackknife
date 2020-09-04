@@ -92,7 +92,7 @@ Java项目：https://github.com/JackWHLiu/jackknife_java_samples （只提供基
 
 
 
-##### 数据库ORM模块（jackknife-orm），自4.10.0开始并入jackknife-mvvm
+##### 数据库ORM模块（jackknife-orm）
 
 ##### 1、初始化配置
 
