@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.webrtc;
+package com.lwh.jackknife.av.webrtc.voip;
 
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
-import com.lwh.jackknife.av.webrtc.interfaces.IWebRtcSession;
-import com.lwh.jackknife.av.webrtc.mode.IWebRtcMode;
-import com.lwh.jackknife.av.webrtc.parameters.RoomParameters;
+import com.lwh.jackknife.av.webrtc.voip.parameters.RoomParameters;
+import com.lwh.jackknife.av.webrtc.util.RtcTimer;
 
 import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
@@ -30,23 +29,33 @@ import org.webrtc.SessionDescription;
 /**
  * 音视频通话中的会话封装，使用具体的通话模式来代理具体的功能，如果模式改变，同一功能的具体行为也随之改变。
  */
-public class WebRtcSession extends WebRtcBase {
+public class VoIPSession extends VoIPBase {
 
-    private static String TAG = "WebRtcSession";
+    private static String TAG = "VoIPSession";
+    /**
+     * 每隔0.5秒刷新一次通话时间，比每隔1秒刷新更精准，但又不损耗太多性能，0.5秒是较优的做法，一般用于音乐播放器
+     * 播放进度和播放时间的刷新。
+     */
+    private RtcTimer mTimer;
+    private long mStartTimedTimeMillis;
+    private boolean mAlive;
 
-    public WebRtcSession(IWebRtcMode mode) {
+    public long getStartedTimeMillis() {
+        return mStartTimedTimeMillis;
+    }
+
+    public VoIPSession(IVoIPMode mode) {
         super(mode, false);
         setWebRtcBase(this);
     }
 
-    @Override
-    public long getStartedTimeMillis() {
-        return mMode.getStartedTimeMillis();
+    public boolean isAlive() {
+        return mAlive;
     }
 
     @Override
-    public void setStartedTimeMillis(long timeMillis) {
-        mMode.setStartedTimeMillis(timeMillis);
+    public void onSessionCreated(long startedTimeMillis) {
+        mAlive = true;
     }
 
     @Override
@@ -55,13 +64,13 @@ public class WebRtcSession extends WebRtcBase {
     }
 
     @Override
-    public void onSessionCreated(long startedTimeMillis) {
-        // not support
+    public void onSessionClosed() {
+        mAlive = false;
     }
 
     @Override
-    public void onSessionClosed() {
-        // not support
+    public void sendHangUp() {
+        mMode.sendHangUp();
     }
 
     @Override
@@ -75,7 +84,7 @@ public class WebRtcSession extends WebRtcBase {
     }
 
     @Override
-    public void changeTo(IWebRtcMode mode) {
+    public void changeTo(IVoIPMode mode) {
         if (mode.getCurrentModeName().equals(mMode.getCurrentModeName())) {
             return;
         }
@@ -102,7 +111,7 @@ public class WebRtcSession extends WebRtcBase {
     }
 
     @Override
-    public void setWebRtcBase(WebRtcBase base) {
+    public void setWebRtcBase(VoIPBase base) {
         mMode.setWebRtcBase(base);
     }
 
@@ -132,8 +141,9 @@ public class WebRtcSession extends WebRtcBase {
     }
 
     @Override
-    public void sendHangUp() {
-        mMode.sendHangUp();
+    public VoIPSession createSession(OnSessionTimeUpdateListener listener) {
+        Log.w(TAG, "已处于通话中");
+        return this;
     }
 
     @Override
@@ -142,14 +152,17 @@ public class WebRtcSession extends WebRtcBase {
     }
 
     @Override
-    public IWebRtcSession createSession() {
-        Log.w(TAG, "已处于通话中");
-        return this;
-    }
-
-    @Override
     public void closeSession() {
         // not support
+    }
+
+    /**
+     * 开始计时，计时器每隔0.5秒会发送一次REFRESH_PROGRESS_EVENT给handler。
+     */
+    void startTimer(Handler handler) {
+        mStartTimedTimeMillis = System.currentTimeMillis();
+        mTimer = new RtcTimer(handler);
+        mTimer.startTimer();
     }
 
     @Override
@@ -162,14 +175,17 @@ public class WebRtcSession extends WebRtcBase {
         mMode.sendEndMsg(msg);
     }
 
-    @Override
-    public void startTimer(Handler handler) {
-        mMode.startTimer(handler);
+    /**
+     * 停止计时，调用stop()方法前务必先停止计时器，否则会报空指针。
+     */
+    void stopTimer() {
+        if (mTimer != null) {
+            mTimer.stopTimer();
+        }
     }
 
-    @Override
-    public void stopTimer() {
-        mMode.stopTimer();
+    public interface OnSessionTimeUpdateListener {
+        void updateTime(String formattedTime);
     }
 
     @Override

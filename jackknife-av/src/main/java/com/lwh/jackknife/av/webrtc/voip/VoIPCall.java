@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.webrtc;
+package com.lwh.jackknife.av.webrtc.voip;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
-import com.lwh.jackknife.av.webrtc.interfaces.IWebRtcCall;
-import com.lwh.jackknife.av.webrtc.interfaces.IWebRtcSession;
-import com.lwh.jackknife.av.webrtc.mode.IWebRtcMode;
-import com.lwh.jackknife.av.webrtc.parameters.RoomParameters;
+import com.lwh.jackknife.av.webrtc.voip.parameters.RoomParameters;
 
 import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
@@ -31,29 +27,30 @@ import org.webrtc.SessionDescription;
 /**
  * 封装了呼叫之后和接听之前的过程，使用具体的通话模式来代理具体的功能，如果模式改变，同一功能的具体行为也随之改变。
  */
-public class WebRtcCall extends WebRtcBase {
+public class VoIPCall extends VoIPBase {
 
-    private static final String TAG = "WebRtcCall";
+    private static String TAG = "VoIPCall";
 
-    private static WebRtcCall mInstance;
+    private static VoIPCall mInstance;
 
-    private int mStatus;
+    private static int mStatus;
+    private VoIPSession mSession;
+    private long mStartedTimeMillis;
 
-    /**
-     * 在SESSION生命周期可以获取到这个对象。
-     */
-    private IWebRtcSession mSession;
-
-    private WebRtcCall(IWebRtcMode mode, boolean autoConnect) {
+    private VoIPCall(IVoIPMode mode, boolean autoConnect) {
         super(mode, autoConnect);
         setWebRtcBase(this);
         mStatus = CREATED;
     }
 
-    private WebRtcCall(IWebRtcMode mode) {
+    private VoIPCall(IVoIPMode mode) {
         super(mode);
         setWebRtcBase(this);
         mStatus = CREATED;
+    }
+
+    public static boolean isSessionStatus() {
+        return mStatus == SESSION;
     }
 
     /**
@@ -61,7 +58,7 @@ public class WebRtcCall extends WebRtcBase {
      *
      * @return
      */
-    public static synchronized WebRtcCall getInstance() {
+    public static synchronized VoIPCall getInstance() {
         //如果为空，则会报空指针，自行保证在stop前调用
         return mInstance;
     }
@@ -72,38 +69,30 @@ public class WebRtcCall extends WebRtcBase {
      * @param mode
      * @return
      */
-    public static IWebRtcCall create(IWebRtcMode mode) {
+    public static IVoIPCall create(IVoIPMode mode) {
         if (mInstance == null) {
-            synchronized (WebRtcCall.class) {
-                if (mInstance == null) {
-                    mInstance = new WebRtcCall(mode);
-                }
+            synchronized (VoIPCall.class) {
+                if (mInstance == null) mInstance = new VoIPCall(mode);
             }
         }
         return mInstance;
     }
 
-    public static IWebRtcCall create(IWebRtcMode mode, boolean autoConnect) {
+    public static IVoIPCall create(IVoIPMode mode, boolean autoConnect) {
         if (mInstance == null) {
-            synchronized (WebRtcCall.class) {
-                if (mInstance == null) mInstance = new WebRtcCall(mode, autoConnect);
+            synchronized (VoIPCall.class) {
+                if (mInstance == null) mInstance = new VoIPCall(mode, autoConnect);
             }
         }
         return mInstance;
     }
 
-    /**
-     * 结束通话，每次通话周期完成后必须调用stop()方法。
-     */
-    @Override
-    public void stop() {
-        super.stop();
-        mInstance = null;
-        mStatus = DESTROYED;
+    public static int currentStatus() {
+        return mStatus;
     }
 
     @Override
-    public void changeTo(IWebRtcMode mode) {
+    public void changeTo(IVoIPMode mode) {
         if (mode.getCurrentModeName().equals(mMode.getCurrentModeName())) {
             return;
         }
@@ -130,7 +119,7 @@ public class WebRtcCall extends WebRtcBase {
     }
 
     @Override
-    public void setWebRtcBase(WebRtcBase base) {
+    public void setWebRtcBase(VoIPBase base) {
         mMode.setWebRtcBase(base);
     }
 
@@ -159,6 +148,16 @@ public class WebRtcCall extends WebRtcBase {
         mMode.sendCandidate(candidate);
     }
 
+    /**
+     * 结束通话，每次通话后必须调用stop()方法，且stop应在closeSession之后。
+     */
+    @Override
+    public void stop() {
+        super.stop();
+        mInstance = null;
+        mStatus = DESTROYED;
+    }
+
     @Override
     public void sendHangUp() {
         mMode.sendHangUp();
@@ -173,39 +172,40 @@ public class WebRtcCall extends WebRtcBase {
     @Override
     public void call(boolean isInitiator, RoomParameters parameters) {
         mMode.call(isInitiator, parameters);
+        mStartedTimeMillis = System.currentTimeMillis();
         mStatus = PENDING;
     }
 
+    public VoIPSession createSession() {
+        return createSession(null);
+    }
+
     @Override
-    public IWebRtcSession createSession() {
-        return mSession = mMode.createSession();
+    public VoIPSession createSession(VoIPSession.OnSessionTimeUpdateListener listener) {
+        return mSession = mMode.createSession(listener);
     }
 
     @Override
     public void closeSession() {
-        mMode.closeSession();
-        mStatus = HANG_UP;
-        onSessionClosed();
+        if (mStatus == SESSION) {
+            mSession.onSessionClosed();
+            mMode.closeSession();
+            mStatus = HANG_UP;
+            mSession.stopTimer();
+            onSessionClosed();
+        }
     }
 
     @Override
     public void reminderMayNotCreateSession(long waitedTimeMillis) {
-        mMode.reminderMayNotCreateSession(waitedTimeMillis);
+        if (mStatus == PENDING) {
+            mMode.reminderMayNotCreateSession(waitedTimeMillis);
+        }
     }
 
     @Override
     public void sendEndMsg(String msg) {
-        mMode.sendEndMsg(msg);
-    }
-
-    @Override
-    public void startTimer(Handler handler) {
-        //not support
-    }
-
-    @Override
-    public void stopTimer() {
-        //not support
+        // not support
     }
 
     @Override
@@ -216,29 +216,14 @@ public class WebRtcCall extends WebRtcBase {
     }
 
     @Override
-    public long getStartedTimeMillis() {
-        return mMode.getStartedTimeMillis();
-    }
-
-    @Override
-    public void setStartedTimeMillis(long timeMillis) {
-        mMode.setStartedTimeMillis(timeMillis);
-    }
-
-    @Override
     public void tickRtcSpentTime(String formattedTime) {
         //not support
     }
 
     @Override
     public void onSessionCreated(long startedTimeMillis) {
-        setStartedTimeMillis(startedTimeMillis);
+        mStartedTimeMillis = startedTimeMillis;
         mStatus = SESSION;
-    }
-
-    @Override
-    public void onSessionClosed() {
-        mSession = null;
     }
 
     @Override
@@ -251,11 +236,16 @@ public class WebRtcCall extends WebRtcBase {
         //not support
     }
 
-    public int getStatus() {
-        return mStatus;
+    @Override
+    public void onSessionClosed() {
+        mSession = null;
     }
 
-    public IWebRtcSession getSession() {
+    public long getStartedTimeMillis() {
+        return mStartedTimeMillis;
+    }
+
+    public VoIPSession getSession() {
         return mSession;
     }
 }

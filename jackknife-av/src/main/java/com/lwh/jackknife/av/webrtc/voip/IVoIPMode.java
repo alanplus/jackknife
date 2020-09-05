@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.webrtc.mode;
+package com.lwh.jackknife.av.webrtc.voip;
 
 import android.content.Context;
-
-import com.lwh.jackknife.av.webrtc.WebRtcBase;
-import com.lwh.jackknife.av.webrtc.interfaces.IWebRtcCall;
-import com.lwh.jackknife.av.webrtc.interfaces.IWebRtcSession;
 
 /**
  * 如语音通话模式、视频通话模式。
  */
-public interface IWebRtcMode extends IWebRtcCall, IWebRtcSession {
+public interface IVoIPMode extends IVoIPCall, IVoIPSession {
 
     /**
      * 刚被创建状态。
@@ -57,7 +53,7 @@ public interface IWebRtcMode extends IWebRtcCall, IWebRtcSession {
      *
      * @param mode
      */
-    void changeTo(IWebRtcMode mode);
+    void changeTo(IVoIPMode mode);
 
     /**
      * 获取当前模式名称。
@@ -85,5 +81,5 @@ public interface IWebRtcMode extends IWebRtcCall, IWebRtcSession {
      *
      * @param base
      */
-    void setWebRtcBase(WebRtcBase base);
+    void setWebRtcBase(VoIPBase base);
 }

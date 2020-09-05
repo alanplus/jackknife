@@ -14,28 +14,12 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.webrtc.interfaces;
-
-import android.os.Handler;
+package com.lwh.jackknife.av.webrtc.voip;
 
 /**
  * 抽象接通中的WebRTC会话。
  */
-public interface IWebRtcSession {
-
-    /**
-     * 获取会话开始的时间点。
-     *
-     * @return
-     */
-    long getStartedTimeMillis();
-
-    /**
-     * 设置会话开始的时间点。
-     *
-     * @param timeMillis
-     */
-    void setStartedTimeMillis(long timeMillis);
+public interface IVoIPSession {
 
     /**
      * 刷新通话时间。
@@ -70,14 +54,4 @@ public interface IWebRtcSession {
      * @param msg
      */
     void sendEndMsg(String msg);
-
-    /**
-     * 开始计时，计时器每隔0.5秒会发送一次REFRESH_PROGRESS_EVENT给handler。
-     */
-    void startTimer(Handler handler);
-
-    /**
-     * 停止计时，调用stop()方法前务必先停止计时器，否则会报空指针。
-     */
-    void stopTimer();
 }

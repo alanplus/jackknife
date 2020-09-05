@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.webrtc.interfaces;
+package com.lwh.jackknife.av.webrtc.voip;
 
-import com.lwh.jackknife.av.webrtc.parameters.RoomParameters;
+import com.lwh.jackknife.av.webrtc.voip.parameters.RoomParameters;
 
 import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
@@ -24,7 +24,7 @@ import org.webrtc.SessionDescription;
 /**
  * 抽象呼叫和接听等业务。
  */
-public interface IWebRtcCall {
+public interface IVoIPCall {
 
     /**
      * 检测呼叫和接听的环境，如网络是否畅通。
@@ -72,9 +72,10 @@ public interface IWebRtcCall {
     /**
      * 创建会话。
      *
+     * @param listener
      * @return
      */
-    IWebRtcSession createSession();
+    VoIPSession createSession(VoIPSession.OnSessionTimeUpdateListener listener);
 
     /**
      * 关闭会话。
@@ -84,7 +85,7 @@ public interface IWebRtcCall {
     /**
      * 未接通电话，已经等待的时间。
      *
-     * @param waitedTimeMillis 当前时间与发起通话开始时间的差值
+     * @param waitedTimeMillis
      */
     void reminderMayNotCreateSession(long waitedTimeMillis);
 

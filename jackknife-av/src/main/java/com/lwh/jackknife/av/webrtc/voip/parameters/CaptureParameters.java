@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.webrtc.parameters;
+package com.lwh.jackknife.av.webrtc.voip.parameters;
 
 public class CaptureParameters {
 

@@ -14,34 +14,36 @@
  * limitations under the License.
  */
 
-package com.lwh.jackknife.av.webrtc.mode;
+package com.lwh.jackknife.av.webrtc.voip;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.lwh.jackknife.av.R;
 import com.lwh.jackknife.av.media.SimpleAudioPlayer;
 import com.lwh.jackknife.av.webrtc.OnVideoCallEvents;
-import com.lwh.jackknife.av.webrtc.WebRtcBase;
-import com.lwh.jackknife.av.webrtc.WebRtcSession;
-import com.lwh.jackknife.av.webrtc.interfaces.IWebRtcSession;
-import com.lwh.jackknife.av.webrtc.parameters.CaptureParameters;
+import com.lwh.jackknife.av.webrtc.voip.parameters.CaptureParameters;
 import com.lwh.jackknife.av.webrtc.util.RtcTimer;
 
 import org.webrtc.AudioTrack;
 import org.webrtc.CameraVideoCapturer;
+import org.webrtc.IceCandidate;
+import org.webrtc.SessionDescription;
 
 import java.util.LinkedList;
 
 /**
  * 视频通话模式。
  */
-public abstract class JKVideoMode implements IWebRtcMode, OnVideoCallEvents {
+public abstract class VoIPVideoMode implements IVoIPMode, OnVideoCallEvents {
 
-    private static final String TAG = "JKVideoMode";
+    private static final String TAG = "VideoMode";
+
     private Context mContext;
+
     /**
      * 用来循环播放呼叫声音。
      */
@@ -49,15 +51,10 @@ public abstract class JKVideoMode implements IWebRtcMode, OnVideoCallEvents {
     private long mStartedTimeMillis;
     private CameraVideoCapturer mCapture;
     private CaptureParameters mCaptureParameters;
-    private WebRtcBase mBase;
+    private VoIPBase mBase;
+    private Handler mHandler;
 
-    /**
-     * 每隔0.5秒刷新一次通话时间，比每隔1秒刷新更精准，但又不损耗太多性能，0.5秒是较优的做法，一般用于音乐播放器
-     * 播放进度和播放时间的刷新。
-     */
-    private RtcTimer mTimer;
-
-    public JKVideoMode(Context context, CaptureParameters parameters) {
+    public VoIPVideoMode(Context context, CaptureParameters parameters) {
         this.mContext = context;
         this.mCaptureParameters = parameters;
     }
@@ -67,22 +64,39 @@ public abstract class JKVideoMode implements IWebRtcMode, OnVideoCallEvents {
     }
 
     @Override
-    public IWebRtcSession createSession() {
-        IWebRtcSession session = new WebRtcSession(this);
+    public VoIPSession createSession(VoIPSession.OnSessionTimeUpdateListener listener) {
+        VoIPSession session = new VoIPSession(this);
         long time = System.currentTimeMillis();
-        session.setStartedTimeMillis(time);
-        session.onSessionCreated(time); //这行代码代码很重要，会影响到生命周期状态
+        session.startTimer(mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what) {
+                    case RtcTimer.REFRESH_PROGRESS_EVENT:
+                        String formattedTime = RtcTimer.formatTime(
+                                System.currentTimeMillis() - time);
+                        tickRtcSpentTime(formattedTime);
+                        if (session.isAlive() && listener != null) {
+                            listener.updateTime(formattedTime);
+                        }
+                        break;
+                }
+            }
+        });
+        session.onSessionCreated(time); //这行代码代码很重要，会影响到生命周期状态，要先进到会话状态，再设置会话开始时间
         session.onSessionForeground();
         return session;
     }
 
     @Override
     public void closeSession() {
-        // nothing to do
+        if (mHandler != null) {
+            mHandler.removeMessages(RtcTimer.REFRESH_PROGRESS_EVENT);
+        }
     }
 
     @Override
-    public void changeTo(IWebRtcMode mode) {
+    public void changeTo(IVoIPMode mode) {
         throw new UnsupportedOperationException("模式本身");
     }
 
@@ -102,7 +116,7 @@ public abstract class JKVideoMode implements IWebRtcMode, OnVideoCallEvents {
     }
 
     @Override
-    public void setWebRtcBase(WebRtcBase base) {
+    public void setWebRtcBase(VoIPBase base) {
         this.mBase = base;
     }
 
@@ -127,6 +141,21 @@ public abstract class JKVideoMode implements IWebRtcMode, OnVideoCallEvents {
     }
 
     @Override
+    public void sendSessionDescription(boolean isInitiator, SessionDescription sdp) {
+        //发送SDP给房间服务器
+    }
+
+    @Override
+    public void sendCandidate(IceCandidate candidate) {
+        //发送ICE令牌给房间服务器
+    }
+
+    @Override
+    public void sendHangUp() {
+        //发送挂断请求给房间服务器
+    }
+
+    @Override
     public void reminderMayNotCreateSession(long waitedTimeMillis) {
         if (waitedTimeMillis >= 10 * 1000) {    //10秒
             onCallingEvent(CallingEventLevel.LEVEL_OBJECT_PHONE_NOT_AROUND);
@@ -137,17 +166,7 @@ public abstract class JKVideoMode implements IWebRtcMode, OnVideoCallEvents {
     }
 
     @Override
-    public void startTimer(Handler handler) {
-        setStartedTimeMillis(System.currentTimeMillis());
-        mTimer = new RtcTimer(handler);
-        mTimer.startTimer();
-    }
-
-    @Override
-    public void stopTimer() {
-        if (mTimer != null) {
-            mTimer.stopTimer();
-        }
+    public void sendEndMsg(String msg) {
     }
 
     @Override
@@ -160,18 +179,8 @@ public abstract class JKVideoMode implements IWebRtcMode, OnVideoCallEvents {
     }
 
     @Override
-    public long getStartedTimeMillis() {
-        return mStartedTimeMillis;
-    }
-
-    @Override
-    public void setStartedTimeMillis(long timeMillis) {
-        this.mStartedTimeMillis = timeMillis;
-    }
-
-    @Override
     public void tickRtcSpentTime(String formattedTime) {
-        Log.i(TAG, "已通话时间 " + formattedTime);
+        Log.i(TAG, "视频通话 " + formattedTime);
     }
 
     @Override
