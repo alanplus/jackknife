@@ -22,6 +22,9 @@ import com.lwh.jackknife.av.ffmpeg.FFmpeg;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 音频工具。
+ */
 public class AudioUtils {
 
     /**
@@ -60,7 +63,7 @@ public class AudioUtils {
      * @param path 需要变声的原音频文件
      * @param type 音效的类型
      */
-    public native static void fixEffect(String path, int type);
+    public native static void addSoundEffect(String path, int type);
 
     static {
         System.loadLibrary("fmodL");
@@ -68,12 +71,13 @@ public class AudioUtils {
         System.loadLibrary("jknfav");
     }
 
-    public native static int getBitrate(String input_music);
+    public native static int getBitrate(String inputMusic);
 
     /**
      * 转码压缩。
      */
-    public static void transcodeAndCompress(String srcAudioPath, String outputPath, int samplingRate, int bitrate, Callback callback) {
+    public static void transCompress(String srcAudioPath, String outputPath, int samplingRate,
+                                     int bitrate, Callback callback) {
         ArrayList<String> cmdLine = new ArrayList<>();
         cmdLine.add("ffmpeg");
         cmdLine.add("-i");

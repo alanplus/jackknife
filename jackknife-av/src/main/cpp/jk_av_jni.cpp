@@ -15,10 +15,10 @@ extern "C" {
     #include "libavfilter/buffersrc.h"
     #include "libavfilter/buffersink.h"
     #include "libswscale/swscale.h"
-    #include "jknf_log.h"
+    #include "jk_log.h"
 
 void jknf_log_write(void *ptr, int level, const char *fmt, va_list vl) {
-    FILE *fp = fopen("/storage/emulated/0/jknf_log.txt", "a+");
+    FILE *fp = fopen("/storage/emulated/0/jk_log.txt", "a+");
     if (fp) {
         vfprintf(fp, fmt, vl);
         fflush(fp);
@@ -27,7 +27,7 @@ void jknf_log_write(void *ptr, int level, const char *fmt, va_list vl) {
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBgMusic(JNIEnv *env,
+Java_com_lwh_jackknife_av_util_VideoUtils_addVideoBGM(JNIEnv *env,
         jclass jcls, jstring input_video, jstring input_music, jstring output_path) {
 
     AVOutputFormat *ofmt = NULL;

@@ -33,6 +33,7 @@ import java.nio.ByteOrder;
 import java.util.Locale;
 
 public class CpuUtils {
+
     private final static String TAG = "CpuUtils";
 
     private static String errorMsg = null;

@@ -22,6 +22,7 @@ import android.media.MediaScannerConnection;
 
 import com.lwh.jackknife.av.ffmpeg.Callback;
 import com.lwh.jackknife.av.ffmpeg.FFmpeg;
+import com.lwh.jackknife.av.filter.VideoFilter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,52 +30,15 @@ import java.util.List;
 
 public class VideoUtils {
 
-    public static final int WATERMARK_POS_LEFT_UP = 0;
-    public static final int WATERMARK_POS_RIGHT_UP = 1;
-    public static final int WATERMARK_POS_LEFT_BOTTOM = 2;
-    public static final int WATERMARK_POS_RIGHT_BOTTOM = 3;
 
     static {
         System.loadLibrary("jknfav");
     }
 
-    public native static boolean addVideoBgMusic(String input_video, String input_music, String output_path);
-
-    public static long getVideoDuration(String path) {
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        String result = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        try {
-            return Long.parseLong(result);
-        } catch (Exception ignored) {
-
-        }
-        return 0;
-    }
-
-    public static int getVideoWidth(String path) {
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        String result = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
-        try {
-            return Integer.parseInt(result);
-        } catch (Exception ignored) {
-
-        }
-        return 0;
-    }
-
-    public static int getVideoHeight(String path) {
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        String result = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
-        try {
-            return Integer.parseInt(result);
-        } catch (Exception ignored) {
-
-        }
-        return 0;
-    }
+    public static final int WATER_MARK_POS_LEFT_UP = 0;
+    public static final int WATER_MARK_POS_RIGHT_UP = 1;
+    public static final int WATER_MARK_POS_LEFT_BOTTOM = 2;
+    public static final int WATER_MARK_POS_RIGHT_BOTTOM = 3;
 
     /**
      * 扫描媒体文件。
@@ -119,7 +83,6 @@ public class VideoUtils {
         cmdLine.add("48k");
     }
 
-
     private static void setSize(List<String> cmdLine) {
         cmdLine.add("scale");
         cmdLine.add("400x600");
@@ -148,15 +111,82 @@ public class VideoUtils {
         FFmpeg.getInstance().run(cmdLine, callback);
     }
 
+    // <editor-folder desc="水印相关">
+
+    /**
+     * 给视频添加背景音乐。
+     *
+     * @param input_video
+     * @param input_music
+     * @param output_path
+     * @return
+     */
+    public native static boolean addVideoBGM(String input_video, String input_music, String output_path);
+
+    /**
+     * 获取视频的角度。
+     *
+     * @param path
+     * @return
+     */
+    public static long getVideoDuration(String path) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path);
+        String result = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+        try {
+            return Long.parseLong(result);
+        } catch (Exception ignored) {
+
+        }
+        return 0;
+    }
+
+    /**
+     * 获取视频的宽度信息。
+     *
+     * @param path
+     * @return
+     */
+    public static int getVideoWidth(String path) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path);
+        String result = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+        try {
+            return Integer.parseInt(result);
+        } catch (Exception ignored) {
+
+        }
+        return 0;
+    }
+
+    /**
+     * 获取视频的高度信息。
+     *
+     * @param path
+     * @return
+     */
+    public static int getVideoHeight(String path) {
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path);
+        String result = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+        try {
+            return Integer.parseInt(result);
+        } catch (Exception ignored) {
+
+        }
+        return 0;
+    }
+
     /**
      * 给视频加水印。
      *
-     * @see #WATERMARK_POS_LEFT_UP
-     * @see #WATERMARK_POS_RIGHT_UP
-     * @see #WATERMARK_POS_LEFT_BOTTOM
-     * @see #WATERMARK_POS_RIGHT_BOTTOM
+     * @see #WATER_MARK_POS_LEFT_UP
+     * @see #WATER_MARK_POS_RIGHT_UP
+     * @see #WATER_MARK_POS_LEFT_BOTTOM
+     * @see #WATER_MARK_POS_RIGHT_BOTTOM
      */
-    public static void addWatermark(String srcVideoPath, String watermarkImgPath, int pos, String outputPath, Callback callback) {
+    public static void addWatermark(String srcVideoPath, String watermarkImgPath, int pos,
+                                    String outputPath, Callback callback) {
         ArrayList<String> cmdLine = new ArrayList<>();
         cmdLine.add("ffmpeg");
         cmdLine.add("-i");
@@ -217,6 +247,8 @@ public class VideoUtils {
         FFmpeg.getInstance().run(cmdLine, callback);
     }
 
+    // </editor-folder>
+
     /**
      * 从视频文件中提取音频。
      *
@@ -276,27 +308,10 @@ public class VideoUtils {
     }
 
     /**
-     * 黑白。
-     */
-    public static final String FILTER_1 = "lutyuv=u=128:v=128";
-    /**
-     * 色彩变换。
-     */
-    public static final String FILTER_2 = "hue=H=2*PI*t: s=sin(2*PI*t)+1";
-    /**
-     * 暗角。
-     */
-    public static final String FILTER_3 = "vignette=PI/3";
-    /**
-     * 底片。
-     */
-    public static final String FILTER_4 = "lutyuv=y=maxval+minval-val:u=maxval+minval-val:v=maxval+minval-val";
-
-    /**
-     * 滤镜。
+     * 视频滤镜。
      */
     public static void filterVideo(String srcVideoPath,
-                                   String filter,
+                                   VideoFilter filter,
                                    String outputPath,
                                    Callback callback) {
         ArrayList<String> cmdLine = new ArrayList<>();
@@ -306,7 +321,7 @@ public class VideoUtils {
         setAudio(cmdLine);
         setVideo(cmdLine);
         cmdLine.add("-vf");
-        cmdLine.add(filter);
+        cmdLine.add(filter.getFilter());
         cmdLine.add(outputPath);
         FFmpeg.getInstance().run(cmdLine, callback);
     }

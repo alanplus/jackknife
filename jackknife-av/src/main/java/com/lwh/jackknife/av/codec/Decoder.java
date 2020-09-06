@@ -16,10 +16,14 @@
 
 package com.lwh.jackknife.av.codec;
 
+/**
+ * 解码器。
+ */
 public class Decoder {
 
     static {
         System.loadLibrary("jknfav");
     }
-    public native int decode(String inputurl, String outputurl);
+
+    public native int decode(String inputUrl, String outputUrl);
 }

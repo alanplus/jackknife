@@ -45,6 +45,7 @@ public class SimpleAudioPlayer {
         return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
     }
 
+
     /**
      * 调用这个方法之前不能调用其他play方法，调用后必须exit才可以调用其他play方法。
      *

@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <math.h>
-#include "jknf_log.h"
+#include "jk_log.h"
 #include "ffmpeg.h"
 
 /* Include only the enabled headers since some compilers (namely, Sun
