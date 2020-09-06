@@ -36,12 +36,8 @@ public class CpuUtils {
 
     private final static String TAG = "CpuUtils";
 
-    private static String errorMsg = null;
-    private static boolean isCompatible = false;
-
-    public static String getErrorMsg() {
-        return errorMsg;
-    }
+    private static boolean mCompatible = false;
+    private static String mErrorMsg;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static String[] getABIList21() {
@@ -52,7 +48,6 @@ public class CpuUtils {
         return abis;
     }
 
-    @SuppressWarnings("deprecation")
     private static String[] getABIList() {
         final String[] abis = new String[2];
         abis[0] = Build.CPU_ABI;
@@ -60,16 +55,14 @@ public class CpuUtils {
         return abis;
     }
 
-    /**
-     * @param context
-     * @return 不兼容
-     */
-    public static boolean hasCompatibleCPU(Context context) {
+    private static MachineSpec machineSpec = null;
+
+    public static boolean hasCompatibleCPU(Context context, String soLibName) {
         // If already checked return cached result
-        if (errorMsg != null || isCompatible) {
-            return isCompatible;
+        if (mErrorMsg != null || mCompatible) {
+            return mCompatible;
         }
-        isCompatible = true;
+        mCompatible = true;
         boolean hasNeon = false, hasFpu = false, hasArmV6 = false, hasPlaceHolder = false,
                 hasArmV7 = false, hasMips = false, hasX86 = false, is64bits = false, isIntel = false;
         float bogoMIPS = -1;
@@ -109,7 +102,7 @@ public class CpuUtils {
         boolean elfHasArm = false;
         boolean elfHasMips = false;
         boolean elfIs64bits = false;
-        final File lib = searchLibrary(context.getApplicationInfo());
+        final File lib = searchLibrary(context, soLibName);
         if (lib != null && (elf = readLib(lib)) != null) {
             elfHasX86 = elf.e_machine == EM_386 || elf.e_machine == EM_X86_64;
             elfHasArm = elf.e_machine == EM_ARM || elf.e_machine == EM_AARCH64;
@@ -117,7 +110,7 @@ public class CpuUtils {
             elfIs64bits = elf.is64bits;
             Log.i(TAG, "elf= " + elf.toString());
         } else {
-            Log.i(TAG, "WARNING: Unable to read libjknfffmpeg.so; cannot check device ABI!");
+            Log.i(TAG, "WARNING: Unable to read " + soLibName + ".so; cannot check device ABI!");
         }
 
         /* cpuinfo */
@@ -195,38 +188,38 @@ public class CpuUtils {
                 if (hasPlaceHolder && isIntel) {
                     Log.i(TAG, "Emulated armv7 detected, trying to launch x86 libraries");
                 } else {
-                    errorMsg = "x86 build on non-x86 device";
-                    isCompatible = false;
+                    mErrorMsg = "x86 build on non-x86 device";
+                    mCompatible = false;
                 }
             } else if (elfHasArm && !hasArmV6) {
-                errorMsg = "ARM build on non ARM device";
-                isCompatible = false;
+                mErrorMsg = "ARM build on non ARM device";
+                mCompatible = false;
             }
 
             if (elfHasMips && !hasMips) {
-                errorMsg = "MIPS build on non-MIPS device";
-                isCompatible = false;
+                mErrorMsg = "MIPS build on non-MIPS device";
+                mCompatible = false;
             } else if (elfHasArm && hasMips) {
-                errorMsg = "ARM build on MIPS device";
-                isCompatible = false;
+                mErrorMsg = "ARM build on MIPS device";
+                mCompatible = false;
             }
 
             if (elf.e_machine == EM_ARM && elf.att_arch.startsWith("v7") && !hasArmV7) {
-                errorMsg = "ARMv7 build on non-ARMv7 device";
-                isCompatible = false;
+                mErrorMsg = "ARMv7 build on non-ARMv7 device";
+                mCompatible = false;
             }
             if (elf.e_machine == EM_ARM) {
                 if (elf.att_arch.startsWith("v6") && !hasArmV6) {
-                    errorMsg = "ARMv6 build on non-ARMv6 device";
-                    isCompatible = false;
+                    mErrorMsg = "ARMv6 build on non-ARMv6 device";
+                    mCompatible = false;
                 } else if (elf.att_fpu && !hasFpu) {
-                    errorMsg = "FPU-enabled build on non-FPU device";
-                    isCompatible = false;
+                    mErrorMsg = "FPU-enabled build on non-FPU device";
+                    mCompatible = false;
                 }
             }
             if (elfIs64bits && !is64bits) {
-                errorMsg = "64bits build on 32bits device";
-                isCompatible = false;
+                mErrorMsg = "64bits build on 32bits device";
+                mCompatible = false;
             }
         }
 
@@ -253,56 +246,55 @@ public class CpuUtils {
         }
 
         // Store into MachineSpecs
-        machineSpecs = new MachineSpecs();
-        machineSpecs.hasArmV6 = hasArmV6;
-        machineSpecs.hasArmV7 = hasArmV7;
-        machineSpecs.hasFpu = hasFpu;
-        machineSpecs.hasMips = hasMips;
-        machineSpecs.hasNeon = hasNeon;
-        machineSpecs.hasX86 = hasX86;
-        machineSpecs.is64bits = is64bits;
-        machineSpecs.bogoMIPS = bogoMIPS;
-        machineSpecs.processors = processors;
-        machineSpecs.frequency = frequency;
+        machineSpec = new MachineSpec();
+        machineSpec.hasArmV6 = hasArmV6;
+        machineSpec.hasArmV7 = hasArmV7;
+        machineSpec.hasFpu = hasFpu;
+        machineSpec.hasMips = hasMips;
+        machineSpec.hasNeon = hasNeon;
+        machineSpec.hasX86 = hasX86;
+        machineSpec.is64bits = is64bits;
+        machineSpec.bogoMIPS = bogoMIPS;
+        machineSpec.processors = processors;
+        machineSpec.frequency = frequency;
 
-        Log.i(TAG, machineSpecs.toString());
+        Log.i(TAG, machineSpec.toString());
 
-        return isCompatible;
+        return mCompatible;
     }
 
-    public static MachineSpecs getMachineSpecs() {
-        return machineSpecs;
+    public static MachineSpec getMachineSpec() {
+        return machineSpec;
     }
 
-    private static MachineSpecs machineSpecs = null;
-
-    public static class MachineSpecs {
-        public boolean hasNeon;
-        public boolean hasFpu;
-        public boolean hasArmV6;
-        public boolean hasArmV7;
-        public boolean hasMips;
-        public boolean hasX86;
-        public boolean is64bits;
-        public float bogoMIPS;
-        public int processors;
-        public float frequency; /* in MHz */
-
-        @Override
-        public String toString() {
-            return "MachineSpecs{" +
-                    "hasNeon=" + hasNeon +
-                    ", hasFpu=" + hasFpu +
-                    ", hasArmV6=" + hasArmV6 +
-                    ", hasArmV7=" + hasArmV7 +
-                    ", hasMips=" + hasMips +
-                    ", hasX86=" + hasX86 +
-                    ", is64bits=" + is64bits +
-                    ", bogoMIPS=" + bogoMIPS +
-                    ", processors=" + processors +
-                    ", frequency=" + frequency +
-                    '}';
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+    private static File searchLibrary(Context context, String libName) {
+        ApplicationInfo applicationInfo = context.getApplicationInfo();
+        // Search for library path
+        String[] libraryPaths;
+        if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+            final String property = System.getProperty("java.library.path");
+            libraryPaths = property.split(":");
+        } else {
+            libraryPaths = new String[1];
+            libraryPaths[0] = applicationInfo.nativeLibraryDir;
         }
+        Log.i(TAG, "find library path=" + libraryPaths[0]);
+        if (libraryPaths[0] == null) {
+            Log.i(TAG, "can't find library path");
+            return null;
+        }
+        getFileList(libraryPaths[0]);
+        // Search for libjknfffmpeg.so
+        File lib;
+        for (String libraryPath : libraryPaths) {
+            lib = new File(libraryPath, libName);
+            if (lib.exists() && lib.canRead()) {
+                return lib;
+            }
+        }
+        Log.i(TAG, "WARNING: Can't find shared library");
+        return null;
     }
 
     private static final int EM_386 = 3;
@@ -341,33 +333,33 @@ public class CpuUtils {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    private static File searchLibrary(ApplicationInfo applicationInfo) {
-        // Search for library path
-        String[] libraryPaths;
-        if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-            final String property = System.getProperty("java.library.path");
-            libraryPaths = property.split(":");
-        } else {
-            libraryPaths = new String[1];
-            libraryPaths[0] = applicationInfo.nativeLibraryDir;
+    public static class MachineSpec {
+        public boolean hasNeon;
+        public boolean hasFpu;
+        public boolean hasArmV6;
+        public boolean hasArmV7;
+        public boolean hasMips;
+        public boolean hasX86;
+        public boolean is64bits;
+        public float bogoMIPS;
+        public int processors;
+        public float frequency; /* in MHz */
+
+        @Override
+        public String toString() {
+            return "MachineSpecs{" +
+                    "hasNeon=" + hasNeon +
+                    ", hasFpu=" + hasFpu +
+                    ", hasArmV6=" + hasArmV6 +
+                    ", hasArmV7=" + hasArmV7 +
+                    ", hasMips=" + hasMips +
+                    ", hasX86=" + hasX86 +
+                    ", is64bits=" + is64bits +
+                    ", bogoMIPS=" + bogoMIPS +
+                    ", processors=" + processors +
+                    ", frequency=" + frequency +
+                    '}';
         }
-        Log.i(TAG, "find library path=" + libraryPaths[0]);
-        if (libraryPaths[0] == null) {
-            Log.i(TAG, "can't find library path");
-            return null;
-        }
-        getFileList(libraryPaths[0]);
-        // Search for libjknfffmpeg.so
-        File lib;
-        for (String libraryPath : libraryPaths) {
-            lib = new File(libraryPath, "libjknfffmpeg.so");
-            if (lib.exists() && lib.canRead()) {
-                return lib;
-            }
-        }
-        Log.i(TAG, "WARNING: Can't find shared library");
-        return null;
     }
 
     private static void getFileList(String strPath) {
@@ -581,6 +573,4 @@ public class CpuUtils {
     }
 
     private static final String URI_AUTHORIZED_CHARS = "'()*";
-
-
 }
